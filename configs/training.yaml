@@ -1,0 +1,12 @@
+sample_rate: 16000
+segment_seconds: 4
+batch_size: 2
+epochs: 200
+epoch_size: 5000  # 5000 steps * 200 epochs = 1,000,000 updates
+val_size: 20
+learning_rate: 0.001
+num_workers: 0
+snr_min: -10
+snr_max: 20
+checkpoint_dir: checkpoints/dtln
+device: cpu

@@ -1,0 +1,28 @@
+# Environments
+venv/
+env/
+.env
+
+# PyTorch and Checkpoints
+checkpoints/
+*.pt
+*.pth
+
+# Data
+data/
+*.wav
+*.flac
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDEs
+.idea/
+.vscode/
+.DS_Store
+
+# Logs
+logs/
+*.log

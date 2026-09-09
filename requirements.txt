@@ -1,0 +1,10 @@
+librosa==0.10.*
+soundfile
+numpy
+scipy
+audiomentations
+webrtcvad
+torch
+torchaudio
+yt-dlp
+pandas

@@ -1,0 +1,5 @@
+# Configuration for data generation and paths
+data_root: "data/raw"
+processed_dir: "data/processed"
+manifests_dir: "data/manifests"
+sample_rate: 16000
