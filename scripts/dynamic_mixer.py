@@ -7,7 +7,7 @@ import scipy.signal
 import numpy as np
 
 class AntigravityDataset(torch.utils.data.Dataset):
-    def __init__(self, clean_manifest, noise_manifest, rir_manifest=None, epoch_size=10000, is_val=False):
+    def __init__(self, clean_manifest, noise_manifest, rir_manifest=None, epoch_size=10000, is_val=False, return_metadata=False):
         self.clean_df = pd.read_csv(clean_manifest)
         self.noise_df = pd.read_csv(noise_manifest)
         self.rir_df = pd.read_csv(rir_manifest) if rir_manifest and os.path.exists(rir_manifest) else None
@@ -15,6 +15,7 @@ class AntigravityDataset(torch.utils.data.Dataset):
         self.target_sr = 16000
         self.clip_duration = 3.0 # Fixed 3s clips for training
         self.is_val = is_val
+        self.return_metadata = return_metadata
 
     def __len__(self):
         return self.epoch_size
@@ -102,6 +103,13 @@ class AntigravityDataset(torch.utils.data.Dataset):
         snr = self.get_snr()
         noisy, target = self.mix_at_snr(reverberant_clean, noise_audio, snr)
         
+        if self.return_metadata:
+            meta = {
+                'snr': snr,
+                'category': noise_row.get('category', 'unknown')
+            }
+            return noisy, target, meta
+            
         return noisy, target
 
 def test():
