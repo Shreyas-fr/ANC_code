@@ -31,7 +31,7 @@ class MultiResolutionSTFTLoss(nn.Module):
         return loss / len(self.fft_sizes)
 
 class EnhancementLoss(nn.Module):
-    def __init__(self, l1_weight=10.0, stft_weight=1.0):
+    def __init__(self, l1_weight=5.0, stft_weight=5.0):
         super().__init__()
         self.l1_weight = l1_weight
         self.stft_weight = stft_weight

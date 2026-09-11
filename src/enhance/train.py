@@ -10,7 +10,7 @@ import sys
 # Add root to sys.path to import scripts
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from scripts.dynamic_mixer import AntigravityDataset
-from src.enhance.complex_crn import ComplexCRN
+from src.enhance.complex_crn import ComplexCRN_Wrapper
 from src.enhance.losses import EnhancementLoss
 from src.enhance.evaluate import pesq, stoi, si_sdr
 import numpy as np
@@ -41,7 +41,7 @@ def train(config):
     train_loader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True, num_workers=config.get('num_workers', 0))
     val_loader = DataLoader(val_dataset, batch_size=config['batch_size'], shuffle=False, num_workers=config.get('num_workers', 0))
 
-    model = ComplexCRN().to(device)
+    model = ComplexCRN_Wrapper().to(device)
     criterion = EnhancementLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=config['learning_rate'])
     
@@ -49,6 +49,18 @@ def train(config):
     writer = SummaryWriter(log_dir=os.path.join(config['checkpoint_dir'], 'logs'))
 
     best_val_loss = float('inf')
+
+    # Check for legacy checkpoints to resume
+    if os.path.exists(os.path.join(config['checkpoint_dir'], 'latest.pt')):
+        print("Resuming from latest.pt")
+        state_dict = torch.load(os.path.join(config['checkpoint_dir'], 'latest.pt'), map_location=device)
+        new_state_dict = {}
+        for k, v in state_dict.items():
+            if not k.startswith("core."):
+                new_state_dict["core." + k] = v
+            else:
+                new_state_dict[k] = v
+        model.load_state_dict(new_state_dict)
 
     print("Starting training...")
     for epoch in range(1, config['epochs'] + 1):

@@ -6,16 +6,23 @@ from collections import defaultdict
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from scripts.dynamic_mixer import AntigravityDataset
-from src.enhance.complex_crn import ComplexCRN
+from src.enhance.complex_crn import ComplexCRN_Wrapper
 from src.enhance.evaluate import pesq, stoi, si_sdr
 
 def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = ComplexCRN().to(device)
+    model = ComplexCRN_Wrapper().to(device)
     
     checkpoint_path = "checkpoints/dtln/best.pt"
     if os.path.exists(checkpoint_path):
-        model.load_state_dict(torch.load(checkpoint_path, map_location=device))
+        state_dict = torch.load(checkpoint_path, map_location=device)
+        new_state_dict = {}
+        for k, v in state_dict.items():
+            if not k.startswith("core."):
+                new_state_dict["core." + k] = v
+            else:
+                new_state_dict[k] = v
+        model.load_state_dict(new_state_dict)
     else:
         print("Warning: best.pt not found, evaluating untrained model.")
         
