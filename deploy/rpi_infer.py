@@ -10,7 +10,8 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 class LiveInfer:
-    def __init__(self, model_path, input_device, output_device, use_nlms=False):
+    def __init__(self, model_path, input_device, output_device, use_nlms=False, use_dsp_limiter=False):
+        self.use_dsp_limiter = use_dsp_limiter
         self.sess = ort.InferenceSession(model_path, providers=['CPUExecutionProvider'])
         self.input_name = self.sess.get_inputs()[0].name
         
@@ -39,6 +40,11 @@ class LiveInfer:
             self.xruns += 1
             
         chunk = indata[:, 0]
+        
+        if self.use_dsp_limiter:
+            # Hybrid DSP Pre-Limiter: instantly hard-clip explosive peaks before the STFT and CRN
+            chunk = np.clip(chunk, -0.4, 0.4)
+            
         self.in_buf[:-self.hop] = self.in_buf[self.hop:]
         self.in_buf[-self.hop:] = chunk
         
@@ -83,6 +89,7 @@ def main():
     parser.add_argument("--input-device", type=int, default=None)
     parser.add_argument("--output-device", type=int, default=None)
     parser.add_argument("--nlms", action="store_true")
+    parser.add_argument("--dsp-limiter", action="store_true", help="Enable pre-NN DSP transient hard clipper")
     parser.add_argument("--loopback-latency-test", action="store_true")
     args = parser.parse_args()
     
@@ -95,7 +102,7 @@ def main():
         infer.loopback_latency_test()
         return
         
-    infer = LiveInfer("checkpoints/dtln/model.onnx", args.input_device, args.output_device, args.nlms)
+    infer = LiveInfer("checkpoints/dtln/model.onnx", args.input_device, args.output_device, args.nlms, args.dsp_limiter)
     
     print("Starting audio stream... (Press Ctrl+C to stop)")
     try:
