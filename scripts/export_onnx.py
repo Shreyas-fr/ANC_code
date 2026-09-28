@@ -10,7 +10,7 @@ def export_to_onnx():
     device = torch.device('cpu')
     wrapper = ComplexCRN_Wrapper().to(device)
     
-    checkpoint_path = "checkpoints/dtln/best.pt"
+    checkpoint_path = "checkpoints/dtln_finetune/best.pt"
     if os.path.exists(checkpoint_path):
         print(f"Loading weights from {checkpoint_path}")
         state_dict = torch.load(checkpoint_path, map_location=device)
@@ -28,7 +28,7 @@ def export_to_onnx():
     # Dummy input: Magnitude spectrogram of 1 frame [Batch=1, Freq=257, Time=1]
     dummy_input = torch.randn(1, 257, 1)
     
-    onnx_path = "checkpoints/dtln/model.onnx"
+    onnx_path = "checkpoints/dtln/model.onnx"  # overwrite in-place so rpi_infer.py path unchanged
     os.makedirs(os.path.dirname(onnx_path), exist_ok=True)
     
     print("Exporting Core Model to ONNX...")
