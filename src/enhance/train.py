@@ -50,10 +50,13 @@ def train(config):
 
     best_val_loss = float('inf')
 
-    # Check for legacy checkpoints to resume
-    if os.path.exists(os.path.join(config['checkpoint_dir'], 'latest.pt')):
-        print("Resuming from latest.pt")
-        state_dict = torch.load(os.path.join(config['checkpoint_dir'], 'latest.pt'), map_location=device)
+    # Resume: prefer checkpoint_dir/latest.pt, fall back to pre-trained dtln/latest.pt
+    ckpt_path = os.path.join(config['checkpoint_dir'], 'latest.pt')
+    if not os.path.exists(ckpt_path):
+        ckpt_path = "checkpoints/dtln/latest.pt"  # pre-trained baseline
+    if os.path.exists(ckpt_path):
+        print(f"Resuming from {ckpt_path}")
+        state_dict = torch.load(ckpt_path, map_location=device)
         new_state_dict = {}
         for k, v in state_dict.items():
             if not k.startswith("core."):
