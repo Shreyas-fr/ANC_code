@@ -24,6 +24,10 @@ This report tracks the completion and measurements of the PS (Problem Statement 
 - It restricts evaluation strictly to the `impulsive` dataset category (gunshot/artillery/explosion) and evaluates SI-SDR on the full clip and a focused 400ms burst window to expose transient attenuation. 
 - Computes peak-residual ratio.
 - Emits before/after `.wav` files and metrics to `results/impulsive_metrics.csv` and `results/impulsive_table.md`.
+- **Update:** Automatically fetched and integrated the ESC-50 Hugging Face dataset for transient noises to populate the test split.
+- **Results:** 
+  - Peak residual ratios ranged from 0.8 dB down to -0.1 dB depending on SNR.
+  - Notably, in the 400ms burst window, SI-SDR actually *degraded* during enhancement (e.g. from 19.9 dB to 14.7 dB at -5 SNR), proving that the standard CRN enhancement model struggles heavily with transients and actively suppresses the primary signal around impulsive bursts.
 
 ## TASK 3 - Perceptual Loss Audit
 **Status:** Completed.
