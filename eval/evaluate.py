@@ -1,5 +1,7 @@
 import sys
 import os
+import argparse
+import random
 import torch
 import numpy as np
 import pandas as pd
@@ -184,17 +186,33 @@ def generate_reports(df):
     plt.close()
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run evaluation and write results_table.md")
+    parser.add_argument("--checkpoint", default="checkpoints/dtln_finetune/best.pt",
+                        help="Path to the .pt checkpoint to evaluate (default: fine-tuned best)")
+    parser.add_argument("--seed", type=int, default=42, help="Global random seed for reproducibility")
+    args = parser.parse_args()
+
+    # Fix all sources of randomness so results are exactly reproducible
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = ComplexCRN_Wrapper().to(device)
-    checkpoint_path = "checkpoints/dtln/best.pt"
-    if os.path.exists(checkpoint_path):
-        state_dict = torch.load(checkpoint_path, map_location=device)
+
+    if os.path.exists(args.checkpoint):
+        print(f"Loading checkpoint: {args.checkpoint}")
+        state_dict = torch.load(args.checkpoint, map_location=device)
         new_state_dict = {}
         for k, v in state_dict.items():
             if not k.startswith("core."): new_state_dict["core." + k] = v
             else: new_state_dict[k] = v
         model.load_state_dict(new_state_dict)
-    
+        print(f"  MD5: {__import__('hashlib').md5(open(args.checkpoint,'rb').read()).hexdigest()}")
+    else:
+        print(f"WARNING: checkpoint not found at {args.checkpoint}. Using random weights.")
+
     df = run_evaluation(model)
     if not df.empty:
         generate_reports(df)
+        print("\nDone. Results written to results/results_table.md")
