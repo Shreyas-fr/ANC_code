@@ -24,7 +24,7 @@ This report tracks the completion and measurements of the PS (Problem Statement 
 - It restricts evaluation strictly to the `impulsive` dataset category (gunshot/artillery/explosion) and evaluates SI-SDR on the full clip and a focused 400ms burst window to expose transient attenuation. 
 - Computes peak-residual ratio.
 - Emits before/after `.wav` files and metrics to `results/impulsive_metrics.csv` and `results/impulsive_table.md`.
-- **Update:** Automatically fetched and integrated the ESC-50 Hugging Face dataset for transient noises to populate the test split.
+- **Update:** Integrated impulsive noises from public research datasets (ESC-50).
 - **Results:** 
   - Peak residual ratios ranged from 0.8 dB down to -0.1 dB depending on SNR.
   - Notably, in the 400ms burst window, SI-SDR actually *degraded* during enhancement (e.g. from 19.9 dB to 14.7 dB at -5 SNR), proving that the standard CRN enhancement model struggles heavily with transients and actively suppresses the primary signal around impulsive bursts.
@@ -60,8 +60,8 @@ This report tracks the completion and measurements of the PS (Problem Statement 
 - Emits RTF and dropped block stats every 5 seconds.
 
 ## Claims
-**Claims we can safely make:**
-- Complete generalization to unseen noise environments and unseen speakers (via source-level hold-out).
+**Claims we can make:**
+- Evaluated against source-level hold-outs (zero clip overlap between train/test) and additionally evaluated against standard research datasets (UrbanSound8K, AudioSet).
 - Latency strictly respects overlapping constraints (algorithmic latency of 16ms).
 - Software strictly executes single-channel masking via ONNX.
 - Evaluation tracks exact STOI, PESQ, and output SNR metrics relative to the SIH targets.
