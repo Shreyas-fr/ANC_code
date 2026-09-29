@@ -1,6 +1,6 @@
 # Antigravity ANC: Deliverables Report
 
-This report tracks the completion and measurements of the PS (Problem Statement SIH26052) targets for the neural single-channel noise suppression system (Complex CRN).
+This report tracks the completion and measurements of the PS (Problem Statement SIH26052) targets for the neural single-channel noise suppression system (Stateful Polar-D).
 
 ## PS Targets Reference
 - Output SNR > 15 dB
@@ -9,6 +9,15 @@ This report tracks the completion and measurements of the PS (Problem Statement 
 - Real-time on embedded hardware
 
 ---
+
+## Architecture: Polar-D (Stateful Polar LSTM)
+
+The current system replaces the legacy Complex CRN with the **Polar-D** architecture. This is a lightweight, low-latency, stateful recurrent model parameterizing a polar complex mask, heavily optimized for single-channel causal execution on embedded hardware (e.g. Raspberry Pi).
+
+*See the dedicated [System Diagrams](system_diagrams.md) document for complete visual flowcharts covering the neural architecture, data training pipeline, and embedded user flows.*
+
+---
+
 
 ## TASK 1 - Evaluation Harness
 **Status:** Completed.

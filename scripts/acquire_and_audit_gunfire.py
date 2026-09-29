@@ -29,13 +29,10 @@ def sha256(fname):
             h.update(chunk)
     return h.hexdigest()
 
+import subprocess
 def download_file(url, out_path):
     print(f"Downloading {url} to {out_path}...")
-    with requests.get(url, stream=True) as r:
-        r.raise_for_status()
-        with open(out_path, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=8192): 
-                f.write(chunk)
+    subprocess.run(["curl", "-L", "-C", "-", "-o", out_path, url], check=True)
     print(f"Downloaded {out_path}")
 
 def main():
@@ -94,10 +91,8 @@ def main():
     with open(meta_path, "r") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            # Uuid, Device_Id, Firearm_Type, Distance_from_Shooter, Firing_Style, ...
-            meta_records[row["Uuid"]] = row
+            meta_records[row["uuid"]] = row
             
-    # Inventory
     wav_files = []
     for root, dirs, fs in os.walk(UNZIP_DIR):
         for f in fs:
@@ -110,22 +105,6 @@ def main():
     source_groups = collections.defaultdict(list)
     uuid_to_group = {}
     
-    # We must group by the actual independent event.
-    # Looking at the paper details, if multiple devices record the same session, they might have different UUIDs?
-    # Let's group by (Firearm_Type, Firing_Style, Distance_from_Shooter... wait, different distance = different device same event?)
-    # Let's inspect the first few metadata rows to see if there is a 'session_id' or 'event_id'
-    # Actually, the quickest way to group is by looking at all metadata values.
-    # Let's print out the headers of the metadata first.
-    with open(meta_path, "r") as f:
-        print("Metadata Headers:", csv.DictReader(f).fieldnames)
-        
-    # Heuristic: A "Session" in these range experiments is typically uniquely defined by the (Firearm, Firing Style) block being performed at a certain time.
-    # We will construct source_group_id = Firearm_Type + "_" + Firing_Style (if this divides them well)
-    # If not enough, we add more. But to be safe against leakage, grouping all of the same firearm into one split is the SAFEST for avoiding identical events.
-    # Actually, grouping by Firearm_Type is extremely safe! But we need enough groups for 70/15/15.
-    # There are 4 firearms. If we group by firearm, we only have 4 groups.
-    # Let's group by Firearm_Type + "_" + Firing_Style. Since there are 3 styles, that's 12 groups.
-    
     import torchaudio
     
     exact_hashes = collections.defaultdict(list)
@@ -134,16 +113,15 @@ def main():
         h = sha256(w)
         exact_hashes[h].append(w)
         fname = os.path.basename(w)
-        # 0a07b229-7d2b-4d2b-8f32-c94cbc7b1487_chan5_v1.wav
         parts = fname.replace(".wav", "").split("_")
         uuid = parts[0]
         
         m = meta_records.get(uuid, {})
-        firearm = m.get("Firearm_Type", "UNKNOWN")
-        style = m.get("Firing_Style", "UNKNOWN")
-        device = m.get("Device_Id", "UNKNOWN")
+        firearm = m.get("firearm", "UNKNOWN")
+        session = m.get("recording_session ", "UNKNOWN")
+        device = m.get("device_name", "UNKNOWN")
         
-        group_id = f"{firearm}_{style}"
+        group_id = f"{firearm}_{session}"
         
         try:
             info = torchaudio.info(w)

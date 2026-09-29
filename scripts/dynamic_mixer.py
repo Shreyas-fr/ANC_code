@@ -62,35 +62,58 @@ class AntigravityDataset(torch.utils.data.Dataset):
         return self.config.epoch_size
 
     def load_random_clip(self, row, is_rir=False):
-        path = row.get('file_path', row.get('path'))
+        path = row.get('audio_path')
+        if pd.isna(path): path = row.get('file_path')
+        if pd.isna(path): path = row.get('path')
         
+        if pd.isna(path) or not path:
+            raise ValueError(f"Missing path field in row: {row}")
+            
         if is_rir:
             # RIRs are usually fully loaded and small, perfect for caching
             return self._load_full_clip_cached(path)
             
-        duration = row['duration']
-        max_start = max(0, duration - self.config.clip_duration)
-        start_time = random.uniform(0, max_start)
-        frame_offset = int(start_time * self.config.target_sr)
-        num_frames = int(self.config.clip_duration * self.config.target_sr)
-        
         try:
-            wav, sr = sf.read(path, start=frame_offset, frames=num_frames, dtype='float32', always_2d=True)
-            wav = torch.from_numpy(wav.T)[0] # Extract the first channel
+            info = sf.info(path)
+            native_sr = info.samplerate
             
-            if wav.shape[0] < num_frames:
-                pad = num_frames - wav.shape[0]
+            duration = row.get('duration', info.frames / native_sr)
+            max_start = max(0, duration - self.config.clip_duration)
+            start_time = random.uniform(0, max_start)
+            
+            frame_offset = int(start_time * native_sr)
+            num_frames = int(self.config.clip_duration * native_sr)
+            
+            wav, sr = sf.read(path, start=frame_offset, frames=num_frames, dtype='float32', always_2d=True)
+            wav = torch.from_numpy(wav.T)[0] # Extract the first channel (V1 mono policy)
+            
+            if sr != self.config.target_sr:
+                import torchaudio.transforms as T
+                resampler = T.Resample(sr, self.config.target_sr)
+                wav = resampler(wav)
+                
+            target_frames = int(self.config.clip_duration * self.config.target_sr)
+            if wav.shape[0] < target_frames:
+                pad = target_frames - wav.shape[0]
                 wav = torch.nn.functional.pad(wav, (0, pad))
+            elif wav.shape[0] > target_frames:
+                wav = wav[:target_frames]
+                
             return wav
         except Exception as e:
             logger.error(f"Error loading clip {path}: {e}")
-            return torch.zeros(num_frames)
+            return torch.zeros(int(self.config.clip_duration * self.config.target_sr))
 
     @lru_cache(maxsize=1024)
     def _load_full_clip_cached(self, path):
         try:
             wav, sr = sf.read(path, dtype='float32', always_2d=True)
-            return torch.from_numpy(wav.T)[0]
+            wav = torch.from_numpy(wav.T)[0]
+            if sr != self.config.target_sr:
+                import torchaudio.transforms as T
+                resampler = T.Resample(sr, self.config.target_sr)
+                wav = resampler(wav)
+            return wav
         except Exception as e:
             logger.error(f"Error loading RIR {path}: {e}")
             return torch.tensor([1.0]) # fallback impulse
@@ -153,7 +176,8 @@ class AntigravityDataset(torch.utils.data.Dataset):
         if self.config.return_metadata:
             meta = {
                 'snr': snr,
-                'category': noise_row.get('category', 'unknown')
+                'category': noise_row.get('category', 'unknown'),
+                'dataset_origin': noise_row.get('dataset_origin', 'UNKNOWN')
             }
             return noisy, target, meta
             
