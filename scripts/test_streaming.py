@@ -28,10 +28,12 @@ def test_streaming():
     noisy, sr = sf.read("data/eval_samples/0_noisy.wav", dtype='float32')
     if len(noisy.shape) > 1: noisy = noisy[:, 0]
     
+    import scipy.signal
     # DSP Parameters
     n_fft = 512
     hop_length = 256
-    window = np.hanning(n_fft).astype(np.float32)
+    window = scipy.signal.windows.hann(n_fft, sym=False).astype(np.float32)
+    ola_window = window[:hop_length]**2 + window[hop_length:]**2
     
     # State buffers
     in_buffer = np.zeros(n_fft, dtype=np.float32)
@@ -70,7 +72,7 @@ def test_streaming():
             out_buffer += enhanced_frame
             
             # Shift out
-            output_hop = out_buffer[:hop_length].copy()
+            output_hop = (out_buffer[:hop_length] / (ola_window + 1e-8)).copy()
             output.append(output_hop)
             
             out_buffer[:-hop_length] = out_buffer[hop_length:]

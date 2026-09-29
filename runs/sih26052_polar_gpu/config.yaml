@@ -1,0 +1,11 @@
+batch_size: 4
+clip_grad: 5.0
+eval_steps:
+- 10000
+- 25000
+- 50000
+- 75000
+- 100000
+learning_rate: 0.001
+max_steps: 100000
+seed: 12345

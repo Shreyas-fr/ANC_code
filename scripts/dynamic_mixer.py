@@ -62,7 +62,7 @@ class AntigravityDataset(torch.utils.data.Dataset):
         return self.config.epoch_size
 
     def load_random_clip(self, row, is_rir=False):
-        path = row['path']
+        path = row.get('file_path', row.get('path'))
         
         if is_rir:
             # RIRs are usually fully loaded and small, perfect for caching

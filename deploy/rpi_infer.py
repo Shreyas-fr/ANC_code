@@ -15,9 +15,11 @@ class LiveInfer:
         self.sess = ort.InferenceSession(model_path, providers=['CPUExecutionProvider'])
         self.input_name = self.sess.get_inputs()[0].name
         
+        import scipy.signal
         self.n_fft = 512
         self.hop = 256
-        self.window = np.hanning(self.n_fft).astype(np.float32)
+        self.window = scipy.signal.windows.hann(self.n_fft, sym=False).astype(np.float32)
+        self.ola_window = self.window[:self.hop]**2 + self.window[self.hop:]**2
         
         self.use_nlms = use_nlms
         if self.use_nlms:
@@ -67,7 +69,7 @@ class LiveInfer:
             enhanced_frame = self.nlms.process(enhanced_frame, est_noise)
             
         self.out_buf += enhanced_frame
-        outdata[:, 0] = self.out_buf[:self.hop]
+        outdata[:, 0] = self.out_buf[:self.hop] / (self.ola_window + 1e-8)
         
         self.out_buf[:-self.hop] = self.out_buf[self.hop:]
         self.out_buf[-self.hop:] = 0.0

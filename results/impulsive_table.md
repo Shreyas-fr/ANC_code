@@ -1,9 +1,6 @@
 # Impulsive Noise Performance
 
-| Input SNR | SI-SDR Full (N->E) | SI-SDR Burst Window (N->E) | Peak Ratio (E/C) |
-|-----------|--------------------|----------------------------|------------------|
-| -5 dB | -2.8 -> 5.8 | 19.9 -> 14.7 | 0.8 dB |
-| 0 dB | 2.1 -> 9.3 | 24.6 -> 17.2 | 0.5 dB |
-| 5 dB | 7.0 -> 12.5 | 28.9 -> 19.8 | 0.2 dB |
-| 10 dB | 11.9 -> 14.8 | 33.1 -> 21.5 | -0.1 dB |
-| 15 dB | 16.8 -> 17.0 | 37.3 -> 23.2 | -0.1 dB |
+> **NOTE**: No held-out impulsive clips available after deduplication.
+> ESC-50 impulsive clips used during training were removed from the test set.
+> AudioSet impulsive classes (gunshot/artillery/explosion) had 0 clips in the test manifest.
+> Impulsive evaluation is a planned next step using a separate held-out set.

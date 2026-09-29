@@ -39,8 +39,9 @@ def export_to_onnx(checkpoint_path=CHECKPOINT, onnx_path=ONNX_PATH):
     core = wrapper.core
     core.eval()
 
-    # Dummy: [B=1, F=257, T=16] — must have enough time frames to avoid LSTM issues
-    dummy = torch.randn(1, 257, 16)
+    # Dummy: [B=1, F=257, T=1] — single STFT frame, matching rpi_infer.py streaming mode.
+    # dynamo=False (TorchScript) handles single-frame LSTM correctly and embeds weights.
+    dummy = torch.randn(1, 257, 1)
 
     # --- PyTorch reference output (before export) ---
     with torch.no_grad():
