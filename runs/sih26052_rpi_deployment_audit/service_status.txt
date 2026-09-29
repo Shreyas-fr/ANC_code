@@ -1,0 +1,11 @@
+● sih26052-edge.service - SIH26052 StatefulPolarLSTM ANC Edge Service
+     Loaded: loaded (/home/shreyas/.config/systemd/user/sih26052-edge.service; linked; preset: enabled)
+     Active: active (running) since Wed 2026-09-30 01:30:35 IST; 2s ago
+ Invocation: f5f549cda3ba44ee990a0287ef915969
+   Main PID: 2527 (python)
+      Tasks: 4 (limit: 2363)
+        CPU: 2.131s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/sih26052-edge.service
+             └─2527 /home/shreyas/env/bin/python /home/shreyas/sih26052_edge/app/anc_stream.py
+
+Sep 30 01:30:35 shreyas systemd[1261]: Started sih26052-edge.service - SIH26052 StatefulPolarLSTM ANC Edge Service.

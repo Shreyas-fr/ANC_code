@@ -1,0 +1,20 @@
+[Unit]
+Description=SIH26052 StatefulPolarLSTM ANC Edge Service
+After=network.target sound.target audio.service pipewire.service
+Wants=sound.target
+
+[Service]
+Type=simple
+User=shreyas
+WorkingDirectory=/home/shreyas/sih26052_edge
+Environment="PYTHONPATH=/home/shreyas/sih26052_edge"
+ExecStart=/home/shreyas/env/bin/python /home/shreyas/sih26052_edge/app/anc_stream.py
+StandardOutput=append:/home/shreyas/sih26052_edge/logs/service.log
+StandardError=append:/home/shreyas/sih26052_edge/logs/service.err
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Install]
+WantedBy=default.target

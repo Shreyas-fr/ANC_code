@@ -1,0 +1,6 @@
+model filename: best.pt
+SHA-256: b105b714b0ca510662050b4fc6e099a8e779d9042549486a79d8119708e51d9a
+parameter count: 1448962
+architecture: StatefulPolarLSTM
+PyTorch version: 2.14.0+cpu
+dtype: float32
