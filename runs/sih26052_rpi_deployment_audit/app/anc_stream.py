@@ -170,3 +170,25 @@ if __name__ == "__main__":
             f.write(f"nan_inf_count,{nan_c}\n")
             f.write(f"state_resets,{resets}\n")
             f.write(f"dropped_frames,{drops}\n")
+    else:
+        # Default daemon mode
+        stream = ANCStream(os.path.expanduser("~/sih26052_edge/config/config.json"))
+        hop = stream.config['hop_length']
+        sr = stream.config['sample_rate']
+        sleep_time = hop / sr
+        
+        print("Starting ANC edge service dummy stream...")
+        frames = 0
+        while True:
+            chunk = np.random.randn(hop).astype(np.float32) * 0.05
+            start = time.time()
+            stream.process_frame(chunk)
+            elapsed = time.time() - start
+            
+            # Simulate real-time pacing
+            if elapsed < sleep_time:
+                time.sleep(sleep_time - elapsed)
+                
+            frames += 1
+            if frames % 100 == 0:
+                stream.monitor.flush_log()

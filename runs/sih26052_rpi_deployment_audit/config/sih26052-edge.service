@@ -2,6 +2,8 @@
 Description=SIH26052 StatefulPolarLSTM ANC Edge Service
 After=network.target sound.target audio.service pipewire.service
 Wants=sound.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
 
 [Service]
 Type=simple
@@ -13,8 +15,6 @@ StandardOutput=append:/home/shreyas/sih26052_edge/logs/service.log
 StandardError=append:/home/shreyas/sih26052_edge/logs/service.err
 Restart=on-failure
 RestartSec=5
-StartLimitIntervalSec=60
-StartLimitBurst=5
 
 [Install]
 WantedBy=default.target

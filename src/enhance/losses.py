@@ -30,14 +30,56 @@ class MultiResolutionSTFTLoss(nn.Module):
             
         return loss / len(self.fft_sizes)
 
+class SISDRLoss(nn.Module):
+    def __init__(self, eps=1e-8):
+        super().__init__()
+        self.eps = eps
+
+    def forward(self, est, target):
+        # est, target: [B, T]
+        # SI-SDR = 10 * log10( ||s_target||^2 / ||e_noise||^2 )
+        # s_target = (<est, target> / <target, target>) * target
+        # e_noise = est - s_target
+        
+        target_energy = torch.sum(target ** 2, dim=-1, keepdim=True) + self.eps
+        dot_product = torch.sum(est * target, dim=-1, keepdim=True)
+        
+        # Optimal scaling factor
+        alpha = dot_product / target_energy
+        
+        # Scaled target and noise
+        s_target = alpha * target
+        e_noise = est - s_target
+        
+        s_target_energy = torch.sum(s_target ** 2, dim=-1) + self.eps
+        e_noise_energy = torch.sum(e_noise ** 2, dim=-1) + self.eps
+        
+        si_sdr = 10 * torch.log10(s_target_energy / e_noise_energy)
+        
+        # Return negative SI-SDR as loss (to minimize)
+        return -torch.mean(si_sdr)
+
+
 class EnhancementLoss(nn.Module):
-    def __init__(self, l1_weight=5.0, stft_weight=5.0):
+    def __init__(self, l1_weight=5.0, stft_weight=5.0, sisdr_weight=0.0):
         super().__init__()
         self.l1_weight = l1_weight
         self.stft_weight = stft_weight
+        self.sisdr_weight = sisdr_weight
         self.stft_loss = MultiResolutionSTFTLoss()
+        self.sisdr_loss = SISDRLoss()
 
     def forward(self, enhanced, clean):
+        loss = 0.0
+        
         l1_loss = torch.nn.functional.l1_loss(enhanced, clean)
+        loss += self.l1_weight * l1_loss
+        
         stft_loss = self.stft_loss(enhanced, clean)
-        return self.l1_weight * l1_loss + self.stft_weight * stft_loss
+        loss += self.stft_weight * stft_loss
+        
+        if self.sisdr_weight > 0.0:
+            sisdr_loss_val = self.sisdr_loss(enhanced, clean)
+            loss += self.sisdr_weight * sisdr_loss_val
+            
+        return loss
