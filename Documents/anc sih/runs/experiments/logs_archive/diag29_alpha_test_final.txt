@@ -1,0 +1,25 @@
+spawn scp test_alpha_decay.py shreyas@shreyas.local:~/sih26052_edge/prototype/test_alpha_decay.py
+shreyas@shreyas.local's password: 
+test_alpha_decay.py                             0%    0     0.0KB/s   --:-- ETAtest_alpha_decay.py                           100% 4142    66.2KB/s   00:00    
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/test_alpha_decay.py
+shreyas@shreyas.local's password: 
+Starting State Decay Experiment...
+Processing alpha = 1.00
+Processing alpha = 0.95
+Processing alpha = 0.90
+Processing alpha = 0.85
+Processing alpha = 0.80
+Processing alpha = 0.70
+Processing alpha = 0.50
+Processing alpha = 0.00
+
+--- RESULTS TABLE ---
+alpha | 16ms peak | tail energy | RMS | speech corr | SI-SDR | SNR | STOI
+1.00 | 26.54 | 0.327400 | 0.010827 | 0.1492 | -17.70 | -1.12 | N/A
+0.95 | 26.54 | 0.327401 | 0.010827 | 0.1492 | -17.70 | -1.12 | N/A
+0.90 | 26.54 | 0.327401 | 0.010827 | 0.1492 | -17.70 | -1.12 | N/A
+0.85 | 26.54 | 0.327401 | 0.010827 | 0.1492 | -17.70 | -1.12 | N/A
+0.80 | 26.54 | 0.327401 | 0.010827 | 0.1492 | -17.70 | -1.12 | N/A
+0.70 | 26.54 | 0.327401 | 0.010827 | 0.1492 | -17.70 | -1.12 | N/A
+0.50 | 26.54 | 0.327401 | 0.010827 | 0.1492 | -17.70 | -1.12 | N/A
+0.00 | 26.54 | 0.327400 | 0.010827 | 0.1492 | -17.70 | -1.12 | N/A

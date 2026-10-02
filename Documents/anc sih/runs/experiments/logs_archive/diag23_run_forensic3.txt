@@ -1,0 +1,13 @@
+spawn scp run_forensic3.py shreyas@shreyas.local:~/sih26052_edge/prototype/run_forensic3.py
+shreyas@shreyas.local's password: 
+run_forensic3.py                                0%    0     0.0KB/s   --:-- ETArun_forensic3.py                              100% 2081   204.0KB/s   00:00    
+spawn ssh shreyas@shreyas.local /home/shreyas/env/bin/python ~/sih26052_edge/prototype/run_forensic3.py
+shreyas@shreyas.local's password: 
+Input RMS: 393.89
+Input Peak: 9244
+Output RMS: 272.86
+Output Peak: 6320
+Input avg tail energy: 0.446261
+Output avg tail energy: 0.310650
+Delay: 16.00 ms (corr 17.95)
+Output/Input speech correlation: 0.0284

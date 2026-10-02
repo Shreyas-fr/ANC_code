@@ -1,0 +1,102 @@
+spawn ssh shreyas@shreyas.local journalctl -u user@1000 -n 50 --no-pager; journalctl | grep -iE "wireplumber|pipewire" | tail -n 50
+shreyas@shreyas.local's password: 
+Sep 30 01:59:41 shreyas systemd[1225]: Started gvfs-mtp-volume-monitor.service - Virtual filesystem service - Media Transfer Protocol monitor.
+Sep 30 01:59:41 shreyas dbus-daemon[1275]: [session uid=1000 pid=1275 pidfd=5] Activating via systemd: service name='org.gtk.vfs.GPhoto2VolumeMonitor' unit='gvfs-gphoto2-volume-monitor.service' requested by ':1.17' (uid=1000 pid=1492 comm="pcmanfm --desktop")
+Sep 30 01:59:41 shreyas systemd[1225]: Starting gvfs-gphoto2-volume-monitor.service - Virtual filesystem service - digital camera monitor...
+Sep 30 01:59:41 shreyas xdg-desktop-portal-wlr[1593]: 2026/09/30 01:59:41 [ERROR] - xdpw: Could not find render node
+Sep 30 01:59:41 shreyas xdg-desktop-portal-wlr[1593]: 2026/09/30 01:59:41 [ERROR] - xdpw: Could not find render node
+Sep 30 01:59:41 shreyas dbus-daemon[1275]: [session uid=1000 pid=1275 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.wlr'
+Sep 30 01:59:41 shreyas systemd[1225]: Started xdg-desktop-portal-wlr.service - Portal service (wlroots implementation).
+Sep 30 01:59:41 shreyas xdg-desktop-por[1542]: Choosing gtk.portal for org.freedesktop.impl.portal.Account as a last-resort fallback
+Sep 30 01:59:41 shreyas xdg-desktop-por[1542]: Choosing gtk.portal for org.freedesktop.impl.portal.Email as a last-resort fallback
+Sep 30 01:59:41 shreyas xdg-desktop-por[1542]: Choosing gtk.portal for org.freedesktop.impl.portal.DynamicLauncher as a last-resort fallback
+Sep 30 01:59:41 shreyas dbus-daemon[1275]: [session uid=1000 pid=1275 pidfd=5] Successfully activated service 'org.freedesktop.portal.Desktop'
+Sep 30 01:59:41 shreyas systemd[1225]: Started xdg-desktop-portal.service - Portal service.
+Sep 30 01:59:41 shreyas dbus-daemon[1275]: [session uid=1000 pid=1275 pidfd=5] Successfully activated service 'org.gtk.vfs.GPhoto2VolumeMonitor'
+Sep 30 01:59:41 shreyas systemd[1225]: Started gvfs-gphoto2-volume-monitor.service - Virtual filesystem service - digital camera monitor.
+Sep 30 01:59:41 shreyas dbus-daemon[1275]: [session uid=1000 pid=1275 pidfd=5] Activating via systemd: service name='org.gtk.vfs.GoaVolumeMonitor' unit='gvfs-goa-volume-monitor.service' requested by ':1.17' (uid=1000 pid=1492 comm="pcmanfm --desktop")
+Sep 30 01:59:41 shreyas systemd[1225]: Starting gvfs-goa-volume-monitor.service - Virtual filesystem service - GNOME Online Accounts monitor...
+Sep 30 01:59:41 shreyas dbus-daemon[1275]: [session uid=1000 pid=1275 pidfd=5] Successfully activated service 'org.gtk.vfs.GoaVolumeMonitor'
+Sep 30 01:59:41 shreyas systemd[1225]: Started gvfs-goa-volume-monitor.service - Virtual filesystem service - GNOME Online Accounts monitor.
+Sep 30 14:17:21 shreyas systemd[1225]: Reached target bluetooth.target - Bluetooth.
+Sep 30 14:33:31 shreyas wireplumber[1282]: wireplumber: stopped by signal: Terminated
+Sep 30 14:33:31 shreyas systemd[1225]: Stopping wireplumber.service - Multimedia Service Session Manager...
+Sep 30 14:33:31 shreyas wireplumber[1282]: wireplumber: disconnected from pipewire
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c22340 id:3
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634bde850 id:4
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c2a240 id:6
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c339d0 id:7
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c58eb0 id:8
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634b4eed0 id:9
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634bd41f0 id:10
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634bda090 id:11
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634b97630 id:12
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634baa7e0 id:13
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c68070 id:14
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c7ecb0 id:15
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c63a00 id:16
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634b43d40 id:17
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c73b20 id:18
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634b332c0 id:19
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634b360d0 id:20
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c73640 id:21
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634cc17b0 id:22
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634cc18d0 id:23
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634d0fba0 id:24
+Sep 30 14:33:31 shreyas systemd[1225]: Stopped wireplumber.service - Multimedia Service Session Manager.
+Sep 30 14:33:31 shreyas systemd[1225]: Started wireplumber.service - Multimedia Service Session Manager.
+Sep 30 14:33:31 shreyas wireplumber[5668]: wp-internal-comp-loader: Loading profile 'main'
+Sep 30 14:33:31 shreyas xdg-desktop-por[1542]: Realtime error: Could not get pidns for pid 5668: Could not fstatat ns/pid: Not a directory
+Sep 30 14:33:31 shreyas xdg-desktop-por[1542]: Realtime error: Could not get pidns for pid 5668: Could not fstatat ns/pid: Not a directory
+Sep 30 14:33:31 shreyas wireplumber[5668]: default: Failed to get percentage from UPower: org.freedesktop.DBus.Error.NameHasNoOwner
+Sep 30 14:33:31 shreyas wireplumber[5668]: [0:42:13.136421296] [5668]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+Sep 30 01:59:30 shreyas pipewire-pulse[1284]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Sep 30 01:59:30 shreyas pipewire-pulse[1284]: mod.rt: RTKit does not give us MaxRealtimePriority, using 1
+Sep 30 01:59:30 shreyas pipewire-pulse[1284]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Sep 30 01:59:30 shreyas pipewire-pulse[1284]: mod.rt: RTKit does not give us MinNiceLevel, using 0
+Sep 30 01:59:30 shreyas pipewire-pulse[1284]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Sep 30 01:59:30 shreyas pipewire-pulse[1284]: mod.rt: RTKit does not give us RTTimeUSecMax, using -1
+Sep 30 01:59:30 shreyas wireplumber[1282]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Sep 30 01:59:30 shreyas wireplumber[1282]: mod.rt: RTKit does not give us MaxRealtimePriority, using 1
+Sep 30 01:59:30 shreyas pipewire[1276]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Sep 30 01:59:30 shreyas pipewire[1276]: mod.rt: RTKit does not give us MaxRealtimePriority, using 1
+Sep 30 01:59:30 shreyas pipewire[1276]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Sep 30 01:59:30 shreyas pipewire[1276]: mod.rt: RTKit does not give us MinNiceLevel, using 0
+Sep 30 01:59:30 shreyas wireplumber[1282]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Sep 30 01:59:30 shreyas wireplumber[1282]: mod.rt: RTKit does not give us MinNiceLevel, using 0
+Sep 30 01:59:30 shreyas pipewire[1276]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Sep 30 01:59:30 shreyas pipewire[1276]: mod.rt: RTKit does not give us RTTimeUSecMax, using -1
+Sep 30 01:59:30 shreyas wireplumber[1282]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Sep 30 01:59:30 shreyas wireplumber[1282]: mod.rt: RTKit does not give us RTTimeUSecMax, using -1
+Sep 30 01:59:30 shreyas wireplumber[1282]: wp-internal-comp-loader: Loading profile 'main'
+Sep 30 01:59:31 shreyas wireplumber[1282]: default: Failed to get percentage from UPower: org.freedesktop.DBus.Error.NameHasNoOwner
+Sep 30 01:59:32 shreyas wireplumber[1282]: [0:00:15.705917156] [1282]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+Sep 30 14:33:31 shreyas wireplumber[1282]: wireplumber: stopped by signal: Terminated
+Sep 30 14:33:31 shreyas systemd[1225]: Stopping wireplumber.service - Multimedia Service Session Manager...
+Sep 30 14:33:31 shreyas wireplumber[1282]: wireplumber: disconnected from pipewire
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c22340 id:3
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634bde850 id:4
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c2a240 id:6
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c339d0 id:7
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c58eb0 id:8
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634b4eed0 id:9
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634bd41f0 id:10
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634bda090 id:11
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634b97630 id:12
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634baa7e0 id:13
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c68070 id:14
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c7ecb0 id:15
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c63a00 id:16
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634b43d40 id:17
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c73b20 id:18
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634b332c0 id:19
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634b360d0 id:20
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634c73640 id:21
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634cc17b0 id:22
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634cc18d0 id:23
+Sep 30 14:33:31 shreyas wireplumber[1282]: pw.core: 0x555634bd1d80: leaked proxy 0x555634d0fba0 id:24
+Sep 30 14:33:31 shreyas systemd[1225]: Stopped wireplumber.service - Multimedia Service Session Manager.
+Sep 30 14:33:31 shreyas systemd[1225]: Started wireplumber.service - Multimedia Service Session Manager.
+Sep 30 14:33:31 shreyas wireplumber[5668]: wp-internal-comp-loader: Loading profile 'main'
+Sep 30 14:33:31 shreyas wireplumber[5668]: default: Failed to get percentage from UPower: org.freedesktop.DBus.Error.NameHasNoOwner
+Sep 30 14:33:31 shreyas wireplumber[5668]: [0:42:13.136421296] [5668]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817

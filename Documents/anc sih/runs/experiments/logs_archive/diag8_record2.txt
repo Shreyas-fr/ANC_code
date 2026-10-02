@@ -1,0 +1,2 @@
+spawn ssh shreyas@shreyas.local rm -f ~/sih26052-edge/audio/vs102_mic_test.wav; timeout 10 pw-record --target 46 ~/sih26052-edge/audio/vs102_mic_test.wav; ls -l ~/sih26052-edge/audio/vs102_mic_test.wav
+shreyas@shreyas.local's password: 

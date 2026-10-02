@@ -1,0 +1,2 @@
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/pi_ai_network_sender.py > /tmp/pi_final_test2.log 2>&1
+shreyas@shreyas.local's password: 

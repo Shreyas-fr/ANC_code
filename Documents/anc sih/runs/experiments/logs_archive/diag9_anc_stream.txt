@@ -1,0 +1,196 @@
+spawn ssh shreyas@shreyas.local cat /home/shreyas/sih26052_edge/app/anc_stream.py
+shreyas@shreyas.local's password: 
+import time
+import json
+import numpy as np
+import torch
+import soundfile as sf
+import os
+import sys
+
+from app.stateful_polar_lstm import StatefulPolarLSTM_Wrapper
+from app.monitor import PerformanceMonitor
+
+class ANCStream:
+    def __init__(self, config_path):
+        with open(config_path, 'r') as f:
+            self.config = json.load(f)
+            
+        self.device = torch.device("cpu")
+        self.model = StatefulPolarLSTM_Wrapper()
+        
+        # Load model using map_location='cpu'
+        ckpt = torch.load(self.config['model_path'], map_location='cpu')
+        if 'model_state_dict' in ckpt:
+            self.model.load_state_dict(ckpt['model_state_dict'])
+        else:
+            self.model.load_state_dict(ckpt)
+            
+        self.model.to(self.device)
+        self.model.eval()
+        
+        self.monitor = PerformanceMonitor(
+            log_path=os.path.join(self.config['log_directory'], "runtime_metrics.csv"),
+            deadline_ms=self.config['frame_ms']
+        )
+        
+        self.reset_state()
+
+    def reset_state(self):
+        self.h = None
+        self.c = None
+        self.in_buffer = np.zeros(512, dtype=np.float32)
+        self.out_buffer = np.zeros(512, dtype=np.float32)
+        self.window = torch.hann_window(512).numpy()
+        self.monitor.record_anomaly(state_reset=True)
+
+    def process_frame(self, audio_chunk):
+        # audio_chunk: (256,) float32
+        start_time = time.time()
+        
+        try:
+            if np.isnan(audio_chunk).any() or np.isinf(audio_chunk).any():
+                self.monitor.record_anomaly(nan_inf=True)
+                self.reset_state()
+                return audio_chunk # Fallback
+                
+            # Shift in_buffer and append chunk
+            self.in_buffer[:256] = self.in_buffer[256:]
+            self.in_buffer[256:] = audio_chunk
+            
+            # STFT (1 frame)
+            frame = self.in_buffer * self.window
+            stft = np.fft.rfft(frame)
+            features = np.concatenate([stft.real, stft.imag])
+            
+            input_t = torch.tensor(features, dtype=torch.float32).unsqueeze(0).unsqueeze(0) # (1, 1, 514)
+            
+            with torch.no_grad():
+                if self.h is None:
+                    self.h = torch.zeros(2, 1, 256, device=self.device)
+                    self.c = torch.zeros(2, 1, 256, device=self.device)
+                
+                mr, mi, self.h, self.c, _, _ = self.model.core(input_t, self.h, self.c)
+
+                
+            mr = mr.squeeze().numpy()
+            mi = mi.squeeze().numpy()
+            
+            if np.isnan(mr).any() or np.isinf(mr).any():
+                self.monitor.record_anomaly(nan_inf=True)
+                self.reset_state()
+                return audio_chunk # Fallback
+                
+            # Apply mask
+            mask = mr + 1j * mi
+            enh_stft = stft * mask
+            
+            # iSTFT (1 frame)
+            enh_frame = np.fft.irfft(enh_stft, n=512) * self.window
+            
+            # Overlap-add
+            self.out_buffer[:256] += enh_frame[:256]
+            out_chunk = self.out_buffer[:256].copy()
+            self.out_buffer[:256] = self.out_buffer[256:] + enh_frame[256:]
+            self.out_buffer[256:] = 0.0
+            
+        except Exception as e:
+            print(f"Exception in process_frame: {e}")
+            self.monitor.record_anomaly(dropped=True)
+            return audio_chunk # Fallback
+            
+        proc_time_ms = (time.time() - start_time) * 1000
+        self.monitor.record_frame(proc_time_ms)
+        
+        return out_chunk
+
+    def run_file(self, in_file, out_file):
+        audio, sr = sf.read(in_file)
+        if sr != self.config['sample_rate']:
+            raise ValueError(f"Expected {self.config['sample_rate']} Hz, got {sr}")
+            
+        hop = self.config['hop_length']
+        out_audio = []
+        
+        # Process hop by hop continuously
+        for i in range(0, len(audio), hop):
+            chunk = audio[i:i+hop]
+            if len(chunk) < hop:
+                chunk = np.pad(chunk, (0, hop - len(chunk)))
+            out = self.process_frame(chunk)
+            out_audio.extend(out)
+            
+            if i % (hop * 100) == 0:
+                self.monitor.flush_log()
+                
+        self.monitor.flush_log(force=True)
+        sf.write(out_file, out_audio[:len(audio)], sr)
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "test":
+        # Run 5-minute prerecorded test
+        stream = ANCStream(os.path.expanduser("~/sih26052_edge/config/config.json"))
+        # Generate a dummy 5-minute test file since we don't have access to Gold
+        dummy_audio = np.random.randn(16000 * 300).astype(np.float32) * 0.1
+        sf.write("/tmp/test_in.wav", dummy_audio, 16000)
+        
+        stream.run_file("/tmp/test_in.wav", "/tmp/test_out.wav")
+        print("5-minute test completed successfully.")
+        
+        # Save summary without pandas
+        import csv
+        frames = 0
+        misses = 0
+        p50 = []
+        p95 = []
+        p99 = []
+        max_t = 0
+        nan_c = 0
+        resets = 0
+        drops = 0
+        
+        with open(os.path.expanduser("~/sih26052_edge/logs/runtime_metrics.csv"), "r") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                frames = max(frames, int(row['frames_processed']))
+                misses = max(misses, int(row['deadline_misses']))
+                p50.append(float(row['p50_ms']))
+                p95.append(float(row['p95_ms']))
+                p99.append(float(row['p99_ms']))
+                max_t = max(max_t, float(row['max_ms']))
+                nan_c = max(nan_c, int(row['nan_inf_count']))
+                resets = max(resets, int(row['state_resets']))
+                drops = max(drops, int(row['dropped_frames']))
+                
+        with open(os.path.expanduser("~/sih26052_edge/logs/5min_stream_test.csv"), "w") as f:
+            f.write(f"frames_processed,{frames}\n")
+            f.write(f"deadline_misses,{misses}\n")
+            f.write(f"p50_ms,{np.median(p50)}\n")
+            f.write(f"p95_ms,{np.median(p95)}\n")
+            f.write(f"p99_ms,{np.median(p99)}\n")
+            f.write(f"max_ms,{max_t}\n")
+            f.write(f"nan_inf_count,{nan_c}\n")
+            f.write(f"state_resets,{resets}\n")
+            f.write(f"dropped_frames,{drops}\n")
+    else:
+        # Default daemon mode
+        stream = ANCStream(os.path.expanduser("~/sih26052_edge/config/config.json"))
+        hop = stream.config['hop_length']
+        sr = stream.config['sample_rate']
+        sleep_time = hop / sr
+        
+        print("Starting ANC edge service dummy stream...")
+        frames = 0
+        while True:
+            chunk = np.random.randn(hop).astype(np.float32) * 0.05
+            start = time.time()
+            stream.process_frame(chunk)
+            elapsed = time.time() - start
+            
+            # Simulate real-time pacing
+            if elapsed < sleep_time:
+                time.sleep(sleep_time - elapsed)
+                
+            frames += 1
+            if frames % 100 == 0:
+                stream.monitor.flush_log()

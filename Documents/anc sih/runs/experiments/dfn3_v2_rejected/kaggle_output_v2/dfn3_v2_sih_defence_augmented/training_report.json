@@ -1,0 +1,32 @@
+{
+  "architecture": "DeepFilterNet3",
+  "container_format": "HK (hknt 1.1.0)",
+  "sample_rate": 48000,
+  "epochs": 3,
+  "best_val_loss": 0.0020568839281622786,
+  "history": [
+    {
+      "epoch": 1,
+      "mean_train_loss": 0.00218605557974014,
+      "val_loss": 0.00213862019154476
+    },
+    {
+      "epoch": 2,
+      "mean_train_loss": 0.002130226166918874,
+      "val_loss": 0.0020739976534969173
+    },
+    {
+      "epoch": 3,
+      "mean_train_loss": 0.0020714725248722568,
+      "val_loss": 0.0020568839281622786
+    }
+  ],
+  "hk_roundtrip": "strict load passed",
+  "output_files": [
+    "/kaggle/working/dfn3_v2_sih_defence_augmented/epoch-1.hk",
+    "/kaggle/working/dfn3_v2_sih_defence_augmented/epoch-2.hk",
+    "/kaggle/working/dfn3_v2_sih_defence_augmented/epoch-3.hk",
+    "/kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_best.hk",
+    "/kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_final.hk"
+  ]
+}
