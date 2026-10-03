@@ -1,0 +1,20 @@
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge; /home/shreyas/env/bin/python ~/analyze_dual.py /home/shreyas/sih26052_edge/audio/final_test2_input_20260930_154218.wav /home/shreyas/sih26052_edge/audio/final_test2_ai_output_20260930_154218.wav
+shreyas@shreyas.local's password: 
+INPUT:
+Duration: 60.00s
+Sample Rate: 16000 Hz
+Channels: 1
+RMS: 407.49
+Peak: 10590.0
+NaN/Inf: False/False
+
+OUTPUT:
+Duration: 60.00s
+Sample Rate: 16000 Hz
+Channels: 1
+RMS: 279.73
+Peak: 7023.0
+NaN/Inf: False/False
+
+Cross-correlation: -0.0842
+Output contains speech: YES

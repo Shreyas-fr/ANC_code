@@ -1,0 +1,17 @@
+spawn scp pi_ai_network_sender.py shreyas@shreyas.local:~/sih26052_edge/prototype/pi_ai_network_sender.py
+shreyas@shreyas.local's password: 
+pi_ai_network_sender.py                         0%    0     0.0KB/s   --:-- ETApi_ai_network_sender.py                       100% 3649   161.7KB/s   00:00    
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/pi_ai_network_sender.py
+shreyas@shreyas.local's password: 
+Found VS102 source ID: 46
+Starting recording and live streaming to 10.85.100.182:5005...
+
+=== REAL-TIME MEASUREMENT ===
+Frames processed: 1875
+Median: 15.45 ms
+p95: 19.12 ms
+p99: 20.92 ms
+Max: 29.66 ms
+>16ms frames (Deadline misses): 720
+Packets sent: 1875
+Temperature: 72.2 °C

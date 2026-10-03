@@ -1,0 +1,18 @@
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; export XDG_RUNTIME_DIR=/run/user/1000; /home/shreyas/env/bin/python /home/shreyas/sih26052_edge/prototype/pi_ai_network_sender.py
+shreyas@shreyas.local's password: 
+Found VS102 source ID: 77
+Starting recording and live streaming to 10.85.100.182:5005...
+
+=== REAL-TIME MEASUREMENT ===
+Frames processed: 3750
+Median: 15.37 ms
+p95: 18.76 ms
+p99: 20.36 ms
+Max: 23.88 ms
+>16ms frames (Deadline misses): 1405
+Packets sent: 3750
+Temperature: 79.8 °C
+
+Files saved:
+Input: /home/shreyas/sih26052_edge/audio/final_test2_input_20260930_164525.wav
+Output: /home/shreyas/sih26052_edge/audio/final_test2_ai_output_20260930_164525.wav

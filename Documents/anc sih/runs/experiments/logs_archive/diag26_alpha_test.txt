@@ -1,0 +1,5 @@
+spawn scp test_alpha_decay.py shreyas@shreyas.local:~/sih26052_edge/prototype/test_alpha_decay.py
+shreyas@shreyas.local's password: 
+test_alpha_decay.py                             0%    0     0.0KB/s   --:-- ETAtest_alpha_decay.py                           100% 3919   266.7KB/s   00:00    
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/test_alpha_decay.py
+shreyas@shreyas.local's password: 

@@ -1,0 +1,15 @@
+spawn ssh shreyas@shreyas.local pw-cli enum-params 76 Profile
+shreyas@shreyas.local's password: 
+  Object: size 200, type Spa:Pod:Object:Param:Profile (262151), id Spa:Enum:ParamId:Profile (9)
+    Prop: key Spa:Pod:Object:Param:Profile:index (1), flags 00000000
+      Int 65536
+    Prop: key Spa:Pod:Object:Param:Profile:name (2), flags 00000000
+      String "audio-gateway"
+    Prop: key Spa:Pod:Object:Param:Profile:description (3), flags 00000000
+      String "Audio Gateway (A2DP Source & HSP/HFP AG)"
+    Prop: key Spa:Pod:Object:Param:Profile:available (5), flags 00000000
+      Id 2        (Spa:Enum:ParamAvailability:yes)
+    Prop: key Spa:Pod:Object:Param:Profile:priority (4), flags 00000000
+      Int 256
+    Prop: key Spa:Pod:Object:Param:Profile:save (8), flags 00000000
+      Bool false

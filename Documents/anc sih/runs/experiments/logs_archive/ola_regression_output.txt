@@ -1,0 +1,61 @@
+spawn scp run_ola_regression.py shreyas@shreyas.local:~/sih26052_edge/prototype/run_ola_regression.py
+shreyas@shreyas.local's password: 
+run_ola_regression.py                           0%    0     0.0KB/s   --:-- ETArun_ola_regression.py                         100%   16KB 376.2KB/s   00:00    
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/run_ola_regression.py
+shreyas@shreyas.local's password: 
+=== HASH VERIFICATION ===
+anc_stream.py       : e4f6e99c95784013e27b6585933a42f8bed85594e39256e312d26999bb3b4246
+  (original pre-fix): 4be77159b5ff208c90c04867290e54495ec5308a5af0df645b6b22b04e6d52b3
+  (expected fixed)  : e4f6e99c95784013e27b6585933a42f8bed85594e39256e312d26999bb3b4246
+  Match fixed       : True
+best.pt             : b105b714b0ca510662050b4fc6e099a8e779d9042549486a79d8119708e51d9a
+  Unchanged         : True
+
+=== REGRESSION TEST 1: IDENTITY RECONSTRUCTION ===
+  RMS            : 0.012434
+  Peak           : 0.323181
+  Clip           : False
+  NaN/Inf        : False
+  Max abs error  : 0.512268
+  Mean abs error : 0.008247
+  Best lag       : 256 samples (16.00 ms)
+  SNR @ lag=0    : -3.37 dB
+  SNR @ lag=+256 : 60.55 dB
+  SNR @ lag=-256 : -2.92 dB
+  SNR @ best lag : 60.55 dB  ← alignment-corrected
+  Speech corr    : -0.0856
+  Tail energy    : 0.427685
+  16ms corr peak : 148.4429 (causal processing latency)
+
+DSP_OLA_FIX = PASS
+
+=== REGRESSION TEST 2: FULL MODEL AI OUTPUT ===
+  RMS         : 0.011119
+  Peak        : 0.289673
+  Clip        : False
+  NaN/Inf     : False
+  SNR @ best  : 19.41 dB
+  Speech corr : -0.0858
+  Tail energy : 0.383277
+  16ms peak   : 132.7162
+
+=== REGRESSION TEST 3: 20-SECOND TIMING TEST ===
+  Total frames : 1249
+  Dropped      : 0
+  State resets : 0
+  Median       : 15.771 ms
+  p95          : 18.884 ms
+  p99          : 20.783 ms
+  Maximum      : 23.765 ms
+  NaN/Inf out  : 0
+  Clipped out  : 0
+  Temperature  : temp=84.0'C
+
+=== REGRESSION TEST 4: SERVICE STATUS ===
+  sih26052-edge.service : active
+
+Report written: /home/shreyas/sih26052_edge/prototype/ola_production_fix_report.md
+Status written: /home/shreyas/sih26052_edge/prototype/ola_fix_status.txt
+
+=== ALL REGRESSION TESTS COMPLETE ===
+DSP_OLA_FIX = PASS

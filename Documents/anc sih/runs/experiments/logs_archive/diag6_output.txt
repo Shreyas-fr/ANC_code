@@ -1,0 +1,119 @@
+spawn ssh shreyas@shreyas.local bash ~/diag6.sh
+shreyas@shreyas.local's password: 
+=== STEP 1 - CURRENT STATE ===
+PipeWire 'pipewire-0' [1.4.2, shreyas@shreyas, cookie:3750210833]
+ └─ Clients:
+        34. pipewire                            [1.4.2, shreyas@shreyas, pid:1284]
+        47. WirePlumber                         [1.4.2, shreyas@shreyas, pid:5668]
+        66. WirePlumber [export]                [1.4.2, shreyas@shreyas, pid:5668]
+        73. xdg-desktop-portal                  [1.4.2, shreyas@shreyas, pid:1542]
+        74. xdg-desktop-portal-wlr              [1.4.2, shreyas@shreyas, pid:1593]
+        75. unknown                             [1.4.2, shreyas@shreyas, pid:1482]
+        77. wpctl                               [1.4.2, shreyas@shreyas, pid:6387]
+
+Audio
+ ├─ Devices:
+ │      36. realme narzo 60 5G                  [bluez5]
+ │      64. Built-in Audio                      [alsa]
+ │      65. Built-in Audio                      [alsa]
+ │  
+ ├─ Sinks:
+ │  *   35. Dummy Output                        [vol: 1.00]
+ │  
+ ├─ Sources:
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+
+Video
+ ├─ Devices:
+ │      33. pispbe                              [v4l2]
+ │      37. pispbe                              [v4l2]
+ │      38. pispbe                              [v4l2]
+ │      39. pispbe                              [v4l2]
+ │      40. pispbe                              [v4l2]
+ │      41. pispbe                              [v4l2]
+ │      42. pispbe                              [v4l2]
+ │      48. pispbe                              [v4l2]
+ │      49. pispbe                              [v4l2]
+ │      50. pispbe                              [v4l2]
+ │      51. pispbe                              [v4l2]
+ │      52. pispbe                              [v4l2]
+ │      53. pispbe                              [v4l2]
+ │      54. pispbe                              [v4l2]
+ │      55. pispbe                              [v4l2]
+ │      56. pispbe                              [v4l2]
+ │      57. rpi-hevc-dec                        [v4l2]
+ │  
+ ├─ Sinks:
+ │  
+ ├─ Sources:
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+
+Settings
+ └─ Default Configured Devices:
+DEV_ID BEFORE: 36
+id 36, type PipeWire:Interface:Device
+    api.bluez5.address = "A8:EF:5F:FF:6E:82"
+    api.bluez5.class = "0x5a020c"
+    api.bluez5.connection = "connected"
+    api.bluez5.device = ""
+    api.bluez5.icon = "phone"
+    api.bluez5.path = "/org/bluez/hci0/dev_A8_EF_5F_FF_6E_82"
+    bluez5.auto-connect = "[ hfp_hf hsp_hs a2dp_sink hfp_ag hsp_ag a2dp_source ]"
+    bluez5.profile = "off"
+  * client.id = "66"
+    device.alias = "realme narzo 60 5G"
+  * device.api = "bluez5"
+    device.bus = "bluetooth"
+  * device.description = "realme narzo 60 5G"
+    device.form-factor = "phone"
+    device.icon-name = "audio-card-bluetooth"
+  * device.name = "bluez_card.A8_EF_5F_FF_6E_82"
+    device.product.id = "0x1200"
+    device.string = "A8:EF:5F:FF:6E:82"
+    device.vendor.id = "bluetooth:0046"
+  * factory.id = "15"
+  * media.class = "Audio/Device"
+  * object.serial = "129"
+    spa.object.id = "0"
+Device A8:EF:5F:FF:6E:82 (public)
+	Name: realme narzo 60 5G
+	Alias: realme narzo 60 5G
+	Class: 0x005a020c (5898764)
+	Icon: phone
+	Paired: yes
+	Bonded: yes
+	Trusted: yes
+	Blocked: no
+	Connected: yes
+	LegacyPairing: no
+	UUID: OBEX Object Push          (00001105-0000-1000-8000-00805f9b34fb)
+	UUID: Audio Source              (0000110a-0000-1000-8000-00805f9b34fb)
+	UUID: A/V Remote Control Target (0000110c-0000-1000-8000-00805f9b34fb)
+	UUID: A/V Remote Control        (0000110e-0000-1000-8000-00805f9b34fb)
+	UUID: Headset AG                (00001112-0000-1000-8000-00805f9b34fb)
+	UUID: PANU                      (00001115-0000-1000-8000-00805f9b34fb)
+	UUID: NAP                       (00001116-0000-1000-8000-00805f9b34fb)
+	UUID: Handsfree Audio Gateway   (0000111f-0000-1000-8000-00805f9b34fb)
+	UUID: Phonebook Access Server   (0000112f-0000-1000-8000-00805f9b34fb)
+	UUID: Message Access Server     (00001132-0000-1000-8000-00805f9b34fb)
+	UUID: PnP Information           (00001200-0000-1000-8000-00805f9b34fb)
+	UUID: Generic Access Profile    (00001800-0000-1000-8000-00805f9b34fb)
+	UUID: Generic Attribute Profile (00001801-0000-1000-8000-00805f9b34fb)
+	UUID: Unknown                   (0000aa15-0000-1000-8000-00805f9b34fb)
+	UUID: Vendor specific           (a49eaa15-cb06-495c-9f4f-bb80a90cdf00)
+	UUID: Vendor specific           (a49ecc15-cb06-495c-9f4f-bb80a90cdf00)
+	Modalias: bluetooth:v0046p1200d1436
+monitor.bluez.properties = {
+  bluez5.roles = [ a2dp_sink ]
+}
+=== STEP 2 - REMOVE FILE ===
+REMOVED
+=== STEP 3 - RESTART WIREPLUMBER ===
+=== STEP 4 - RECONNECT PHONE ===
+Attempting to connect to A8:EF:5F:FF:6E:82

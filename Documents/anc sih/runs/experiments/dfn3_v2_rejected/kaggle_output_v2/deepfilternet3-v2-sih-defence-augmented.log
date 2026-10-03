@@ -1,0 +1,267 @@
+[{"stream_name":"stderr","time":6.233947119,"data":"/usr/local/lib/python3.12/dist-packages/nbformat/__init__.py:96: MissingIDFieldWarning: Cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently, and will stop doing so in the future.\n"}
+,{"stream_name":"stderr","time":6.234009477,"data":"  validate(nb)\n"}
+,{"stream_name":"stderr","time":7.048928761,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.048959254,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.048964904,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.048969196,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":7.706555731,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.706586547,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.706591863,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.706595678,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":15.394916927,"data":"GPU: Tesla T4 | count: 2\n"}
+,{"stream_name":"stdout","time":15.394952362,"data":"\n"}
+,{"stream_name":"stdout","time":15.394955972,"data":"[1/6] Rust toolchain...\n"}
+,{"stream_name":"stdout","time":15.394958551,"data":"  Installing rustup...\n"}
+,{"stream_name":"stdout","time":29.916332983,"data":"stable-x86_64-unknown-linux-gnu installed - rustc 1.99.0 (b940084d7 2026-09-28)\n"}
+,{"stream_name":"stdout","time":29.916365968,"data":"\n"}
+,{"stream_name":"stdout","time":29.916371703,"data":"\n"}
+,{"stream_name":"stdout","time":29.916375776,"data":"Rust is installed now. Great!\n"}
+,{"stream_name":"stdout","time":29.916379772,"data":"\n"}
+,{"stream_name":"stdout","time":29.91638337,"data":"To get started you may need to restart your current shell.\n"}
+,{"stream_name":"stdout","time":29.91638762,"data":"This would reload your PATH environment variable to include\n"}
+,{"stream_name":"stdout","time":29.91639203,"data":"Cargo's bin directory ($HOME/.cargo/bin).\n"}
+,{"stream_name":"stdout","time":29.916396516,"data":"\n"}
+,{"stream_name":"stdout","time":29.916400698,"data":"To configure your current shell, you need to source the\n"}
+,{"stream_name":"stdout","time":29.916405549,"data":"corresponding env file under $HOME/.cargo.\n"}
+,{"stream_name":"stdout","time":29.916409817999998,"data":"\n"}
+,{"stream_name":"stdout","time":29.916414369,"data":"Consider running the right command for your shell (note the leading DOT):\n"}
+,{"stream_name":"stdout","time":29.916418894,"data":". \"$HOME/.cargo/env\" # For sh/ash/dash/pdksh/bash\n"}
+,{"stream_name":"stdout","time":29.916423608,"data":"cargo:rerun-if-env-changed=CC_x86_64-unknown-linux-gnu\n"}
+,{"stream_name":"stdout","time":29.916428066,"data":"CC_x86_64-unknown-linux-gnu = None\n"}
+,{"stream_name":"stdout","time":29.916431989,"data":"cargo:rerun-if-env-changed=CC_x86_64_unknown_linux_gnu\n"}
+,{"stream_name":"stdout","time":29.916435926,"data":"CC_x86_64_unknown_linux_gnu = None\n"}
+,{"stream_name":"stdout","time":29.916440219,"data":"cargo:rerun-if-env-changed=HOST_CC\n"}
+,{"stream_name":"stdout","time":29.916457132,"data":"HOST_CC = None\n"}
+,{"stream_name":"stdout","time":29.916461569,"data":"cargo:rerun-if-env-changed=CC\n"}
+,{"stream_name":"stdout","time":29.916465444,"data":"CC = None\n"}
+,{"stream_name":"stdout","time":29.91646925,"data":"cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT\n"}
+,{"stream_name":"stdout","time":29.916474106,"data":"cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS\n"}
+,{"stream_name":"stdout","time":29.916478255,"data":"CRATE_CC_NO_DEFAULTS = None\n"}
+,{"stream_name":"stdout","time":29.916482038,"data":"cargo:rerun-if-env-changed=CFLAGS\n"}
+,{"stream_name":"stdout","time":29.916485896,"data":"CFLAGS = None\n"}
+,{"stream_name":"stdout","time":29.916489519,"data":"cargo:rerun-if-env-changed=HOST_CFLAGS\n"}
+,{"stream_name":"stdout","time":29.916493084,"data":"HOST_CFLAGS = None\n"}
+,{"stream_name":"stdout","time":29.916496796,"data":"cargo:rerun-if-env-changed=CFLAGS_x86_64_unknown_linux_gnu\n"}
+,{"stream_name":"stdout","time":29.916500643,"data":"CFLAGS_x86_64_unknown_linux_gnu = None\n"}
+,{"stream_name":"stdout","time":29.916504544,"data":"cargo:rerun-if-env-changed=CFLAGS_x86_64-unknown-linux-gnu\n"}
+,{"stream_name":"stdout","time":29.916508377,"data":"CFLAGS_x86_64-unknown-linux-gnu = None\n"}
+,{"stream_name":"stdout","time":29.916512214,"data":"info: downloading installer\n"}
+,{"stream_name":"stdout","time":29.916515977,"data":"info: profile set to minimal\n"}
+,{"stream_name":"stdout","time":29.916519808,"data":"info: default host tuple is x86_64-unknown-linux-gnu\n"}
+,{"stream_name":"stdout","time":29.916523667,"data":"info: syncing channel updates for stable-x86_64-unknown-linux-gnu\n"}
+,{"stream_name":"stdout","time":29.916527674,"data":"info: latest update on 2026-10-01 for version 1.99.0 (b940084d7 2026-09-28)\n"}
+,{"stream_name":"stdout","time":29.916531549,"data":"info: downloading 3 components\n"}
+,{"stream_name":"stdout","time":29.916535655,"data":"info: default toolchain set to stable-x86_64-unknown-linux-gnu\n"}
+,{"stream_name":"stdout","time":29.916539647,"data":"cargo 1.99.0 (5f94df478 2026-08-27)\n"}
+,{"stream_name":"stdout","time":29.916543642,"data":"  Rust: OK\n"}
+,{"stream_name":"stdout","time":29.916547429,"data":"\n"}
+,{"stream_name":"stdout","time":29.916551088,"data":"[2/6] Installing maturin...\n"}
+,{"stream_name":"stdout","time":35.315240899,"data":"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.5/10.5 MB 79.3 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":35.31528418,"data":"maturin 1.15.0\n"}
+,{"stream_name":"stdout","time":35.315290666,"data":"\n"}
+,{"stream_name":"stdout","time":35.315295106,"data":"[3/6] Cloning DeepFilterNet v0.5.6 source...\n"}
+,{"stream_name":"stdout","time":38.658140693,"data":"Cloning into '/kaggle/temp/DeepFilterNet-src'...\n"}
+,{"stream_name":"stdout","time":38.658184899,"data":"Note: switching to '978576aa8400552a4ce9730838c635aa30db5e61'.\n"}
+,{"stream_name":"stdout","time":38.658209442,"data":"\n"}
+,{"stream_name":"stdout","time":38.658214182,"data":"You are in 'detached HEAD' state. You can look around, make experimental\n"}
+,{"stream_name":"stdout","time":38.65821938,"data":"changes and commit them, and you can discard any commits you make in this\n"}
+,{"stream_name":"stdout","time":38.6582244,"data":"state without impacting any branches by switching back to a branch.\n"}
+,{"stream_name":"stdout","time":38.658228136,"data":"\n"}
+,{"stream_name":"stdout","time":38.658231725,"data":"If you want to create a new branch to retain commits you create, you may\n"}
+,{"stream_name":"stdout","time":38.658252517,"data":"do so (now or later) by using -c with the switch command. Example:\n"}
+,{"stream_name":"stdout","time":38.658259942,"data":"\n"}
+,{"stream_name":"stdout","time":38.65826238,"data":"  git switch -c \u003cnew-branch-name\u003e\n"}
+,{"stream_name":"stdout","time":38.65826566,"data":"\n"}
+,{"stream_name":"stdout","time":38.658268005,"data":"Or undo this operation with:\n"}
+,{"stream_name":"stdout","time":38.658270457,"data":"\n"}
+,{"stream_name":"stdout","time":38.658272782,"data":"  git switch -\n"}
+,{"stream_name":"stdout","time":38.658275307,"data":"\n"}
+,{"stream_name":"stdout","time":38.658277665,"data":"Turn off this advice by setting config variable advice.detachedHead to false\n"}
+,{"stream_name":"stdout","time":131.871007794,"data":"e \u003chttps://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html\u003e for more information about checking conditional configuration\n"}
+,{"stream_name":"stdout","time":131.871044975,"data":"   = note: `#[warn(unexpected_cfgs)]` on by default\n"}
+,{"stream_name":"stdout","time":131.871051695,"data":"\n"}
+,{"stream_name":"stdout","time":131.87105708,"data":"warning: use of deprecated constant `std::f32::MIN`: replaced by the `MIN` associated constant on `f32`\n"}
+,{"stream_name":"stdout","time":131.871062617,"data":"   --\u003e libDF/src/lib.rs:539:30\n"}
+,{"stream_name":"stdout","time":131.871068559,"data":"    |\n"}
+,{"stream_name":"stdout","time":131.871073566,"data":"539 |     let mut high = std::f32::MIN;\n"}
+,{"stream_name":"stdout","time":131.871078534,"data":"    |                              ^^^\n"}
+,{"stream_name":"stdout","time":131.871083583,"data":"    |\n"}
+,{"stream_name":"stdout","time":131.871088547,"data":"    = note: `#[warn(deprecated)]` on by default\n"}
+,{"stream_name":"stdout","time":131.871094182,"data":"\n"}
+,{"stream_name":"stdout","time":131.871099674,"data":"warning: use of deprecated constant `std::f32::MIN`: replaced by the `MIN` associated constant on `f32`\n"}
+,{"stream_name":"stdout","time":131.871105472,"data":"   --\u003e libDF/src/lib.rs:554:30\n"}
+,{"stream_name":"stdout","time":131.87111051,"data":"    |\n"}
+,{"stream_name":"stdout","time":131.87111536,"data":"554 |     let mut high = std::f32::MIN;\n"}
+,{"stream_name":"stdout","time":131.871120271,"data":"    |                              ^^^\n"}
+,{"stream_name":"stdout","time":131.871125171,"data":"\n"}
+,{"stream_name":"stdout","time":131.871129908,"data":"   Compiling numpy v0.19.0\n"}
+,{"stream_name":"stdout","time":131.871134808,"data":"warning: `deep_filter` (lib) generated 3 warnings\n"}
+,{"stream_name":"stdout","time":131.871139971,"data":"   Compiling DeepFilterLib v0.5.6 (/kaggle/temp/DeepFilterNet-src/pyDF)\n"}
+,{"stream_name":"stdout","time":131.871144969,"data":"warning: non-local `impl` definition, `impl` blocks should be written at the same level as their item\n"}
+,{"stream_name":"stdout","time":131.87114998,"data":"  --\u003e pyDF/src/lib.rs:19:1\n"}
+,{"stream_name":"stdout","time":131.871154804,"data":"   |\n"}
+,{"stream_name":"stdout","time":131.871159464,"data":"19 | #[pymethods]\n"}
+,{"stream_name":"stdout","time":131.871164414,"data":"   | -^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":131.871169255,"data":"   | |\n"}
+,{"stream_name":"stdout","time":131.87117424,"data":"   | `PyClassImplCollector` is not local\n"}
+,{"stream_name":"stdout","time":131.871179324,"data":"   | `PyClassNewTextSignature` is not local\n"}
+,{"stream_name":"stdout","time":131.871184246,"data":"   | move the `impl` block outside of this function `trampoline` and up 4 bodies\n"}
+,{"stream_name":"stdout","time":131.871198783,"data":"20 | #[allow(clippy::upper_case_acronyms)]\n"}
+,{"stream_name":"stdout","time":131.871203231,"data":"21 | impl DF {\n"}
+,{"stream_name":"stdout","time":131.871207231,"data":"   |      --\n"}
+,{"stream_name":"stdout","time":131.87121097,"data":"   |      |\n"}
+,{"stream_name":"stdout","time":131.871214925,"data":"   |      `DF` is not local\n"}
+,{"stream_name":"stdout","time":131.871218981,"data":"   |      `DF` is not local\n"}
+,{"stream_name":"stdout","time":131.871222784,"data":"   |\n"}
+,{"stream_name":"stdout","time":131.871227246,"data":"   = note: the attribute macro `pymethods` defines the non-local `impl`, and may need to be changed\n"}
+,{"stream_name":"stdout","time":131.871231626,"data":"   = note: the attribute macro `pymethods` may come from an old version of the `pyo3_macros` crate, try updating your dependency with `cargo update -p pyo3_macros`\n"}
+,{"stream_name":"stdout","time":131.871236307,"data":"   = note: an `impl` is never scoped, even when it is nested inside an item, as it may impact type checking outside of that item, which can be the case if neither the trait or the self type are at the same nesting level as the `impl`\n"}
+,{"stream_name":"stdout","time":131.871241208,"data":"   = note: `#[warn(non_local_definitions)]` on by default\n"}
+,{"stream_name":"stdout","time":131.871245552,"data":"   = note: this warning originates in the attribute macro `pymethods` (in Nightly builds, run with -Z macro-backtrace for more info)\n"}
+,{"stream_name":"stdout","time":131.871249922,"data":"\n"}
+,{"stream_name":"stdout","time":131.871256151,"data":"warning: hiding a lifetime that's elided elsewhere is confusing\n"}
+,{"stream_name":"stdout","time":131.871260386,"data":"   --\u003e pyDF/src/lib.rs:302:27\n"}
+,{"stream_name":"stdout","time":131.871264908,"data":"    |\n"}
+,{"stream_name":"stdout","time":131.871269415,"data":"302 |     fn unit_norm_init(py: Python, num_freq_bins: usize) -\u003e PyResult\u003c\u0026PyArray2\u003cf32\u003e\u003e {\n"}
+,{"stream_name":"stdout","time":131.87127449,"data":"    |                           ^^^^^^ the lifetime is hidden here        ^^^^^^^^^^^^^^ the same lifetime is elided here\n"}
+,{"stream_name":"stdout","time":131.871278742,"data":"    |\n"}
+,{"stream_name":"stdout","time":131.871282621,"data":"    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing\n"}
+,{"stream_name":"stdout","time":131.871286844,"data":"    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default\n"}
+,{"stream_name":"stdout","time":131.871290953,"data":"help: use `'_` for type paths\n"}
+,{"stream_name":"stdout","time":131.871294833,"data":"    |\n"}
+,{"stream_name":"stdout","time":131.871298618,"data":"302 |     fn unit_norm_init(py: Python\u003c'_\u003e, num_freq_bins: usize) -\u003e PyResult\u003c\u0026PyArray2\u003cf32\u003e\u003e {\n"}
+,{"stream_name":"stdout","time":131.871303524,"data":"    |                                 ++++\n"}
+,{"stream_name":"stdout","time":131.871307571,"data":"\n"}
+,{"stream_name":"stdout","time":131.871311403,"data":"warning: `DeepFilterLib` (lib) generated 2 warnings (run `cargo fix --lib -p DeepFilterLib` to apply 1 suggestion)\n"}
+,{"stream_name":"stdout","time":131.871315969,"data":"    Finished `release` profile [optimized] target(s) in 28.81s\n"}
+,{"stream_name":"stdout","time":131.871320675,"data":"📖 Found type stub file at libdf.pyi\n"}
+,{"stream_name":"stdout","time":131.871325647,"data":"📦 Built wheel for CPython 3.12 to /kaggle/temp/df_wheels/deepfilterlib-0.5.6-cp312-cp312-manylinux_2_35_x86_64.whl\n"}
+,{"stream_name":"stdout","time":133.204466079,"data":"  deepfilterlib: INSTALLED\n"}
+,{"stream_name":"stdout","time":134.848503542,"data":"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 113.2/113.2 kB 3.0 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":139.982522233,"data":"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.9/3.9 MB 40.5 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":139.982552935,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.6/61.6 kB 2.9 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":139.982557549,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 53.0/53.0 kB 3.0 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":139.982560801,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stdout","time":139.982563713,"data":"google-adk 1.29.0 requires google-cloud-bigquery-storage\u003e=2.0.0, which is not installed.\n"}
+,{"stream_name":"stdout","time":139.982566716,"data":"deepfilternet 0.5.6 requires numpy\u003c2.0,\u003e=1.22, but you have numpy 2.0.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":139.982569576,"data":"ray 2.55.1 requires packaging\u003e=24.2, but you have packaging 23.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":139.982572212,"data":"build 1.5.0 requires packaging\u003e=24.0, but you have packaging 23.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":139.98257588,"data":"google-colab 1.0.0 requires jupyter-server==2.14.0, but you have jupyter-server 2.12.5 which is incompatible.\n"}
+,{"stream_name":"stdout","time":139.982594528,"data":"google-colab 1.0.0 requires pandas==2.2.2, but you have pandas 2.3.3 which is incompatible.\n"}
+,{"stream_name":"stdout","time":139.982599699,"data":"bigquery-magics 0.14.0 requires packaging\u003e=24.2.0, but you have packaging 23.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":139.982604651,"data":"google-cloud-bigquery 3.41.0 requires packaging\u003e=24.2.0, but you have packaging 23.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":139.982609383,"data":"wheel 0.47.0 requires packaging\u003e=24.0, but you have packaging 23.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":139.982625515,"data":"xarray 2025.12.0 requires packaging\u003e=24.1, but you have packaging 23.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":139.982629744,"data":"db-dtypes 1.5.1 requires packaging\u003e=24.2.0, but you have packaging 23.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":140.226184212,"data":"torchaudio shim: OK\n"}
+,{"stream_name":"stdout","time":144.417454023,"data":"numpy=2.0.2 torch=2.10.0+cu128\n"}
+,{"stream_name":"stdout","time":144.417488639,"data":"Setup complete.\n"}
+,{"stream_name":"stdout","time":145.364063599,"data":"\u001b[32m2026-10-02 04:59:31\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36mDF\u001b[0m | \u001b[1mRunning on torch 2.10.0+cu128\u001b[0m\n"}
+,{"stream_name":"stdout","time":145.365143555,"data":"\u001b[32m2026-10-02 04:59:31\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36mDF\u001b[0m | \u001b[1mRunning on host 979c96dc1a8f\u001b[0m\n"}
+,{"stream_name":"stderr","time":145.368109136,"data":"fatal: not a git repository (or any of the parent directories): .git\n"}
+,{"stream_name":"stdout","time":145.383558741,"data":"\u001b[32m2026-10-02 04:59:31\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36mDF\u001b[0m | \u001b[1mLoading model settings of DeepFilterNet3\u001b[0m\n"}
+,{"stream_name":"stdout","time":145.388357377,"data":"\u001b[32m2026-10-02 04:59:31\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36mDF\u001b[0m | \u001b[1mInitializing model `deepfilternet3`\u001b[0m\n"}
+,{"stream_name":"stderr","time":145.571448886,"data":"fatal: not a git repository (or any of the parent directories): .git\n"}
+,{"stream_name":"stderr","time":145.571479754,"data":"\n"}
+,{"stream_name":"stderr","time":145.571483873,"data":"fatal: not a git repository (or any of the parent directories): .git\n"}
+,{"stream_name":"stdout","time":145.852600586,"data":"\u001b[32m2026-10-02 04:59:31\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36mDF\u001b[0m | \u001b[1mFound checkpoint /root/.cache/DeepFilterNet/DeepFilterNet3/checkpoints/model_120.ckpt.best with epoch 120\u001b[0m\n"}
+,{"stream_name":"stdout","time":145.893744572,"data":"\u001b[32m2026-10-02 04:59:31\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36mDF\u001b[0m | \u001b[1mRunning on device cuda:0\u001b[0m\n"}
+,{"stream_name":"stdout","time":145.894933633,"data":"\u001b[32m2026-10-02 04:59:31\u001b[0m | \u001b[1mINFO    \u001b[0m | \u001b[36mDF\u001b[0m | \u001b[1mModel loaded\u001b[0m\n"}
+,{"stream_name":"stdout","time":145.931008661,"data":"DeepFilterNet3 Native SR=48000\n"}
+,{"stream_name":"stdout","time":145.931040069,"data":"No V1 model.hk found in input; starting fine-tuning from pretrained reference.\n"}
+,{"stream_name":"stdout","time":145.931045873,"data":"hk.save_file unavailable (Native HK library (hk.dll) is not available); saving via torch.save: /kaggle/working/dfn3_v2_sih_defence_augmented/pretrained_reference.hk\n"}
+,{"stream_name":"stdout","time":145.931051063,"data":"DataParallel across 2 GPUs\n"}
+,{"stream_name":"stdout","time":434.387586221,"data":"Discovered sih-26-processed-audio at: /kaggle/input/datasets/panavpayappagoudar/sih-26-processed-audio\n"}
+,{"stream_name":"stdout","time":435.066045551,"data":"Total raw entries in sih-26: 122,324\n"}
+,{"stream_name":"stdout","time":435.066088383,"data":"Defence Subsets: Gunfire=1450, Drone=273, Vehicle=2000, Env=576, Speech=93651\n"}
+,{"stream_name":"stdout","time":435.066092853,"data":"V2 Training set size: 3600 mixtures | Val size: 256\n"}
+,{"stream_name":"stdout","time":494.692685357,"data":"[epoch 1/3] step=  25 loss=0.00222 elapsed=54s\n"}
+,{"stream_name":"stdout","time":541.931120402,"data":"[epoch 1/3] step=  50 loss=0.00221 elapsed=101s\n"}
+,{"stream_name":"stdout","time":588.902706288,"data":"[epoch 1/3] step=  75 loss=0.00220 elapsed=148s\n"}
+,{"stream_name":"stdout","time":639.295208462,"data":"[epoch 1/3] step= 100 loss=0.00220 elapsed=198s\n"}
+,{"stream_name":"stdout","time":683.76269246,"data":"[epoch 1/3] step= 125 loss=0.00219 elapsed=243s\n"}
+,{"stream_name":"stdout","time":732.156076871,"data":"[epoch 1/3] step= 150 loss=0.00219 elapsed=291s\n"}
+,{"stream_name":"stdout","time":780.013754133,"data":"[epoch 1/3] step= 175 loss=0.00219 elapsed=339s\n"}
+,{"stream_name":"stdout","time":825.981196266,"data":"[epoch 1/3] step= 200 loss=0.00219 elapsed=385s\n"}
+,{"stream_name":"stdout","time":873.473725331,"data":"[epoch 1/3] step= 225 loss=0.00219 elapsed=433s\n"}
+,{"stream_name":"stdout","time":932.783387598,"data":"=== Epoch 1 Complete: Train Loss=0.00219 | Val Loss=0.00214 ===\n"}
+,{"stream_name":"stdout","time":932.81778206,"data":"hk.save_file unavailable (Native HK library (hk.dll) is not available); saving via torch.save: /kaggle/working/dfn3_v2_sih_defence_augmented/epoch-1.hk\n"}
+,{"stream_name":"stdout","time":932.817831512,"data":"Saved HK checkpoint: /kaggle/working/dfn3_v2_sih_defence_augmented/epoch-1.hk\n"}
+,{"stream_name":"stdout","time":932.817836856,"data":"hk.save_file unavailable (Native HK library (hk.dll) is not available); saving via torch.save: /kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_best.hk\n"}
+,{"stream_name":"stdout","time":932.817850681,"data":"Saved HK checkpoint: /kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_best.hk\n"}
+,{"stream_name":"stdout","time":982.85983304,"data":"[epoch 2/3] step=  25 loss=0.00215 elapsed=50s\n"}
+,{"stream_name":"stdout","time":1027.961454844,"data":"[epoch 2/3] step=  50 loss=0.00214 elapsed=95s\n"}
+,{"stream_name":"stdout","time":1073.054664953,"data":"[epoch 2/3] step=  75 loss=0.00215 elapsed=140s\n"}
+,{"stream_name":"stdout","time":1117.414122178,"data":"[epoch 2/3] step= 100 loss=0.00215 elapsed=185s\n"}
+,{"stream_name":"stdout","time":1163.995785106,"data":"[epoch 2/3] step= 125 loss=0.00215 elapsed=231s\n"}
+,{"stream_name":"stdout","time":1208.379376438,"data":"[epoch 2/3] step= 150 loss=0.00214 elapsed=276s\n"}
+,{"stream_name":"stdout","time":1254.19570521,"data":"[epoch 2/3] step= 175 loss=0.00214 elapsed=321s\n"}
+,{"stream_name":"stdout","time":1298.580467011,"data":"[epoch 2/3] step= 200 loss=0.00213 elapsed=366s\n"}
+,{"stream_name":"stdout","time":1344.151727758,"data":"[epoch 2/3] step= 225 loss=0.00213 elapsed=411s\n"}
+,{"stream_name":"stdout","time":1402.27440215,"data":"=== Epoch 2 Complete: Train Loss=0.00213 | Val Loss=0.00207 ===\n"}
+,{"stream_name":"stdout","time":1402.306944974,"data":"hk.save_file unavailable (Native HK library (hk.dll) is not available); saving via torch.save: /kaggle/working/dfn3_v2_sih_defence_augmented/epoch-2.hk\n"}
+,{"stream_name":"stdout","time":1402.306983039,"data":"Saved HK checkpoint: /kaggle/working/dfn3_v2_sih_defence_augmented/epoch-2.hk\n"}
+,{"stream_name":"stdout","time":1402.306988006,"data":"hk.save_file unavailable (Native HK library (hk.dll) is not available); saving via torch.save: /kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_best.hk\n"}
+,{"stream_name":"stdout","time":1402.306991899,"data":"Saved HK checkpoint: /kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_best.hk\n"}
+,{"stream_name":"stdout","time":1448.396713277,"data":"[epoch 3/3] step=  25 loss=0.00210 elapsed=46s\n"}
+,{"stream_name":"stdout","time":1495.045018441,"data":"[epoch 3/3] step=  50 loss=0.00209 elapsed=93s\n"}
+,{"stream_name":"stdout","time":1539.508572945,"data":"[epoch 3/3] step=  75 loss=0.00209 elapsed=137s\n"}
+,{"stream_name":"stdout","time":1587.777698067,"data":"[epoch 3/3] step= 100 loss=0.00208 elapsed=185s\n"}
+,{"stream_name":"stdout","time":1632.597035261,"data":"[epoch 3/3] step= 125 loss=0.00208 elapsed=230s\n"}
+,{"stream_name":"stdout","time":1678.823795086,"data":"[epoch 3/3] step= 150 loss=0.00208 elapsed=277s\n"}
+,{"stream_name":"stdout","time":1723.956724676,"data":"[epoch 3/3] step= 175 loss=0.00208 elapsed=322s\n"}
+,{"stream_name":"stdout","time":1770.793864887,"data":"[epoch 3/3] step= 200 loss=0.00207 elapsed=368s\n"}
+,{"stream_name":"stdout","time":1814.969379012,"data":"[epoch 3/3] step= 225 loss=0.00207 elapsed=413s\n"}
+,{"stream_name":"stdout","time":1874.626547802,"data":"=== Epoch 3 Complete: Train Loss=0.00207 | Val Loss=0.00206 ===\n"}
+,{"stream_name":"stdout","time":1874.681468963,"data":"hk.save_file unavailable (Native HK library (hk.dll) is not available); saving via torch.save: /kaggle/working/dfn3_v2_sih_defence_augmented/epoch-3.hk\n"}
+,{"stream_name":"stdout","time":1874.681496943,"data":"Saved HK checkpoint: /kaggle/working/dfn3_v2_sih_defence_augmented/epoch-3.hk\n"}
+,{"stream_name":"stdout","time":1874.681503271,"data":"hk.save_file unavailable (Native HK library (hk.dll) is not available); saving via torch.save: /kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_best.hk\n"}
+,{"stream_name":"stdout","time":1874.681508279,"data":"Saved HK checkpoint: /kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_best.hk\n"}
+,{"stream_name":"stdout","time":1874.681528341,"data":"hk.save_file unavailable (Native HK library (hk.dll) is not available); saving via torch.save: /kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_final.hk\n"}
+,{"stream_name":"stdout","time":1874.681533308,"data":"Saved HK checkpoint: /kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_final.hk\n"}
+,{"stream_name":"stdout","time":1874.681537978,"data":"V2 Training Complete.\n"}
+,{"stream_name":"stdout","time":1874.727352007,"data":"hk.load_file fallback (Invalid HK file magic b'PK\\x03\\x04' or version 0); loading via torch.load: /kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_best.hk\n"}
+,{"stream_name":"stdout","time":1874.727409045,"data":"model_v2_best.hk HK round-trip check: PASSED STRICTLY\n"}
+,{"stream_name":"stdout","time":1874.727415742,"data":"{\n"}
+,{"stream_name":"stdout","time":1874.7274201,"data":"  \"architecture\": \"DeepFilterNet3\",\n"}
+,{"stream_name":"stdout","time":1874.727424815,"data":"  \"container_format\": \"HK (hknt 1.1.0)\",\n"}
+,{"stream_name":"stdout","time":1874.727429174,"data":"  \"sample_rate\": 48000,\n"}
+,{"stream_name":"stdout","time":1874.72743283,"data":"  \"epochs\": 3,\n"}
+,{"stream_name":"stdout","time":1874.72743637,"data":"  \"best_val_loss\": 0.0020568839281622786,\n"}
+,{"stream_name":"stdout","time":1874.727439943,"data":"  \"history\": [\n"}
+,{"stream_name":"stdout","time":1874.727444124,"data":"    {\n"}
+,{"stream_name":"stdout","time":1874.72744777,"data":"      \"epoch\": 1,\n"}
+,{"stream_name":"stdout","time":1874.727451555,"data":"      \"mean_train_loss\": 0.00218605557974014,\n"}
+,{"stream_name":"stdout","time":1874.72745574,"data":"      \"val_loss\": 0.00213862019154476\n"}
+,{"stream_name":"stdout","time":1874.727460052,"data":"    },\n"}
+,{"stream_name":"stdout","time":1874.727463823,"data":"    {\n"}
+,{"stream_name":"stdout","time":1874.727467547,"data":"      \"epoch\": 2,\n"}
+,{"stream_name":"stdout","time":1874.727470877,"data":"      \"mean_train_loss\": 0.002130226166918874,\n"}
+,{"stream_name":"stdout","time":1874.727474538,"data":"      \"val_loss\": 0.0020739976534969173\n"}
+,{"stream_name":"stdout","time":1874.727478072,"data":"    },\n"}
+,{"stream_name":"stdout","time":1874.727481199,"data":"    {\n"}
+,{"stream_name":"stdout","time":1874.727485262,"data":"      \"epoch\": 3,\n"}
+,{"stream_name":"stdout","time":1874.727488937,"data":"      \"mean_train_loss\": 0.0020714725248722568,\n"}
+,{"stream_name":"stdout","time":1874.727492797,"data":"      \"val_loss\": 0.0020568839281622786\n"}
+,{"stream_name":"stdout","time":1874.727497282,"data":"    }\n"}
+,{"stream_name":"stdout","time":1874.727595753,"data":"  ],\n"}
+,{"stream_name":"stdout","time":1874.727602405,"data":"  \"hk_roundtrip\": \"strict load passed\",\n"}
+,{"stream_name":"stdout","time":1874.727606712,"data":"  \"output_files\": [\n"}
+,{"stream_name":"stdout","time":1874.7276107,"data":"    \"/kaggle/working/dfn3_v2_sih_defence_augmented/epoch-1.hk\",\n"}
+,{"stream_name":"stdout","time":1874.727614944,"data":"    \"/kaggle/working/dfn3_v2_sih_defence_augmented/epoch-2.hk\",\n"}
+,{"stream_name":"stdout","time":1874.727619115,"data":"    \"/kaggle/working/dfn3_v2_sih_defence_augmented/epoch-3.hk\",\n"}
+,{"stream_name":"stdout","time":1874.727623239,"data":"    \"/kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_best.hk\",\n"}
+,{"stream_name":"stdout","time":1874.727627561,"data":"    \"/kaggle/working/dfn3_v2_sih_defence_augmented/model_v2_final.hk\"\n"}
+,{"stream_name":"stdout","time":1874.727631454,"data":"  ]\n"}
+,{"stream_name":"stdout","time":1874.727659232,"data":"}\n"}
+,{"stream_name":"stdout","time":1874.727663376,"data":"\n"}
+,{"stream_name":"stdout","time":1874.727677023,"data":"All outputs saved to: /kaggle/working/dfn3_v2_sih_defence_augmented\n"}
+,{"stream_name":"stderr","time":1883.124498945,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":1883.124567189,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":1883.395414913,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":1883.395474888,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":1884.286824591,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":1884.643039581,"data":"[NbConvertApp] Writing 39567 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":1887.343843584,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":1888.521798069,"data":"[NbConvertApp] Writing 379591 bytes to __results__.html\n"}
+]

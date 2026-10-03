@@ -1,0 +1,15 @@
+spawn ssh shreyas@shreyas.local mkdir -p ~/sih26052_edge/prototype
+shreyas@shreyas.local's password: 
+spawn scp vs102_ai_stream.py shreyas@shreyas.local:~/sih26052_edge/prototype/vs102_ai_stream.py
+shreyas@shreyas.local's password: 
+vs102_ai_stream.py                              0%    0     0.0KB/s   --:-- ETAvs102_ai_stream.py                            100% 4743   141.0KB/s   00:00    
+spawn ssh shreyas@shreyas.local /home/shreyas/env/bin/python ~/sih26052_edge/prototype/vs102_ai_stream.py
+shreyas@shreyas.local's password: 
+Traceback (most recent call last):
+  File "/home/shreyas/sih26052_edge/prototype/vs102_ai_stream.py", line 10, in <module>
+    from app.anc_stream import ANCStream
+  File "/home/shreyas/sih26052_edge/app/anc_stream.py", line 9, in <module>
+    from app.stateful_polar_lstm import StatefulPolarLSTM_Wrapper
+  File "/home/shreyas/sih26052_edge/app/stateful_polar_lstm.py", line 7, in <module>
+    from stateful_lstm import causal_istft
+ModuleNotFoundError: No module named 'stateful_lstm'

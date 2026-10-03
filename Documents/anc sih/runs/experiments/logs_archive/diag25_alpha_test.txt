@@ -1,0 +1,16 @@
+spawn scp test_alpha_decay.py shreyas@shreyas.local:~/sih26052_edge/prototype/test_alpha_decay.py
+shreyas@shreyas.local's password: 
+test_alpha_decay.py                             0%    0     0.0KB/s   --:-- ETAtest_alpha_decay.py                           100% 3897   402.2KB/s   00:00    
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/test_alpha_decay.py
+shreyas@shreyas.local's password: 
+Starting State Decay Experiment...
+Processing alpha = 1.00
+Traceback (most recent call last):
+  File "/home/shreyas/sih26052_edge/prototype/test_alpha_decay.py", line 96, in <module>
+    stream.model.core = get_decay_core(a)
+    ^^^^^^^^^^^^^^^^^
+  File "/home/shreyas/env/lib/python3.13/site-packages/torch/nn/modules/module.py", line 2025, in __setattr__
+    raise TypeError(
+    ...<2 lines>...
+    )
+TypeError: cannot assign '__main__.get_decay_core.<locals>.decay_core' as child module 'core' (torch.nn.Module or None expected)

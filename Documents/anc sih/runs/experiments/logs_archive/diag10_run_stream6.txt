@@ -1,0 +1,18 @@
+spawn ssh shreyas@shreyas.local cat /tmp/out.log; cat /tmp/exit_code.log
+shreyas@shreyas.local's password: 
+Found VS102 source ID: 46
+Starting recording on target 46...
+
+=== REAL-TIME MEASUREMENT ===
+Frames processed: 1250
+Median: 15.29 ms
+p95: 18.96 ms
+p99: 20.54 ms
+Max: 28.27 ms
+>16ms frames (Deadline misses): 446
+Temperature: 74.9 °C
+
+Files saved:
+Input: /home/shreyas/sih26052_edge/audio/vs102_live_input_20260930_150947.wav
+Output: /home/shreyas/sih26052_edge/audio/vs102_ai_output_20260930_150947.wav
+0
