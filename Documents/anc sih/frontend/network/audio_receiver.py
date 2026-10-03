@@ -37,6 +37,7 @@ class AudioReceiver(QObject):
         self.packets_lost = 0
         self.duplicate_packets = 0
         self.out_of_order_packets = 0
+        self.sequence_resets = 0
         self.last_sequence: Optional[int] = None
         self.last_packet_time: Optional[float] = None
         self.is_connected = False
@@ -84,6 +85,7 @@ class AudioReceiver(QObject):
                 was_connected = self.is_connected
                 if self.last_packet_time is not None and (now - self.last_packet_time > self.timeout_sec):
                     self.is_connected = False
+                    self.last_sequence = None
                 if was_connected != self.is_connected:
                     self.status_changed.emit(self.stream_name, self.is_connected)
 
@@ -127,13 +129,17 @@ class AudioReceiver(QObject):
                     elif seq == self.last_sequence:
                         self.duplicate_packets += 1
                     elif seq < self.last_sequence:
-                        self.out_of_order_packets += 1
+                        if self.last_sequence - seq > 1000:
+                            self.sequence_resets += 1
+                            self.last_sequence = seq
+                            self.packets_received += 1
+                        else:
+                            self.out_of_order_packets += 1
                     else: # seq > last_sequence + 1 (skipped packets)
                         lost = seq - (self.last_sequence + 1)
                         self.packets_lost += lost
                         self.packets_received += 1
                         self.last_sequence = seq
-
                 # Emit to GUI / buffer
                 self.frame_received.emit(self.stream_name, samples, seq, packet_time)
 
@@ -155,6 +161,7 @@ class AudioReceiver(QObject):
                 'lost': self.packets_lost,
                 'duplicates': self.duplicate_packets,
                 'out_of_order': self.out_of_order_packets,
+                'sequence_resets': self.sequence_resets,
                 'loss_pct': loss_pct,
                 'last_seq': self.last_sequence,
                 'connected': self.is_connected,

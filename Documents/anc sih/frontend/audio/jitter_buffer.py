@@ -8,7 +8,7 @@ class JitterBuffer:
     Stores mono float32 PCM samples.
     Conceals underruns with silence (zeros).
     """
-    def __init__(self, sample_rate: int = 16000, target_buffer_ms: int = 48, max_buffer_ms: int = 500):
+    def __init__(self, sample_rate: int = 16000, target_buffer_ms: int = 48, max_buffer_ms: int = 50):
         self.sample_rate = sample_rate
         self.target_samples = int((target_buffer_ms / 1000.0) * sample_rate)
         self.max_samples = int((max_buffer_ms / 1000.0) * sample_rate)

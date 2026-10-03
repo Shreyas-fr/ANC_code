@@ -42,7 +42,7 @@ class MainWindow(QMainWindow):
         self.jitter_buffer = JitterBuffer(
             sample_rate=self.cfg['sample_rate'],
             target_buffer_ms=self.cfg['buffer_ms'],
-            max_buffer_ms=500
+            max_buffer_ms=self.cfg.get('max_buffer_ms', 50)
         )
         self.playback = AudioPlayback(
             jitter_buffer=self.jitter_buffer,
@@ -97,6 +97,7 @@ class MainWindow(QMainWindow):
                 "sample_rate": 16000,
                 "frame_size": 256,
                 "buffer_ms": 48,
+                "max_buffer_ms": 50,
                 "packet_timeout_ms": 1000,
                 "window_seconds": 3.0,
                 "output_device": None,
@@ -143,7 +144,7 @@ class MainWindow(QMainWindow):
             window_sec=self.cfg['window_seconds']
         )
         self.wave_enhanced = WaveformWidget(
-            title="PANEL 2: ENHANCED AUDIO (STATEFUL POLAR LSTM)",
+            title="PANEL 2: ENHANCED AUDIO (UDP 5005)",
             color_hex="#10B981",
             sample_rate=self.cfg['sample_rate'],
             window_sec=self.cfg['window_seconds']

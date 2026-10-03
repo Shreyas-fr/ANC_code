@@ -5,6 +5,7 @@
   "sample_rate": 16000,
   "frame_size": 256,
   "buffer_ms": 48,
+  "max_buffer_ms": 50,
   "packet_timeout_ms": 1000,
   "window_seconds": 3.0,
   "output_device": null,

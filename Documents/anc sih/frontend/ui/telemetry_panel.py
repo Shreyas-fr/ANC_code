@@ -88,14 +88,20 @@ class TelemetryPanel(QFrame):
         ai_layout.setVerticalSpacing(4)
         
         ai_layout.addWidget(self._create_name_label("Model:"), 0, 0)
-        ai_layout.addWidget(self._create_val_label("StatefulPolarLSTM"), 0, 1)
+        self.lbl_model_name = self._create_val_label("N/A")
+        ai_layout.addWidget(self.lbl_model_name, 0, 1)
         
-        ai_layout.addWidget(self._create_name_label("Parameters:"), 1, 0)
-        ai_layout.addWidget(self._create_val_label("1,448,962"), 1, 1)
+        ai_layout.addWidget(self._create_name_label("Backend:"), 1, 0)
+        self.lbl_model_backend = self._create_val_label("N/A")
+        ai_layout.addWidget(self.lbl_model_backend, 1, 1)
+
+        ai_layout.addWidget(self._create_name_label("Model SHA:"), 2, 0)
+        self.lbl_model_sha = self._create_val_label("N/A")
+        ai_layout.addWidget(self.lbl_model_sha, 2, 1)
         
-        ai_layout.addWidget(self._create_name_label("AI Engine:"), 2, 0)
+        ai_layout.addWidget(self._create_name_label("AI Engine:"), 3, 0)
         self.lbl_ai_status = self._create_status_label("N/A — telemetry unavailable", "#64748B")
-        ai_layout.addWidget(self.lbl_ai_status, 2, 1)
+        ai_layout.addWidget(self.lbl_ai_status, 3, 1)
         
         main_layout.addWidget(ai_group)
         
@@ -162,7 +168,7 @@ class TelemetryPanel(QFrame):
         self.lbl_pi_temp = self._create_val_label("N/A — telemetry unavailable")
         diag_layout.addWidget(self.lbl_pi_temp, 0, 1)
         
-        diag_layout.addWidget(self._create_name_label("LSTM Resets:"), 1, 0)
+        diag_layout.addWidget(self._create_name_label("State Resets:"), 1, 0)
         self.lbl_state_resets = self._create_val_label("N/A — telemetry unavailable")
         diag_layout.addWidget(self.lbl_state_resets, 1, 1)
         
@@ -237,6 +243,22 @@ class TelemetryPanel(QFrame):
             self.lbl_ai_status.setText("ACTIVE" if ai_act else "INACTIVE")
             self.lbl_ai_status.setStyleSheet("color: #10B981;" if ai_act else "color: #EF4444;")
 
+        if 'model' in data:
+            self.lbl_model_name.setText(str(data['model']))
+        else:
+            self.lbl_model_name.setText("N/A")
+
+        if 'backend' in data:
+            self.lbl_model_backend.setText(str(data['backend']))
+        else:
+            self.lbl_model_backend.setText("N/A")
+
+        if 'model_sha' in data:
+            sha = str(data['model_sha'])
+            self.lbl_model_sha.setText(sha[:16] + "..." if len(sha) > 16 else sha)
+        else:
+            self.lbl_model_sha.setText("N/A")
+
         if 'latency_ms' in data:
             self.lbl_lat_curr.setText(f"{data['latency_ms']:.2f} ms")
         if 'latency_median_ms' in data:
@@ -261,6 +283,9 @@ class TelemetryPanel(QFrame):
         self.lbl_bt_status.setStyleSheet("color: #64748B;")
         self.lbl_ai_status.setText("N/A — telemetry unavailable")
         self.lbl_ai_status.setStyleSheet("color: #64748B;")
+        self.lbl_model_name.setText("N/A")
+        self.lbl_model_backend.setText("N/A")
+        self.lbl_model_sha.setText("N/A")
         
         self.lbl_lat_curr.setText("N/A — telemetry unavailable")
         self.lbl_lat_med.setText("N/A — telemetry unavailable")
