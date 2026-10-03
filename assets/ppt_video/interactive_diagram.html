@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antigravity ANC - Interactive System Diagram</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --text-color: #f8fafc;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --secondary: #8b5cf6;
+            --card-bg: rgba(30, 41, 59, 0.6);
+            --card-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(to right, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(96, 165, 250, 0.3);
+        }
+        
+        p.subtitle {
+            color: #94a3b8;
+            font-weight: 300;
+            margin-top: 0.5rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0 2rem 0;
+        }
+
+        button.tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        button.tab-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        button.tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 2rem 2rem 2rem;
+            position: relative;
+        }
+
+        .diagram-wrapper {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 1200px;
+            overflow: auto;
+            opacity: 0;
+            transform: scale(0.98);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            display: none;
+        }
+
+        .diagram-wrapper.active {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+            animation: fadeScale 0.5s ease forwards;
+        }
+
+        @keyframes fadeScale {
+            0% { opacity: 0; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Modal / Tooltip */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 30px var(--primary-glow);
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #60a5fa;
+        }
+
+        .modal-body {
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .modal-close {
+            margin-top: 1.5rem;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* Mermaid Overrides */
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .node rect, .node circle, .node ellipse, .node polygon, .node path {
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+        }
+        
+        .node:hover rect, .node:hover circle, .node:hover ellipse, .node:hover polygon, .node:hover path {
+            filter: brightness(1.3) drop-shadow(0 0 8px rgba(96, 165, 250, 0.6)) !important;
+            transform: scale(1.02);
+        }
+
+        .edgePath path {
+            stroke-width: 2px !important;
+            transition: stroke-width 0.3s ease;
+        }
+        
+        .edgePath:hover path {
+            stroke-width: 4px !important;
+            stroke: #c084fc !important;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Antigravity ANC Architecture</h1>
+        <p class="subtitle">Interactive system visualization. Click any node for details.</p>
+    </header>
+
+    <div class="controls">
+        <button class="tab-btn active" onclick="switchTab('tech')">Technical Flow</button>
+        <button class="tab-btn" onclick="switchTab('data')">Data Pipeline</button>
+        <button class="tab-btn" onclick="switchTab('user')">User Flow</button>
+    </div>
+
+    <div class="container">
+        <!-- Technical Flow -->
+        <div id="tech" class="diagram-wrapper active">
+            <div class="mermaid">
+                flowchart TD
+                    %% Inputs
+                    AudioIn[Noisy Audio Waveform]:::input --> STFT
+                    
+                    %% Feature Extraction
+                    subgraph Signal Processing
+                        STFT[Causal STFT<br>n_fft=512, hop=256]:::proc
+                        Concat[Concat Real & Imaginary]:::proc
+                        iSTFT[Causal Inverse STFT<br>overlap-add fold]:::proc
+                    end
+                    
+                    %% Neural Network Core
+                    subgraph Polar-D Neural Core
+                        LSTM[2-Layer Stateful LSTM<br>hidden_size=256]:::neural
+                        FC_Mag[Linear -> Sigmoid * 2.0<br>Mag Mask]:::neural
+                        FC_Phase[Linear -> Tanh * π<br>Phase Mask]:::neural
+                        ComplexConvert[Combine Mag & Phase]:::neural
+                    end
+                    
+                    %% Connections
+                    STFT -->|Complex Spectrogram| Concat
+                    STFT -->|Noisy Spectrogram| ComplexMult((x)):::math
+                    
+                    Concat -->|Features: B x T x 514| LSTM
+                    LSTM --> FC_Mag
+                    LSTM --> FC_Phase
+                    
+                    FC_Mag --> ComplexConvert
+                    FC_Phase --> ComplexConvert
+                    
+                    ComplexConvert -->|Complex Ratio Mask| ComplexMult
+                    ComplexMult -->|Enhanced Spectrogram| iSTFT
+                    
+                    iSTFT --> AudioOut[Enhanced Audio Waveform]:::output
+
+                    %% Interactive Links
+                    click AudioIn showDetails "AudioIn"
+                    click STFT showDetails "STFT"
+                    click Concat showDetails "Concat"
+                    click iSTFT showDetails "iSTFT"
+                    click LSTM showDetails "LSTM"
+                    click FC_Mag showDetails "FC_Mag"
+                    click FC_Phase showDetails "FC_Phase"
+                    click ComplexConvert showDetails "ComplexConvert"
+                    click AudioOut showDetails "AudioOut"
+
+                    classDef input fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff,rx:8px
+                    classDef output fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#fff,rx:8px
+                    classDef proc fill:#1e293b,stroke:#8b5cf6,stroke-width:2px,color:#fff,rx:8px
+                    classDef neural fill:#312e81,stroke:#c084fc,stroke-width:2px,color:#fff,rx:8px
+                    classDef math fill:#000,stroke:#fff,stroke-width:2px,color:#fff,shape:circle
+            </div>
+        </div>
+
+        <!-- Data Pipeline -->
+        <div id="data" class="diagram-wrapper">
+            <div class="mermaid">
+                flowchart LR
+                    %% Data Sources
+                    subgraph Raw Data Sources
+                        Clean[Clean Speech<br>UrbanSound, AudioSet]:::source
+                        ProxyNoise[Proxy Noise<br>ESC-50, etc.]:::source
+                        Gunfire[IoBT Gunfire<br>Defence Domain]:::source
+                        RIR[Impulse Responses<br>Reverb]:::source
+                    end
+                    
+                    %% Mixer Logic
+                    subgraph Dynamic DataLoader
+                        Augment[Augmentations<br>TimeStretch, PitchShift]:::mixer
+                        Convolve[Apply RIR]:::mixer
+                        Mix[SNR Mixer<br>-10dB to +20dB]:::mixer
+                    end
+                    
+                    %% Sinks
+                    Target[Target Clean Audio]:::target
+                    Noisy[Noisy Audio Mixture]:::target
+                    
+                    %% Flow
+                    Clean --> Augment
+                    Augment --> Convolve
+                    RIR -.-> Convolve
+                    
+                    ProxyNoise --> Mix
+                    Gunfire --> Mix
+                    Convolve --> Mix
+                    
+                    Convolve --> Target
+                    Mix --> Noisy
+                    
+                    Target --> Loss[EnhancementLoss<br>L1 + MRSTFT]:::loss
+                    Noisy --> Model[Polar-D Network]:::model
+                    Model --> Pred[Enhanced Audio]:::target
+                    Pred --> Loss
+
+                    %% Interactions
+                    click Clean showDetails "Clean"
+                    click ProxyNoise showDetails "ProxyNoise"
+                    click Gunfire showDetails "Gunfire"
+                    click RIR showDetails "RIR"
+                    click Augment showDetails "Augment"
+                    click Convolve showDetails "Convolve"
+                    click Mix showDetails "Mix"
+                    click Loss showDetails "Loss"
+                    click Model showDetails "Model"
+
+                    classDef source fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff,rx:8px
+                    classDef mixer fill:#701a75,stroke:#d946ef,stroke-width:2px,color:#fff,rx:8px
+                    classDef target fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#fff,rx:8px
+                    classDef loss fill:#7f1d1d,stroke:#ef4444,stroke-width:2px,color:#fff,rx:8px
+                    classDef model fill:#312e81,stroke:#c084fc,stroke-width:2px,color:#fff,rx:8px
+            </div>
+        </div>
+
+        <!-- User Flow -->
+        <div id="user" class="diagram-wrapper">
+            <div class="mermaid">
+                sequenceDiagram
+                    autonumber
+                    participant Mic as USB Microphone
+                    participant RPi as Raspberry Pi (ONNX)
+                    participant Out as Speaker/Headphones
+                    
+                    note over Mic,Out: Real-Time Stream Loop (16ms Algorithmic Latency)
+                    
+                    Mic->>RPi: Capture 256 samples (16kHz)
+                    activate RPi
+                    RPi->>RPi: Buffer into 512-sample window
+                    RPi->>RPi: Causal STFT Extraction
+                    RPi->>RPi: ONNX Runtime (Polar-D Inference)
+                    RPi->>RPi: State Update (LSTM hidden/cell)
+                    RPi->>RPi: Complex Multiplication & iSTFT
+                    RPi->>RPi: Overlap-Add Fold
+                    RPi->>Out: Output 256 clean samples
+                    deactivate RPi
+                    
+                    Out-->>Mic: Continuous loop...
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="modalTitle">Node Title</h2>
+            <div class="modal-body" id="modalBody">
+                Node description goes here.
+            </div>
+            <button class="modal-close" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#1e293b',
+                primaryTextColor: '#f8fafc',
+                primaryBorderColor: '#3b82f6',
+                lineColor: '#94a3b8',
+                secondaryColor: '#0f172a',
+                tertiaryColor: '#1e293b',
+                fontFamily: 'Outfit, sans-serif'
+            },
+            flowchart: {
+                curve: 'basis'
+            }
+        });
+    </script>
+
+    <script>
+        // Details Database for Interactive Modal
+        const detailsDB = {
+            "AudioIn": "<b>Noisy Audio Waveform:</b> The raw time-domain audio signal captured directly from the environment, containing both the target speech and background noise (e.g. gunfire, wind).",
+            "STFT": "<b>Causal STFT:</b> Short-Time Fourier Transform using a 512-point FFT and 256-point hop. Crucially, `center=False` is used to prevent the algorithm from looking into the future, maintaining real-time causality.",
+            "Concat": "<b>Concatenation:</b> The complex spectrogram is split into its Real and Imaginary components. These are concatenated along the feature dimension to feed into the real-valued LSTM.",
+            "LSTM": "<b>Stateful LSTM:</b> A 2-layer Long Short-Term Memory network with 256 hidden units. It maintains hidden states across chunks, allowing it to remember acoustic context over time.",
+            "FC_Mag": "<b>Magnitude Mask:</b> A fully connected layer ending in a Sigmoid activation multiplied by 2.0. This restricts the magnitude modification to a range between 0 (silence) and 2.0 (boost).",
+            "FC_Phase": "<b>Phase Mask:</b> A fully connected layer ending in a Tanh activation multiplied by π. This allows the network to apply phase corrections between -π and +π radians.",
+            "ComplexConvert": "<b>Complex Conversion:</b> The predicted magnitude and phase are converted back into a valid complex number (a + jb) to form the Complex Ratio Mask (CRM).",
+            "iSTFT": "<b>Inverse STFT:</b> The enhanced complex spectrogram is converted back to a time-domain waveform using an overlap-add folding technique.",
+            "AudioOut": "<b>Enhanced Audio Waveform:</b> The final, noise-suppressed audio signal ready for playback on the speaker or earpiece.",
+            "Clean": "<b>Clean Speech:</b> High-quality, noise-free human speech clips sourced from datasets like UrbanSound or AudioSet.",
+            "ProxyNoise": "<b>Proxy Noise:</b> Standard environmental noises (sirens, wind, babble) from the ESC-50 dataset.",
+            "Gunfire": "<b>IoBT Gunfire:</b> Specialized, highly transient and impulsive defense-domain noises recorded in the field.",
+            "RIR": "<b>Room Impulse Responses:</b> Acoustic measurements used to simulate realistic room reverberation and echo on the clean speech.",
+            "Augment": "<b>Augmentations:</b> Dynamic Time Stretching and Pitch Shifting applied randomly to the clean speech to improve model generalization.",
+            "Convolve": "<b>RIR Convolution:</b> Mathematically convolves the clean speech with a Room Impulse Response to simulate spatial characteristics.",
+            "Mix": "<b>SNR Mixer:</b> Combines the clean/reverberant speech with the noise track at a specific Signal-to-Noise Ratio (SNR), randomly selected between -10dB and +20dB.",
+            "Loss": "<b>EnhancementLoss:</b> A dual-objective loss function combining L1 time-domain waveform distance and Multi-Resolution STFT magnitude loss to guide gradient descent.",
+            "Model": "<b>Polar-D Network:</b> The neural architecture currently being trained."
+        };
+
+        // Tab Switching Logic
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.diagram-wrapper').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('modal');
+        const mTitle = document.getElementById('modalTitle');
+        const mBody = document.getElementById('modalBody');
+
+        // This is called globally by Mermaid's click directive
+        window.showDetails = function(nodeId) {
+            if (detailsDB[nodeId]) {
+                mTitle.innerText = nodeId.replace(/_/g, " ");
+                mBody.innerHTML = detailsDB[nodeId];
+                modal.classList.add('active');
+            }
+        }
+
+        window.closeModal = function() {
+            modal.classList.remove('active');
+        }
+
+        // Close on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    </script>
+</body>
+</html>
