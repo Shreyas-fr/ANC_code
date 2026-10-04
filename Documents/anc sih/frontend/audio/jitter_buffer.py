@@ -54,6 +54,14 @@ class JitterBuffer:
         with self.lock:
             return (len(self.buffer) / self.sample_rate) * 1000.0
 
+    def get_stats(self) -> dict:
+        with self.lock:
+            return {
+                "underrun_count": int(self.underrun_count),
+                "overflow_count": int(self.overflow_count),
+                "level_ms": (len(self.buffer) / self.sample_rate) * 1000.0,
+            }
+
     def clear(self):
         """Flush the buffer."""
         with self.lock:

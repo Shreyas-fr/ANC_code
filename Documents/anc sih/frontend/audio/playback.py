@@ -29,10 +29,31 @@ class AudioPlayback:
             devs = sd.query_devices()
             for idx, d in enumerate(devs):
                 if d.get('max_output_channels', 0) > 0:
-                    devices.append((idx, f"{idx}: {d['name']}"))
+                    host = ""
+                    try:
+                        hostapi = sd.query_hostapis(d.get("hostapi", 0))
+                        host = hostapi.get("name", "")
+                    except Exception:
+                        host = ""
+                    label = f"{idx}: {d['name']}"
+                    if host:
+                        label = f"{idx}: {d['name']} [{host}]"
+                    devices.append((idx, label))
         except Exception as e:
             logger.error(f"Error querying audio devices: {e}")
         return devices
+
+    @staticmethod
+    def get_default_output_index() -> Optional[int]:
+        try:
+            default = sd.default.device
+            if isinstance(default, (list, tuple)) and len(default) > 1:
+                return int(default[1]) if default[1] is not None else None
+            if isinstance(default, int):
+                return default
+        except Exception:
+            return None
+        return None
 
     def _audio_callback(self, outdata: np.ndarray, frames: int, time_info, status):
         """High-priority audio callback executed by sound card driver."""

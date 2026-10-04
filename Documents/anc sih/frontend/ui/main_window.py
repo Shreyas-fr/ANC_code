@@ -36,7 +36,8 @@ class MainWindow(QMainWindow):
         self.load_config()
         
         self.is_demo_mode = False
-        self.state = "DISCONNECTED" # DISCONNECTED, CONNECTING, LIVE, DEGRADED, ERROR
+        self.state = "DISCONNECTED"  # DISCONNECTED, LIVE, DEGRADED, AI ERROR
+        self.latest_pi_telemetry = {}
         
         # Audio Pipeline Components
         self.jitter_buffer = JitterBuffer(
@@ -211,11 +212,13 @@ class MainWindow(QMainWindow):
         self.ind_bt = self._create_indicator("● BLUETOOTH")
         self.ind_audio = self._create_indicator("● AUDIO")
         self.ind_ai = self._create_indicator("● AI")
+        self.lbl_run_state = self._create_indicator("DISCONNECTED")
         
         ind_box.addWidget(self.ind_edge)
         ind_box.addWidget(self.ind_bt)
         ind_box.addWidget(self.ind_audio)
         ind_box.addWidget(self.ind_ai)
+        ind_box.addWidget(self.lbl_run_state)
         h_layout.addLayout(ind_box)
         
         h_layout.addStretch()
@@ -294,10 +297,21 @@ class MainWindow(QMainWindow):
         return lbl
 
     def _populate_audio_devices(self):
-        self.combo_device.addItem("Output: System Default", None)
+        self.combo_device.clear()
         devices = AudioPlayback.get_output_devices()
-        for idx, name in devices:
-            self.combo_device.addItem(name, idx)
+        default_idx = AudioPlayback.get_default_output_index()
+        selected = 0
+        if not devices:
+            self.combo_device.addItem("No playback devices found", None)
+            return
+        for i, (idx, name) in enumerate(devices):
+            label = name
+            if default_idx is not None and idx == default_idx:
+                label = f"{name} (system default)"
+                selected = i
+            self.combo_device.addItem(label, idx)
+        self.combo_device.setCurrentIndex(selected)
+        self.playback.device = self.combo_device.currentData()
 
     def bind_signals(self):
         self.enhanced_receiver.frame_received.connect(self._on_enhanced_frame)
@@ -340,12 +354,12 @@ class MainWindow(QMainWindow):
             
         if stream_name == "enhanced":
             if is_connected:
-                self.state = "LIVE"
+                self._set_run_state("LIVE")
                 self.ind_edge.setStyleSheet("color: #10B981;")
                 self.ind_audio.setStyleSheet("color: #10B981;")
                 self.wave_enhanced.set_active_status(True)
             else:
-                self.state = "DISCONNECTED"
+                self._set_run_state("DISCONNECTED")
                 self.ind_edge.setStyleSheet("color: #EF4444;")
                 self.ind_audio.setStyleSheet("color: #64748B;")
                 self.wave_enhanced.set_active_status(False)
@@ -368,6 +382,7 @@ class MainWindow(QMainWindow):
     def _on_telemetry_received(self, data: dict):
         if self.is_demo_mode:
             return
+        self.latest_pi_telemetry = data
         self.telemetry_panel.update_telemetry(data)
         
         if data.get('bluetooth_connected', False):
@@ -379,6 +394,7 @@ class MainWindow(QMainWindow):
             self.ind_ai.setStyleSheet("color: #10B981;")
         else:
             self.ind_ai.setStyleSheet("color: #EF4444;")
+        self._refresh_run_state()
 
     @Slot(bool)
     def _on_telemetry_status(self, is_connected: bool):
@@ -402,8 +418,12 @@ class MainWindow(QMainWindow):
         
         # Update network stats in telemetry panel
         stats = self.enhanced_receiver.get_stats()
-        buf_ms = self.jitter_buffer.get_level_ms()
+        jb = self.jitter_buffer.get_stats()
+        buf_ms = jb.get("level_ms", self.jitter_buffer.get_level_ms())
+        stats["jitter_underruns"] = jb.get("underrun_count", 0)
+        stats["jitter_overflows"] = jb.get("overflow_count", 0)
         self.telemetry_panel.update_network_stats(stats, buf_ms)
+        self._refresh_run_state()
         
         # Check input receiver status if port 5007 is idle
         if not self.input_receiver.is_connected:
@@ -496,6 +516,45 @@ class MainWindow(QMainWindow):
         self.wave_input.add_samples(noisy_in)
         self.wave_enhanced.add_samples(enhanced_out)
         self.spectrum_widget.update_spectrum(enhanced_out)
+
+    def _set_run_state(self, state: str):
+        self.state = state
+        colors = {
+            "LIVE": "#10B981",
+            "DEGRADED": "#F59E0B",
+            "AI ERROR": "#EF4444",
+            "DISCONNECTED": "#64748B",
+        }
+        color = colors.get(state, "#64748B")
+        if hasattr(self, "lbl_run_state"):
+            self.lbl_run_state.setText(state)
+            self.lbl_run_state.setStyleSheet(f"color: {color};")
+
+    def _refresh_run_state(self):
+        if self.is_demo_mode:
+            return
+        if not self.enhanced_receiver.is_connected:
+            self._set_run_state("DISCONNECTED")
+            return
+        tel = self.latest_pi_telemetry or {}
+        nan_inf = int(tel.get("nan_inf_events") or 0)
+        sha_stale = bool(tel.get("model_is_stale"))
+        ai_error = nan_inf > 0 or sha_stale
+        if tel.get("model_active") is False and tel.get("diag_mode") == "dfn3":
+            ai_error = True
+        stats = self.enhanced_receiver.get_stats()
+        jb = self.jitter_buffer.get_stats()
+        degraded = (
+            stats.get("loss_pct", 0.0) > 5.0
+            or jb.get("underrun_count", 0) > 0
+            or str(tel.get("cooler_hint") or "") in ("WARM", "HOT", "THROTTLED")
+        )
+        if ai_error:
+            self._set_run_state("AI ERROR")
+        elif degraded:
+            self._set_run_state("DEGRADED")
+        else:
+            self._set_run_state("LIVE")
 
     def _toggle_mute(self):
         muted = self.btn_mute.isChecked()

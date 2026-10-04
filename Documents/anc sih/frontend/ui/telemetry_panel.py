@@ -76,9 +76,13 @@ class TelemetryPanel(QFrame):
         bt_layout.addWidget(self._create_name_label("Profile:"), 0, 0)
         bt_layout.addWidget(self._create_val_label("HFP (Mono 16kHz)"), 0, 1)
         
-        bt_layout.addWidget(self._create_name_label("Status:"), 1, 0)
+        bt_layout.addWidget(self._create_name_label("Device:"), 1, 0)
+        self.lbl_bt_device = self._create_val_label("N/A")
+        bt_layout.addWidget(self.lbl_bt_device, 1, 1)
+
+        bt_layout.addWidget(self._create_name_label("Status:"), 2, 0)
         self.lbl_bt_status = self._create_status_label("N/A — telemetry unavailable", "#64748B")
-        bt_layout.addWidget(self.lbl_bt_status, 1, 1)
+        bt_layout.addWidget(self.lbl_bt_status, 2, 1)
         
         main_layout.addWidget(bt_group)
         
@@ -121,10 +125,14 @@ class TelemetryPanel(QFrame):
         proc_layout.addWidget(self._create_name_label("P95 Latency:"), 2, 0)
         self.lbl_lat_p95 = self._create_val_label("N/A — telemetry unavailable")
         proc_layout.addWidget(self.lbl_lat_p95, 2, 1)
+
+        proc_layout.addWidget(self._create_name_label("P99 Latency:"), 3, 0)
+        self.lbl_lat_p99 = self._create_val_label("N/A — telemetry unavailable")
+        proc_layout.addWidget(self.lbl_lat_p99, 3, 1)
         
-        proc_layout.addWidget(self._create_name_label("Max Latency:"), 3, 0)
+        proc_layout.addWidget(self._create_name_label("Max Latency:"), 4, 0)
         self.lbl_lat_max = self._create_val_label("N/A — telemetry unavailable")
-        proc_layout.addWidget(self.lbl_lat_max, 3, 1)
+        proc_layout.addWidget(self.lbl_lat_max, 4, 1)
         
         main_layout.addWidget(proc_group)
         
@@ -152,10 +160,14 @@ class TelemetryPanel(QFrame):
         net_layout.addWidget(self._create_name_label("Jitter Buffer:"), 4, 0)
         self.lbl_stream_buf = self._create_val_label("0.0 ms")
         net_layout.addWidget(self.lbl_stream_buf, 4, 1)
+
+        net_layout.addWidget(self._create_name_label("Jitter Underruns:"), 5, 0)
+        self.lbl_jitter_underrun = self._create_val_label("0")
+        net_layout.addWidget(self.lbl_jitter_underrun, 5, 1)
         
-        net_layout.addWidget(self._create_name_label("Duration:"), 5, 0)
+        net_layout.addWidget(self._create_name_label("Duration:"), 6, 0)
         self.lbl_stream_dur = self._create_val_label("00:00:00")
-        net_layout.addWidget(self.lbl_stream_dur, 5, 1)
+        net_layout.addWidget(self.lbl_stream_dur, 6, 1)
         
         main_layout.addWidget(net_group)
         
@@ -175,6 +187,18 @@ class TelemetryPanel(QFrame):
         diag_layout.addWidget(self._create_name_label("NaN/Inf Events:"), 2, 0)
         self.lbl_nan_events = self._create_val_label("N/A — telemetry unavailable")
         diag_layout.addWidget(self.lbl_nan_events, 2, 1)
+
+        diag_layout.addWidget(self._create_name_label("Capture Underruns:"), 3, 0)
+        self.lbl_cap_underrun = self._create_val_label("N/A — telemetry unavailable")
+        diag_layout.addWidget(self.lbl_cap_underrun, 3, 1)
+
+        diag_layout.addWidget(self._create_name_label("Throttle / Cooler:"), 4, 0)
+        self.lbl_throttle = self._create_val_label("N/A — telemetry unavailable")
+        diag_layout.addWidget(self.lbl_throttle, 4, 1)
+
+        diag_layout.addWidget(self._create_name_label("Diag Mode:"), 5, 0)
+        self.lbl_diag_mode = self._create_val_label("N/A")
+        diag_layout.addWidget(self.lbl_diag_mode, 5, 1)
         
         main_layout.addWidget(diag_group)
         main_layout.addStretch()
@@ -212,6 +236,7 @@ class TelemetryPanel(QFrame):
         self.lbl_stream_seqerr.setText(str(seq_err))
         
         self.lbl_stream_buf.setText(f"{buffer_ms:.1f} ms")
+        self.lbl_jitter_underrun.setText(str(int(stats.get("jitter_underruns", 0))))
         
         dur_sec = int(stats.get('duration_sec', 0))
         hrs = dur_sec // 3600

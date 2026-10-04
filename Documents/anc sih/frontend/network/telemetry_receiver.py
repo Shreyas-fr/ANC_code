@@ -7,6 +7,8 @@ from typing import Optional
 
 from PySide6.QtCore import QObject, Signal
 
+from frontend.network.telemetry_schema import normalize_telemetry
+
 logger = logging.getLogger("TelemetryReceiver")
 
 class TelemetryReceiver(QObject):
@@ -77,6 +79,7 @@ class TelemetryReceiver(QObject):
                     text = data.decode('utf-8').strip()
                     payload = json.loads(text)
                     
+                    payload = normalize_telemetry(payload)
                     with self.lock:
                         self.latest_data = payload
                         self.last_telemetry_time = packet_time

@@ -29,7 +29,7 @@ class PipelineWidget(QFrame):
             'mic': self._create_stage_item("● MIC", "Microphone"),
             'hfp': self._create_stage_item("● HFP", "Bluetooth HFP"),
             'pi': self._create_stage_item("● PI 5", "Raspberry Pi 5"),
-            'ai': self._create_stage_item("● AI", "PolarLSTM AI"),
+            'ai': self._create_stage_item("● AI", "DeepFilterNet3"),
             'net': self._create_stage_item("● NET", "UDP Network"),
             'out': self._create_stage_item("● OUTPUT", "PC Speakers")
         }
@@ -101,15 +101,26 @@ class PipelineWidget(QFrame):
             
             # Check telemetry for mic, hfp, ai
             if telemetry and isinstance(telemetry, dict):
-                bt_conn = telemetry.get('bluetooth_connected', True)
-                ai_act = telemetry.get('model_active', True)
-                
+                model = str(telemetry.get('model') or 'DeepFilterNet3')
+                self.stages['ai']['desc'].setText(model[:22])
+                device = str(telemetry.get('bluetooth_device') or 'Bluetooth HFP')
+                if 'rockerz' in device.lower() or '512' in device.lower():
+                    self.stages['hfp']['desc'].setText('Rockerz 512 ANC')
+                elif 'vs102' in device.lower():
+                    self.stages['hfp']['desc'].setText('HFP (check device)')
+                bt_conn = telemetry.get('bluetooth_connected')
+                if bt_conn is None:
+                    bt_conn = True
+                ai_act = telemetry.get('model_active')
+                if ai_act is None:
+                    ai_act = True
+
                 self.stages['hfp']['tag'].setStyleSheet("color: #10B981;" if bt_conn else "color: #EF4444;")
                 self.stages['hfp']['container'].setStyleSheet("border: 1px solid #10B981;" if bt_conn else "border: 1px solid #EF4444;")
-                
+
                 self.stages['mic']['tag'].setStyleSheet("color: #10B981;" if bt_conn else "color: #EF4444;")
                 self.stages['mic']['container'].setStyleSheet("border: 1px solid #10B981;" if bt_conn else "border: 1px solid #EF4444;")
-                
+
                 self.stages['ai']['tag'].setStyleSheet("color: #10B981;" if ai_act else "color: #EF4444;")
                 self.stages['ai']['container'].setStyleSheet("border: 1px solid #10B981;" if ai_act else "border: 1px solid #EF4444;")
             else:
