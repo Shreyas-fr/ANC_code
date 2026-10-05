@@ -6,7 +6,7 @@ The PC Frontend is a high-performance, lightweight PySide6 desktop GUI for live 
 
 ## Architectural Guarantee
 
-- **Authoritative Edge Node**: The Raspberry Pi 5 performs all microphone capture, Bluetooth HFP routing, and StatefulPolarLSTM AI model inference.
+- **Authoritative Edge Node**: The Raspberry Pi 5 performs all microphone capture, Bluetooth HFP routing, and DFN3 AI model inference.
 - **PC Frontend Role**: The PC acts **exclusively** as a network receiver, live audio renderer, and telemetry visualization console.
 - **No AI / PyTorch on PC**: The PC does **NOT** load PyTorch, run model checkpoints, or perform inference.
 - **Memory-Only Streaming**: Normal operation processes all PCM audio in memory ring buffers (`JitterBuffer`). It **NEVER** records or writes `.wav` audio files to disk.

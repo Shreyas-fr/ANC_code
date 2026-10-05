@@ -28,7 +28,7 @@ class Theme:
     ACCENT_CYAN_LIGHT = "#38BDF8"# Secondary Cyan
     ACCENT_CYAN_GLOW = "rgba(34, 211, 238, 0.12)"
 
-    ACCENT_VIOLET = "#8B5CF6"    # AI Violet (StatefulPolarLSTM, Model Inference)
+    ACCENT_VIOLET = "#8B5CF6"    # AI Violet (DFN3, Model Inference)
     ACCENT_VIOLET_LIGHT = "#A78BFA"
     ACCENT_VIOLET_GLOW = "rgba(139, 92, 246, 0.15)"
 

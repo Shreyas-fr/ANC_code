@@ -3,7 +3,7 @@
 ## 1. Files Modified
 - `frontend/network/audio_receiver.py`: Sequence tracking completely rewritten to accurately identify Out-of-Order packets versus massive sequence jumps (connection drops or sender restarts) without logging false sequence errors. Added timeout detection.
 - `frontend/audio/jitter_buffer.py`: Replaced the legacy 500 ms buffer maximum with a hard 50 ms upper limit to prevent memory bloating and artificial audio latency.
-- `frontend/ui/telemetry_panel.py`: Removed hardcoded claims of `StatefulPolarLSTM`. All AI Engine fields (Model Name, Backend, SHA checksum) are now fully dynamic and read directly from UDP 5006, defaulting to `N/A`.
+- `frontend/ui/telemetry_panel.py`: Removed hardcoded claims of `DFN3`. All AI Engine fields (Model Name, Backend, SHA checksum) are now fully dynamic and read directly from UDP 5006, defaulting to `N/A`.
 
 ## 2. Configuration Changes
 - Added fail-safes so that if `max_buffer_ms` is absent from `frontend_config.json`, the dashboard rigorously defaults to 50 ms.

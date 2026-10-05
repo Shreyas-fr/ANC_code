@@ -48,7 +48,7 @@ class DiagnosticsPanel(QWidget):
         edge_grid.addWidget(self.val_edge_hw, 0, 1)
 
         edge_grid.addWidget(self._make_label("AI Architecture:"), 0, 2)
-        self.val_ai_arch = self._make_val("StatefulPolarLSTM (1,448,962 params)", color=Theme.ACCENT_VIOLET_LIGHT)
+        self.val_ai_arch = self._make_val("DFN3 (Rust / ONNX)", color=Theme.ACCENT_VIOLET_LIGHT)
         edge_grid.addWidget(self.val_ai_arch, 0, 3)
 
         # Row 1

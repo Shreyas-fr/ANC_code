@@ -198,7 +198,7 @@ class MainWindow(QMainWindow):
         )
         self.wave_enhanced = WaveformWidget(
             title="ENHANCED OUTPUT",
-            subtitle="AI filtered StatefulPolarLSTM post-enhancement stream",
+            subtitle="AI filtered DFN3 post-enhancement stream",
             port_label="UDP 5005",
             color_hex=Theme.ACCENT_VIOLET,
             sample_rate=self.cfg['sample_rate'],

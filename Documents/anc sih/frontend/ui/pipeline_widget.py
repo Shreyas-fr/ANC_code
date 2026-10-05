@@ -1,7 +1,7 @@
 """
 Processing Pipeline Architecture Diagram for SIH 2026 PS 26052.
 Displays end-to-end signal flow:
-[MIC] -> [HFP] -> [EDGE PI 5] -> [STATEFUL POLAR LSTM] -> [UDP STREAM] -> [OUTPUT]
+[MIC] -> [HFP] -> [EDGE PI 5] -> [DFN3] -> [UDP STREAM] -> [OUTPUT]
 """
 
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout, QWidget, QSizePolicy
@@ -59,7 +59,7 @@ class PipelineWidget(QFrame):
             'mic': self._create_stage_item("● MIC", "Microphone Capture", "Raw Analog", is_ai=False),
             'hfp': self._create_stage_item("● HFP", "Bluetooth 16kHz", "mSBC / CVSD", is_ai=False),
             'pi': self._create_stage_item("● EDGE PI 5", "Edge Hardware", "BCM2712 Quad-Core", is_ai=False),
-            'ai': self._create_stage_item("● AI ENGINE", "StatefulPolarLSTM", "ONNX / PyTorch", is_ai=True),
+            'ai': self._create_stage_item("● AI ENGINE", "DeepFilterNet3", "ONNX / Rust", is_ai=True),
             'net': self._create_stage_item("● UDP STREAM", "Port 5005 PCM", "1032 B Datagrams", is_ai=False),
             'out': self._create_stage_item("● OUTPUT", "Host Playback", "Low-Latency Ring", is_ai=False)
         }

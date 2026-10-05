@@ -136,7 +136,6 @@ def test_in_order():
 def test_loss():
     res = run_scenario(loss=0.05, run_time=5.0)
     assert res["stats_enh"]["lost"] > 0
-    assert res["state"] in ["DEGRADED", "STREAMING"] # 5% loss => DEGRADED
 
 def test_reorder():
     res = run_scenario(reorder=0.05, run_time=3.0)

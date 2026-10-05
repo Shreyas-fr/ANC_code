@@ -206,7 +206,7 @@ class MetricCard(QFrame):
 class SignalTransformWidget(QFrame):
     """
     Visual bridge between Raw Audio Input and Enhanced Output.
-    Communicates: RAW AUDIO IN ➔ PI 5 BCM2712 ➔ STATEFUL POLAR LSTM ➔ ENHANCED AUDIO OUT.
+    Communicates: RAW AUDIO IN ➔ PI 5 BCM2712 ➔ DFN3 ➔ ENHANCED AUDIO OUT.
     """
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -248,7 +248,7 @@ class SignalTransformWidget(QFrame):
         layout.addWidget(arr2)
 
         # Stage 3: AI Inference
-        self.lbl_ai = QLabel("STATEFUL POLAR LSTM")
+        self.lbl_ai = QLabel("DFN3 ENGINE")
         self.lbl_ai.setFont(QFont(Theme.FONT_FAMILY_MONO, 8, QFont.Weight.Bold))
         self.lbl_ai.setStyleSheet(f"color: {Theme.ACCENT_VIOLET_LIGHT};")
         layout.addWidget(self.lbl_ai)
