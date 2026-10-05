@@ -1,7 +1,0 @@
-spawn ssh shreyas@shreyas.local systemctl cat sih26052-edge.service; ls -la ~/sih26052-edge/
-shreyas@shreyas.local's password: 
-No files found for sih26052-edge.service.
-total 12
-drwxrwxr-x  3 shreyas shreyas 4096 Sep 30 14:59 .
-drwx------ 18 shreyas shreyas 4096 Sep 30 15:01 ..
-drwxrwxr-x  2 shreyas shreyas 4096 Sep 30 15:00 audio

@@ -1,18 +1,0 @@
-spawn ssh shreyas@shreyas.local cat /tmp/pi_final_test.log
-shreyas@shreyas.local's password: 
-Found VS102 source ID: 46
-Starting recording and live streaming to 10.85.100.182:5005...
-
-=== REAL-TIME MEASUREMENT ===
-Frames processed: 3750
-Median: 15.49 ms
-p95: 18.89 ms
-p99: 20.50 ms
-Max: 42.37 ms
->16ms frames (Deadline misses): 1468
-Packets sent: 3750
-Temperature: 77.1 °C
-
-Files saved:
-Input: /home/shreyas/sih26052_edge/audio/final_test_input_20260930_152059.wav
-Output: /home/shreyas/sih26052_edge/audio/final_test_ai_output_20260930_152059.wav

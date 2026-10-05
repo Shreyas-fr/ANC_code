@@ -1,3 +1,0 @@
-spawn ssh shreyas@shreyas.local timeout 15 bluetoothctl scan on; bluetoothctl devices
-shreyas@shreyas.local's password: 
-SetDiscoveryFilter success

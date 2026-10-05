@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+pc_venv/
+env/
+.env
+
+# Media and Logs
+*.wav
+*.mp4
+*.gif
+*.raw
+*.csv
+*.json
+*.log
+*.txt
+
+# AI Models (Heavy)
+*.hk
+*.pth
+*.onnx
+
+# Mac Specific
+.DS_Store
+
+# Temporary outputs
+kaggle_output/
+kaggle_output_v2/
+runs/experiments/logs_archive/
+anc_tests/

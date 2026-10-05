@@ -1,4 +1,0 @@
-spawn ssh shreyas@shreyas.local XDG_RUNTIME_DIR=/run/user/1000 journalctl --user -u wireplumber --since "30 minutes ago" -n 50 --no-pager
-shreyas@shreyas.local's password: 
--- No entries --
-No journal files were found.

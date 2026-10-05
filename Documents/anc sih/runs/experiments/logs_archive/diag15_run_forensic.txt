@@ -1,5 +1,0 @@
-spawn scp run_forensic.py shreyas@shreyas.local:~/sih26052_edge/prototype/run_forensic.py
-shreyas@shreyas.local's password: 
-run_forensic.py                                 0%    0     0.0KB/s   --:-- ETArun_forensic.py                               100% 5788   102.4KB/s   00:00    
-spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/run_forensic.py
-shreyas@shreyas.local's password: 

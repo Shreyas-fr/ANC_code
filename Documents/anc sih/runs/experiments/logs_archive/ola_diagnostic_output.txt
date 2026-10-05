@@ -1,27 +1,0 @@
-spawn scp test_ola_reconstruction.py shreyas@shreyas.local:~/sih26052_edge/prototype/test_ola_reconstruction.py
-shreyas@shreyas.local's password: 
-test_ola_reconstruction.py                      0%    0     0.0KB/s   --:-- ETAtest_ola_reconstruction.py                    100% 7770   587.2KB/s   00:00    
-spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/test_ola_reconstruction.py
-shreyas@shreyas.local's password: 
-==================================================
-CRITICAL CHECK - OVERLAP-ADD NORMALIZATION CURVE
-==================================================
-Hann[n] + Hann[n-256]:
-  Min:  0.996926
-  Max:  0.999991
-  Mean: 0.998047
-Hann[n]^2 + Hann[n-256]^2:
-  Min:  0.496950
-  Max:  0.999981
-  Mean: 0.748535
-==================================================
-
-Running CURRENT IDENTITY...
-Running NORMALIZED OLA...
-Running PURE DSP IDENTITY...
-
---- RESULTS TABLE ---
-Test | 16ms peak | tail energy | RMS | peak | max_err | mean_err | recon SNR
-CURRENT IDENTITY | 110.80 | 0.323972 | 0.009535 | 0.2400 | 0.461781 | 0.007317 | -2.35
-NORMALIZED OLA | 132.71 | 0.383212 | 0.011118 | 0.2897 | 0.487734 | 0.007817 | -2.91
-PURE DSP IDENTITY | 148.46 | 0.427744 | 0.012435 | 0.3232 | 0.512238 | 0.008248 | -3.37

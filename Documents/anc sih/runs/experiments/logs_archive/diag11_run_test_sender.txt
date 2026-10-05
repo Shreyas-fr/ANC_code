@@ -1,4 +1,0 @@
-spawn ssh shreyas@shreyas.local /home/shreyas/env/bin/python ~/sih26052_edge/prototype/controlled_test_sender.py
-shreyas@shreyas.local's password: 
-Sending 1kHz sine wave for 5.0s to 10.85.100.182:5005
-Done sending controlled test signal. Sent 312 packets.

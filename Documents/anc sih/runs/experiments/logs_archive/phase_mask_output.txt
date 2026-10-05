@@ -1,24 +1,0 @@
-spawn scp test_phase_mask.py shreyas@shreyas.local:~/sih26052_edge/prototype/test_phase_mask.py
-shreyas@shreyas.local's password: 
-test_phase_mask.py                              0%    0     0.0KB/s   --:-- ETAtest_phase_mask.py                            100% 5631   619.7KB/s   00:00    
-spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/test_phase_mask.py
-shreyas@shreyas.local's password: 
-Running CURRENT...
-Running PHASE_ZERO...
-Running IDENTITY...
-
---- RESULTS TABLE ---
-Test | 16ms peak | tail energy | RMS | speech corr | SI-SDR | SNR
-CURRENT | 99.25 | 0.289287 | 0.008539 | -0.0841 | -2.00 | -2.00
-PHASE_ZERO | 99.26 | 0.289291 | 0.008539 | -0.0846 | -2.01 | -2.01
-IDENTITY | 111.03 | 0.324512 | 0.009551 | -0.0839 | -2.35 | -2.35
-
---- PHASE STATISTICS ---
-Mean: -0.001225 rad
-Std: 0.017705 rad
-Min: -0.044259 rad
-Max: 0.051428 rad
-Median Absolute: 0.011420 rad
-Bins > 0.1 rad: 0.00%
-Bins > 0.5 rad: 0.00%
-Bins > 1.0 rad: 0.00%

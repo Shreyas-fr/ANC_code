@@ -1,23 +1,0 @@
-spawn scp analyze_dual.py shreyas@shreyas.local:~/analyze_dual.py
-shreyas@shreyas.local's password: 
-analyze_dual.py                                 0%    0     0.0KB/s   --:-- ETAanalyze_dual.py                               100% 2072   170.3KB/s   00:00    
-spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge; /home/shreyas/env/bin/python ~/analyze_dual.py $(cat /tmp/last_recordings.txt | head -1) $(cat /tmp/last_recordings.txt | tail -1)
-shreyas@shreyas.local's password: 
-INPUT:
-Duration: 20.00s
-Sample Rate: 16000 Hz
-Channels: 1
-RMS: 380.52
-Peak: 6294.0
-NaN/Inf: False/False
-
-OUTPUT:
-Duration: 20.00s
-Sample Rate: 16000 Hz
-Channels: 1
-RMS: 262.16
-Peak: 4774.0
-NaN/Inf: False/False
-
-Cross-correlation: -0.1088
-Output contains speech: YES
