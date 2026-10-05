@@ -1,0 +1,9 @@
+@@ -29,7 +29,7 @@
+             'mic': self._create_stage_item("● MIC", "Microphone"),
+             'hfp': self._create_stage_item("● HFP", "Bluetooth HFP"),
+             'pi': self._create_stage_item("● PI 5", "Raspberry Pi 5"),
+-            'ai': self._create_stage_item("● AI", "PolarLSTM AI"),
++            'ai': self._create_stage_item("● AI", "DeepFilterNet3"),
+             'net': self._create_stage_item("● NET", "UDP Network"),
+             'out': self._create_stage_item("● OUTPUT", "PC Speakers")
+         }

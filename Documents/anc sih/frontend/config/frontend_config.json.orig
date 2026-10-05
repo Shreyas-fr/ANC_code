@@ -1,0 +1,14 @@
+{
+  "audio_port": 5005,
+  "telemetry_port": 5006,
+  "input_port": 5007,
+  "sample_rate": 16000,
+  "frame_size": 256,
+  "buffer_ms": 80,
+  "max_buffer_ms": 160,
+  "packet_timeout_ms": 1000,
+  "window_seconds": 3.0,
+  "output_device": null,
+  "fft_size": 512,
+  "target_fps": 30
+}

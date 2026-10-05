@@ -42,6 +42,10 @@ class AudioReceiver(QObject):
         self.last_packet_time: Optional[float] = None
         self.is_connected = False
         self.start_time: Optional[float] = None
+        
+        self.malformed_packets = 0
+        self.recent_stats = [] # list of (time, received_count, lost_count)
+        self.recent_intervals = [] # list of (time, interval_ms)
 
     def start(self):
         """Start UDP receiver background thread."""
@@ -94,7 +98,9 @@ class AudioReceiver(QObject):
                 packet_time = time.time()
                 
                 # Malformed check: must have at least 8-byte header + some payload
-                if len(data) < 8:
+                if len(data) < 8 or len(data) > 2048:
+                    with self.lock:
+                        self.malformed_packets += 1
                     logger.warning(f"Discarded short packet ({len(data)} bytes)")
                     continue
                     
@@ -120,11 +126,15 @@ class AudioReceiver(QObject):
                         self.status_changed.emit(self.stream_name, True)
 
                     # Sequence Tracking
+                    added_received = 0
+                    added_lost = 0
                     if self.last_sequence is None:
                         self.last_sequence = seq
                         self.packets_received += 1
+                        added_received = 1
                     elif seq == self.last_sequence + 1:
                         self.packets_received += 1
+                        added_received = 1
                         self.last_sequence = seq
                     elif seq == self.last_sequence:
                         self.duplicate_packets += 1
@@ -133,13 +143,30 @@ class AudioReceiver(QObject):
                             self.sequence_resets += 1
                             self.last_sequence = seq
                             self.packets_received += 1
+                            added_received = 1
                         else:
                             self.out_of_order_packets += 1
                     else: # seq > last_sequence + 1 (skipped packets)
                         lost = seq - (self.last_sequence + 1)
                         self.packets_lost += lost
                         self.packets_received += 1
+                        added_received = 1
+                        added_lost = lost
                         self.last_sequence = seq
+                    
+                    self.recent_stats.append((packet_time, added_received, added_lost))
+                    
+                    if hasattr(self, '_last_pkt_time_for_jitter') and self._last_pkt_time_for_jitter is not None:
+                        interval = (packet_time - self._last_pkt_time_for_jitter) * 1000.0
+                        self.recent_intervals.append((packet_time, interval))
+                    self._last_pkt_time_for_jitter = packet_time
+                    
+                    # prune old stats (> 5 seconds)
+                    cutoff = packet_time - 5.0
+                    while self.recent_stats and self.recent_stats[0][0] < cutoff:
+                        self.recent_stats.pop(0)
+                    while self.recent_intervals and self.recent_intervals[0][0] < cutoff:
+                        self.recent_intervals.pop(0)
                 # Emit to GUI / buffer
                 self.frame_received.emit(self.stream_name, samples, seq, packet_time)
 
@@ -156,13 +183,28 @@ class AudioReceiver(QObject):
             loss_pct = (self.packets_lost / total_expected * 100.0) if total_expected > 0 else 0.0
             duration = (time.time() - self.start_time) if self.start_time else 0.0
             
+            # calculate 5s metrics
+            recent_recv = sum(x[1] for x in self.recent_stats)
+            recent_lost = sum(x[2] for x in self.recent_stats)
+            recent_total = recent_recv + recent_lost
+            recent_loss_pct = (recent_lost / recent_total * 100.0) if recent_total > 0 else 0.0
+            
+            if self.recent_intervals:
+                intervals = [x[1] for x in self.recent_intervals]
+                jitter_p95 = np.percentile(intervals, 95)
+            else:
+                jitter_p95 = 0.0
+            
             return {
                 'received': self.packets_received,
                 'lost': self.packets_lost,
                 'duplicates': self.duplicate_packets,
                 'out_of_order': self.out_of_order_packets,
+                'malformed': self.malformed_packets,
                 'sequence_resets': self.sequence_resets,
                 'loss_pct': loss_pct,
+                'recent_loss_pct': recent_loss_pct,
+                'jitter_p95_ms': jitter_p95,
                 'last_seq': self.last_sequence,
                 'connected': self.is_connected,
                 'duration_sec': duration

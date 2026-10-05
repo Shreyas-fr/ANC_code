@@ -52,8 +52,7 @@ class MainWindow(QMainWindow):
         self.jitter_buffer = JitterBuffer(
             sample_rate=self.cfg['sample_rate'],
             target_buffer_ms=self.cfg['buffer_ms'],
-            max_buffer_ms=self.cfg.get('max_buffer_ms', 250),
-            prebuffer=True
+            max_buffer_ms=self.cfg.get('max_buffer_ms', 50)
         )
         self.playback = AudioPlayback(
             jitter_buffer=self.jitter_buffer,
@@ -176,7 +175,7 @@ class MainWindow(QMainWindow):
         lbl_sec1.setStyleSheet(f"color: {Theme.TEXT_SECONDARY}; letter-spacing: 1px;")
         sec_header.addWidget(lbl_sec1)
         sec_header.addStretch()
-        lbl_sec1_sub = QLabel("16 kHz Mono PCM · Low-Latency Memory Ring Buffer · Zero Disk I/O")
+        lbl_sec1_sub = QLabel("16 kHz Mono PCM · Real-Time Memory Ring Buffer · Zero Disk I/O")
         lbl_sec1_sub.setFont(QFont(Theme.FONT_FAMILY_UI, 8))
         lbl_sec1_sub.setStyleSheet(f"color: {Theme.TEXT_MUTED};")
         sec_header.addWidget(lbl_sec1_sub)
@@ -226,7 +225,7 @@ class MainWindow(QMainWindow):
         self.kpi_layout.setSpacing(12)
         
         # Hero Primary KPI: AI Latency (Pi Model Inference)
-        self.kpi_lat = MetricCard("END-TO-END LATENCY", tag="P50 / Median", context="Pi Model Execution Time", is_primary=True)
+        self.kpi_lat = MetricCard("AI INFERENCE LATENCY", tag="P50 / Median", context="Pi Model Execution Time", is_primary=True)
         self.kpi_loss = MetricCard("PACKET LOSS", tag="UDP 5005", context="0 lost / 0 recv")
         self.kpi_sr = MetricCard("SAMPLE RATE", tag="16 kHz", context="HFP Mono 256 Smpl")
         self.kpi_sr.set_value("16 kHz", Theme.ACCENT_CYAN, "HFP Mono 256 Smpl")
@@ -301,7 +300,7 @@ class MainWindow(QMainWindow):
         
         brand_box.addLayout(title_row)
         
-        lbl_sub = QLabel("EDGE AI COMMUNICATION ENHANCEMENT  |  DEEPFILTERNET3 · 16 kHz HFP")
+        lbl_sub = QLabel("EDGE AI COMMUNICATION ENHANCEMENT  |  STATEFUL POLAR LSTM · 16 kHz HFP")
         lbl_sub.setFont(QFont(Theme.FONT_FAMILY_MONO, 8))
         lbl_sub.setStyleSheet(f"color: {Theme.TEXT_MUTED}; letter-spacing: 0.5px;")
         brand_box.addWidget(lbl_sub)
@@ -467,15 +466,13 @@ class MainWindow(QMainWindow):
             self.pill_ai.set_status("INACTIVE", Theme.ACCENT_ROSE)
             
         # Update Hero AI Latency KPI
-        buffer_ms = self.jitter_buffer.get_level_ms()
         if 'latency_median_ms' in data:
             lat = data['latency_median_ms']
-            self.kpi_lat.set_value(f"buffer: {buffer_ms:.1f} ms", Theme.ACCENT_VIOLET_LIGHT, f"processing delay: {lat:.1f} ms")
+            p95 = data.get('latency_p95_ms', lat)
+            self.kpi_lat.set_value(f"{lat:.1f} ms", Theme.ACCENT_VIOLET_LIGHT, f"P95: {p95:.1f} ms · Pi AI Inference")
         elif 'latency_ms' in data:
             lat = data['latency_ms']
-            self.kpi_lat.set_value(f"buffer: {buffer_ms:.1f} ms", Theme.ACCENT_VIOLET_LIGHT, f"processing delay: {lat:.1f} ms")
-        else:
-            self.kpi_lat.set_value(f"buffer: {buffer_ms:.1f} ms", Theme.ACCENT_VIOLET_LIGHT, "processing delay: unknown")
+            self.kpi_lat.set_value(f"{lat:.1f} ms", Theme.ACCENT_VIOLET_LIGHT, "Frame Latency (Pi AI)")
             
         if 'temperature_c' in data:
             temp = data['temperature_c']
@@ -500,80 +497,18 @@ class MainWindow(QMainWindow):
         self.wave_enhanced.update_plot()
         
         # Update network stats in diagnostics panel and KPI
-        stats_enh = self.enhanced_receiver.get_stats()
-        stats_in = self.input_receiver.get_stats()
-        buf_stats = self.jitter_buffer.get_stats()
-        telemetry = self.telemetry_receiver.latest_data or {}
-        
-        # State Machine (F1d)
-        new_state = "DISCONNECTED"
-        new_color = Theme.ACCENT_ROSE
-        
-        is_enh_conn = stats_enh['connected']
-        is_raw_conn = stats_in['connected']
-        
-        loss_5s = stats_enh.get('recent_loss_pct', 0.0)
-        jitter_p95 = stats_enh.get('jitter_p95_ms', 0.0)
-        target_buf_ms = getattr(self.jitter_buffer, 'target_samples', 960) / getattr(self.jitter_buffer, 'sample_rate', 16000) * 1000.0
-        
-        # Check underruns over last 5s
-        if not hasattr(self, '_last_underruns'):
-            self._last_underruns = buf_stats.get('underrun_events', 0)
-            self._underrun_diffs = [] # (time, diff)
-        
-        curr_time = time.time()
-        curr_underruns = buf_stats.get('underrun_events', 0)
-        if curr_underruns > self._last_underruns:
-            self._underrun_diffs.append((curr_time, curr_underruns - self._last_underruns))
-            self._last_underruns = curr_underruns
-            
-        # prune underruns
-        while self._underrun_diffs and self._underrun_diffs[0][0] < curr_time - 5.0:
-            self._underrun_diffs.pop(0)
-        underruns_5s = sum(x[1] for x in self._underrun_diffs)
-        
-        ai_error_reported = telemetry.get('error', False) # Sender might report model error
-        model_active = telemetry.get('model_active', True) # Assume active if no telemetry yet
-        
-        if not is_enh_conn and not is_raw_conn:
-            new_state = "DISCONNECTED"
-            new_color = Theme.ACCENT_ROSE
-        elif is_raw_conn and not is_enh_conn:
-            new_state = "AI ERROR"
-            new_color = Theme.ACCENT_ROSE
-        elif ai_error_reported:
-            new_state = "AI ERROR"
-            new_color = Theme.ACCENT_ROSE
-        elif not model_active:
-            new_state = "PASSTHROUGH"
-            new_color = Theme.ACCENT_CYAN
-        elif getattr(self.jitter_buffer, '_holding', False) or (is_enh_conn and stats_enh['received'] < 10):
-            new_state = "BUFFERING"
-            new_color = Theme.ACCENT_AMBER
-        elif loss_5s >= 2.0 or underruns_5s > 3 or jitter_p95 > target_buf_ms:
-            new_state = "DEGRADED"
-            new_color = Theme.ACCENT_AMBER
-        else:
-            new_state = "STREAMING"
-            new_color = Theme.ACCENT_EMERALD
-            
-        if new_state != self.state:
-            self.event_feed.log_event("STATE", f"{self.state} ➔ {new_state}", "INFO")
-            self.state = new_state
-            
-        self.readiness_badge.set_state(self.state, new_color)
+        stats = self.enhanced_receiver.get_stats()
         buf_ms = self.jitter_buffer.get_level_ms()
-        self.diagnostics_panel.update_network_stats(stats_enh, stats_in, buf_stats, buf_ms)
+        self.diagnostics_panel.update_network_stats(stats, buf_ms)
         
         # Update KPI cards
-        pct = stats_enh.get('loss_pct', 0.0)
+        pct = stats.get('loss_pct', 0.0)
         color = Theme.ACCENT_EMERALD if pct < 1.0 else (Theme.ACCENT_AMBER if pct < 5.0 else Theme.ACCENT_ROSE)
-        recv = stats_enh.get('received', 0)
-        lost = stats_enh.get('lost', 0)
+        recv = stats.get('received', 0)
+        lost = stats.get('lost', 0)
         self.kpi_loss.set_value(f"{pct:.2f}%", color, f"{lost} lost / {recv:,} recv")
         
-        target_ms = self.cfg.get('buffer_ms', 60.0)
-        self.kpi_buf.set_value(f"{buf_ms:.1f} ms", Theme.ACCENT_EMERALD if buf_ms <= target_ms * 1.5 else Theme.ACCENT_AMBER, f"Target: {target_ms:.1f} ms (Zero Disk I/O)")
+        self.kpi_buf.set_value(f"{buf_ms:.1f} ms", Theme.ACCENT_EMERALD if buf_ms < 50 else Theme.ACCENT_AMBER, "Target: 48.0 ms (Zero Disk I/O)")
         
         # Check input receiver status if port 5007 is idle
         if not self.input_receiver.is_connected:

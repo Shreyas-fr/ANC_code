@@ -92,36 +92,36 @@ class DiagnosticsPanel(QWidget):
         net_grid.setVerticalSpacing(8)
 
         # Row 0
-        net_grid.addWidget(self._make_label("Frames Received:"), 0, 0)
-        self.val_net_recv = self._make_val("0")
-        net_grid.addWidget(self.val_net_recv, 0, 1)
+        net_grid.addWidget(self._make_label("Frames Recv / Lost:"), 0, 0)
+        self.val_net_recv_lost = self._make_val("0 / 0")
+        net_grid.addWidget(self.val_net_recv_lost, 0, 1)
 
         net_grid.addWidget(self._make_label("Enhanced Audio Port:"), 0, 2)
         self.val_port_enh = self._make_val("UDP 5005 (1032 B = 8B Seq + 1024B PCM)", color=Theme.ACCENT_CYAN)
         net_grid.addWidget(self.val_port_enh, 0, 3)
 
         # Row 1
-        net_grid.addWidget(self._make_label("Frames Lost:"), 1, 0)
-        self.val_net_lost = self._make_val("0")
-        net_grid.addWidget(self.val_net_lost, 1, 1)
+        net_grid.addWidget(self._make_label("Late / Dup / Mal:"), 1, 0)
+        self.val_net_bad = self._make_val("0 / 0 / 0", color=Theme.ACCENT_AMBER)
+        net_grid.addWidget(self.val_net_bad, 1, 1)
 
         net_grid.addWidget(self._make_label("Input Audio Port:"), 1, 2)
         self.val_port_in = self._make_val("UDP 5007 (1032 B = 8B Seq + 1024B PCM)")
         net_grid.addWidget(self.val_port_in, 1, 3)
 
         # Row 2
-        net_grid.addWidget(self._make_label("Packet Loss %:"), 2, 0)
-        self.val_net_loss_pct = self._make_val("0.00%", color=Theme.ACCENT_EMERALD)
-        net_grid.addWidget(self.val_net_loss_pct, 2, 1)
+        net_grid.addWidget(self._make_label("Underruns:"), 2, 0)
+        self.val_net_underruns = self._make_val("0", color=Theme.ACCENT_ROSE)
+        net_grid.addWidget(self.val_net_underruns, 2, 1)
 
         net_grid.addWidget(self._make_label("Telemetry Port:"), 2, 2)
         self.val_port_telem = self._make_val("UDP 5006 (JSON Datagrams)")
         net_grid.addWidget(self.val_port_telem, 2, 3)
 
         # Row 3
-        net_grid.addWidget(self._make_label("Sequence Errors:"), 3, 0)
-        self.val_net_seq_err = self._make_val("0")
-        net_grid.addWidget(self.val_net_seq_err, 3, 1)
+        net_grid.addWidget(self._make_label("Buffer / Jitter P95:"), 3, 0)
+        self.val_net_buf_jit = self._make_val("0.0 ms / 0.0 ms", color=Theme.ACCENT_VIOLET_LIGHT)
+        net_grid.addWidget(self.val_net_buf_jit, 3, 1)
 
         net_grid.addWidget(self._make_label("Stream Duration:"), 3, 2)
         self.val_net_duration = self._make_val("00:00:00")
@@ -190,30 +190,32 @@ class DiagnosticsPanel(QWidget):
         lbl.setStyleSheet(f"color: {color};")
         return lbl
 
-    def update_network_stats(self, stats: dict, buffer_ms: float):
+    def update_network_stats(self, stats_enh: dict, stats_in: dict, buf_stats: dict, buf_ms: float):
         """Update network telemetry from receiver stats."""
-        self.val_net_recv.setText(f"{stats.get('received', 0):,}")
-        self.val_net_lost.setText(f"{stats.get('lost', 0):,}")
+        recv = stats_enh.get('received', 0)
+        lost = stats_enh.get('lost', 0)
+        self.val_net_recv_lost.setText(f"{recv:,} / {lost:,}")
 
-        pct = stats.get('loss_pct', 0.0)
-        self.val_net_loss_pct.setText(f"{pct:.2f}%")
-        if pct > 5.0:
-            self.val_net_loss_pct.setStyleSheet(f"color: {Theme.ACCENT_ROSE};")
-        elif pct > 1.0:
-            self.val_net_loss_pct.setStyleSheet(f"color: {Theme.ACCENT_AMBER};")
-        else:
-            self.val_net_loss_pct.setStyleSheet(f"color: {Theme.ACCENT_EMERALD};")
+        late = buf_stats.get('overflow_samples', 0)
+        dup = stats_enh.get('duplicates', 0)
+        mal = stats_enh.get('malformed', 0)
+        self.val_net_bad.setText(f"{late:,} / {dup:,} / {mal:,}")
+        
+        underruns = buf_stats.get('underrun_events', 0)
+        self.val_net_underruns.setText(f"{underruns:,}")
+        if underruns > 0:
+            self.val_net_underruns.setStyleSheet(f"color: {Theme.ACCENT_ROSE};")
+            
+        jitter = stats_enh.get('jitter_p95_ms', 0.0)
+        self.val_net_buf_jit.setText(f"{buf_ms:.1f} ms / {jitter:.1f} ms")
 
-        seq_err = stats.get('out_of_order', 0) + stats.get('duplicates', 0)
-        self.val_net_seq_err.setText(str(seq_err))
-
-        dur_sec = int(stats.get('duration_sec', 0))
+        dur_sec = int(stats_enh.get('duration_sec', 0))
         hrs = dur_sec // 3600
         mins = (dur_sec % 3600) // 60
         secs = dur_sec % 60
         self.val_net_duration.setText(f"{hrs:02d}:{mins:02d}:{secs:02d}")
 
-        conn = stats.get('connected', False)
+        conn = stats_enh.get('connected', False)
         if conn:
             self.val_health_edge.setText("CONNECTED")
             self.val_health_edge.setStyleSheet(f"color: {Theme.ACCENT_EMERALD};")
