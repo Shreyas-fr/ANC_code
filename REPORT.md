@@ -57,6 +57,20 @@ Every metric reported below originates from script executions in this repository
 
 *Measured using explicit output SNR: $10\log_{10}(\|\text{clean}\|^2 / \|\text{enhanced} - \text{clean}\|^2)$ after cross-correlation delay alignment. Note that historical active-speech SNR yields 7.27 dB overall across all 590 clips.*
 
+> [!CAUTION]
+> **Label Integrity Caveat on Full Manifest**: As audited in `results/dfn3/per_snr_measured_bins.md`, four proxy clips (034, 106, 242, 569) in the `EXISTING_PROXY` subset had 0 noise power injected during synthesis (actual measured input SNR $\approx 145\text{ dB}$), which distorts the input SNR mean in the -5 dB, 0 dB, 10 dB, and 15 dB manifest rows.
+> 
+> In contrast, the **IoBT Gunfire subset** ($n=442$) has **100% exact labels** (0 clips deviate by $>0.01\text{ dB}$).
+
+### Defense & Gunfire Transient Results (`IoBT_GUNFIRE` Only — Exact Labels)
+Below are the verified per-SNR metrics evaluated strictly on genuine acoustic gunfire bursts (`results/dfn3/per_snr_gunfire_only.md`):
+
+| Input SNR | n | Target Out SNR | Measured Out SNR | $\Delta$ SNR | Target STOI | Measured STOI | Target PESQ | Measured PESQ | Compliance Status |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **5 dB (Gunfire)** | 104 | $> 15.0\text{ dB}$ | **7.14 dB** | +2.14 dB | $> 0.85$ | **0.870** | $> 2.50$ | 1.679 | ❌ **FAIL** (PESQ, Out SNR) / ✅ **PASS** (STOI) |
+| **10 dB (Gunfire)** | 93 | $> 15.0\text{ dB}$ | **8.61 dB** | -1.39 dB | $> 0.85$ | **0.909** | $> 2.50$ | 1.990 | ❌ **FAIL** (PESQ, Out SNR) / ✅ **PASS** (STOI) |
+| **15 dB (Gunfire)** | 63 | $> 15.0\text{ dB}$ | **10.30 dB** | -4.70 dB | $> 0.85$ | **0.940** | $> 2.50$ | 2.236 | ❌ **FAIL** (PESQ, Out SNR) / ✅ **PASS** (STOI) |
+
 ---
 
 ### Canonical 590-Example Validation Set Results (DeepFilterNet3 Frozen)

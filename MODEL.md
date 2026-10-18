@@ -13,7 +13,9 @@ All earlier experiments (Polar-D, Stateful PolarLSTM, Complex CRN) have been ret
 | :--- | :--- |
 | **Model Architecture** | DeepFilterNet3 (ERB Filterbank + Deep Complex Filtering) |
 | **Sample Rate** | 48,000 Hz (48 kHz) |
-| **Parameters** | 2,167,969 |
+| **Trainable Parameters** | 2,135,484 (`sum(p.numel() for p in model.parameters())`) |
+| **Model Buffers** | 32,485 (ERB filterbank tables & STFT windows) |
+| **Total Checkpoint Tensors** | 2,167,969 (total elements in `model.hk` checkpoint) |
 | **Status** | **FROZEN — CANONICAL CANDIDATE** |
 | **Binary Checksum (SHA256)** | `522c87ac9e7ff15a09e5d2043139d1b77ec3a6187cea9f91fff10addcabedfbe` |
 | **Weight Format** | `.hk` (Haiku / NumPy binary checkpoint) |

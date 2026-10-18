@@ -3,7 +3,7 @@
 Model: DeepFilterNet3
 Status: AUTHORITATIVE CURRENT CANDIDATE
 Sample rate: 48 kHz
-Parameters: 2,167,969 (Exact: 2,167,969)
+Parameters: 2,135,484 weights/biases (2,167,969 total checkpoint tensors including 32,485 ERB/filterbank buffer elements)
 Source: current fine-tuned DFN3 checkpoint ()
 
 SHA256:
