@@ -43,18 +43,19 @@ The DRDO Problem Statement specifies the following performance targets:
 
 ### Authoritative Performance Table (Input SNR vs. Measured Metrics)
 
-Every metric reported below originates from script executions in the repository. Per repository policy, metrics derived from the legacy baseline harness (`eval/evaluate.py` with `ComplexCRN_Wrapper`) are explicitly marked as **UNVERIFIED for DFN3** because full per-SNR breakdown evaluation requires access to the raw training dataset host.
+Every metric reported below originates from script executions in this repository (`scripts/evaluate_dfn3_per_snr.py` executed on `final_model/model.hk`, SHA256 `522c87ac9e7ff15a09e5d2043139d1b77ec3a6187cea9f91fff10addcabedfbe`, across all 590 clips of the canonical validation set). Full outputs and per-clip records are available in `results/dfn3/per_snr_table.md`, `results/dfn3/per_origin_table.md`, `results/dfn3/deployed_streaming_comparison.md`, and `results/dfn3/metrics_per_clip.csv`.
 
-| Input SNR | Target Out SNR | Measured Out SNR | Target STOI | Measured STOI | Target PESQ | Measured PESQ | Compliance Status |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **5 dB** | $> 15.0\text{ dB}$ | 9.3 dB *(UNVERIFIED for DFN3)* | $> 0.85$ | 0.86 *(UNVERIFIED for DFN3)* | $> 2.50$ | 1.67 *(UNVERIFIED for DFN3)* | ❌ **FAIL** (PESQ, Out SNR) |
-| **10 dB** | $> 15.0\text{ dB}$ | 12.7 dB *(UNVERIFIED for DFN3)* | $> 0.85$ | 0.90 *(UNVERIFIED for DFN3)* | $> 2.50$ | 2.04 *(UNVERIFIED for DFN3)* | ❌ **FAIL** (PESQ, Out SNR) |
-| **15 dB** | $> 15.0\text{ dB}$ | 15.6 dB *(UNVERIFIED for DFN3)* | $> 0.85$ | 0.94 *(UNVERIFIED for DFN3)* | $> 2.50$ | 2.45 *(UNVERIFIED for DFN3)* | ❌ **FAIL** (PESQ) / ✅ **PASS** (STOI, SNR) |
+| Input SNR | n | Target Out SNR | Measured Out SNR | Target STOI | Measured STOI | Target PESQ | Measured PESQ | Compliance Status |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **-10 dB** | 30 | $> 15.0\text{ dB}$ | -2.92 dB | $> 0.85$ | 0.648 | $> 2.50$ | 1.144 | ❌ **FAIL** (STOI, PESQ, Out SNR) |
+| **-5 dB** | 63 | $> 15.0\text{ dB}$ | 1.49 dB | $> 0.85$ | 0.774 | $> 2.50$ | 1.385 | ❌ **FAIL** (STOI, PESQ, Out SNR) |
+| **0 dB** | 117 | $> 15.0\text{ dB}$ | 3.96 dB | $> 0.85$ | 0.826 | $> 2.50$ | 1.434 | ❌ **FAIL** (STOI, PESQ, Out SNR) |
+| **5 dB** | 137 | $> 15.0\text{ dB}$ | 6.95 dB | $> 0.85$ | **0.875** | $> 2.50$ | 1.687 | ❌ **FAIL** (PESQ, Out SNR) / ✅ **PASS** (STOI) |
+| **10 dB** | 121 | $> 15.0\text{ dB}$ | 8.51 dB | $> 0.85$ | **0.913** | $> 2.50$ | 2.021 | ❌ **FAIL** (PESQ, Out SNR) / ✅ **PASS** (STOI) |
+| **15 dB** | 86 | $> 15.0\text{ dB}$ | 10.31 dB | $> 0.85$ | **0.942** | $> 2.50$ | 2.309 | ❌ **FAIL** (PESQ, Out SNR) / ✅ **PASS** (STOI) |
+| **20 dB** | 36 | $> 15.0\text{ dB}$ | 10.64 dB | $> 0.85$ | **0.958** | $> 2.50$ | **2.708** | ❌ **FAIL** (Out SNR) / ✅ **PASS** (STOI, PESQ) |
 
-*To re-run the full per-SNR matrix on DFN3 once raw multi-gigabyte audio datasets are mounted:*
-```bash
-python eval/evaluate.py --checkpoint final_model/model.hk --seed 42
-```
+*Measured using explicit output SNR: $10\log_{10}(\|\text{clean}\|^2 / \|\text{enhanced} - \text{clean}\|^2)$ after cross-correlation delay alignment. Note that historical active-speech SNR yields 7.27 dB overall across all 590 clips.*
 
 ---
 
@@ -126,10 +127,34 @@ A continuous 6-minute in-memory stress test was executed on physical Raspberry P
 1. **Single-Channel Neural Noise Suppression:** The system is an advanced monaural neural filter. It successfully removes continuous acoustic noise and high-energy impulsive transients (78.7% improvement rate on gunfire).
 2. **Evaluated Against Unseen Sources:** Source-level hold-out splits were built and audited (see docs/diagnostics/source_overlap_report.md). The canonical manifest itself does not record per-clip source IDs.
 3. **Hardware Validated:** Demonstrably executes natively on physical Raspberry Pi 5 hardware without specialized hardware accelerators.
-4. **Honest Metric Reporting:** Overall STOI on the canonical validation set is 0.866 (per-SNR DFN3 numbers are unverified); transparently reports misses on PESQ ($< 2.5$) and low-SNR output SNR ($< 15\text{ dB}$).
+4. **Honest Metric Reporting:** Overall STOI on the canonical validation set is 0.866; verified per-SNR breakdown across all 7 target SNRs (-10 to +20 dB) reports misses on PESQ (< 2.5 across all SNRs except 20 dB) and Output SNR (< 15 dB across all SNRs) transparently based on `scripts/evaluate_dfn3_per_snr.py`.
 
 ### Boundaries & Non-Claims:
 1. **Not Physical ANC:** The system does **NOT** perform physical Active Noise Cancellation. It does not synthesize anti-phase acoustic waves in ambient airspace; it performs digital noise reduction on a captured digital stream.
 2. **Negative Result for Adaptive NLMS:** Adding an adaptive Normalized LMS post-filter in series with the neural model **degraded performance** on single-microphone audio due to voice leakage in the synthesized noise reference. Documented as a negative result.
 3. **No Dual-Microphone Reference Testing:** The dual-channel hardware reference path remains untested due to lack of multi-channel acoustic recordings.
 4. **No Quantization or TensorRT:** Model weights operate in standard full precision (FP32). INT8 quantization, weight pruning, and TensorRT compilation were **not performed**.
+
+
+---
+
+## 7. Reproduction Instructions
+
+To reproduce the exact measured canonical evaluation numbers and generate all per-SNR tables, per-origin breakdowns, streaming comparisons, and diagnostic plots:
+
+```bash
+# 1. Activate canonical environment
+source antigravity/venv/bin/activate
+
+# 2. Verify model checkpoint integrity
+shasum -a 256 final_model/model.hk
+# Output must match: 522c87ac9e7ff15a09e5d2043139d1b77ec3a6187cea9f91fff10addcabedfbe
+
+# 3. Run full evaluation suite (offline 590 clips + deployed streaming 344 clips)
+python scripts/evaluate_dfn3_per_snr.py
+
+# 4. View produced tables and plots
+cat results/dfn3/per_snr_table.md
+cat results/dfn3/per_origin_table.md
+cat results/dfn3/deployed_streaming_comparison.md
+```
