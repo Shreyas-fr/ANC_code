@@ -200,7 +200,7 @@ class BlockBackend:
 # Full chain: 256 @16k in -> 256 @16k out, deterministic
 # --------------------------------------------------------------------------- #
 class AudioChain:
-    def __init__(self, backend, fs_io: int = FS_IO, fs_proc: int = FS_PROC):
+    def __init__(self, backend, fs_io: int = FS_IO, fs_proc: int = FS_PROC, align_to: Optional[int] = None):
         assert fs_proc % fs_io == 0
         ratio = fs_proc // fs_io
         self.backend, self.ratio = backend, ratio
@@ -211,6 +211,23 @@ class AudioChain:
         self.out_fifo.push(np.zeros(self.prime_io, np.float32))
         self.fs_io = fs_io
         self.underruns = 0
+
+        resamp_delay = int(round((self.up.delay_s + self.down.delay_s) * self.fs_io))
+        be_delay_io = self.backend.delay_samples_48k // self.ratio
+        raw_delay = be_delay_io + resamp_delay + self.prime_io
+
+        if align_to is not None:
+            rem = raw_delay % align_to
+            pad = (align_to - rem) % align_to
+            if pad > 0:
+                self.out_fifo.push(np.zeros(pad, np.float32))
+            self._delay_samples_io = raw_delay + pad
+        else:
+            self._delay_samples_io = raw_delay
+
+    @property
+    def delay_samples_io(self) -> int:
+        return self._delay_samples_io
 
     def process(self, x16: np.ndarray) -> np.ndarray:
         self.in_fifo.push(self.up.process(x16))
@@ -232,7 +249,7 @@ class AudioChain:
             "resample_ms": 1000.0 * (self.up.delay_s + self.down.delay_s),
             "backend_ms": 1000.0 * self.backend.delay_samples_48k / FS_PROC,
         }
-        d["algorithmic_total_ms"] = round(sum(d.values()), 2)
+        d["algorithmic_total_ms"] = round(1000.0 * self._delay_samples_io / self.fs_io, 2)
         return {k: round(v, 2) for k, v in d.items()}
 
 

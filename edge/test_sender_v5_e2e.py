@@ -73,11 +73,6 @@ def run_v5(mode, sleep_s=0.0, extra=(), duration=7):
     for f in ("streaming_core.py", "pi_sender_v2.py", "pi_sender_v5.py", "playout.py"):
         shutil.copy(os.path.join(HERE, f), tmp)
     
-    # Patch the tmp files to fix the TypeError
-    os.system(f"sed -i '' 's/, align_to=FRAME//g' {tmp}/pi_sender_v5.py")
-    os.system(f"sed -i '' 's/align_to=FR//g' {tmp}/playout.py")
-    os.system(f"sed -i '' 's/chain.delay_samples_io/chain.backend.delay_samples_48k/g' {tmp}/playout.py {tmp}/pi_sender_v5.py")
-    
     open(os.path.join(tmp, "dfn3_enhance.py"), "w").write("SLEEP = %r\n" % sleep_s + FAKE_DFN3)
     open(os.path.join(tmp, "gen.py"), "w").write(GEN)
     ports = [free_port() for _ in range(3)]
