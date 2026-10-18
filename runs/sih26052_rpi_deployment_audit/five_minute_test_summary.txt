@@ -1,0 +1,9 @@
+frames_processed,1000
+deadline_misses,15
+p50_ms,5.207479000091553
+p95_ms,5.291128158569336
+p99_ms,5.3557634353637695
+max_ms,37.57286071777344
+nan_inf_count,0
+state_resets,1
+dropped_frames,0

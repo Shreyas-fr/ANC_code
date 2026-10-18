@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# Start logger
+~/anc_logs/power_logger.sh dfn3load &
+LOGGER_PID=$!
+
+trap "kill $LOGGER_PID 2>/dev/null; exit" EXIT INT TERM
+
+function check_abort {
+    PMIC=$(vcgencmd pmic_read_adc)
+    EXT5V=$(echo "$PMIC" | grep EXT5V_V | cut -d= -f2 | sed "s/V//")
+    THROT=$(vcgencmd get_throttled | cut -d= -f2)
+    TEMP=$(vcgencmd measure_temp | cut -d= -f2 | sed "s/.C//")
+    
+    ABORT=0
+    REASON=""
+    
+    if awk "BEGIN {exit !($EXT5V < 4.75)}"; then
+        ABORT=1; REASON="V_DROP($EXT5V)"
+    fi
+    if awk "BEGIN {exit !($TEMP >= 82)}"; then
+        ABORT=1; REASON="TEMP($TEMP)"
+    fi
+    
+    # "get_throttled bit 0x1 set NOW (not the sticky 0x10000)"
+    # get_throttled returns something like 0x50000. 
+    # Bit 0 is 0x1. In bash, checking bit 0:
+    THROT_DEC=$(( THROT ))
+    if [ $(( THROT_DEC & 1 )) -ne 0 ]; then
+        ABORT=1; REASON="THROTTLE_BIT0"
+    fi
+    
+    if [ "$ABORT" -eq 1 ]; then
+        STAGE=$(cat ~/anc_logs/stage.txt 2>/dev/null)
+        echo "ABORTED $STAGE $REASON throt=$THROT ext5v=$EXT5V temp=$TEMP" > ~/anc_logs/stage.txt
+        echo "ABORTED $STAGE $REASON"
+        
+        # Kill python process with SIGTERM, wait 3s, SIGKILL
+        if [ -n "$PY_PID" ]; then
+            kill -15 $PY_PID 2>/dev/null || true
+            sleep 3
+            kill -9 $PY_PID 2>/dev/null || true
+        fi
+        kill $LOGGER_PID 2>/dev/null || true
+        exit 1
+    fi
+}
+
+function check_gate {
+    STAGE_NAME=$1
+    if [ ! -f ~/anc_logs/power_dfn3load.csv ]; then
+        return 0
+    fi
+    MIN_V=$(awk -F, -v stg="$STAGE_NAME" 'NR>1 && $12==stg {if(min=="" || $3<min) min=$3} END {print min}' ~/anc_logs/power_dfn3load.csv)
+    if [ -n "$MIN_V" ] && awk "BEGIN {exit !($MIN_V < 4.80)}"; then
+        echo "GATE FAILED for $STAGE_NAME, min V = $MIN_V"
+        echo "ABORTED GATING $STAGE_NAME $MIN_V" > ~/anc_logs/stage.txt
+        kill $LOGGER_PID 2>/dev/null || true
+        exit 1
+    fi
+}
+
+function rest_stage {
+    PREV=$1
+    echo "rest_after_$PREV" > ~/anc_logs/stage.txt
+    
+    for i in {1..180}; do
+        check_abort
+        TEMP=$(vcgencmd measure_temp | cut -d= -f2 | sed "s/.C//")
+        if awk "BEGIN {exit !($TEMP < 60)}"; then
+            break
+        fi
+        sleep 1
+    done
+}
+
+function run_stage {
+    THREADS=$1
+    STAGE_NAME="t${THREADS}"
+    echo "$STAGE_NAME" > ~/anc_logs/stage.txt
+    echo "Starting $STAGE_NAME"
+    
+    /home/shreyas/env/bin/python ~/anc_logs/dfn3_load.py $THREADS 60 &
+    PY_PID=$!
+    
+    while kill -0 $PY_PID 2>/dev/null; do
+        check_abort
+        sleep 1
+    done
+}
+
+run_stage 1
+rest_stage "t1"
+check_gate "t1"
+
+run_stage 2
+rest_stage "t2"
+check_gate "t2"
+
+run_stage 3
+rest_stage "t3"
+
+echo "DONE" > ~/anc_logs/stage.txt
+kill $LOGGER_PID 2>/dev/null || true

@@ -1,0 +1,472 @@
+spawn ssh shreyas@shreyas.local bash ~/diag3.sh
+shreyas@shreyas.local's password: 
+=== 1. WirePlumber Version ===
+wireplumber
+Compiled with libwireplumber 0.5.8
+Linked with libwireplumber 0.5.8
+Usage:
+  wpctl [OPTION…] COMMAND [COMMAND_OPTIONS] - WirePlumber Control CLI
+
+Commands:
+  status 
+  get-volume ID
+  inspect ID
+  set-default ID
+  set-volume ID VOL[%][-/+]
+  set-mute ID 1|0|toggle
+  set-profile ID INDEX
+  set-route ID INDEX
+  clear-default [ID]
+  settings [KEY] [VAL]
+  set-log-level [ID] LEVEL
+
+Help Options:
+  -h, --help       Show help options
+
+Pass -h after a command to see command-specific options
+
+Error: Unknown option --version
+
+=== 2. Existing Config Locations ===
+/usr/share/wireplumber/scripts/client/access-default.lua
+/usr/share/wireplumber/scripts/client/access-portal.lua
+/usr/share/wireplumber/scripts/client/access-snap.lua
+/usr/share/wireplumber/scripts/default-nodes/apply-default-node.lua
+/usr/share/wireplumber/scripts/default-nodes/find-best-default-node.lua
+/usr/share/wireplumber/scripts/default-nodes/find-selected-default-node.lua
+/usr/share/wireplumber/scripts/default-nodes/rescan.lua
+/usr/share/wireplumber/scripts/default-nodes/state-default-nodes.lua
+/usr/share/wireplumber/scripts/device/apply-profile.lua
+/usr/share/wireplumber/scripts/device/apply-routes.lua
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua
+/usr/share/wireplumber/scripts/device/find-best-profile.lua
+/usr/share/wireplumber/scripts/device/find-best-routes.lua
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua
+/usr/share/wireplumber/scripts/device/select-profile.lua
+/usr/share/wireplumber/scripts/device/select-routes.lua
+/usr/share/wireplumber/scripts/device/state-profile.lua
+/usr/share/wireplumber/scripts/device/state-routes.lua
+/usr/share/wireplumber/scripts/fallback-sink.lua
+/usr/share/wireplumber/scripts/lib/common-utils.lua
+/usr/share/wireplumber/scripts/lib/device-info-cache.lua
+/usr/share/wireplumber/scripts/lib/filter-utils.lua
+/usr/share/wireplumber/scripts/lib/linking-utils.lua
+/usr/share/wireplumber/scripts/lib/monitor-utils.lua
+/usr/share/wireplumber/scripts/lib/node-utils.lua
+/usr/share/wireplumber/scripts/linking/find-best-target.lua
+/usr/share/wireplumber/scripts/linking/find-default-target.lua
+/usr/share/wireplumber/scripts/linking/find-defined-target.lua
+/usr/share/wireplumber/scripts/linking/find-filter-target.lua
+/usr/share/wireplumber/scripts/linking/find-media-role-target.lua
+/usr/share/wireplumber/scripts/linking/find-user-target.lua.example
+/usr/share/wireplumber/scripts/linking/get-filter-from-target.lua
+/usr/share/wireplumber/scripts/linking/link-target.lua
+/usr/share/wireplumber/scripts/linking/prepare-link.lua
+/usr/share/wireplumber/scripts/linking/rescan.lua
+/usr/share/wireplumber/scripts/linking/rescan-media-role-links.lua
+/usr/share/wireplumber/scripts/metadata.lua
+/usr/share/wireplumber/scripts/monitors/alsa.lua
+/usr/share/wireplumber/scripts/monitors/alsa-midi.lua
+/usr/share/wireplumber/scripts/monitors/bluez.lua
+/usr/share/wireplumber/scripts/monitors/bluez-midi.lua
+/usr/share/wireplumber/scripts/monitors/libcamera/create-device.lua
+/usr/share/wireplumber/scripts/monitors/libcamera/create-node.lua
+/usr/share/wireplumber/scripts/monitors/libcamera/enumerate-device.lua
+/usr/share/wireplumber/scripts/monitors/libcamera/name-device.lua
+/usr/share/wireplumber/scripts/monitors/libcamera/name-node.lua
+/usr/share/wireplumber/scripts/monitors/v4l2/create-device.lua
+/usr/share/wireplumber/scripts/monitors/v4l2/create-node.lua
+/usr/share/wireplumber/scripts/monitors/v4l2/enumerate-device.lua
+/usr/share/wireplumber/scripts/monitors/v4l2/name-device.lua
+/usr/share/wireplumber/scripts/monitors/v4l2/name-node.lua
+/usr/share/wireplumber/scripts/node/create-item.lua
+/usr/share/wireplumber/scripts/node/filter-forward-format.lua
+/usr/share/wireplumber/scripts/node/software-dsp.lua
+/usr/share/wireplumber/scripts/node/state-stream.lua
+/usr/share/wireplumber/scripts/node/suspend-node.lua
+/usr/share/wireplumber/scripts/session-services.lua
+/usr/share/wireplumber/scripts/sm-objects.lua
+/usr/share/wireplumber/wireplumber.conf
+/usr/share/wireplumber/wireplumber.conf.d/alsa-vm.conf
+=== 3. Search Installed Config ===
+/usr/share/wireplumber/wireplumber.conf:12:  api.bluez5.*    = bluez5/libspa-bluez5
+/usr/share/wireplumber/wireplumber.conf:57:wireplumber.profiles = {
+/usr/share/wireplumber/wireplumber.conf:59:  ## <profile> = {
+/usr/share/wireplumber/wireplumber.conf:60:  ##   inherits = [ other, profile, names ]   # optional
+/usr/share/wireplumber/wireplumber.conf:66:  # The default profile
+/usr/share/wireplumber/wireplumber.conf:80:  # Profile for running on a systemwide level
+/usr/share/wireplumber/wireplumber.conf:85:  # Typical profile for embedded use cases, systemwide without maintaining state
+/usr/share/wireplumber/wireplumber.conf:90:  # Profile for video-only use cases (camera & screen sharing)
+/usr/share/wireplumber/wireplumber.conf:98:  ## Profiles for multi-instance setup
+/usr/share/wireplumber/wireplumber.conf:124:  ## The following are not complete profiles, but blocks that can be inherited
+/usr/share/wireplumber/wireplumber.conf:144:    monitor.bluez.seat-monitoring = disabled
+/usr/share/wireplumber/wireplumber.conf:148:  # default nodes selection, profiles, routes and stream volume / properties
+/usr/share/wireplumber/wireplumber.conf:152:    hooks.device.profile.state = disabled
+/usr/share/wireplumber/wireplumber.conf:359:    type = virtual, provides = monitor.bluez.seat-monitoring,
+/usr/share/wireplumber/wireplumber.conf:371:    name = monitors/bluez.lua, type = script/lua
+/usr/share/wireplumber/wireplumber.conf:372:    provides = monitor.bluez
+/usr/share/wireplumber/wireplumber.conf:377:    wants = [ monitor.bluez.seat-monitoring ]
+/usr/share/wireplumber/wireplumber.conf:380:    name = monitors/bluez-midi.lua, type = script/lua
+/usr/share/wireplumber/wireplumber.conf:381:    provides = monitor.bluez-midi
+/usr/share/wireplumber/wireplumber.conf:386:    wants = [ monitor.bluez.seat-monitoring ]
+/usr/share/wireplumber/wireplumber.conf:477:  ## Device profile selection hooks
+/usr/share/wireplumber/wireplumber.conf:479:    name = device/select-profile.lua, type = script/lua
+/usr/share/wireplumber/wireplumber.conf:480:    provides = hooks.device.profile.select
+/usr/share/wireplumber/wireplumber.conf:483:    name = device/find-preferred-profile.lua, type = script/lua
+/usr/share/wireplumber/wireplumber.conf:484:    provides = hooks.device.profile.find-preferred
+/usr/share/wireplumber/wireplumber.conf:487:    name = device/find-best-profile.lua, type = script/lua
+/usr/share/wireplumber/wireplumber.conf:488:    provides = hooks.device.profile.find-best
+/usr/share/wireplumber/wireplumber.conf:491:    name = device/state-profile.lua, type = script/lua
+/usr/share/wireplumber/wireplumber.conf:492:    provides = hooks.device.profile.state
+/usr/share/wireplumber/wireplumber.conf:495:    name = device/apply-profile.lua, type = script/lua
+/usr/share/wireplumber/wireplumber.conf:496:    provides = hooks.device.profile.apply
+/usr/share/wireplumber/wireplumber.conf:499:    name = device/autoswitch-bluetooth-profile.lua, type = script/lua
+/usr/share/wireplumber/wireplumber.conf:500:    provides = hooks.device.profile.autoswitch-bluetooth
+/usr/share/wireplumber/wireplumber.conf:503:    type = virtual, provides = policy.device.profile
+/usr/share/wireplumber/wireplumber.conf:504:    requires = [ hooks.device.profile.select,
+/usr/share/wireplumber/wireplumber.conf:505:                 hooks.device.profile.autoswitch-bluetooth,
+/usr/share/wireplumber/wireplumber.conf:506:                 hooks.device.profile.apply ]
+/usr/share/wireplumber/wireplumber.conf:507:    wants = [ hooks.device.profile.find-best, hooks.device.profile.find-preferred,
+/usr/share/wireplumber/wireplumber.conf:508:              hooks.device.profile.state ]
+/usr/share/wireplumber/wireplumber.conf:671:                 policy.device.profile
+/usr/share/wireplumber/wireplumber.conf:687:    wants = [ monitor.bluez, monitor.bluez-midi ]
+/usr/share/wireplumber/wireplumber.conf:768:  bluetooth.autoswitch-to-headset-profile = {
+/usr/share/wireplumber/wireplumber.conf:769:    description = "Whether to autoswitch to BT headset profile or not"
+/usr/share/wireplumber/wireplumber.conf:775:  device.restore-profile = {
+/usr/share/wireplumber/wireplumber.conf:776:    description = "Whether to restore device profile or not"
+/usr/share/wireplumber/scripts/lib/device-info-cache.lua:45:      active_profile = -1,
+/usr/share/wireplumber/scripts/lib/device-info-cache.lua:62:      profiles = route.profiles,
+/usr/share/wireplumber/scripts/lib/linking-utils.lua:354:  local card_profile_device = si_props ["card.profile.device"]
+/usr/share/wireplumber/scripts/lib/linking-utils.lua:360:  if not card_profile_device or not device then
+/usr/share/wireplumber/scripts/lib/linking-utils.lua:368:  -- in an active profile.
+/usr/share/wireplumber/scripts/lib/linking-utils.lua:375:    if (route.device ~= tonumber (card_profile_device)) then
+/usr/share/wireplumber/scripts/lib/linking-utils.lua:397:          (route.devices, tonumber (card_profile_device)) then
+/usr/share/wireplumber/scripts/linking/rescan.lua:226:-- switching profiles.
+/usr/share/wireplumber/scripts/linking/rescan.lua:228:  name = "linking/bluez-session-item-removed",
+/usr/share/wireplumber/scripts/linking/rescan.lua:233:      Constraint { "device.api", "=", "bluez5" },
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:6:-- Based on bt-profile-switch.lua in tests/examples
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:9:-- Based on bluez-autoswitch in media-session
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:14:-- This script is charged to automatically change BT profiles on a device. If a
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:16:-- device profile is automatically switched to HSP/HFP. If there is no clients
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:17:-- linked to the device's loopback source node, the BT device profile is
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:18:-- switched back to A2DP profile.
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:20:-- We switch to the highest priority profile that has an Input route available.
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:21:-- The reason for this is that we may have microphone enabled with non-HFP
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:24:-- is empty, then we revert back to the old profile.
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:32:headset_profiles = nil
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:34:local profile_restore_timeout_msec = 2000
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:35:local profile_switch_timeout_msec = 500
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:41:local last_profiles = {}
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:49:    state = Settings.get_boolean ("bluetooth.autoswitch-to-headset-profile")
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:51:    headset_profiles = state and state:load () or {}
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:54:    headset_profiles = nil
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:63:function saveHeadsetProfile (device, profile_name)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:64:  local key = "saved-headset-profile:" .. device.properties ["device.name"]
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:65:  headset_profiles [key] = profile_name
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:66:  state:save_after_timeout (headset_profiles)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:69:function getSavedHeadsetProfile (device)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:70:  local key = "saved-headset-profile:" .. device.properties ["device.name"]
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:71:  return headset_profiles [key]
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:74:function saveLastProfile (device, profile_name)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:75:  last_profiles [device.properties ["device.name"]] = profile_name
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:78:function getSavedLastProfile (device)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:79:  return last_profiles [device.properties ["device.name"]]
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:82:function isSwitchedToHeadsetProfile (device)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:83:  return getSavedLastProfile (device) ~= nil
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:86:function findProfile (device, index, name)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:87:  for p in device:iterate_params ("EnumProfile") do
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:88:    local profile = cutils.parseParam (p, "EnumProfile")
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:89:    if not profile then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:90:      goto skip_enum_profile
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:93:    Log.debug ("Profile name: " .. profile.name .. ", priority: "
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:94:              .. tostring (profile.priority) .. ", index: " .. tostring (profile.index))
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:95:    if (index ~= nil and profile.index == index) or
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:96:       (name ~= nil and profile.name == name) then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:97:      return profile.priority, profile.index, profile.name
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:100:    ::skip_enum_profile::
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:106:function getCurrentProfile (device)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:107:  for p in device:iterate_params ("Profile") do
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:108:    local profile = cutils.parseParam (p, "Profile")
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:109:    if profile then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:110:      return profile.name
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:117:function highestPrioProfileWithInputRoute (device)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:118:  local profile_priority = INVALID
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:119:  local profile_index = INVALID
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:120:  local profile_name = nil
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:136:    if route.profiles then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:137:      for _, v in pairs (route.profiles) do
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:138:        local priority, index, name = findProfile (device, v)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:140:          if profile_priority < priority then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:141:            profile_priority = priority
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:142:            profile_index = index
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:143:            profile_name = name
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:152:  return profile_priority, profile_index, profile_name
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:155:function hasProfileInputRoute (device, profile_index)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:158:    if route and route.direction == "Input" and route.profiles then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:159:      for _, v in pairs (route.profiles) do
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:160:        if v == profile_index then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:169:function switchDeviceToHeadsetProfile (dev_id, device_om)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:179:  local cur_profile_name = getCurrentProfile (device)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:180:  local priority, index, name = findProfile (device, nil, cur_profile_name)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:181:  if hasProfileInputRoute (device, index) then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:182:    Log.info ("Current profile has input route, not switching")
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:186:  if isSwitchedToHeadsetProfile (device) then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:187:    Log.info ("Device with id " .. tostring(dev_id).. " is already switched to HSP/HFP")
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:191:  local saved_headset_profile = getSavedHeadsetProfile (device)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:194:  if saved_headset_profile then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:195:    priority, index, name = findProfile (device, nil, saved_headset_profile)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:196:    if index ~= INVALID and not hasProfileInputRoute (device, index) then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:198:      saveHeadsetProfile (device, nil)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:202:    priority, index, name = highestPrioProfileWithInputRoute (device)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:207:      "Spa:Pod:Object:Param:Profile", "Profile",
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:211:    -- store the current profile (needed when restoring)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:212:    saveLastProfile (device, cur_profile_name)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:214:    -- switch to headset profile
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:215:    Log.info ("Setting profile of '"
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:217:          .. "' from: " .. cur_profile_name
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:219:    device:set_params ("Profile", pod)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:221:    Log.warning ("Got invalid index when switching profile")
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:225:function restoreProfile (dev_id, device_om)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:235:  if not isSwitchedToHeadsetProfile (device) then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:236:    Log.info ("Device with id " .. tostring(dev_id).. " is already not switched to HSP/HFP")
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:240:  local profile_name = getSavedLastProfile (device)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:241:  local cur_profile_name = getCurrentProfile (device)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:244:  if cur_profile_name then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:245:    priority, index, name = findProfile (device, nil, cur_profile_name)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:247:    if index ~= INVALID and hasProfileInputRoute (device, index) then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:248:      Log.info ("Setting saved headset profile to: " .. cur_profile_name)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:249:      saveHeadsetProfile (device, cur_profile_name)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:253:  if profile_name then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:254:    priority, index, name = findProfile (device, nil, profile_name)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:258:        "Spa:Pod:Object:Param:Profile", "Profile",
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:262:      -- clear last profile as we will restore it now
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:263:      saveLastProfile (device, nil)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:265:      -- restore previous profile
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:266:      Log.info ("Restoring profile of '"
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:268:            .. "' from: " .. cur_profile_name
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:270:      device:set_params ("Profile", pod)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:272:      Log.warning ("Failed to restore profile")
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:277:function triggerSwitchDeviceToHeadsetProfile (dev_id, device_om)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:289:  switch_timeout_source[dev_id] = Core.timeout_add (profile_switch_timeout_msec, function ()
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:291:    switchDeviceToHeadsetProfile (dev_id, device_om)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:295:function triggerRestoreProfile (dev_id, device_om)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:296:  -- we never restore the device profiles if there are active streams
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:314:  restore_timeout_source[dev_id] = Core.timeout_add (profile_restore_timeout_msec, function ()
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:316:    restoreProfile (dev_id, device_om)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:329:        Constraint { "bluez5.loopback", "=", "true", type = "pw" }
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:364:            Constraint { "bluez5.loopback", "!", "true", type = "pw" },
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:380:  if not Settings.get_boolean ("bluetooth.autoswitch-to-headset-profile") then
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:388:    triggerSwitchDeviceToHeadsetProfile (dev_id, device_om)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:393:      triggerRestoreProfile (dev_id, device_om)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:403:    Constraint { "bluez5.loopback", "!", "true", type = "pw" }
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:410:  name = "node-removed@autoswitch-bluetooth-profile",
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:415:      Constraint { "bluez5.loopback", "!", "true", type = "pw" },
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:427:      triggerRestoreProfile (dev_id, device_om)
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:433:  name = "link-added@autoswitch-bluetooth-profile",
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:450:      Constraint { "bluez5.loopback", "!", "true", type = "pw" }
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:462:  name = "bluez-device-added@autoswitch-bluetooth-profile",
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:466:      Constraint { "device.api", "=", "bluez5" },
+/usr/share/wireplumber/scripts/device/autoswitch-bluetooth-profile.lua:476:    saveLastProfile (device, nil)
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:7:-- Finds the user preferred profile for a device, based on the priorities
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:8:-- defined in the "device.profile.priority.rules" section of the configuration.
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:14:config.rules = Conf.get_section_as_json ("device.profile.priority.rules", Json.Array {})
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:17:  name = "device/find-preferred-profile",
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:18:  after = "device/find-stored-profile",
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:19:  before = "device/find-best-profile",
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:22:      Constraint { "event.type", "=", "select-profile" },
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:26:    local selected_profile = event:get_data ("selected-profile")
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:28:    -- skip hook if the profile is already selected for this device.
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:29:    if selected_profile then
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:38:    -- skip hook if the profile priorities are NOT defined for this device.
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:47:    for _, priority_profile in ipairs(priorities) do
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:48:      for p in device:iterate_params("EnumProfile") do
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:49:        local device_profile = cutils.parseParam(p, "EnumProfile")
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:50:        if device_profile and device_profile.name == priority_profile then
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:51:          selected_profile = device_profile
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:52:          goto profile_set
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:57:::profile_set::
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:58:    if selected_profile then
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:60:        "Found preferred profile '%s' (%d) for device '%s'",
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:61:        selected_profile.name, selected_profile.index, device_name))
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:62:      event:set_data ("selected-profile", selected_profile)
+/usr/share/wireplumber/scripts/device/find-preferred-profile.lua:64:      log:info (device, "Profiles listed in 'device.profile.priority.rules'"
+/usr/share/wireplumber/scripts/device/select-routes.lua:21:  after = "device/select-profile",
+/usr/share/wireplumber/scripts/device/select-routes.lua:42:    local profile = nil
+/usr/share/wireplumber/scripts/device/select-routes.lua:44:    -- get current profile
+/usr/share/wireplumber/scripts/device/select-routes.lua:45:    for p in device:iterate_params ("Profile") do
+/usr/share/wireplumber/scripts/device/select-routes.lua:46:      profile = cutils.parseParam (p, "Profile")
+/usr/share/wireplumber/scripts/device/select-routes.lua:66:        if profile and cutils.arrayContains (route.profiles, profile.index) then
+/usr/share/wireplumber/scripts/device/select-routes.lua:82:    -- restore routes for profile
+/usr/share/wireplumber/scripts/device/select-routes.lua:83:    if profile then
+/usr/share/wireplumber/scripts/device/select-routes.lua:84:      local profile_changed = (dev_info.active_profile ~= profile.index)
+/usr/share/wireplumber/scripts/device/select-routes.lua:85:      dev_info.active_profile = profile.index
+/usr/share/wireplumber/scripts/device/select-routes.lua:87:      -- if the profile changed, restore routes for that profile
+/usr/share/wireplumber/scripts/device/select-routes.lua:88:      -- if any of the routes of the current profile changed in availability,
+/usr/share/wireplumber/scripts/device/select-routes.lua:91:      if profile_changed or avail_routes_changed then
+/usr/share/wireplumber/scripts/device/select-routes.lua:93:            string.format ("restore routes for profile(%s) of device(%s)",
+/usr/share/wireplumber/scripts/device/select-routes.lua:94:            profile.name, dev_info.name))
+/usr/share/wireplumber/scripts/device/select-routes.lua:97:        local active_ids = findActiveDeviceIDs (profile)
+/usr/share/wireplumber/scripts/device/select-routes.lua:102:          ["profile.changed"] = profile_changed,
+/usr/share/wireplumber/scripts/device/select-routes.lua:103:          ["profile.name"] = profile.name,
+/usr/share/wireplumber/scripts/device/select-routes.lua:104:          ["profile.active-device-ids"] = active_ids,
+/usr/share/wireplumber/scripts/device/select-routes.lua:114:function findActiveDeviceIDs (profile)
+/usr/share/wireplumber/scripts/device/select-routes.lua:115:  -- parses the classes from the profile and returns the device IDs
+/usr/share/wireplumber/scripts/device/select-routes.lua:122:  --    3: card.profile.devices
+/usr/share/wireplumber/scripts/device/select-routes.lua:131:  --    3: card.profile.devices
+/usr/share/wireplumber/scripts/device/select-routes.lua:139:  if type (profile.classes) == "table" and profile.classes.pod_type == "Struct" then
+/usr/share/wireplumber/scripts/device/select-routes.lua:140:    for _, p in ipairs (profile.classes) do
+/usr/share/wireplumber/scripts/device/select-routes.lua:149:          if k == "card.profile.devices" and
+/usr/share/wireplumber/scripts/device/state-profile.lua:7:-- This file contains all the logic related to saving device profiles
+/usr/share/wireplumber/scripts/device/state-profile.lua:10:-- A devices profile needs to be selected for any new device. the script selects
+/usr/share/wireplumber/scripts/device/state-profile.lua:11:-- the device profile from the user preferences, as well as store the user
+/usr/share/wireplumber/scripts/device/state-profile.lua:12:-- selected device profile to state file
+/usr/share/wireplumber/scripts/device/state-profile.lua:21:find_stored_profile_hook = SimpleEventHook {
+/usr/share/wireplumber/scripts/device/state-profile.lua:22:  name = "device/find-stored-profile",
+/usr/share/wireplumber/scripts/device/state-profile.lua:25:      Constraint { "event.type", "=", "select-profile" },
+/usr/share/wireplumber/scripts/device/state-profile.lua:29:    local selected_profile = event:get_data ("selected-profile")
+/usr/share/wireplumber/scripts/device/state-profile.lua:31:    -- skip hook if profile is already selected
+/usr/share/wireplumber/scripts/device/state-profile.lua:32:    if selected_profile then
+/usr/share/wireplumber/scripts/device/state-profile.lua:43:    local profile_name = state_table[dev_name]
+/usr/share/wireplumber/scripts/device/state-profile.lua:45:    if profile_name then
+/usr/share/wireplumber/scripts/device/state-profile.lua:46:      for p in device:iterate_params ("EnumProfile") do
+/usr/share/wireplumber/scripts/device/state-profile.lua:47:        local profile = cutils.parseParam (p, "EnumProfile")
+/usr/share/wireplumber/scripts/device/state-profile.lua:48:        if profile.name == profile_name and profile.available ~= "no" then
+/usr/share/wireplumber/scripts/device/state-profile.lua:49:          selected_profile = profile
+/usr/share/wireplumber/scripts/device/state-profile.lua:55:    if selected_profile then
+/usr/share/wireplumber/scripts/device/state-profile.lua:57:          "Found stored profile '%s' (%d) for device '%s'",
+/usr/share/wireplumber/scripts/device/state-profile.lua:58:          selected_profile.name, selected_profile.index, dev_name))
+/usr/share/wireplumber/scripts/device/state-profile.lua:59:      event:set_data ("selected-profile", selected_profile)
+/usr/share/wireplumber/scripts/device/state-profile.lua:64:store_user_selected_profile_hook = SimpleEventHook {
+/usr/share/wireplumber/scripts/device/state-profile.lua:65:  name = "device/store-user-selected-profile",
+/usr/share/wireplumber/scripts/device/state-profile.lua:69:      Constraint { "event.subject.param-id", "=", "Profile" },
+/usr/share/wireplumber/scripts/device/state-profile.lua:75:    for p in device:iterate_params ("Profile") do
+/usr/share/wireplumber/scripts/device/state-profile.lua:76:      local profile = cutils.parseParam (p, "Profile")
+/usr/share/wireplumber/scripts/device/state-profile.lua:77:      if profile.save then
+/usr/share/wireplumber/scripts/device/state-profile.lua:79:        updateStoredProfile (device, profile)
+/usr/share/wireplumber/scripts/device/state-profile.lua:85:function updateStoredProfile (device, profile)
+/usr/share/wireplumber/scripts/device/state-profile.lua:95:      "update stored profile to '%s' (%d) for device '%s'",
+/usr/share/wireplumber/scripts/device/state-profile.lua:96:      profile.name, profile.index, dev_name))
+/usr/share/wireplumber/scripts/device/state-profile.lua:98:  -- check if the new profile is the same as the current one
+/usr/share/wireplumber/scripts/device/state-profile.lua:99:  if state_table[dev_name] == profile.name then
+/usr/share/wireplumber/scripts/device/state-profile.lua:100:    log:debug (device, " ... profile is already stored")
+/usr/share/wireplumber/scripts/device/state-profile.lua:104:  -- find the full profile from EnumProfile, making also sure that the
+/usr/share/wireplumber/scripts/device/state-profile.lua:105:  -- user / client application has actually set an existing profile
+/usr/share/wireplumber/scripts/device/state-profile.lua:106:  for p in device:iterate_params ("EnumProfile") do
+/usr/share/wireplumber/scripts/device/state-profile.lua:107:    local enum_profile = cutils.parseParam (p, "EnumProfile")
+/usr/share/wireplumber/scripts/device/state-profile.lua:108:    if enum_profile.name == profile.name then
+/usr/share/wireplumber/scripts/device/state-profile.lua:109:      index = enum_profile.index
+/usr/share/wireplumber/scripts/device/state-profile.lua:115:        "profile '%s' (%d) is not valid on device '%s'",
+/usr/share/wireplumber/scripts/device/state-profile.lua:116:        profile.name, profile.index, dev_name))
+/usr/share/wireplumber/scripts/device/state-profile.lua:120:  state_table[dev_name] = profile.name
+/usr/share/wireplumber/scripts/device/state-profile.lua:124:      "stored profile '%s' (%d) for device '%s'",
+/usr/share/wireplumber/scripts/device/state-profile.lua:125:      profile.name, index, dev_name))
+/usr/share/wireplumber/scripts/device/state-profile.lua:130:    state = State ("default-profile")
+/usr/share/wireplumber/scripts/device/state-profile.lua:132:    find_stored_profile_hook:register ()
+/usr/share/wireplumber/scripts/device/state-profile.lua:133:    store_user_selected_profile_hook:register ()
+/usr/share/wireplumber/scripts/device/state-profile.lua:137:    find_stored_profile_hook:remove ()
+/usr/share/wireplumber/scripts/device/state-profile.lua:138:    store_user_selected_profile_hook:remove ()
+/usr/share/wireplumber/scripts/device/state-profile.lua:142:Settings.subscribe ("device.restore-profile", function ()
+/usr/share/wireplumber/scripts/device/state-profile.lua:143:  toggleState (Settings.get_boolean ("device.restore-profile"))
+/usr/share/wireplumber/scripts/device/state-profile.lua:145:toggleState (Settings.get_boolean ("device.restore-profile"))
+/usr/share/wireplumber/scripts/device/state-routes.lua:24:-- hook to restore routes selection for a newly selected profile
+/usr/share/wireplumber/scripts/device/state-routes.lua:30:      Constraint { "profile.changed", "=", "true" },
+/usr/share/wireplumber/scripts/device/state-routes.lua:31:      Constraint { "profile.active-device-ids", "is-present" },
+/usr/share/wireplumber/scripts/device/state-routes.lua:37:    local profile_name = event_properties ["profile.name"]
+/usr/share/wireplumber/scripts/device/state-routes.lua:38:    local active_ids = event_properties ["profile.active-device-ids"]
+/usr/share/wireplumber/scripts/device/state-routes.lua:44:    -- get the stored routes for this profile
+/usr/share/wireplumber/scripts/device/state-routes.lua:46:    local spr = getStoredProfileRoutes (dev_info, profile_name)
+/usr/share/wireplumber/scripts/device/state-routes.lua:67:            (ri.profiles == nil or cutils.arrayContains (ri.profiles, dev_info.active_profile)) and
+/usr/share/wireplumber/scripts/device/state-routes.lua:247:    -- save selected routes for the active profile
+/usr/share/wireplumber/scripts/device/state-routes.lua:248:    for p in device:iterate_params ("Profile") do
+/usr/share/wireplumber/scripts/device/state-routes.lua:249:      local profile = cutils.parseParam (p, "Profile")
+/usr/share/wireplumber/scripts/device/state-routes.lua:250:      saveProfileRoutes (dev_info, profile.name)
+/usr/share/wireplumber/scripts/device/state-routes.lua:295:-- for the given device and profile
+/usr/share/wireplumber/scripts/device/state-routes.lua:296:function saveProfileRoutes (dev_info, profile_name)
+/usr/share/wireplumber/scripts/device/state-routes.lua:306:    local key = dev_info.name .. ":profile:" .. profile_name
+/usr/share/wireplumber/scripts/device/state-routes.lua:313:-- for the given device and profile
+/usr/share/wireplumber/scripts/device/state-routes.lua:314:function getStoredProfileRoutes (dev_info, profile_name)
+/usr/share/wireplumber/scripts/device/state-routes.lua:315:  local key = dev_info.name .. ":profile:" .. profile_name
+/usr/share/wireplumber/scripts/device/find-best-profile.lua:7:-- Find the best profile for a device based on profile priorities and
+/usr/share/wireplumber/scripts/device/find-best-profile.lua:14:  name = "device/find-best-profile",
+/usr/share/wireplumber/scripts/device/find-best-profile.lua:15:  after = "device/find-preferred-profile",
+=== 6. User/System Overrides ===
+=== 7. Environment ===
+PipeWire 'pipewire-0' [1.4.2, shreyas@shreyas, cookie:3750210833]
+ └─ Clients:
+        33. WirePlumber                         [1.4.2, shreyas@shreyas, pid:1282]
+        34. pipewire                            [1.4.2, shreyas@shreyas, pid:1284]
+        47. WirePlumber [export]                [1.4.2, shreyas@shreyas, pid:1282]
+        73. xdg-desktop-portal                  [1.4.2, shreyas@shreyas, pid:1542]
+        74. xdg-desktop-portal-wlr              [1.4.2, shreyas@shreyas, pid:1593]
+        75. unknown                             [1.4.2, shreyas@shreyas, pid:1482]
+        77. wpctl                               [1.4.2, shreyas@shreyas, pid:5338]
+
+Audio
+ ├─ Devices:
+ │      48. Built-in Audio                      [alsa]
+ │      49. Built-in Audio                      [alsa]
+ │      76. realme narzo 60 5G                  [bluez5]
+ │  
+ ├─ Sinks:
+ │  *   35. Dummy Output                        [vol: 1.00]
+ │  
+ ├─ Sources:
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+
+Video
+ ├─ Devices:
+ │      56. rpi-hevc-dec                        [v4l2]
+ │      57. pispbe                              [v4l2]
+ │      58. pispbe                              [v4l2]
+ │      59. pispbe                              [v4l2]
+ │      60. pispbe                              [v4l2]
+ │      61. pispbe                              [v4l2]
+ │      62. pispbe                              [v4l2]
+ │      63. pispbe                              [v4l2]
+ │      64. pispbe                              [v4l2]
+ │      65. pispbe                              [v4l2]
+ │      66. pispbe                              [v4l2]
+ │      67. pispbe                              [v4l2]
+ │      68. pispbe                              [v4l2]
+ │      69. pispbe                              [v4l2]
+ │      70. pispbe                              [v4l2]
+ │      71. pispbe                              [v4l2]
+ │      72. pispbe                              [v4l2]
+ │  
+ ├─ Sinks:
+ │  
+ ├─ Sources:
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+
+Settings
+ └─ Default Configured Devices:
+id 76, type PipeWire:Interface:Device
+    api.bluez5.address = "A8:EF:5F:FF:6E:82"
+    api.bluez5.class = "0x5a020c"
+    api.bluez5.connection = "connected"
+    api.bluez5.device = ""
+    api.bluez5.icon = "phone"
+    api.bluez5.path = "/org/bluez/hci0/dev_A8_EF_5F_FF_6E_82"
+    bluez5.auto-connect = "[ hfp_hf hsp_hs a2dp_sink hfp_ag hsp_ag a2dp_source ]"
+    bluez5.profile = "off"
+  * client.id = "47"
+    device.alias = "realme narzo 60 5G"
+  * device.api = "bluez5"
+    device.bus = "bluetooth"
+  * device.description = "realme narzo 60 5G"
+    device.form-factor = "phone"
+    device.icon-name = "audio-card-bluetooth"
+  * device.name = "bluez_card.A8_EF_5F_FF_6E_82"
+    device.product.id = "0x1200"
+    device.string = "A8:EF:5F:FF:6E:82"
+    device.vendor.id = "bluetooth:0046"
+  * factory.id = "15"
+  * media.class = "Audio/Device"
+  * object.serial = "77"
+    spa.object.id = "96"

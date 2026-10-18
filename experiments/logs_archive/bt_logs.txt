@@ -1,0 +1,22 @@
+spawn ssh shreyas@shreyas.local journalctl -u bluetooth -n 20
+shreyas@shreyas.local's password: 
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/aptx_hd
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSink/aptx
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/aptx
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSink/opus_g
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/opus_g
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSink/sbc
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/sbc
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/aptx_ll_1
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/aptx_ll_0
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/aptx_ll_duplex_1
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/aptx_ll_duplex_0
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/faststream
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/faststream_duplex
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSink/opus_05
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/opus_05
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSink/opus_05_duplex
+Sep 30 01:59:32 shreyas bluetoothd[663]: Endpoint registered: sender=:1.24 path=/MediaEndpoint/A2DPSource/opus_05_duplex
+Sep 30 14:17:52 shreyas bluetoothd[663]: src/profile.c:ext_auth() Hands-Free unit rejected A8:EF:5F:FF:6E:82:
+Sep 30 14:18:22 shreyas bluetoothd[663]: profiles/audio/a2dp.c:auth_cb() Access denied:
+Sep 30 14:18:52 shreyas bluetoothd[663]: src/profile.c:ext_auth() Hands-Free unit rejected A8:EF:5F:FF:6E:82:

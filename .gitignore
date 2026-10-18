@@ -1,0 +1,53 @@
+# Environments
+venv/
+.venv/
+env/
+.env
+
+# PyTorch and Checkpoints
+checkpoints/
+*.pt
+*.pth
+
+# Data
+data/
+*.wav
+*.flac
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDEs
+.idea/
+.vscode/
+.DS_Store
+
+# Logs
+logs/
+*.log
+rpi_key*
+
+# Secrets, Keys, and Large Model Weights
+*.key
+*.pem
+rpi_key*
+.env
+.env.*
+id_rsa*
+id_ed25519*
+*.p12
+*.pfx
+*.hk
+
+# Local workspace mirror
+Documents/
+
+*.ckpt
+*.ckpt.*
+*.best
+
+# Large regenerable manifests
+experiments/logs_archive/dataset_inventory.csv
+experiments/dfn3_v2_rejected/*_manifest.csv

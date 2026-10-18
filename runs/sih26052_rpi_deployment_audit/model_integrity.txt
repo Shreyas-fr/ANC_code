@@ -1,0 +1,13 @@
+--- Model Integrity Verification ---
+Architecture: StatefulPolarLSTM
+Parameter Count: 1448962
+Causal STFT: Verified
+Explicit h/c state: Verified
+Polar complex mask: Verified
+Magnitude range: [0, 2]
+Phase range: [-pi, pi]
+
+Checkpoint being benchmarked: runs/sih26052_polar_v2_25k/best.pt
+Checkpoint SHA-256: b105b714b0ca510662050b4fc6e099a8e779d9042549486a79d8119708e51d9a
+
+Note: The existing RPi deployment (deploy/rpi_infer.py and scripts/export_onnx.py) currently points to `checkpoints/dtln/latest.pt` (ComplexCRN) and its ONNX export `checkpoints/dtln/model.onnx`. It does NOT use the `runs/sih26052_polar_v2_25k/best.pt` checkpoint or the StatefulPolarLSTM architecture. We will benchmark the new StatefulPolarLSTM checkpoint as requested.

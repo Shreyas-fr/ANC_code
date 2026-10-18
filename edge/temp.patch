@@ -1,0 +1,36 @@
+--- a/frontend/ui/main_window.py
++++ b/frontend/ui/main_window.py
+@@ -42,7 +42,8 @@
+         self.jitter_buffer = JitterBuffer(
+             sample_rate=self.cfg['sample_rate'],
+             target_buffer_ms=self.cfg['buffer_ms'],
+-            max_buffer_ms=self.cfg.get('max_buffer_ms', 50)
++            max_buffer_ms=self.cfg.get('max_buffer_ms', 250),
++            prebuffer=True
+         )
+         self.playback = AudioPlayback(
+             jitter_buffer=self.jitter_buffer,
+--- a/frontend/ui/pipeline_widget.py
++++ b/frontend/ui/pipeline_widget.py
+@@ -29,7 +29,7 @@
+             'mic': self._create_stage_item("● MIC", "Microphone"),
+             'hfp': self._create_stage_item("● HFP", "Bluetooth HFP"),
+             'pi': self._create_stage_item("● PI 5", "Raspberry Pi 5"),
+-            'ai': self._create_stage_item("● AI", "PolarLSTM AI"),
++            'ai': self._create_stage_item("● AI", "DeepFilterNet3"),
+             'net': self._create_stage_item("● NET", "UDP Network"),
+             'out': self._create_stage_item("● OUTPUT", "PC Speakers")
+         }
+--- a/frontend/config/frontend_config.json
++++ b/frontend/config/frontend_config.json
+@@ -4,8 +4,8 @@
+   "input_port": 5007,
+   "sample_rate": 16000,
+   "frame_size": 256,
+-  "buffer_ms": 48,
+-  "max_buffer_ms": 50,
++  "buffer_ms": 80,
++  "max_buffer_ms": 250,
+   "packet_timeout_ms": 1000,
+   "window_seconds": 3.0,
+   "output_device": null,

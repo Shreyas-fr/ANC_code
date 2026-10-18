@@ -1,0 +1,10 @@
+--- Dependency Audit ---
+Python: 3.13.5
+NumPy: 2.2.4
+ONNX Runtime: Missing
+SciPy: Missing
+SoundFile: Missing
+
+Analysis:
+The core inference dependencies (`onnxruntime`, `scipy`, `soundfile`) are currently missing on the Raspberry Pi. 
+Standard `onnxruntime` for ARM64 can be quite large. The smallest appropriate ARM64 runtime option for ONNX would be the `onnxruntime` PyPI wheel if available for aarch64 (which is typically ~10-20MB for the CPU-only version), or cross-compiling ONNX Runtime with `--minimal_build` flag to strip unused operators, reducing the binary size to ~2-3MB. Alternatively, since the StatefulPolarLSTM has complex operations (like STFT/iSTFT and polar complex masks) that might not be fully supported by ONNX minimal build without custom ops, using PyTorch Mobile (TorchScript) or a specialized TFLite conversion might be necessary, though `onnxruntime` is the most direct path given the existing `export_onnx.py`. We will proceed with installing the standard `onnxruntime` aarch64 wheel, `scipy`, and `soundfile` in a virtual environment on the Pi to conduct the deployment test.

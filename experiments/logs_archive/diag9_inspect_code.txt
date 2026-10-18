@@ -1,0 +1,33 @@
+spawn ssh shreyas@shreyas.local cat /home/shreyas/sih26052_edge/config/sih26052-edge.service; ls -la /home/shreyas/sih26052_edge/
+shreyas@shreyas.local's password: 
+[Unit]
+Description=SIH26052 StatefulPolarLSTM ANC Edge Service
+After=network.target sound.target audio.service pipewire.service
+Wants=sound.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=shreyas
+WorkingDirectory=/home/shreyas/sih26052_edge
+Environment="PYTHONPATH=/home/shreyas/sih26052_edge"
+ExecStart=/home/shreyas/env/bin/python /home/shreyas/sih26052_edge/app/anc_stream.py
+StandardOutput=append:/home/shreyas/sih26052_edge/logs/service.log
+StandardError=append:/home/shreyas/sih26052_edge/logs/service.err
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+total 40
+drwxrwxr-x 10 shreyas shreyas 4096 Sep 30 01:25 .
+drwx------ 18 shreyas shreyas 4096 Sep 30 15:01 ..
+drwxrwxr-x  3 shreyas shreyas 4096 Sep 30 01:28 app
+drwxrwxr-x  2 shreyas shreyas 4096 Sep 30 01:25 audio
+drwxrwxr-x  3 shreyas shreyas 4096 Sep 30 01:31 backups
+drwxrwxr-x  2 shreyas shreyas 4096 Sep 30 01:30 config
+drwxrwxr-x  2 shreyas shreyas 4096 Sep 30 01:30 logs
+drwxrwxr-x  2 shreyas shreyas 4096 Sep 30 01:26 models
+drwxrwxr-x  2 shreyas shreyas 4096 Sep 30 01:25 scripts
+drwxrwxr-x  2 shreyas shreyas 4096 Sep 30 01:26 tests

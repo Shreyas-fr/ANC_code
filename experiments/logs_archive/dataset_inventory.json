@@ -1,0 +1,38 @@
+{
+  "dataset_root_path": "/Users/shreyasdivekar/.cache/kagglehub/datasets/panavpayappagoudar/sih-26-processed-audio/versions/1",
+  "total_file_count": 167137,
+  "total_disk_size_bytes": 19765922570,
+  "total_disk_size_gb": 18.41,
+  "file_extensions": {
+    ".py": 4,
+    ".csv": 4,
+    ".txt": 44777,
+    ".md": 9,
+    "": 4,
+    ".cfg": 1,
+    ".wav": 122324,
+    ".gif": 8,
+    ".html": 2,
+    ".ini": 1,
+    ".xlsx": 1,
+    ".yml": 2
+  },
+  "audio_file_count": 122324,
+  "sample_rates": {
+    "16000": 122324
+  },
+  "channels": {
+    "1": 122324
+  },
+  "subtypes_bitdepth": {
+    "PCM_16": 122324
+  },
+  "total_audio_duration_sec": 616617.73,
+  "total_audio_duration_hours": 171.28,
+  "min_duration_sec": 0.5,
+  "max_duration_sec": 459.59,
+  "median_duration_sec": 3.1,
+  "internal_exact_duplicates_count": 631,
+  "exact_project_leakage_matches_count": 0,
+  "filename_project_matches_count": 576
+}

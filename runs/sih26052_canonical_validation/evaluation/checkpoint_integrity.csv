@@ -1,0 +1,6 @@
+checkpoint,path,valid,status,params
+V1_POLAR_25K,runs/sih26052_polar_gpu/checkpoint_25000.pt,True,Valid,1448962
+V2_POLAR_25K,runs/sih26052_polar_v2_25k/best.pt,True,Valid,1448962
+PROXY_ONLY,runs/sih26052_sampling_ablation/proxy_only/checkpoint_20000.pt,True,Valid,1448962
+MIXED_50,runs/sih26052_sampling_ablation/mixed_50/checkpoint_20000.pt,True,Valid,1448962
+GUNFIRE_HEAVY,runs/sih26052_sampling_ablation/gunfire_heavy/checkpoint_15000.pt,True,Valid,1448962

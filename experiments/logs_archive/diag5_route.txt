@@ -1,0 +1,2 @@
+spawn ssh shreyas@shreyas.local pw-cli enum-params 36 Route
+shreyas@shreyas.local's password: 

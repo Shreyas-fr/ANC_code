@@ -1,0 +1,9 @@
+--- Python Dependency Audit ---
+Python version: 3.13.5
+Torch: 2.14.0+cpu
+Numpy: 2.5.3
+Scipy: 1.18.1
+Soundfile: 0.14.0
+psutil: 7.2.2
+
+Audio Subsystem: PipeWire 1.4.2 is active. ALSA fallback available.

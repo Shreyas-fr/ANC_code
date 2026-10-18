@@ -1,0 +1,7 @@
+batch_size: 4
+clip_grad: 5.0
+epoch_size: 100
+epochs: 2
+learning_rate: 0.001
+seed: 12345
+val_size: 20

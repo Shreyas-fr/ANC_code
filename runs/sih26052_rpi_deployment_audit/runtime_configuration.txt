@@ -1,0 +1,14 @@
+{
+    "sample_rate": 16000,
+    "channels": 1,
+    "n_fft": 512,
+    "hop_length": 256,
+    "frame_ms": 16,
+    "model_path": "/home/shreyas/sih26052_edge/models/best.pt",
+    "input_device": "null",
+    "output_device": "default",
+    "log_directory": "/home/shreyas/sih26052_edge/logs",
+    "max_queue_frames": 10,
+    "temperature_warning_c": 75,
+    "temperature_critical_c": 85
+}

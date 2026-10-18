@@ -1,0 +1,13 @@
+spawn ssh shreyas@shreyas.local bluetoothctl
+shreyas@shreyas.local's password: 
+Waiting to connect to bluetoothd...[0;94m[bluetoothctl]> [0m        [0;94m[realme narzo 60 5G]> [0m                                                                               Agent registered
+[0;94m[realme narzo 60 5G]> [0magent on
+default-agent
+agent on
+Agent is already registered
+[0;94m[realme narzo 60 5G]> [0mdefault-agent
+[0;94m[realme narzo 60 5G]> [0m                                                                               Default agent request successful
+[0;94m[realme narzo 60 5G]> [0mconnect A8:EF:5F:FF:6E:82
+connect A8:EF:5F:FF:6E:82
+Attempting to connect to A8:EF:5F:FF:6E:82
+[0;94m[realme narzo 60 5G]> [0mDone waiting

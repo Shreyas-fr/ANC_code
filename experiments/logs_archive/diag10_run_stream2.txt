@@ -1,0 +1,3 @@
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/vs102_ai_stream.py
+shreyas@shreyas.local's password: 
+A. VS102 source disappeared
