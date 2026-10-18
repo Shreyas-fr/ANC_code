@@ -94,7 +94,7 @@ During continuous 6-minute in-memory stress testing on Raspberry Pi 5 hardware (
 
 ## 5. Latency Characteristics
 
-- **Deployed End-to-End Latency:** **~713 ms** (500 ms buffer accumulation + 213 ms median compute time). In the deployed 500 ms-block configuration, throughput is prioritized over low latency to ensure zero deadline misses on embedded hardware.
+- **Deployed End-to-End Latency:** **~790 ms** (576 ms measured chain delay + 213 ms median compute time). In the deployed 500 ms-block configuration, throughput is prioritized over low latency to ensure zero deadline misses on embedded hardware.
 - **Model Algorithmic Latency:** **~16 ms** (STFT hop length: 256 samples at 16 kHz or 10 ms at 48 kHz). This latency is achievable only when operating in sample-by-sample streaming mode without block windowing.
 
 ---

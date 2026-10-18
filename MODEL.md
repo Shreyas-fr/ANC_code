@@ -64,5 +64,5 @@ model.hk: OK
 - **Pi 5 Deployment Configuration**: 
   - Audio chunking: **500 ms block** with **300 ms past context** (total window 800 ms).
   - Compute latency: Median **213.0 ms**, P95 **236.4 ms**, Max **424.6 ms** per 500 ms block on 1 Cortex-A76 core.
-  - End-to-end latency: 500 ms (buffer accumulation) + 213 ms (median compute) = **~713 ms** (in batch-block streaming mode).
+  - End-to-end latency: 576 ms (measured chain delay) + 213 ms (median compute) = **~790 ms** (in batch-block streaming mode).
   - Algorithmic latency: **~16 ms** (only when operated frame-by-frame with streaming GRU state).

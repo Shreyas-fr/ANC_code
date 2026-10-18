@@ -107,7 +107,7 @@ To guarantee real-time stability on the Raspberry Pi 5 CPU without deadline miss
 - **Median Inference Time (Pi 5 CPU):** **213.2 ms**
 - **Maximum Inference Time (P99):** **424.6 ms** (stays safely below the 500 ms deadline)
 - **UDP Transmission Overhead:** **~1.0 ms**
-- **Total Real-World End-to-End Latency:** **~713.2 ms (Median)** to **~925.6 ms (Peak)**.
+- **Total Real-World End-to-End Latency:** **~790 ms (Median)** to **~1,000 ms (Peak)**.
 
 > **CRITICAL ARCHITECTURAL NOTE:** We do **NOT** claim low latency (<20 ms) for this deployed 500 ms-block configuration. This operational mode was chosen to ensure zero dropped blocks (18,737 frames sent without loss) on a single thread.
 
@@ -158,7 +158,7 @@ To reproduce the exact measured canonical evaluation numbers and generate all pe
 
 ```bash
 # 1. Activate canonical environment
-source antigravity/venv/bin/activate
+# activate a Python env with torch, deepfilternet, pystoi, pesq, soundfile, scipy
 
 # 2. Verify model checkpoint integrity
 shasum -a 256 final_model/model.hk
@@ -166,9 +166,19 @@ shasum -a 256 final_model/model.hk
 
 # 3. Run full evaluation suite (offline 590 clips + deployed streaming 344 clips)
 python scripts/evaluate_dfn3_per_snr.py
+python scripts/evaluate_dfn3_deep_audit.py
 
 # 4. View produced tables and plots
 cat results/dfn3/per_snr_table.md
 cat results/dfn3/per_origin_table.md
 cat results/dfn3/deployed_streaming_comparison.md
 ```
+
+---
+
+## 8. Additional Findings
+
+- On the 4 canonical clips with no injected noise (n=4, measured input SNR > 30 dB), DFN3 output scores 14.18 dB explicit SNR and 17.0 dB SI-SDR. This suggests the model's own distortion limits explicit output SNR to about 14 dB even on clean input, so the PS target of > 15 dB output SNR is unlikely to be reachable with this model under this metric.
+- Deployed 500 ms block / 300 ms context streaming matches offline whole-clip scoring (344 clips at 5/10/15 dB; STOI within 0.002, PESQ within 0.012; alignment lag 0 samples). See results/dfn3/deployed_streaming_comparison_fixed.md.
+- Explicit output SNR improvement turns negative at input SNR >= 10 dB (SI-SDR improvement at >= 15 dB) while STOI and PESQ still improve. The cause has not been diagnosed.
+- Evaluation scripts read audio from a hard-coded path on the author's machine; edit CANONICAL_AUDIO_DIR before reproducing.

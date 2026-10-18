@@ -140,4 +140,4 @@ Tested real-time edge processing path using `AudioChain` and `BlockBackend` (500
 
 ### Item 5: Delta Columns & Negative Improvement Warnings
 - Added $\Delta\text{SNR}$ and $\Delta\text{SI-SDR}$ columns to all per-SNR tables (`per_snr_table.md`, `per_snr_gunfire_only.md`, `per_snr_measured_bins.md`).
-- Marked rows where improvement is negative with warning indicators `⚠️` (observed at input SNR $\ge 10\text{ dB}$, where the model's subtle attenuation of high-frequency speech components slightly exceeds the small amount of noise removed).
+- Marked rows where improvement is negative with warning indicators `⚠️` (observed at input SNR $\ge 10\text{ dB}$, cause not yet diagnosed).

@@ -24,7 +24,7 @@
 | **+15.0** | 86 | 15.98 ± 9.01 | **10.31 ± 1.88** | <span style='color:red;'>**-5.67 dB** ⚠️</span> | **FAIL** | 15.77 ± 9.23 | **13.50 ± 1.73** | <span style='color:red;'>**-2.27 dB** ⚠️</span> | 0.936 ± 0.058 | **0.942 ± 0.050** | **PASS** | 2.130 ± 0.520 | **2.309 ± 0.478** | **FAIL** |
 | **+20.0** | 36 | 20.00 ± 0.00 | **10.64 ± 2.50** | <span style='color:red;'>**-9.36 dB** ⚠️</span> | **FAIL** | 19.80 ± 0.80 | **14.75 ± 1.24** | <span style='color:red;'>**-5.05 dB** ⚠️</span> | 0.958 ± 0.052 | **0.958 ± 0.042** | **PASS** | 2.580 ± 0.557 | **2.708 ± 0.507** | **PASS** |
 
-*Note: Rows with ⚠️ indicate negative delta (model attenuation and speech distortion at high input SNR exceed noise reduction gain).*
+*Note: Rows with ⚠️ indicate negative delta (cause not yet diagnosed).*
 
 ## Overall Means Across All 590 Clips
 
