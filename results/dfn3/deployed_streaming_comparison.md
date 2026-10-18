@@ -1,3 +1,6 @@
+> [!CAUTION]
+> **INVALID EVALUATION**: This historical file used a fixed lag window of $\pm 500$ ms without dropping the 9,216-sample (~576 ms) initial priming delay of `AudioChain`, causing severe artificial misalignment and corrupted metrics. Refer to `deployed_streaming_comparison_fixed.md` for the correct evaluation.
+
 # Deployed Streaming Config (500 ms Block / 300 ms Context) vs Offline Processing
 
 - **Backend**: `BlockBackend` (500 ms block, 300 ms context, 40 ms guard, 10 ms crossfade)
