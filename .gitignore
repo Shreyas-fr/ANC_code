@@ -13,10 +13,21 @@ data/
 *.wav
 *.flac
 
-# Python
+# Python & Caches
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Temporary & Swap Files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+backups/
 
 # IDEs
 .idea/
