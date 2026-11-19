@@ -1,0 +1,11 @@
+{
+  "duration_s": 320.02017954198527,
+  "packets_received": 0,
+  "packets_lost": 0,
+  "loss_pct": 0.0,
+  "duplicates": 0,
+  "out_of_order": 0,
+  "malformed": 0,
+  "first_seq": null,
+  "last_seq": null
+}

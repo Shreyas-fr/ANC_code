@@ -1,0 +1,9 @@
+metric,value
+grad_finite,True
+grad_nonzero,True
+grad_mag,0.2481689602136612
+identity_snr,38.85528087615967
+target_mask_snr,-4.446393251419067
+target_mask_sdr,-4.5774593
+target_mask_stoi,0.9976323406768026
+target_mask_pesq,3.5218851566314697

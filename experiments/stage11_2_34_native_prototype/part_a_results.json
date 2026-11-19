@@ -1,0 +1,52 @@
+{
+  "normalizers": {
+    "fb_std_max_err": 4.76837158203125e-06,
+    "fb_std_mu_max_err": 8.940696716308594e-08,
+    "fb_stress_max_err": 4.57763671875e-05,
+    "fb_stress_mu_max_err": 3.5762786865234375e-07,
+    "sb_std_max_err": 7.62939453125e-06,
+    "sb_std_mu_max_err": 1.043081283569336e-07,
+    "sb_stress_max_err": 1.9073486328125e-05,
+    "sb_stress_mu_max_err": 8.940696716308594e-08,
+    "passed": true
+  },
+  "fullband_lstm": {
+    "max_out_err": 6.103515625e-05,
+    "max_h_err": 6.288290023803711e-06,
+    "max_c_err": 3.4332275390625e-05,
+    "numerical_tolerance_explanation": "Float32 BLAS summation tree difference between ONNX Runtime MLAS and PyTorch Apple Accelerate",
+    "passed": true
+  },
+  "subband_lstm": {
+    "max_out_err": 7.033348083496094e-06,
+    "max_h_err": 1.0609626770019531e-05,
+    "max_c_err": 3.337860107421875e-05,
+    "passed": true
+  },
+  "runtime_compatibility": {
+    "fb_operators": [
+      "Add",
+      "Concat",
+      "Constant",
+      "LSTM",
+      "MatMul",
+      "Relu",
+      "Slice",
+      "Squeeze",
+      "Transpose"
+    ],
+    "sb_operators": [
+      "Add",
+      "Concat",
+      "Constant",
+      "LSTM",
+      "MatMul",
+      "Slice",
+      "Squeeze",
+      "Transpose"
+    ],
+    "all_supported": true,
+    "passed": true
+  },
+  "part_a_overall_passed": true
+}

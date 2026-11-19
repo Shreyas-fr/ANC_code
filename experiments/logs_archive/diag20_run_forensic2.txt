@@ -1,0 +1,8 @@
+spawn scp run_forensic2.py shreyas@shreyas.local:~/sih26052_edge/prototype/run_forensic2.py
+shreyas@shreyas.local's password: 
+run_forensic2.py                                0%    0     0.0KB/s   --:-- ETArun_forensic2.py                              100% 1620    25.6KB/s   00:00    
+spawn ssh shreyas@shreyas.local /home/shreyas/env/bin/python ~/sih26052_edge/prototype/run_forensic2.py
+shreyas@shreyas.local's password: 
+Input avg tail energy: 0.439478
+Output avg tail energy: 0.309512
+Delay: 16.00 ms (corr 26.54)

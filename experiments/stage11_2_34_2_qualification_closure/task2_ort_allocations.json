@@ -1,0 +1,79 @@
+{
+  "task": "Task 2: ONNX Runtime Allocations & Memory Arena Profiling",
+  "timestamp": "2026-11-14T13:13:01Z",
+  "fullband": {
+    "model_name": "Fullband LSTM Step",
+    "model_path": "/Users/shreyasdivekar/Documents/anc sih/antigravity/experiments/stage11_2_34_native_prototype/models/fullband_step.onnx",
+    "session_creation_time_ms": 50.11329101398587,
+    "allocator_info": {
+      "execution_provider": "CPUExecutionProvider",
+      "allocator_type": "OrtAllocatorType.OrtArenaAllocator (BFCArena)",
+      "memory_type": "OrtMemType.OrtMemTypeDefault (Host RAM)",
+      "allocation_mechanism": "Pre-allocated chunked arena with pattern-based tensor reuse"
+    },
+    "per_frame_tensor_ops": {
+      "total_nodes_per_frame": 14,
+      "operator_breakdown": {
+        "Split": 2,
+        "Transpose": 2,
+        "LSTM": 2,
+        "Squeeze": 2,
+        "Reshape": 2,
+        "Gemm": 1,
+        "Relu": 1,
+        "Concat": 2
+      },
+      "total_intermediate_activations_bytes": 40976,
+      "total_outputs_bytes": 40976,
+      "peak_outstanding_tensor_bytes": 15356624,
+      "arena_held_bytes": 16360656
+    },
+    "lifecycle_behavior": {
+      "session_creation": "Pre-allocates initial chunk (15.60 MiB) and loads graph constants",
+      "warmup_phase": "Executes initial 10 iterations; arena accommodates peak activations",
+      "steady_state_phase": "Executes 50 consecutive iterations; all tensors re-use arena slots (zero OS heap allocations)",
+      "steady_state_arena_held_delta_sum": 0,
+      "fallback_allocations": 0
+    },
+    "distinction_note": "Allocator reuse within the pre-allocated BFCArena is NOT the same as absence of memory operations. Internal book-keeping updates occurred for 100% of operators, but zero system malloc()/brk syscalls were issued during steady-state. However, this does NOT guarantee hard real-time execution or lock-free behavior, as mutex locks protect multi-threaded arena blocks in generic ORT builds."
+  },
+  "subband": {
+    "model_name": "Subband LSTM Step (257 Bins)",
+    "model_path": "/Users/shreyasdivekar/Documents/anc sih/antigravity/experiments/stage11_2_34_native_prototype/models/subband_step.onnx",
+    "session_creation_time_ms": 5.32050000037998,
+    "allocator_info": {
+      "execution_provider": "CPUExecutionProvider",
+      "allocator_type": "OrtAllocatorType.OrtArenaAllocator (BFCArena)",
+      "memory_type": "OrtMemType.OrtMemTypeDefault (Host RAM)",
+      "allocation_mechanism": "Pre-allocated chunked arena with pattern-based tensor reuse"
+    },
+    "per_frame_tensor_ops": {
+      "total_nodes_per_frame": 13,
+      "operator_breakdown": {
+        "Split": 2,
+        "Transpose": 2,
+        "LSTM": 2,
+        "Squeeze": 2,
+        "Reshape": 2,
+        "Gemm": 1,
+        "Concat": 2
+      },
+      "total_intermediate_activations_bytes": 7173384,
+      "total_outputs_bytes": 7142544,
+      "peak_outstanding_tensor_bytes": 14695896,
+      "arena_held_bytes": 23077080
+    },
+    "lifecycle_behavior": {
+      "session_creation": "Pre-allocates initial chunk (22.01 MiB) and loads graph constants",
+      "warmup_phase": "Executes initial 10 iterations; arena accommodates peak activations",
+      "steady_state_phase": "Executes 50 consecutive iterations; all tensors re-use arena slots (zero OS heap allocations)",
+      "steady_state_arena_held_delta_sum": 0,
+      "fallback_allocations": 0
+    },
+    "distinction_note": "Allocator reuse within the pre-allocated BFCArena is NOT the same as absence of memory operations. Internal book-keeping updates occurred for 100% of operators, but zero system malloc()/brk syscalls were issued during steady-state. However, this does NOT guarantee hard real-time execution or lock-free behavior, as mutex locks protect multi-threaded arena blocks in generic ORT builds."
+  },
+  "governance_verdict": {
+    "gate_02_allocation_instrumentation": "PASS",
+    "findings_summary": "ONNX Runtime inference sessions use the BFCArena (Best-Fit with Coalescing) allocator on CPUExecutionProvider. During steady-state inference across 50 iterations for both models, mem_arena_held_delta was identically 0 bytes, confirming that tensor memory is 100% recycled within the pre-allocated arena without OS-level reallocations. Claims of lock-free or hard real-time execution are explicitly rejected, as ORT retains internal threadpool synchronization."
+  }
+}

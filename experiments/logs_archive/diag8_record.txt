@@ -1,0 +1,30 @@
+spawn ssh shreyas@shreyas.local mkdir -p ~/sih26052-edge/audio; pw-record --target 46 -d 10 ~/sih26052-edge/audio/vs102_mic_test.wav
+shreyas@shreyas.local's password: 
+error: open failed: Operation not supported
+pw-record [options] [<file>|-]
+  -h, --help                            Show this help
+      --version                         Show version
+  -v, --verbose                         Enable verbose operations
+
+  -R, --remote                          Remote daemon name
+      --media-type                      Set media type (default Audio)
+      --media-category                  Set media category (default Playback)
+      --media-role                      Set media role (default Music)
+      --target                          Set node target serial or name (default auto)
+                                          0 means don't link
+      --latency                         Set node latency (default 100ms)
+                                          Xunit (unit = s, ms, us, ns)
+                                          or direct samples (256)
+                                          the rate is the one of the source file
+  -P  --properties                      Set node properties
+
+      --rate                            Sample rate (req. for rec) (default 48000)
+      --channels                        Number of channels (req. for rec) (default 2)
+      --channel-map                     Channel map
+                                            one of: "stereo", "surround-51",... or
+                                            comma separated list of channel names: eg. "FL,FR"
+      --format                          Sample format (ulaw|alaw|u8|s8|s16|s32|f32|f64) (req. for rec) (default s16)
+      --volume                          Stream volume 0-1.0 (default 1.000)
+  -q  --quality                         Resampler quality (0 - 15) (default 4)
+  -a, --raw                             RAW mode
+

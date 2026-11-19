@@ -1,0 +1,4 @@
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/vs102_ai_stream.py > /tmp/vs102_stream_out.txt 2>&1
+shreyas@shreyas.local's password: 
+spawn ssh shreyas@shreyas.local cat /tmp/vs102_stream_out.txt
+shreyas@shreyas.local's password: 

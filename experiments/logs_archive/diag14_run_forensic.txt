@@ -1,0 +1,25 @@
+spawn scp run_forensic.py shreyas@shreyas.local:~/sih26052_edge/prototype/run_forensic.py
+shreyas@shreyas.local's password: 
+run_forensic.py                                 0%    0     0.0KB/s   --:-- ETArun_forensic.py                               100% 5832   236.8KB/s   00:00    
+spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/run_forensic.py
+shreyas@shreyas.local's password: 
+1. WAV INTEGRITY
+2. DETERMINE WHERE THE REVERB IS INTRODUCED
+Input avg tail energy: 0.616475
+Output avg tail energy: 0.434825
+3. CROSS-CORRELATION / DELAY ANALYSIS
+Top delays (ms):
+  16.00 ms (corr 16.58)
+  4.38 ms (corr 6.50)
+  27.62 ms (corr 6.50)
+4. SPECTRAL/TEMPORAL ANALYSIS
+5. MODEL BYPASS / IDENTITY RECONSTRUCTION TEST
+Traceback (most recent call last):
+  File "/home/shreyas/sih26052_edge/prototype/run_forensic.py", line 108, in <module>
+    original_infer = stream_processor.model.infer
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/shreyas/env/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1972, in __getattr__
+    raise AttributeError(
+        f"'{type(self).__name__}' object has no attribute '{name}'"
+    )
+AttributeError: 'StatefulPolarLSTM_Wrapper' object has no attribute 'infer'

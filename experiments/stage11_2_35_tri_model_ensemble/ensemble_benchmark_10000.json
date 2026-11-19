@@ -1,0 +1,26 @@
+{
+  "binary": "sih_ensemble_host",
+  "runtime": "Official Microsoft ONNX Runtime C SDK v1.32.0 (Mach-O ARM64)",
+  "threads": 4,
+  "architecture": "Multi-Threaded Producer-Consumer with TimestampedRingBuffer",
+  "frames_executed": 10000,
+  "audio_seconds": 160.00,
+  "cold_start_rss_mb": 10.289,
+  "cold_start_rss_mib": 9.812,
+  "post_init_rss_mb": 75.579,
+  "post_init_rss_mib": 72.078,
+  "post_warmup_rss_mb": 82.395,
+  "post_warmup_rss_mib": 78.578,
+  "final_steady_rss_mb": 93.782,
+  "final_steady_rss_mib": 89.438,
+  "peak_rss_mb": 93.782,
+  "peak_rss_mib": 89.438,
+  "growth_bytes": 8650752,
+  "latency_ms": {
+    "fullsubnet": {"mean": 1.561, "p50": 1.550, "p99": 1.702},
+    "gtcrn": {"mean": 0.476, "p50": 0.477, "p99": 0.553},
+    "dfn3": {"mean": 0.000},
+    "mixer": {"mean": 1.563, "p50": 1.553, "p99": 1.705},
+    "jitter": {"mean": 1.563, "p50": 1.553, "p99": 1.705, "max": 3.013}
+  }
+}

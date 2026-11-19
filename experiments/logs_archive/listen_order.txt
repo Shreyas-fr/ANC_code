@@ -1,0 +1,4 @@
+1. D_in.wav: Listen to the raw, unprocessed background noise and microphone quality.
+2. D_ref_whole.wav: Listen to the ideal, non-realtime DFN3 output (should have minimal noise, clean voice).
+3. D_ref_block.wav: Listen for any potential block-boundary artifacts or slight differences caused by the 500ms block constraint (null test difference is -44dB).
+4. D_out.wav: Listen to the actual real-time Pi output. Since the timeline was 100% E (EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE), this should be pure enhanced audio with NO fallback jumps or delays, but listen to see if the Pi crashed gracefully.

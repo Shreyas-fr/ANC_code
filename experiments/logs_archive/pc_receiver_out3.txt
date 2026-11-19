@@ -1,0 +1,10 @@
+
+Starting ffplay...
+Listening on UDP 0.0.0.0:5005...
+Timeout waiting for packets. Assuming stream ended.
+
+=== RECEIVER STATISTICS ===
+Packets received: 3749
+Packets lost: 1
+Out of order / Duplicates: 0
+===========================
