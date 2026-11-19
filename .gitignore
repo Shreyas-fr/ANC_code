@@ -34,7 +34,45 @@ backups/
 .vscode/
 .DS_Store
 
-# Logs
+# Logs & Security
 logs/
 *.log
 rpi_key*
+*.key
+*.pem
+id_rsa*
+id_ed25519*
+secrets*
+
+# Rust & Cargo Build Artifacts & Binaries
+target/
+**/target/
+target*/
+**/target*/
+*.a
+*.rlib
+*.dylib
+*.dylib.*
+*.so
+*.f32
+*.raw
+*.tar.gz
+
+# Virtual Environments
+.venv_gtcrn/
+pc_venv/
+
+# Embedded Repos & Large SDKs
+third_party/onnxruntime_c_sdk/
+third_party/FullSubNet/
+runs/sih26052_rpi_deployment_audit/runs/dfn3_pi_optimization/DeepFilterNet/
+
+# Scratch & Presentation caches
+.codex/
+.codex*/
+
+# Cleanup & Archive
+CLEANUP/archive/
+CLEANUP/review_required/
+kaggle_output/
+kaggle_output*/

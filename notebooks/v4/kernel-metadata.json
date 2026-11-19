@@ -1,0 +1,18 @@
+{
+  "id": "shreyasdivekar/deepfilternet3-v4-sih26052-compliance-retraining",
+  "title": "DeepFilterNet3 V4 SIH26052 Compliance Retraining",
+  "code_file": "deepfilternet3_v4_sih26052.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "shreyasdivekar/anc-sih-training-data",
+    "panavpayappagoudar/sih-26-processed-audio",
+    "shreyasdivekar/sih26052-canonical-exclusions"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}

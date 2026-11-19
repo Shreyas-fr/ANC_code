@@ -1,0 +1,22 @@
+[Unit]
+Description=SIH26052 DeepFilterNet3 speech-enhancement edge sender
+After=network.target pipewire.service
+Wants=pipewire.service
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+WorkingDirectory=/home/shreyas/sih26052_edge
+Environment=PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app
+Environment=SIH_EDGE_ROOT=/home/shreyas/sih26052_edge
+# Set SIH_PC_IP to the demo laptop. This is speech enhancement, not acoustic ANC.
+Environment=SIH_PC_IP=10.190.58.182
+ExecStart=/home/shreyas/env/bin/python /home/shreyas/sih26052_edge/app/dfn3_live_sender.py --mode dfn3
+StandardOutput=append:/home/shreyas/sih26052_edge/logs/dfn3_live.log
+StandardError=append:/home/shreyas/sih26052_edge/logs/dfn3_live.err
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,280 @@
+{
+  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "clip_count": 590,
+  "reference": "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/sih26052_candidate_step500_repro_20261113/per_clip.csv",
+  "candidate": "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage8_ensemble_20261113/phase_c_ensembles/d1_equal_333_raw/per_clip.csv",
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 26052,
+  "criteria": {
+    "output_snr_db_gt": 15.0,
+    "stoi_gt": 0.85,
+    "pesq_wb_gt": 2.5
+  },
+  "candidate_overall": {
+    "count": 590,
+    "means": {
+      "snr_db": {
+        "n": 590,
+        "mean": 14.71637177766385
+      },
+      "si_sdr_db": {
+        "n": 590,
+        "mean": 13.799597369202203
+      },
+      "stoi": {
+        "n": 590,
+        "mean": 0.9060239908716825
+      },
+      "pesq_wb": {
+        "n": 590,
+        "mean": 2.55155096134897
+      }
+    },
+    "pass_counts": {
+      "snr_gt_15_db": 272,
+      "stoi_gt_0_85": 482,
+      "pesq_gt_2_5": 308,
+      "all_three": 223
+    }
+  },
+  "paired_deltas": {
+    "snr_db": {
+      "mean_candidate_minus_reference": 1.2493889652851506,
+      "ci95_low": 1.1015026298511166,
+      "ci95_high": 1.4087319709295
+    },
+    "si_sdr_db": {
+      "mean_candidate_minus_reference": 1.43671648912893,
+      "ci95_low": 1.241564338182545,
+      "ci95_high": 1.6487575394831473
+    },
+    "stoi": {
+      "mean_candidate_minus_reference": 0.02133373815129042,
+      "ci95_low": 0.017984317974362875,
+      "ci95_high": 0.02521751952259597
+    },
+    "pesq_wb": {
+      "mean_candidate_minus_reference": 0.3192562418468928,
+      "ci95_low": 0.29331053979821126,
+      "ci95_high": 0.34669374686681614
+    }
+  },
+  "input_snr_ge_9_6_db": {
+    "count": 245,
+    "means": {
+      "snr_db": {
+        "n": 245,
+        "mean": 18.32140666865228
+      },
+      "si_sdr_db": {
+        "n": 245,
+        "mean": 17.774121315047598
+      },
+      "stoi": {
+        "n": 245,
+        "mean": 0.9531892135687223
+      },
+      "pesq_wb": {
+        "n": 245,
+        "mean": 3.10523518932109
+      }
+    },
+    "pass_counts": {
+      "snr_gt_15_db": 184,
+      "stoi_gt_0_85": 233,
+      "pesq_gt_2_5": 210,
+      "all_three": 169
+    }
+  },
+  "by_target_snr": {
+    "-10": {
+      "count": 30,
+      "means": {
+        "snr_db": {
+          "n": 30,
+          "mean": 7.371467169056699
+        },
+        "si_sdr_db": {
+          "n": 30,
+          "mean": 4.643967683214378
+        },
+        "stoi": {
+          "n": 30,
+          "mean": 0.7328636847443011
+        },
+        "pesq_wb": {
+          "n": 30,
+          "mean": 1.5228569587071736
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 6,
+        "pesq_gt_2_5": 0,
+        "all_three": 0
+      }
+    },
+    "-5": {
+      "count": 63,
+      "means": {
+        "snr_db": {
+          "n": 63,
+          "mean": 10.878354800478647
+        },
+        "si_sdr_db": {
+          "n": 63,
+          "mean": 9.6131030588142
+        },
+        "stoi": {
+          "n": 63,
+          "mean": 0.8398992369149058
+        },
+        "pesq_wb": {
+          "n": 63,
+          "mean": 1.9251019178874909
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 10,
+        "stoi_gt_0_85": 35,
+        "pesq_gt_2_5": 11,
+        "all_three": 6
+      }
+    },
+    "0": {
+      "count": 117,
+      "means": {
+        "snr_db": {
+          "n": 117,
+          "mean": 12.01173861594495
+        },
+        "si_sdr_db": {
+          "n": 117,
+          "mean": 10.972513096691493
+        },
+        "stoi": {
+          "n": 117,
+          "mean": 0.8796210427370744
+        },
+        "pesq_wb": {
+          "n": 117,
+          "mean": 2.1277843204318967
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 20,
+        "stoi_gt_0_85": 87,
+        "pesq_gt_2_5": 27,
+        "all_three": 14
+      }
+    },
+    "5": {
+      "count": 137,
+      "means": {
+        "snr_db": {
+          "n": 137,
+          "mean": 14.208586016270873
+        },
+        "si_sdr_db": {
+          "n": 137,
+          "mean": 13.318702418112021
+        },
+        "stoi": {
+          "n": 137,
+          "mean": 0.9137940877234495
+        },
+        "pesq_wb": {
+          "n": 137,
+          "mean": 2.4661606715543427
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 60,
+        "stoi_gt_0_85": 123,
+        "pesq_gt_2_5": 62,
+        "all_three": 36
+      }
+    },
+    "10": {
+      "count": 121,
+      "means": {
+        "snr_db": {
+          "n": 121,
+          "mean": 16.525944938052056
+        },
+        "si_sdr_db": {
+          "n": 121,
+          "mean": 15.829291266273202
+        },
+        "stoi": {
+          "n": 121,
+          "mean": 0.9398345836114304
+        },
+        "pesq_wb": {
+          "n": 121,
+          "mean": 2.9025190684421003
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 78,
+        "stoi_gt_0_85": 112,
+        "pesq_gt_2_5": 98,
+        "all_three": 67
+      }
+    },
+    "15": {
+      "count": 86,
+      "means": {
+        "snr_db": {
+          "n": 86,
+          "mean": 19.353309618638917
+        },
+        "si_sdr_db": {
+          "n": 86,
+          "mean": 18.737034756583466
+        },
+        "stoi": {
+          "n": 86,
+          "mean": 0.9620025963067343
+        },
+        "pesq_wb": {
+          "n": 86,
+          "mean": 3.1805451747983002
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 70,
+        "stoi_gt_0_85": 84,
+        "pesq_gt_2_5": 75,
+        "all_three": 66
+      }
+    },
+    "20": {
+      "count": 36,
+      "means": {
+        "snr_db": {
+          "n": 36,
+          "mean": 21.11681428660831
+        },
+        "si_sdr_db": {
+          "n": 36,
+          "mean": 21.156734131891312
+        },
+        "stoi": {
+          "n": 36,
+          "mean": 0.9749147841281138
+        },
+        "pesq_wb": {
+          "n": 36,
+          "mean": 3.525040772226122
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 34,
+        "stoi_gt_0_85": 35,
+        "pesq_gt_2_5": 35,
+        "all_three": 34
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "clip_count": 590,
+  "reference_hashes_verified": 590,
+  "compared_duration_seconds": 1752.3,
+  "per_clip_length_policy": "compare first 47,520 samples of each 48,000-sample Stage8 float prediction to the 47,520-sample native output; native CLI --compensate-delay crops 30 ms from file start before resampling; no additional shift applied",
+  "native_output_format": "PCM16 (format code 1), mono 16 kHz",
+  "per_clip": {
+    "pearson_mean": 0.9797024155627987,
+    "pearson_median": 0.9899314366474158,
+    "pearson_p05": 0.9330215077955258,
+    "pearson_min": 0.5639994332078373,
+    "waveform_sdr_db_mean": 16.388893300558745,
+    "waveform_sdr_db_median": 16.93751199095255,
+    "waveform_sdr_db_p05": 8.64281197968702,
+    "waveform_sdr_db_min": 1.5133838249385037,
+    "rmse_mean": 0.008421765147307496,
+    "rmse_median": 0.006987164294448145,
+    "rmse_max": 0.0781551489333855
+  },
+  "pooled_samples": {
+    "pearson": 0.9826838564377474,
+    "waveform_sdr_db": 14.620689431496919,
+    "rmse": 0.010918078373009248,
+    "mae": 0.004396520065655313,
+    "max_abs_error": 0.6100588440895081
+  },
+  "interpretation": "Waveform implementation parity only. The compared reference is the exact saved Stage8 Python Step-500 float output; native output is quantized PCM16 and 30 ms shorter. No SNR/SI-SDR/STOI/PESQ score is asserted here. This is not independent validation or Pi performance."
+}

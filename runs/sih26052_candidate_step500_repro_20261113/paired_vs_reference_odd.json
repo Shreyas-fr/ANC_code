@@ -1,0 +1,281 @@
+{
+  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "split": "odd",
+  "clip_count": 295,
+  "reference": "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/sih26052_dfn3_canonical_step500/per_clip.csv",
+  "candidate": "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/sih26052_candidate_step500_repro_20261113/per_clip.csv",
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 26052,
+  "criteria": {
+    "output_snr_db_gt": 15.0,
+    "stoi_gt": 0.85,
+    "pesq_wb_gt": 2.5
+  },
+  "candidate_overall": {
+    "count": 295,
+    "means": {
+      "snr_db": {
+        "n": 295,
+        "mean": 13.524745668122982
+      },
+      "si_sdr_db": {
+        "n": 295,
+        "mean": 12.40516399506335
+      },
+      "stoi": {
+        "n": 295,
+        "mean": 0.8824962087468571
+      },
+      "pesq_wb": {
+        "n": 295,
+        "mean": 2.215087617049783
+      }
+    },
+    "pass_counts": {
+      "snr_gt_15_db": 111,
+      "stoi_gt_0_85": 228,
+      "pesq_gt_2_5": 97,
+      "all_three": 74
+    }
+  },
+  "paired_deltas": {
+    "snr_db": {
+      "mean_candidate_minus_reference": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0
+    },
+    "si_sdr_db": {
+      "mean_candidate_minus_reference": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0
+    },
+    "stoi": {
+      "mean_candidate_minus_reference": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0
+    },
+    "pesq_wb": {
+      "mean_candidate_minus_reference": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0
+    }
+  },
+  "input_snr_ge_9_6_db": {
+    "count": 121,
+    "means": {
+      "snr_db": {
+        "n": 121,
+        "mean": 16.881072804527385
+      },
+      "si_sdr_db": {
+        "n": 121,
+        "mean": 16.473409613785357
+      },
+      "stoi": {
+        "n": 121,
+        "mean": 0.9380478900957991
+      },
+      "pesq_wb": {
+        "n": 121,
+        "mean": 2.7104460739892375
+      }
+    },
+    "pass_counts": {
+      "snr_gt_15_db": 81,
+      "stoi_gt_0_85": 111,
+      "pesq_gt_2_5": 75,
+      "all_three": 60
+    }
+  },
+  "by_target_snr": {
+    "-10": {
+      "count": 18,
+      "means": {
+        "snr_db": {
+          "n": 18,
+          "mean": 6.148185843897938
+        },
+        "si_sdr_db": {
+          "n": 18,
+          "mean": 1.4252064459446965
+        },
+        "stoi": {
+          "n": 18,
+          "mean": 0.6665168144220035
+        },
+        "pesq_wb": {
+          "n": 18,
+          "mean": 1.3737618856959872
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 4,
+        "pesq_gt_2_5": 0,
+        "all_three": 0
+      }
+    },
+    "-5": {
+      "count": 30,
+      "means": {
+        "snr_db": {
+          "n": 30,
+          "mean": 9.590930951983285
+        },
+        "si_sdr_db": {
+          "n": 30,
+          "mean": 7.813841731339362
+        },
+        "stoi": {
+          "n": 30,
+          "mean": 0.8257085891419664
+        },
+        "pesq_wb": {
+          "n": 30,
+          "mean": 1.592180641492208
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 1,
+        "stoi_gt_0_85": 17,
+        "pesq_gt_2_5": 0,
+        "all_three": 0
+      }
+    },
+    "0": {
+      "count": 63,
+      "means": {
+        "snr_db": {
+          "n": 63,
+          "mean": 11.451676195972562
+        },
+        "si_sdr_db": {
+          "n": 63,
+          "mean": 10.200319007994546
+        },
+        "stoi": {
+          "n": 63,
+          "mean": 0.8421911970985448
+        },
+        "pesq_wb": {
+          "n": 63,
+          "mean": 1.876376297738817
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 10,
+        "stoi_gt_0_85": 41,
+        "pesq_gt_2_5": 9,
+        "all_three": 7
+      }
+    },
+    "5": {
+      "count": 64,
+      "means": {
+        "snr_db": {
+          "n": 64,
+          "mean": 13.37548939657827
+        },
+        "si_sdr_db": {
+          "n": 64,
+          "mean": 12.449857009570266
+        },
+        "stoi": {
+          "n": 64,
+          "mean": 0.9060937898625369
+        },
+        "pesq_wb": {
+          "n": 64,
+          "mean": 2.176590221002698
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 20,
+        "stoi_gt_0_85": 56,
+        "pesq_gt_2_5": 14,
+        "all_three": 8
+      }
+    },
+    "10": {
+      "count": 66,
+      "means": {
+        "snr_db": {
+          "n": 66,
+          "mean": 15.265601250025707
+        },
+        "si_sdr_db": {
+          "n": 66,
+          "mean": 14.487464494853631
+        },
+        "stoi": {
+          "n": 66,
+          "mean": 0.9267247032994163
+        },
+        "pesq_wb": {
+          "n": 66,
+          "mean": 2.48604611194495
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 39,
+        "stoi_gt_0_85": 59,
+        "pesq_gt_2_5": 32,
+        "all_three": 23
+      }
+    },
+    "15": {
+      "count": 34,
+      "means": {
+        "snr_db": {
+          "n": 34,
+          "mean": 18.83340651007131
+        },
+        "si_sdr_db": {
+          "n": 34,
+          "mean": 18.365427101567903
+        },
+        "stoi": {
+          "n": 34,
+          "mean": 0.9528834614177775
+        },
+        "pesq_wb": {
+          "n": 34,
+          "mean": 2.9369091076009415
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 27,
+        "stoi_gt_0_85": 32,
+        "pesq_gt_2_5": 26,
+        "all_three": 22
+      }
+    },
+    "20": {
+      "count": 20,
+      "means": {
+        "snr_db": {
+          "n": 20,
+          "mean": 18.302613638760825
+        },
+        "si_sdr_db": {
+          "n": 20,
+          "mean": 18.972314317335083
+        },
+        "stoi": {
+          "n": 20,
+          "mean": 0.9478952586045597
+        },
+        "pesq_wb": {
+          "n": 20,
+          "mean": 2.975513994693756
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 14,
+        "stoi_gt_0_85": 19,
+        "pesq_gt_2_5": 16,
+        "all_three": 14
+      }
+    }
+  }
+}

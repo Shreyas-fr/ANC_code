@@ -1,0 +1,134 @@
+{
+  "selected_ids": [
+    6,
+    93,
+    287
+  ],
+  "stage_count": 12,
+  "all_exact": true,
+  "comparisons": [
+    {
+      "val_index": 6,
+      "stage": "stft",
+      "shape": "300x481x2",
+      "elements": 288600,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 6,
+      "stage": "erb_features",
+      "shape": "300x32",
+      "elements": 9600,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 6,
+      "stage": "complex_features",
+      "shape": "300x96x2",
+      "elements": 57600,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 6,
+      "stage": "synthesis",
+      "shape": "144000",
+      "elements": 144000,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 93,
+      "stage": "stft",
+      "shape": "300x481x2",
+      "elements": 288600,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 93,
+      "stage": "erb_features",
+      "shape": "300x32",
+      "elements": 9600,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 93,
+      "stage": "complex_features",
+      "shape": "300x96x2",
+      "elements": 57600,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 93,
+      "stage": "synthesis",
+      "shape": "144000",
+      "elements": 144000,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 287,
+      "stage": "stft",
+      "shape": "300x481x2",
+      "elements": 288600,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 287,
+      "stage": "erb_features",
+      "shape": "300x32",
+      "elements": 9600,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 287,
+      "stage": "complex_features",
+      "shape": "300x96x2",
+      "elements": 57600,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    },
+    {
+      "val_index": 287,
+      "stage": "synthesis",
+      "shape": "144000",
+      "elements": 144000,
+      "exact_equal": true,
+      "max_abs_diff": 0.0,
+      "mean_abs_diff": 0.0,
+      "rmse": 0.0
+    }
+  ],
+  "python_reference": "DeepFilterLib 0.5.6 source compiled locally for Python 3.10.22; same source code as native Rust diagnostic",
+  "native_reference": "Rust DFState 0.5.6 source, same isolated snapshot",
+  "note": "This confirms language binding/frame-array parity for libDF front-end; it does not compare PyTorch network outputs with Tract ONNX outputs."
+}

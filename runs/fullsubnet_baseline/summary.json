@@ -1,0 +1,187 @@
+{
+  "model": "Audio-WestlakeU FullSubNet (official pretrained, epoch 58)",
+  "checkpoint": "/Users/shreyasdivekar/Documents/anc sih/antigravity/checkpoints/fullsubnet/fullsubnet_best_model_58epochs.tar",
+  "checkpoint_sha256": "482615e9709d2d6c10ee0d24f9844ad2da2dae3c0cf897f014839c365917a2e0",
+  "parameter_count": 5637635,
+  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "sample_rate_hz": 16000,
+  "channels": 1,
+  "stft": {
+    "n_fft": 512,
+    "win_length": 512,
+    "hop_length": 256
+  },
+  "model_config": {
+    "look_ahead": 2,
+    "norm_type": "offline_laplace_norm",
+    "sequence_model": "LSTM"
+  },
+  "device": "cpu",
+  "count": 590,
+  "criteria": {
+    "output_snr_db_gt": 15.0,
+    "stoi_gt": 0.85,
+    "pesq_wb_gt": 2.5
+  },
+  "overall": {
+    "mean": {
+      "snr_db": 14.903771717739037,
+      "si_sdr_db": 13.699975426968347,
+      "stoi": 0.9025759069222771,
+      "pesq_wb": 2.5133480449854315,
+      "count": 590,
+      "pass_rate": {
+        "snr_gt_15_db": 0.47796610169491527,
+        "stoi_gt_0_85": 0.8101694915254237,
+        "pesq_gt_2_5": 0.47796610169491527,
+        "all_three": 0.3694915254237288,
+        "valid_counts": {
+          "snr": 590,
+          "stoi": 590,
+          "pesq": 590,
+          "all_three": 590
+        }
+      }
+    }
+  },
+  "strata": {
+    "-10": {
+      "snr_db": 7.11510365850909,
+      "si_sdr_db": 4.409260665052096,
+      "stoi": 0.709851191336466,
+      "pesq_wb": 1.415021574497223,
+      "count": 30,
+      "pass_rate": {
+        "snr_gt_15_db": 0.0,
+        "stoi_gt_0_85": 0.16666666666666666,
+        "pesq_gt_2_5": 0.0,
+        "all_three": 0.0,
+        "valid_counts": {
+          "snr": 30,
+          "stoi": 30,
+          "pesq": 30,
+          "all_three": 30
+        }
+      }
+    },
+    "-5": {
+      "snr_db": 10.706302217193683,
+      "si_sdr_db": 9.128728462850685,
+      "stoi": 0.8322006622161107,
+      "pesq_wb": 1.827212093368409,
+      "count": 63,
+      "pass_rate": {
+        "snr_gt_15_db": 0.15873015873015872,
+        "stoi_gt_0_85": 0.5238095238095238,
+        "pesq_gt_2_5": 0.09523809523809523,
+        "all_three": 0.031746031746031744,
+        "valid_counts": {
+          "snr": 63,
+          "stoi": 63,
+          "pesq": 63,
+          "all_three": 63
+        }
+      }
+    },
+    "0": {
+      "snr_db": 11.936688920605203,
+      "si_sdr_db": 10.556097489568034,
+      "stoi": 0.8758728941668189,
+      "pesq_wb": 2.051958947100191,
+      "count": 117,
+      "pass_rate": {
+        "snr_gt_15_db": 0.19658119658119658,
+        "stoi_gt_0_85": 0.7435897435897436,
+        "pesq_gt_2_5": 0.17094017094017094,
+        "all_three": 0.1282051282051282,
+        "valid_counts": {
+          "snr": 117,
+          "stoi": 117,
+          "pesq": 117,
+          "all_three": 117
+        }
+      }
+    },
+    "5": {
+      "snr_db": 14.493395320748064,
+      "si_sdr_db": 13.304164882134558,
+      "stoi": 0.9102064028913233,
+      "pesq_wb": 2.4111256181758685,
+      "count": 137,
+      "pass_rate": {
+        "snr_gt_15_db": 0.45985401459854014,
+        "stoi_gt_0_85": 0.8832116788321168,
+        "pesq_gt_2_5": 0.40875912408759124,
+        "all_three": 0.24817518248175183,
+        "valid_counts": {
+          "snr": 137,
+          "stoi": 137,
+          "pesq": 137,
+          "all_three": 137
+        }
+      }
+    },
+    "10": {
+      "snr_db": 16.780813501210602,
+      "si_sdr_db": 15.894772077645614,
+      "stoi": 0.9391432760862242,
+      "pesq_wb": 2.8867045414349266,
+      "count": 121,
+      "pass_rate": {
+        "snr_gt_15_db": 0.6776859504132231,
+        "stoi_gt_0_85": 0.9338842975206612,
+        "pesq_gt_2_5": 0.7603305785123967,
+        "all_three": 0.5537190082644629,
+        "valid_counts": {
+          "snr": 121,
+          "stoi": 121,
+          "pesq": 121,
+          "all_three": 121
+        }
+      }
+    },
+    "15": {
+      "snr_db": 19.64771316898882,
+      "si_sdr_db": 18.745609260595018,
+      "stoi": 0.9633882868243662,
+      "pesq_wb": 3.235976802748303,
+      "count": 86,
+      "pass_rate": {
+        "snr_gt_15_db": 0.8255813953488372,
+        "stoi_gt_0_85": 0.9767441860465116,
+        "pesq_gt_2_5": 0.8488372093023255,
+        "all_three": 0.7790697674418605,
+        "valid_counts": {
+          "snr": 86,
+          "stoi": 86,
+          "pesq": 86,
+          "all_three": 86
+        }
+      }
+    },
+    "20": {
+      "snr_db": 22.302934310965025,
+      "si_sdr_db": 21.73538821838844,
+      "stoi": 0.9759020204854674,
+      "pesq_wb": 3.5367132325967154,
+      "count": 36,
+      "pass_rate": {
+        "snr_gt_15_db": 0.9166666666666666,
+        "stoi_gt_0_85": 0.9722222222222222,
+        "pesq_gt_2_5": 0.9722222222222222,
+        "all_three": 0.9166666666666666,
+        "valid_counts": {
+          "snr": 36,
+          "stoi": 36,
+          "pesq": 36,
+          "all_three": 36
+        }
+      }
+    }
+  },
+  "runtime": {
+    "elapsed_wall_seconds": 231.1288480409421,
+    "audio_duration_seconds": 1770.0,
+    "wall_clock_rtf": 0.1305812700796283
+  }
+}

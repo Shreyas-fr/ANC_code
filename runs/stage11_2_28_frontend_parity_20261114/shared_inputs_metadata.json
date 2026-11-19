@@ -1,0 +1,33 @@
+{
+  "selected_ids": [
+    6,
+    93,
+    287
+  ],
+  "manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "resampler": "scipy.signal.resample_poly(x,3,1).astype(float32)",
+  "inputs": [
+    {
+      "val_index": 6,
+      "source_sr": 16000,
+      "output_sr": 48000,
+      "samples": 144000,
+      "input_sha256": "072695f13cca5650e07c17c75bde35deab40fdc492f24de4676944bf563f47bc"
+    },
+    {
+      "val_index": 93,
+      "source_sr": 16000,
+      "output_sr": 48000,
+      "samples": 144000,
+      "input_sha256": "b3559d12dcded184516db4f660d6f09cbd1d0222878cb5eee7fc12c23c14abac"
+    },
+    {
+      "val_index": 287,
+      "source_sr": 16000,
+      "output_sr": 48000,
+      "samples": 144000,
+      "input_sha256": "99973a3d2a7e73de4969821f93bafee9206c7bc23b2f04286be65bfbd5098182"
+    }
+  ],
+  "gold_accessed": false
+}

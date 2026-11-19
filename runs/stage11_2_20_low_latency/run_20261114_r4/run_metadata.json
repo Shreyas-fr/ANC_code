@@ -1,0 +1,55 @@
+{
+  "stage": "11.2.20",
+  "scope": "synthetic software-only profiling and event simulation; no hardware or benchmark audio",
+  "seed": 26052,
+  "environment": {
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "numpy": "1.26.4",
+    "torch": "2.14.1",
+    "device": "cpu",
+    "threads": 1
+  },
+  "command": [
+    "/Users/shreyasdivekar/Documents/anc sih/pc_venv/bin/python",
+    "experiments/stage11_2_20_low_latency/run_stage11_2_20.py",
+    "--output-dir",
+    "runs/stage11_2_20_low_latency/run_20261114_r4",
+    "--profile-seconds",
+    "4",
+    "--continuous-seconds",
+    "4"
+  ],
+  "profile_seconds_per_chunk_size": 4,
+  "continuous_seconds_per_queue_profile": 4,
+  "protected_hashes_before": {
+    "step500": "bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27",
+    "fullsubnet": "482615e9709d2d6c10ee0d24f9844ad2da2dae3c0cf897f014839c365917a2e0",
+    "gtcrn": "a630d992cf792daf4ce2bb5bcf9c4d389f740a8f09c6e0971184697fe6371b79",
+    "manifest": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+    "ensemble_summary": "8140618570c6ed8aaf1139b2845b941caed709bc55d1989e4a7b362c0c65d6b5",
+    "ensemble_per_clip": "b1f8ce8b21622672eb744b9ae0b1d7279579908265636ac0fe59e6825b372190",
+    "v10_config": "6fd82652cef2b90375512df15cf028040ac09f9ce353792a4b8ff24e43222b9b",
+    "v10_checkpoint": "57fedd5b608bb7a82e85c7573b0f921f427546a0321cc948182cb1c5695ba40c",
+    "gtcrn_adapter": "ea74cb3286f088fa88859b3121a1a628ce6b459216cefd778627fe4d37f355ab",
+    "step500_tract_archive": "unavailable; expected hash 99e99379e81ecf5a678833912d28418c3cc7fb40345fd4a8fb8f5b82669a559d"
+  },
+  "protected_hashes_after": {
+    "step500": "bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27",
+    "fullsubnet": "482615e9709d2d6c10ee0d24f9844ad2da2dae3c0cf897f014839c365917a2e0",
+    "gtcrn": "a630d992cf792daf4ce2bb5bcf9c4d389f740a8f09c6e0971184697fe6371b79",
+    "manifest": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+    "ensemble_summary": "8140618570c6ed8aaf1139b2845b941caed709bc55d1989e4a7b362c0c65d6b5",
+    "ensemble_per_clip": "b1f8ce8b21622672eb744b9ae0b1d7279579908265636ac0fe59e6825b372190",
+    "v10_config": "6fd82652cef2b90375512df15cf028040ac09f9ce353792a4b8ff24e43222b9b",
+    "v10_checkpoint": "57fedd5b608bb7a82e85c7573b0f921f427546a0321cc948182cb1c5695ba40c",
+    "gtcrn_adapter": "ea74cb3286f088fa88859b3121a1a628ce6b459216cefd778627fe4d37f355ab",
+    "step500_tract_archive": "unavailable; expected hash 99e99379e81ecf5a678833912d28418c3cc7fb40345fd4a8fb8f5b82669a559d"
+  },
+  "git_head": "242e24c6fd803729314a5636d63ae0be235ce2e4",
+  "limitations": [
+    "Event simulation uses measured adapter service durations on this host; it does not execute a concurrent capture thread.",
+    "Playback is a timed sample-rate sink model, not a physical audio device.",
+    "Synthetic input and CPU-only host timings do not establish Raspberry Pi 5 performance or end-to-end acoustic latency.",
+    "No 35 ms compliance claim is made; Stage 11.2.15 gives Step-500 an estimated 49.5\u201354.5 ms physical latency and the GTCRN result does not qualify that DFN3 deployment path."
+  ]
+}

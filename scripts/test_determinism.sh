@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+python3 "$SCRIPT_DIR/legacy_gold_access_guard.py" "$0"
 
 echo "=== DETERMINISM TEST ==="
 

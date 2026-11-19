@@ -1,0 +1,27 @@
+{
+  "id": "shreyasdivekar/dfn3-v3-1-sih-training",
+  "id_no": 139455139,
+  "title": "DFN3 V3 1 SIH Training",
+  "code_file": "dfn3-v3-1-sih-training.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "keywords": [
+    "gpu"
+  ],
+  "dataset_sources": [
+    "shreyasdivekar/anc-sih-training-data",
+    "panavpayappagoudar/sih-26-processed-audio",
+    "shreyasdivekar/sih26052-canonical-exclusions"
+  ],
+  "kernel_sources": [
+    "shreyasdivekar/deepfilternet3-hknt-anc"
+  ],
+  "competition_sources": [],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:2757e0c7d1e0a9cb43da657b97e223c321a98f5014bdf64f44f2f6b083ad2b2f",
+  "machine_shape": "NvidiaTeslaT4"
+}

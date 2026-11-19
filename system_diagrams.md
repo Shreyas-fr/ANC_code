@@ -1,6 +1,8 @@
 # Antigravity ANC System Diagrams
 
-This document outlines the architecture, data pipeline, and deployment flows for the Polar-D neural noise suppression system.
+> **Historical Polar-D prototype diagrams.** These diagrams do not represent the current deployed DeepFilterNet3 Step-500 block-window chain or its measured latency. Use [MASTER_SIH_COMPLIANCE.md](MASTER_SIH_COMPLIANCE.md) for current architecture and deployment evidence.
+
+This document preserves the earlier Polar-D architecture, data-pipeline, and embedded deployment concepts.
 
 ## 1. Technical Flow (Polar-D Architecture)
 

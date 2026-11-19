@@ -1,0 +1,169 @@
+{
+  "checkpoint": "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/sih26052_rpi_deployment_audit/runs/step500_from_pi.pt",
+  "checkpoint_sha256": "bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27",
+  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "atten_lim_db": null,
+  "post_gain_db": -1.1,
+  "count": 590,
+  "criteria": {
+    "output_snr_db_gt": 15.0,
+    "stoi_gt": 0.85,
+    "pesq_wb_gt": 2.5
+  },
+  "overall": {
+    "mean": {
+      "snr_db": 11.340396452462647,
+      "si_sdr_db": 12.362880880560878,
+      "stoi": 0.8846902527567158,
+      "pesq_wb": 2.232526993751526,
+      "count": 590,
+      "pass_rate": {
+        "snr_gt_15_db": 0.21864406779661016,
+        "stoi_gt_0_85": 0.7576271186440678,
+        "pesq_gt_2_5": 0.35084745762711866,
+        "all_three": 0.17796610169491525,
+        "valid_counts": {
+          "snr": 590,
+          "stoi": 590,
+          "pesq": 590,
+          "all_three": 590
+        }
+      }
+    }
+  },
+  "strata": {
+    "-10": {
+      "snr_db": 6.204864362277986,
+      "si_sdr_db": 2.5594604028561725,
+      "stoi": 0.677401068309107,
+      "pesq_wb": 1.3855106751124064,
+      "count": 30,
+      "pass_rate": {
+        "snr_gt_15_db": 0.0,
+        "stoi_gt_0_85": 0.2,
+        "pesq_gt_2_5": 0.0,
+        "all_three": 0.0,
+        "valid_counts": {
+          "snr": 30,
+          "stoi": 30,
+          "pesq": 30,
+          "all_three": 30
+        }
+      }
+    },
+    "-5": {
+      "snr_db": 8.842196119360079,
+      "si_sdr_db": 8.119305410942045,
+      "stoi": 0.803801428576643,
+      "pesq_wb": 1.688903636402554,
+      "count": 63,
+      "pass_rate": {
+        "snr_gt_15_db": 0.07936507936507936,
+        "stoi_gt_0_85": 0.4126984126984127,
+        "pesq_gt_2_5": 0.09523809523809523,
+        "all_three": 0.031746031746031744,
+        "valid_counts": {
+          "snr": 63,
+          "stoi": 63,
+          "pesq": 63,
+          "all_three": 63
+        }
+      }
+    },
+    "0": {
+      "snr_db": 9.798379332275793,
+      "si_sdr_db": 9.764914952214571,
+      "stoi": 0.8562895508752201,
+      "pesq_wb": 1.8586305930064275,
+      "count": 117,
+      "pass_rate": {
+        "snr_gt_15_db": 0.06837606837606838,
+        "stoi_gt_0_85": 0.6495726495726496,
+        "pesq_gt_2_5": 0.1111111111111111,
+        "all_three": 0.042735042735042736,
+        "valid_counts": {
+          "snr": 117,
+          "stoi": 117,
+          "pesq": 117,
+          "all_three": 117
+        }
+      }
+    },
+    "5": {
+      "snr_db": 11.088983913801613,
+      "si_sdr_db": 11.741752568037954,
+      "stoi": 0.8907131034902214,
+      "pesq_wb": 2.146601016504051,
+      "count": 137,
+      "pass_rate": {
+        "snr_gt_15_db": 0.0948905109489051,
+        "stoi_gt_0_85": 0.8175182481751825,
+        "pesq_gt_2_5": 0.24817518248175183,
+        "all_three": 0.06569343065693431,
+        "valid_counts": {
+          "snr": 137,
+          "stoi": 137,
+          "pesq": 137,
+          "all_three": 137
+        }
+      }
+    },
+    "10": {
+      "snr_db": 12.719371044413565,
+      "si_sdr_db": 14.443218058784657,
+      "stoi": 0.9291003779550211,
+      "pesq_wb": 2.5037333472701144,
+      "count": 121,
+      "pass_rate": {
+        "snr_gt_15_db": 0.2727272727272727,
+        "stoi_gt_0_85": 0.9256198347107438,
+        "pesq_gt_2_5": 0.5041322314049587,
+        "all_three": 0.2066115702479339,
+        "valid_counts": {
+          "snr": 121,
+          "stoi": 121,
+          "pesq": 121,
+          "all_three": 121
+        }
+      }
+    },
+    "15": {
+      "snr_db": 14.130082987686555,
+      "si_sdr_db": 17.41955182090287,
+      "stoi": 0.951125174272221,
+      "pesq_wb": 2.835458737473155,
+      "count": 86,
+      "pass_rate": {
+        "snr_gt_15_db": 0.5116279069767442,
+        "stoi_gt_0_85": 0.9302325581395349,
+        "pesq_gt_2_5": 0.7209302325581395,
+        "all_three": 0.4418604651162791,
+        "valid_counts": {
+          "snr": 86,
+          "stoi": 86,
+          "pesq": 86,
+          "all_three": 86
+        }
+      }
+    },
+    "20": {
+      "snr_db": 14.661039143965654,
+      "si_sdr_db": 19.693713155971924,
+      "stoi": 0.960395659064747,
+      "pesq_wb": 3.0799825522634716,
+      "count": 36,
+      "pass_rate": {
+        "snr_gt_15_db": 0.7222222222222222,
+        "stoi_gt_0_85": 0.9722222222222222,
+        "pesq_gt_2_5": 0.8611111111111112,
+        "all_three": 0.7222222222222222,
+        "valid_counts": {
+          "snr": 36,
+          "stoi": 36,
+          "pesq": 36,
+          "all_three": 36
+        }
+      }
+    }
+  }
+}

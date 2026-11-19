@@ -1,0 +1,123 @@
+{
+  "verdict_components": {
+    "checkpoint_sha256": "a630d992cf792daf4ce2bb5bcf9c4d389f740a8f09c6e0971184697fe6371b79",
+    "strict_state_load": "PASS",
+    "synthetic_trial_count": 30,
+    "all_lengths_match": true,
+    "all_allclose": true,
+    "input_ring_within_fft_plus_internal_push": true,
+    "input_ring_bound_samples": 576,
+    "session_isolation_allclose": true,
+    "invalid_input_rejected_without_state_change": true,
+    "oversized_chunk_rejected_without_state_change": true
+  },
+  "host": {
+    "os": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.14.7",
+    "torch": "2.14.1",
+    "numpy": "1.26.4",
+    "soundfile": "0.14.0",
+    "device": "CPU",
+    "torch_num_threads": 1,
+    "peak_process_rss_bytes": 236879872,
+    "model_load_seconds_host": 0.032762000104412436
+  },
+  "audio": {
+    "sample_rate_hz": 16000,
+    "channels": 1,
+    "stft_n_fft": 512,
+    "hop_samples": 256,
+    "window": "periodic sqrt Hann",
+    "reference_center": true
+  },
+  "numerical_tolerance_frozen_before_run": {
+    "atol": 1e-05,
+    "rtol": 1e-05
+  },
+  "boundary_radius_samples": 128,
+  "long_session_soak": {
+    "seconds_requested": 20.0,
+    "frames_processed": 1250,
+    "wall_seconds_host": 2.768612083978951,
+    "state_summary": {
+      "input_samples_seen": 320000,
+      "frames_seen": 1250,
+      "next_frame_center": 320000,
+      "next_output_sample": 319744,
+      "conv_cache_frames": {
+        "4498065456": 2,
+        "4497823760": 4,
+        "4497826640": 10,
+        "4497833040": 10,
+        "4498342288": 4,
+        "4498343888": 2
+      },
+      "attention_gru_state_shapes": [
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ]
+      ],
+      "inter_gru_state_shapes": [
+        [
+          1,
+          33,
+          16
+        ],
+        [
+          1,
+          33,
+          16
+        ]
+      ],
+      "input_ring_samples": 257,
+      "ola_ring_samples": 256,
+      "max_input_ring_samples": 513,
+      "max_ola_ring_samples": 512,
+      "session_closed": false
+    }
+  },
+  "experiment_wall_seconds": 10.356179125024937,
+  "pooled_chunk_profile": {
+    "chunks": 1956,
+    "mean_execution_ms": 3.4618480248278645,
+    "p95_execution_ms": 6.280114554101601,
+    "p99_execution_ms": 22.714129334781322,
+    "deadline_misses": 6,
+    "python_alloc_delta_mean_bytes": 1453.2218813905931,
+    "max_input_ring_samples": 576,
+    "max_istft_overlap_ring_samples": 512,
+    "max_output_queue_samples": 0
+  },
+  "gold_accessed": false,
+  "canonical_benchmark_run": false,
+  "training_performed": false,
+  "pi_accessed": false
+}

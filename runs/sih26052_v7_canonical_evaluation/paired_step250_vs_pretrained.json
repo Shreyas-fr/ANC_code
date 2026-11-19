@@ -1,0 +1,280 @@
+{
+  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "clip_count": 590,
+  "reference": "antigravity/runs/sih26052_dfn3_canonical_pretrained/per_clip.csv",
+  "candidate": "kaggle_output/dfn3_v7_sih26052/canonical_eval_step250/per_clip.csv",
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 26052,
+  "criteria": {
+    "output_snr_db_gt": 15.0,
+    "stoi_gt": 0.85,
+    "pesq_wb_gt": 2.5
+  },
+  "candidate_overall": {
+    "count": 590,
+    "means": {
+      "snr_db": {
+        "n": 590,
+        "mean": 12.71440612835981
+      },
+      "si_sdr_db": {
+        "n": 590,
+        "mean": 11.372305569097215
+      },
+      "stoi": {
+        "n": 590,
+        "mean": 0.8693765685313904
+      },
+      "pesq_wb": {
+        "n": 590,
+        "mean": 2.1535530167110895
+      }
+    },
+    "pass_counts": {
+      "snr_gt_15_db": 212,
+      "stoi_gt_0_85": 422,
+      "pesq_gt_2_5": 188,
+      "all_three": 147
+    }
+  },
+  "paired_deltas": {
+    "snr_db": {
+      "mean_candidate_minus_reference": 1.1076314451867662,
+      "ci95_low": 0.9192962559805252,
+      "ci95_high": 1.2890046661896306
+    },
+    "si_sdr_db": {
+      "mean_candidate_minus_reference": 0.4838244580321205,
+      "ci95_low": 0.27287013153002954,
+      "ci95_high": 0.6930469541327143
+    },
+    "stoi": {
+      "mean_candidate_minus_reference": 0.000779427156572954,
+      "ci95_low": -0.0022276210182679487,
+      "ci95_high": 0.003609362906451036
+    },
+    "pesq_wb": {
+      "mean_candidate_minus_reference": 0.026273493039405953,
+      "ci95_low": 0.005830214745917562,
+      "ci95_high": 0.04736982929504524
+    }
+  },
+  "input_snr_ge_9_6_db": {
+    "count": 245,
+    "means": {
+      "snr_db": {
+        "n": 245,
+        "mean": 16.257165019334725
+      },
+      "si_sdr_db": {
+        "n": 245,
+        "mean": 15.620524646018437
+      },
+      "stoi": {
+        "n": 245,
+        "mean": 0.9346900342063521
+      },
+      "pesq_wb": {
+        "n": 245,
+        "mean": 2.624224727494376
+      }
+    },
+    "pass_counts": {
+      "snr_gt_15_db": 156,
+      "stoi_gt_0_85": 225,
+      "pesq_gt_2_5": 145,
+      "all_three": 123
+    }
+  },
+  "by_target_snr": {
+    "-10": {
+      "count": 30,
+      "means": {
+        "snr_db": {
+          "n": 30,
+          "mean": 5.074608565780062
+        },
+        "si_sdr_db": {
+          "n": 30,
+          "mean": -1.063014580048192
+        },
+        "stoi": {
+          "n": 30,
+          "mean": 0.6201030394492972
+        },
+        "pesq_wb": {
+          "n": 30,
+          "mean": 1.299399447441101
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 5,
+        "pesq_gt_2_5": 0,
+        "all_three": 0
+      }
+    },
+    "-5": {
+      "count": 63,
+      "means": {
+        "snr_db": {
+          "n": 63,
+          "mean": 8.744930792343402
+        },
+        "si_sdr_db": {
+          "n": 63,
+          "mean": 6.810264994670019
+        },
+        "stoi": {
+          "n": 63,
+          "mean": 0.7688986400106912
+        },
+        "pesq_wb": {
+          "n": 63,
+          "mean": 1.6186356828326272
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 6,
+        "stoi_gt_0_85": 21,
+        "pesq_gt_2_5": 7,
+        "all_three": 2
+      }
+    },
+    "0": {
+      "count": 117,
+      "means": {
+        "snr_db": {
+          "n": 117,
+          "mean": 10.268960879298756
+        },
+        "si_sdr_db": {
+          "n": 117,
+          "mean": 8.750882146117736
+        },
+        "stoi": {
+          "n": 117,
+          "mean": 0.8390637886497476
+        },
+        "pesq_wb": {
+          "n": 117,
+          "mean": 1.8161934084362454
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 13,
+        "stoi_gt_0_85": 68,
+        "pesq_gt_2_5": 11,
+        "all_three": 8
+      }
+    },
+    "5": {
+      "count": 137,
+      "means": {
+        "snr_db": {
+          "n": 137,
+          "mean": 12.153698392646
+        },
+        "si_sdr_db": {
+          "n": 137,
+          "mean": 11.069421015246146
+        },
+        "stoi": {
+          "n": 137,
+          "mean": 0.8810118841169687
+        },
+        "pesq_wb": {
+          "n": 137,
+          "mean": 2.0661280320508637
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 39,
+        "stoi_gt_0_85": 105,
+        "pesq_gt_2_5": 27,
+        "all_three": 16
+      }
+    },
+    "10": {
+      "count": 121,
+      "means": {
+        "snr_db": {
+          "n": 121,
+          "mean": 14.515579553501246
+        },
+        "si_sdr_db": {
+          "n": 121,
+          "mean": 13.696761591829688
+        },
+        "stoi": {
+          "n": 121,
+          "mean": 0.9232220797431845
+        },
+        "pesq_wb": {
+          "n": 121,
+          "mean": 2.4268664042811747
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 62,
+        "stoi_gt_0_85": 108,
+        "pesq_gt_2_5": 59,
+        "all_three": 45
+      }
+    },
+    "15": {
+      "count": 86,
+      "means": {
+        "snr_db": {
+          "n": 86,
+          "mean": 17.272964819112033
+        },
+        "si_sdr_db": {
+          "n": 86,
+          "mean": 16.60785810586178
+        },
+        "stoi": {
+          "n": 86,
+          "mean": 0.9440442239931884
+        },
+        "pesq_wb": {
+          "n": 86,
+          "mean": 2.715306046397187
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 62,
+        "stoi_gt_0_85": 80,
+        "pesq_gt_2_5": 55,
+        "all_three": 49
+      }
+    },
+    "20": {
+      "count": 36,
+      "means": {
+        "snr_db": {
+          "n": 36,
+          "mean": 19.165153215375284
+        },
+        "si_sdr_db": {
+          "n": 36,
+          "mean": 19.071005239016387
+        },
+        "stoi": {
+          "n": 36,
+          "mean": 0.9478251005828648
+        },
+        "pesq_wb": {
+          "n": 36,
+          "mean": 2.969970120324029
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 30,
+        "stoi_gt_0_85": 35,
+        "pesq_gt_2_5": 29,
+        "all_three": 27
+      }
+    }
+  }
+}

@@ -1,0 +1,201 @@
+variant,reference_model,subset,metric,n,mean_candidate_minus_reference,ci95_low,ci95_high,bootstrap_resamples,bootstrap_seed,method_script
+d1_equal_333_raw,step500,all_590,snr_db,590,1.2493889652851506,1.1015026298511166,1.4087319709295,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,step500,target_snr_le_0_db,snr_db,210,0.9443105733801812,0.7348927130933544,1.1453085257813165,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,step500,all_590,si_sdr_db,590,1.43671648912893,1.241564338182545,1.6487575394831473,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,step500,target_snr_le_0_db,si_sdr_db,210,1.4187307303111723,1.0469149243831704,1.822448729066102,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,step500,all_590,stoi,590,0.02133373815129042,0.017984317974362875,0.02521751952259597,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,step500,target_snr_le_0_db,stoi,210,0.03175154767013388,0.02394705773237506,0.04041678345208044,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,step500,all_590,pesq_wb,590,0.3192562418468928,0.29331053979821126,0.34669374686681614,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,step500,target_snr_le_0_db,pesq_wb,210,0.24043709607351393,0.20526385327180227,0.2820494617166973,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,fullsubnet,all_590,snr_db,590,-0.187399940075188,-0.32732657228820056,-0.04980391708339176,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,fullsubnet,target_snr_le_0_db,snr_db,210,0.13005253532443467,-0.04170015100564304,0.32300380967072845,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,fullsubnet,all_590,si_sdr_db,590,0.09962194223385704,-0.044905636601587244,0.25262130437897146,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,fullsubnet,target_snr_le_0_db,si_sdr_db,210,0.41084493392388066,0.19087138837316003,0.6857470591384479,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,fullsubnet,all_590,stoi,590,0.0034480839494054824,0.002082300917423224,0.004922397371017774,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,fullsubnet,target_snr_le_0_db,stoi,210,0.007685325671328836,0.005142372175051573,0.010453983395755906,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,fullsubnet,all_590,pesq_wb,590,0.03820291636353832,0.019461493108232142,0.05794891340247655,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,fullsubnet,target_snr_le_0_db,pesq_wb,210,0.08701756738481067,0.061159926071053465,0.11281485835711161,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,gtcrn,all_590,snr_db,590,0.8726269434413036,0.7180035415811287,1.0253118514196509,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,gtcrn,target_snr_le_0_db,snr_db,210,0.9022360756630121,0.6979026749582745,1.098331983210419,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,gtcrn,all_590,si_sdr_db,590,1.3109050221673582,1.1675049584172605,1.4490285807139898,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,gtcrn,target_snr_le_0_db,si_sdr_db,210,1.3815511049511469,1.1885418850791085,1.5590961190014703,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,gtcrn,all_590,stoi,590,0.024677729383582862,0.022960353009843188,0.026416874823058975,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,gtcrn,target_snr_le_0_db,stoi,210,0.0356420763808544,0.032270511854235226,0.039089782495540785,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_raw,gtcrn,all_590,pesq_wb,590,0.4366136393304599,0.41291287345906436,0.4616887778851945,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_raw,gtcrn,target_snr_le_0_db,pesq_wb,210,0.32327898740768435,0.292198914814563,0.3542740256587664,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,step500,all_590,snr_db,590,1.2800103951412172,1.135153440785067,1.4365753098098464,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,step500,target_snr_le_0_db,snr_db,210,0.9646765439062562,0.7561363063285255,1.1650962821472184,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,step500,all_590,si_sdr_db,590,1.4235281489271803,1.2312756173447483,1.633252930449597,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,step500,target_snr_le_0_db,si_sdr_db,210,1.4127624382803512,1.0476025897385108,1.8103985302971497,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,step500,all_590,stoi,590,0.021245563768433787,0.0179060834379683,0.025108558905858367,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,step500,target_snr_le_0_db,stoi,210,0.03169894636224606,0.023934651848874562,0.04029018125139646,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,step500,all_590,pesq_wb,590,0.3166195091554674,0.2907708186264766,0.3436932480789847,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,step500,target_snr_le_0_db,pesq_wb,210,0.23980485484713598,0.20493639826774598,0.281365301992212,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,fullsubnet,all_590,snr_db,590,-0.15677851021912156,-0.2987996130291258,-0.016625390447049696,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,fullsubnet,target_snr_le_0_db,snr_db,210,0.15041850585050964,-0.02304203847070355,0.3469968965678559,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,fullsubnet,all_590,si_sdr_db,590,0.08643360203210737,-0.0617116804437525,0.2403394911801276,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,fullsubnet,target_snr_le_0_db,si_sdr_db,210,0.4048766418930599,0.1806680505792547,0.6823526239449154,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,fullsubnet,all_590,stoi,590,0.0033599095665488516,0.001967881338793034,0.004867323424420858,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,fullsubnet,target_snr_le_0_db,stoi,210,0.007632724363441017,0.005051022532898555,0.010456008179833082,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,fullsubnet,all_590,pesq_wb,590,0.035566183672112936,0.016831380538011,0.055531695055759556,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,fullsubnet,target_snr_le_0_db,pesq_wb,210,0.08638532615843274,0.060243586060546694,0.1124053957490694,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,gtcrn,all_590,snr_db,590,0.9032483732973698,0.7458175246406978,1.0584359408065163,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,gtcrn,target_snr_le_0_db,snr_db,210,0.9226020461890871,0.7164696835526208,1.1236150037854775,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,gtcrn,all_590,si_sdr_db,590,1.2977166819656085,1.1529056343897695,1.4343738041881486,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,gtcrn,target_snr_le_0_db,si_sdr_db,210,1.375582812920326,1.1811915071290677,1.5525999207520056,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,gtcrn,all_590,stoi,590,0.02458955500072623,0.022873146758718974,0.02631833487499609,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,gtcrn,target_snr_le_0_db,stoi,210,0.03558947507296658,0.032239118502346654,0.0390815039742031,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,gtcrn,all_590,pesq_wb,590,0.4339769066390345,0.4103196633569265,0.45884882329379095,2000,26052,scripts/compare_dfn3_canonical.py
+d1_equal_333_rms_matched,gtcrn,target_snr_le_0_db,pesq_wb,210,0.3226467461813064,0.29206705720651716,0.35333948710135055,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,step500,all_590,snr_db,590,1.5299967039560236,1.3341984586378282,1.7407920890824276,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,step500,target_snr_le_0_db,snr_db,210,1.070035570855338,0.7864877584600095,1.331788757698978,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,step500,all_590,si_sdr_db,590,1.6107826020538962,1.3831250257216046,1.852835328814545,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,step500,target_snr_le_0_db,si_sdr_db,210,1.4687610743453277,1.0456629970898412,1.917836325877832,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,step500,all_590,stoi,590,0.02259473529346832,0.01915272712341376,0.02650583561109181,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,step500,target_snr_le_0_db,stoi,210,0.0323972304526218,0.024175630113707092,0.041410264988711115,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,step500,all_590,pesq_wb,590,0.3570233343011242,0.3281467791128967,0.3876318459238036,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,step500,target_snr_le_0_db,pesq_wb,210,0.24994748944327944,0.2096565196911494,0.29428818374872207,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,fullsubnet,all_590,snr_db,590,0.09320779859568488,0.016395664740319053,0.16687884804105027,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,fullsubnet,target_snr_le_0_db,snr_db,210,0.25577753279959164,0.16218295174048558,0.35950772229200334,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,fullsubnet,all_590,si_sdr_db,590,0.2736880551588235,0.1868833821379193,0.3676282960593753,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,fullsubnet,target_snr_le_0_db,si_sdr_db,210,0.460875277958036,0.31839841803355484,0.6378520803313708,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,fullsubnet,all_590,stoi,590,0.004709081091583386,0.003684275594651043,0.005829328048233343,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,fullsubnet,target_snr_le_0_db,stoi,210,0.008331008453816766,0.006561740333752195,0.010303598293001237,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,fullsubnet,all_590,pesq_wb,590,0.07597000881776972,0.061843469920804944,0.09042216926307994,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,fullsubnet,target_snr_le_0_db,pesq_wb,210,0.09652796075457619,0.07732475233929498,0.11664353624695822,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,gtcrn,all_590,snr_db,590,1.1532346821121764,0.9693403792515732,1.3407054989836886,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,gtcrn,target_snr_le_0_db,snr_db,210,1.0279610731381692,0.7646494564983223,1.2654956884708304,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,gtcrn,all_590,si_sdr_db,590,1.4849711350923247,1.303170596172599,1.6542979579506416,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,gtcrn,target_snr_le_0_db,si_sdr_db,210,1.4315814489853023,1.1687952935479191,1.6655736278647024,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,gtcrn,all_590,stoi,590,0.025938726525760767,0.024130239648166345,0.027795030847257755,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,gtcrn,target_snr_le_0_db,stoi,210,0.03628775916334233,0.03274452545190965,0.03998128593866516,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs60_raw,gtcrn,all_590,pesq_wb,590,0.47438073178469126,0.4473763365412162,0.5023707721698082,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs60_raw,gtcrn,target_snr_le_0_db,pesq_wb,210,0.33278938077744985,0.29816240803116845,0.36572196067798707,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,step500,all_590,snr_db,590,1.4499804243788803,1.272501383306328,1.6416269691115764,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,step500,target_snr_le_0_db,snr_db,210,1.047766711261035,0.7884012730386629,1.2856557244740732,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,step500,all_590,si_sdr_db,590,1.578967648186091,1.3637934938621736,1.8108994844867674,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,step500,target_snr_le_0_db,si_sdr_db,210,1.4867960145375072,1.0846466858848849,1.9222147590722927,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,step500,all_590,stoi,590,0.022553308997514558,0.01909987441884965,0.026470028800651687,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,step500,target_snr_le_0_db,stoi,210,0.032777529144567816,0.024708644410017064,0.041662276720511204,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,step500,all_590,pesq_wb,590,0.3509715591446828,0.3232115792066364,0.3805331525610664,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,step500,target_snr_le_0_db,pesq_wb,210,0.2529508147920881,0.21333543760435922,0.29601313582488464,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,fullsubnet,all_590,snr_db,590,0.013191519018541457,-0.08798551745922735,0.11203672588987804,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,fullsubnet,target_snr_le_0_db,snr_db,210,0.23350867320528837,0.11333797936574001,0.37059546157287004,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,fullsubnet,all_590,si_sdr_db,590,0.24187310129101833,0.1338886855418767,0.3576709322782925,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,fullsubnet,target_snr_le_0_db,si_sdr_db,210,0.47891021815021567,0.3060968915715488,0.6960020951591845,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,fullsubnet,all_590,stoi,590,0.004667654795629627,0.003512303492841082,0.005925755204479472,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,fullsubnet,target_snr_le_0_db,stoi,210,0.008711307145762782,0.0066219001535686335,0.010994656086641129,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,fullsubnet,all_590,pesq_wb,590,0.06991823366132834,0.05401577435812707,0.08651747000419487,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,fullsubnet,target_snr_le_0_db,pesq_wb,210,0.09953128610338484,0.07805191241559528,0.12096734736646925,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,gtcrn,all_590,snr_db,590,1.073218402535033,0.9035205386147364,1.2449692623008144,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,gtcrn,target_snr_le_0_db,snr_db,210,1.005692213543866,0.7671267676682113,1.2220579045500435,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,gtcrn,all_590,si_sdr_db,590,1.4531561812245193,1.2882902861347607,1.60954390091171,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,gtcrn,target_snr_le_0_db,si_sdr_db,210,1.4496163891774818,1.2204799057448557,1.6574897723128716,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,gtcrn,all_590,stoi,590,0.025897300229807005,0.02409201177413238,0.027727657599924866,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,gtcrn,target_snr_le_0_db,stoi,210,0.036668057855288344,0.03308865481959191,0.040252028624150935,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs50_raw,gtcrn,all_590,pesq_wb,590,0.46832895662824986,0.44250141002869203,0.4950419815415042,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs50_raw,gtcrn,target_snr_le_0_db,pesq_wb,210,0.3357927061262585,0.301969485722837,0.368409707177253,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,step500,all_590,snr_db,590,1.5742580239262904,1.3575914269055864,1.8011176519517063,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,step500,target_snr_le_0_db,snr_db,210,1.0596872468478205,0.7542634437365714,1.3406731994152707,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,step500,all_590,si_sdr_db,590,1.6024116290432038,1.3603123383083766,1.8539246593034107,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,step500,target_snr_le_0_db,si_sdr_db,210,1.4094252331086112,0.9784419874815261,1.8719412766175094,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,step500,all_590,stoi,590,0.022168084655256947,0.018734516421009526,0.02607442020917746,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,step500,target_snr_le_0_db,stoi,210,0.03136258703744712,0.023023248974012214,0.040503599643139765,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,step500,all_590,pesq_wb,590,0.3529679037756839,0.3238959204140356,0.3845248334135039,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,step500,target_snr_le_0_db,pesq_wb,210,0.23845248279117404,0.19684230144534792,0.28415294391768314,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,fullsubnet,all_590,snr_db,590,0.1374691185659517,0.08250158320767023,0.18979422139713484,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,fullsubnet,target_snr_le_0_db,snr_db,210,0.24542920879207392,0.177961661668226,0.31879100526020426,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,fullsubnet,all_590,si_sdr_db,590,0.26531708214813104,0.19927969057686928,0.33493939013901375,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,fullsubnet,target_snr_le_0_db,si_sdr_db,210,0.4015394367213197,0.2873148815070846,0.5439273017025807,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,fullsubnet,all_590,stoi,590,0.00428243045337201,0.003424390812369983,0.005254768928021778,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,fullsubnet,target_snr_le_0_db,stoi,210,0.007296365038642081,0.0058209357768233,0.008923392430109311,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,fullsubnet,all_590,pesq_wb,590,0.07191457829232943,0.060037968345617844,0.0842930547514204,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,fullsubnet,target_snr_le_0_db,pesq_wb,210,0.08503295410247076,0.06767441481351852,0.1033159774399939,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,gtcrn,all_590,snr_db,590,1.1974960020824432,1.0030230253489583,1.4009874224798053,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,gtcrn,target_snr_le_0_db,snr_db,210,1.0176127491306515,0.7291775278240528,1.2743867371124304,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,gtcrn,all_590,si_sdr_db,590,1.476600162081632,1.277312405127155,1.6583194511367971,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,gtcrn,target_snr_le_0_db,si_sdr_db,210,1.3722456077485856,1.082441287884703,1.6321221992042452,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,gtcrn,all_590,stoi,590,0.025512075887549387,0.023688211378175898,0.027390711586587603,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,gtcrn,target_snr_le_0_db,stoi,210,0.03525311574816764,0.03152500033774124,0.039147574440076036,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d2_fs70_raw,gtcrn,all_590,pesq_wb,590,0.470325301259251,0.4424856784232592,0.4986520249257653,2000,26052,scripts/compare_dfn3_canonical.py
+d2_fs70_raw,gtcrn,target_snr_le_0_db,pesq_wb,210,0.3212943741253444,0.28581555870317277,0.3547885529484067,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,step500,all_590,snr_db,590,1.2489799326816637,1.1202758601080416,1.381358891045674,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,step500,target_snr_le_0_db,snr_db,210,0.9423681767743946,0.7488142766000861,1.1206426258989746,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,step500,all_590,si_sdr_db,590,1.4324173917696894,1.2623085044265978,1.6089667990805172,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,step500,target_snr_le_0_db,si_sdr_db,210,1.4127832241704537,1.081928434336064,1.7790431705715133,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,step500,all_590,stoi,590,0.02175940947792518,0.018777928958575836,0.02514488913509892,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,step500,target_snr_le_0_db,stoi,210,0.032483901596545635,0.025019963003248363,0.040915396360472096,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,step500,all_590,pesq_wb,590,0.33122634705850634,0.30614154051926173,0.35666424309298145,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,step500,target_snr_le_0_db,pesq_wb,210,0.24586282798222134,0.21056367517936797,0.2851329881662414,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,fullsubnet,all_590,snr_db,590,-0.18780897267867502,-0.32940614849807903,-0.050223748797759066,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,fullsubnet,target_snr_le_0_db,snr_db,210,0.12811013871864807,-0.04244706293417093,0.3043256294811407,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,fullsubnet,all_590,si_sdr_db,590,0.09532284487461663,-0.04250279250068194,0.23366374430000614,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,fullsubnet,target_snr_le_0_db,si_sdr_db,210,0.40489742778316234,0.20686645502772874,0.6482519024737531,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,fullsubnet,all_590,stoi,590,0.0038737552760402393,0.0028259776621591443,0.004943917002605569,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,fullsubnet,target_snr_le_0_db,stoi,210,0.008417679597740594,0.0061981787746403635,0.010822329074458877,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,fullsubnet,all_590,pesq_wb,590,0.05017302157515186,0.032165562242774635,0.0682386462415679,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,fullsubnet,target_snr_le_0_db,pesq_wb,210,0.09244329929351806,0.06992183253878638,0.11568798313538234,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,gtcrn,all_590,snr_db,590,0.8722179108378165,0.6551922513441525,1.0908151429336024,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,gtcrn,target_snr_le_0_db,snr_db,210,0.9002936790572255,0.6101929421568841,1.1822705201239643,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,gtcrn,all_590,si_sdr_db,590,1.3066059248081177,1.0815623985874807,1.5174527711895198,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,gtcrn,target_snr_le_0_db,si_sdr_db,210,1.3756035988104285,1.0705267413920518,1.6523888393132407,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,gtcrn,all_590,stoi,590,0.02510340071021762,0.02294327238297648,0.02728138343773676,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,gtcrn,target_snr_le_0_db,stoi,210,0.036374430307266156,0.03217892192292711,0.040698720282499094,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_fullsubnet_5050_raw,gtcrn,all_590,pesq_wb,590,0.4485837445420734,0.41950889035806815,0.47851077825841254,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_fullsubnet_5050_raw,gtcrn,target_snr_le_0_db,pesq_wb,210,0.3287047193163917,0.2904250783721606,0.36468207962456206,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,step500,all_590,snr_db,590,0.6526510108759525,0.5358730104008832,0.7702872107767463,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,step500,target_snr_le_0_db,snr_db,210,0.5223885256556492,0.3601087281566648,0.6852926827173057,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,step500,all_590,si_sdr_db,590,0.8203628068058276,0.6496781704572563,1.006992466704396,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,step500,target_snr_le_0_db,si_sdr_db,210,0.8918345965273236,0.565022258929363,1.2438861238449086,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,step500,all_590,stoi,590,0.01242093046119979,0.009461282265958305,0.015832860929100703,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,step500,target_snr_le_0_db,stoi,210,0.019765054883657464,0.013283813879398898,0.027073831555474704,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,step500,all_590,pesq_wb,590,0.12088117235797946,0.10083635512044874,0.14181267351922344,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,step500,target_snr_le_0_db,pesq_wb,210,0.10092961561112176,0.07439599719785508,0.13009430536202019,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,fullsubnet,all_590,snr_db,590,-0.7841378944843864,-0.9962284661172246,-0.5765099163148535,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,fullsubnet,target_snr_le_0_db,snr_db,210,-0.2918695124000972,-0.5634433237677124,0.013350104433296164,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,fullsubnet,all_590,si_sdr_db,590,-0.5167317400892452,-0.7177542160703057,-0.29454414853648014,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,fullsubnet,target_snr_le_0_db,si_sdr_db,210,-0.11605119985996781,-0.43142766770856134,0.26822669255796466,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,fullsubnet,all_590,stoi,590,-0.0054647237406851455,-0.00736782572411371,-0.003474440648407132,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,fullsubnet,target_snr_le_0_db,stoi,210,-0.004301167115147576,-0.008398933776880167,-4.1935129158496775e-05,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,fullsubnet,all_590,pesq_wb,590,-0.160172153125375,-0.18654856719202914,-0.13265500161607396,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,fullsubnet,target_snr_le_0_db,pesq_wb,210,-0.052489913077581496,-0.08959400817042305,-0.015051053890160192,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,gtcrn,all_590,snr_db,590,0.2758889890321051,0.12886373458958922,0.4168002163253521,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,gtcrn,target_snr_le_0_db,snr_db,210,0.48031402793848027,0.30541863362389127,0.6482925807858778,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,gtcrn,all_590,si_sdr_db,590,0.6945513398442561,0.5638162144747111,0.8186668405467806,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,gtcrn,target_snr_le_0_db,si_sdr_db,210,0.8546549711672984,0.6854985833179444,1.0272490200734377,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,gtcrn,all_590,stoi,590,0.015764921693492234,0.01438046686710552,0.017146150486115216,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,gtcrn,target_snr_le_0_db,stoi,210,0.023655583594377985,0.020832300492977397,0.02648803112370189,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_step500_gtcrn_5050_raw,gtcrn,all_590,pesq_wb,590,0.23823856984154654,0.21873870393482306,0.2576844637424259,2000,26052,scripts/compare_dfn3_canonical.py
+d3_step500_gtcrn_5050_raw,gtcrn,target_snr_le_0_db,pesq_wb,210,0.18377150694529215,0.15203044154814313,0.21261831960507796,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,step500,all_590,snr_db,590,1.3027682264682734,1.0735123606883268,1.5507736958758134,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,step500,target_snr_le_0_db,snr_db,210,0.8220548247676376,0.5019395728422529,1.1278211239943785,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,step500,all_590,si_sdr_db,590,1.271930662972927,1.0170035907360815,1.553389919984723,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,step500,target_snr_le_0_db,si_sdr_db,210,1.1087294035763087,0.6503257010135758,1.5883988027733988,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,step500,all_590,stoi,590,0.0178894989149991,0.014240316399312189,0.02196263422117476,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,step500,target_snr_le_0_db,stoi,210,0.025070209455512034,0.016456768188225696,0.034333826585008824,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,step500,all_590,pesq_wb,590,0.29113600516723376,0.2582199494161848,0.3246535877504591,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,step500,target_snr_le_0_db,pesq_wb,210,0.17860962606611705,0.13529542413495835,0.2252390903376397,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,fullsubnet,all_590,snr_db,590,-0.13402067889206543,-0.246836265340992,-0.02943929435854807,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,fullsubnet,target_snr_le_0_db,snr_db,210,0.007796786711891028,-0.1301846197890504,0.16454685814210612,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,fullsubnet,all_590,si_sdr_db,590,-0.06516388392214574,-0.19111360095134047,0.08071937425935977,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,fullsubnet,target_snr_le_0_db,si_sdr_db,210,0.10084360718901755,-0.09731479638660828,0.3321728857245112,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,fullsubnet,all_590,stoi,590,3.844713114167174e-06,-0.0010675012403832693,0.0013674928906230919,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,fullsubnet,target_snr_le_0_db,stoi,210,0.0010039874567069993,-0.0010022319085489948,0.003028060318820399,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,fullsubnet,all_590,pesq_wb,590,0.01008267968387927,-0.004887309599730928,0.025784770523087454,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,fullsubnet,target_snr_le_0_db,pesq_wb,210,0.025190097377413796,0.0025291610473678226,0.04928513966855547,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,gtcrn,all_590,snr_db,590,0.9260062046244261,0.7921917995089854,1.0591027085507327,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,gtcrn,target_snr_le_0_db,snr_db,210,0.7799803270504686,0.5863578383754259,0.9426648206844085,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,gtcrn,all_590,si_sdr_db,590,1.1461191960113553,1.0272702963881017,1.2534321957995511,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,gtcrn,target_snr_le_0_db,si_sdr_db,210,1.0715497782162837,0.8953776088685137,1.2272809101700137,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,gtcrn,all_590,stoi,590,0.02123349014729154,0.019753561826582656,0.022695201539093317,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,gtcrn,target_snr_le_0_db,stoi,210,0.028960738166232562,0.02586916809091716,0.03207452177495773,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d3_fullsubnet_gtcrn_5050_raw,gtcrn,all_590,pesq_wb,590,0.4084934026508008,0.38583237517183105,0.4329641982003794,2000,26052,scripts/compare_dfn3_canonical.py
+d3_fullsubnet_gtcrn_5050_raw,gtcrn,target_snr_le_0_db,pesq_wb,210,0.26145151740028744,0.23350824497994924,0.2903637144253367,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,d1_equal_333_raw,all_590,snr_db,590,0.03062142985606641,0.024550332608942765,0.03663168042617231,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,d1_equal_333_raw,target_snr_le_0_db,snr_db,210,0.02036597052607496,0.010660430889006207,0.032629475379704856,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,d1_equal_333_raw,all_590,si_sdr_db,590,-0.013188340201749638,-0.017013536763552856,-0.009302648697392795,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,d1_equal_333_raw,target_snr_le_0_db,si_sdr_db,210,-0.0059682920308208025,-0.011102218574326634,-0.0004365160651795827,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,d1_equal_333_raw,all_590,stoi,590,-8.817438285663119e-05,-0.00011518936759184776,-6.108901555671951e-05,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,d1_equal_333_raw,target_snr_le_0_db,stoi,210,-5.2601307887819345e-05,-0.0001114331653476148,9.574870821838276e-06,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,d1_equal_333_raw,all_590,pesq_wb,590,-0.002636732691425388,-0.0032318231665481954,-0.0019897885595337823,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method
+d1_equal_333_rms_matched,d1_equal_333_raw,target_snr_le_0_db,pesq_wb,210,-0.0006322412263779413,-0.0016844191011928377,0.0007410974020049685,2000,26052,scripts/summarize_stage8_ensembles.py using the comparator's paired percentile-mean method

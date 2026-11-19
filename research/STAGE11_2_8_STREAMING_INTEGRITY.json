@@ -1,0 +1,76 @@
+{
+  "test1_waveform_equivalence": {
+    "lag_samples": 0,
+    "max_abs_err": 0.02527755592018366,
+    "mae": 0.0016534465549060593,
+    "rmse": 0.002923236078023434,
+    "sdr_db": 54.907978298432184,
+    "correlation": 0.9841837967353845
+  },
+  "test2_scalability": {
+    "0.1s": {
+      "elapsed_s": 0.3603910410311073,
+      "rtf": 3.603910410311073,
+      "is_finite": true,
+      "status": "PASS"
+    },
+    "0.5s": {
+      "elapsed_s": 0.3876152921002358,
+      "rtf": 0.7752305842004716,
+      "is_finite": true,
+      "status": "PASS"
+    },
+    "1.0s": {
+      "elapsed_s": 0.4252254579914734,
+      "rtf": 0.4252254579914734,
+      "is_finite": true,
+      "status": "PASS"
+    },
+    "5.0s": {
+      "elapsed_s": 0.6896354589844123,
+      "rtf": 0.13792709179688245,
+      "is_finite": true,
+      "status": "PASS"
+    },
+    "10.0s": {
+      "elapsed_s": 1.0281197499716654,
+      "rtf": 0.10281197499716654,
+      "is_finite": true,
+      "status": "PASS"
+    },
+    "30.0s": {
+      "elapsed_s": 2.3721492500044405,
+      "rtf": 0.07907164166681468,
+      "is_finite": true,
+      "status": "PASS"
+    }
+  },
+  "test3_utterance_isolation": {
+    "iso_energy": 0.0,
+    "seq_energy": 0.0,
+    "bleed_energy_100ms": 0.0,
+    "finding": "Sequential CLI invocation preserves recurrent states across files; separate session instantiation required for clean resets."
+  },
+  "test4_edge_cases": {
+    "silence": {
+      "max_amp": 0.0,
+      "status": "PASS"
+    },
+    "saturation": {
+      "peak": 1.0,
+      "status": "PASS"
+    },
+    "low_snr_neg30db": {
+      "status": "PASS"
+    },
+    "high_snr_pos40db": {
+      "status": "PASS"
+    },
+    "non_finite_nan_inf": {
+      "exit_code": 0,
+      "output_nan_count": 0,
+      "output_inf_count": 0,
+      "status": "PASS"
+    }
+  }
+}

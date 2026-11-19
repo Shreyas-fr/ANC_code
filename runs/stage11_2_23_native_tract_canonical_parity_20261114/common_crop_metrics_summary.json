@@ -1,0 +1,84 @@
+{
+  "scope": "diagnostic SNR and SI-SDR only, common 47,520-sample crop; same active-speech power/SI-SDR formulas as existing evaluator; full 590 rows",
+  "overall": {
+    "n": 590,
+    "native_output_snr_db": 11.475264533143664,
+    "python_output_snr_db_same_crop": 13.463961462567791,
+    "delta_snr_db": -1.9886969294241257,
+    "native_si_sdr_db": 10.065126967949535,
+    "python_si_sdr_db_same_crop": 12.351755592654488,
+    "delta_si_sdr_db": -2.2866286247049525
+  },
+  "target_snr_bins": {
+    "-10.0": {
+      "n": 30,
+      "native_output_snr_db": 6.237635687834274,
+      "python_output_snr_db_same_crop": 6.555609510333308,
+      "delta_snr_db": -0.31797382249903355,
+      "native_si_sdr_db": 2.105770304999806,
+      "python_si_sdr_db_same_crop": 2.5051241006140943,
+      "delta_si_sdr_db": -0.39935379561428846
+    },
+    "-5.0": {
+      "n": 63,
+      "native_output_snr_db": 8.852250849208884,
+      "python_output_snr_db_same_crop": 9.932297746141964,
+      "delta_snr_db": -1.080046896933077,
+      "native_si_sdr_db": 6.706752125888346,
+      "python_si_sdr_db_same_crop": 8.061648680802033,
+      "delta_si_sdr_db": -1.3548965549136853
+    },
+    "0.0": {
+      "n": 117,
+      "native_output_snr_db": 9.841347541605424,
+      "python_output_snr_db_same_crop": 11.01331294530816,
+      "delta_snr_db": -1.1719654037027354,
+      "native_si_sdr_db": 8.408665704622855,
+      "python_si_sdr_db_same_crop": 9.747376533736963,
+      "delta_si_sdr_db": -1.3387108291141108
+    },
+    "5.0": {
+      "n": 137,
+      "native_output_snr_db": 11.284441327190214,
+      "python_output_snr_db_same_crop": 12.805998155212325,
+      "delta_snr_db": -1.5215568280221117,
+      "native_si_sdr_db": 9.959846243951095,
+      "python_si_sdr_db_same_crop": 11.726533563270097,
+      "delta_si_sdr_db": -1.7666873193190045
+    },
+    "10.0": {
+      "n": 121,
+      "native_output_snr_db": 12.969731493638392,
+      "python_output_snr_db_same_crop": 15.18085486721555,
+      "delta_snr_db": -2.2111233735771547,
+      "native_si_sdr_db": 11.988816701451478,
+      "python_si_sdr_db_same_crop": 14.453080649833382,
+      "delta_si_sdr_db": -2.4642639483819058
+    },
+    "15.0": {
+      "n": 86,
+      "native_output_snr_db": 14.27382444539777,
+      "python_output_snr_db_same_crop": 17.892786298138024,
+      "delta_snr_db": -3.618961852740253,
+      "native_si_sdr_db": 13.238614856029423,
+      "python_si_sdr_db_same_crop": 17.409055091528188,
+      "delta_si_sdr_db": -4.170440235498763
+    },
+    "20.0": {
+      "n": 36,
+      "native_output_snr_db": 14.758129533117398,
+      "python_output_snr_db_same_crop": 19.51921658777663,
+      "delta_snr_db": -4.7610870546592325,
+      "native_si_sdr_db": 14.312386018137026,
+      "python_si_sdr_db_same_crop": 19.764404462241814,
+      "delta_si_sdr_db": -5.452018444104785
+    }
+  },
+  "not_reported": [
+    "STOI",
+    "PESQ-WB",
+    "joint-pass",
+    "confidence intervals"
+  ],
+  "why_not_reported": "Current environments do not have pystoi/PESQ or the evaluator dependency stack; no packages were installed. Do not compare these cropped means directly with the original 3-second canonical table."
+}

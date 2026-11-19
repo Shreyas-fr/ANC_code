@@ -1,0 +1,23 @@
+{
+  "SMOKE": false,
+  "USE_DP": true,
+  "MODEL_INIT": "pretrained",
+  "NUM_STEPS": 6000,
+  "ALLOW_NO_EXCLUSIONS": false,
+  "BATCH_SIZE": 16,
+  "LR_MAX": 1e-05,
+  "LR_MIN": 5e-07,
+  "WARMUP_STEPS": 500,
+  "GRAD_CLIP": 0.5,
+  "VAL_EVERY": 500,
+  "SAVE_EVERY": 500,
+  "MAX_KEEP_CKPT": 3,
+  "LAMBDA_SISDR": 0.3,
+  "DF_SR": 48000,
+  "CLIP_LEN_SAMPLES": 144000,
+  "SEED": 26052,
+  "RESUME_PATH": null,
+  "SIH_DS": "/kaggle/input/datasets/panavpayappagoudar/sih-26-processed-audio",
+  "CANONICAL_EXCLUSIONS_PATH": "/kaggle/input/sih26052-canonical-exclusions/canonical_exclusions.csv",
+  "OUT_DIR": "/kaggle/working/dfn3_v3_4_output"
+}
