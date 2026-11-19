@@ -68,7 +68,7 @@ pub fn compute_synthesis_window(analysis_window: &[f32], hop_size: usize) -> Vec
     let mut denom = vec![0.0f32; size];
 
     // Compute sum of squared overlapping analysis windows in steady state
-    let num_overlaps = (size + hop_size - 1) / hop_size;
+    let num_overlaps = size.div_ceil(hop_size);
     let center_frame = num_overlaps;
 
     for frame in 0..(num_overlaps * 2 + 1) {

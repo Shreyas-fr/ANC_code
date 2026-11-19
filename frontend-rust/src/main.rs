@@ -7,14 +7,7 @@
 
 use clap::Parser;
 use eframe::egui;
-
-mod app;
-mod audio;
-mod dsp;
-mod network;
-mod ui;
-
-use app::AncDashboardApp;
+use anc_frontend::AncDashboardApp;
 
 #[derive(Parser, Debug)]
 #[command(

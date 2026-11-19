@@ -7,7 +7,7 @@ pub mod waveforms;
 
 pub use diagnostics::DiagnosticsPanel;
 pub use event_feed::{EventFeed, EventSeverity};
-pub use metrics::{MetricCard, StatusBadge};
+pub use metrics::{MetricCard, StatusBadge, VadBeacon};
 pub use spectrum_view::SpectrumView;
 pub use theme::Theme;
 pub use waveforms::RollingWaveform;

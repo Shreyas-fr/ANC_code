@@ -53,6 +53,7 @@ fn main() {
             sample_rate: args.sample_rate as f32,
             ..Default::default()
         },
+        ..Default::default()
     };
 
     let mut pipeline = TacticalAncPipeline::new(pipeline_config);

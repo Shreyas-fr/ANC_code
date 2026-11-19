@@ -77,7 +77,7 @@ impl EdgeSender {
     /// Sends telemetry JSON data to the mission control operator.
     pub fn send_telemetry(&self, telemetry: &EdgeTelemetry) -> io::Result<()> {
         let json = serde_json::to_vec(telemetry)
-            .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+            .map_err(io::Error::other)?;
         self.sock_telemetry.send_to(&json, self.target_telemetry_addr)?;
         Ok(())
     }

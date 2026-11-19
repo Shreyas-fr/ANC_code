@@ -6,7 +6,8 @@
 use num_complex::Complex32;
 
 use crate::dsp::{
-    CausalAgc, CausalMvdrBeamformer, MvdrConfig, SoftLimiter, StreamingStft, WindowType,
+    CausalAgc, CausalMvdrBeamformer, MvdrConfig, SoftLimiter, StreamingStft, TransientBlanker,
+    TransientConfig, WindowType,
 };
 use crate::model::{EnhancerStats, SpeechEnhancer};
 
@@ -17,6 +18,8 @@ pub struct PipelineConfig {
     pub hop_size: usize,
     pub sample_rate: f32,
     pub window_type: WindowType,
+    pub enable_transient_blanker: bool,
+    pub transient_config: TransientConfig,
     pub enable_mvdr: bool,
     pub enable_agc: bool,
     pub enable_limiter: bool,
@@ -30,6 +33,8 @@ impl Default for PipelineConfig {
             hop_size: 256,
             sample_rate: 16000.0,
             window_type: WindowType::Hann,
+            enable_transient_blanker: true,
+            transient_config: TransientConfig::default(),
             enable_mvdr: true,
             enable_agc: true,
             enable_limiter: true,
@@ -41,13 +46,17 @@ impl Default for PipelineConfig {
 /// End-to-end Tactical Speech Enhancement Pipeline.
 pub struct TacticalAncPipeline {
     config: PipelineConfig,
+    transient_mic1: TransientBlanker,
+    transient_mic2: TransientBlanker,
     stft_mic1: StreamingStft,
     stft_mic2: StreamingStft,
     beamformer: CausalMvdrBeamformer,
     agc: CausalAgc,
     limiter: SoftLimiter,
 
-    // Preallocated complex spectrum scratch buffers
+    // Preallocated scratch buffers (zero heap allocations in process_hop)
+    mic1_scratch: Vec<f32>,
+    mic2_scratch: Vec<f32>,
     spec_mic1: Vec<Complex32>,
     spec_mic2: Vec<Complex32>,
 }
@@ -59,6 +68,8 @@ impl TacticalAncPipeline {
         let hop_size = config.hop_size;
         let num_bins = n_fft / 2 + 1;
 
+        let transient_mic1 = TransientBlanker::new(config.transient_config.clone());
+        let transient_mic2 = TransientBlanker::new(config.transient_config.clone());
         let stft_mic1 = StreamingStft::new(n_fft, hop_size, config.window_type);
         let stft_mic2 = StreamingStft::new(n_fft, hop_size, config.window_type);
         let beamformer = CausalMvdrBeamformer::new(config.mvdr_config.clone());
@@ -67,11 +78,15 @@ impl TacticalAncPipeline {
 
         Self {
             config,
+            transient_mic1,
+            transient_mic2,
             stft_mic1,
             stft_mic2,
             beamformer,
             agc,
             limiter,
+            mic1_scratch: vec![0.0f32; hop_size],
+            mic2_scratch: vec![0.0f32; hop_size],
             spec_mic1: vec![Complex32::default(); num_bins],
             spec_mic2: vec![Complex32::default(); num_bins],
         }
@@ -79,15 +94,17 @@ impl TacticalAncPipeline {
 
     /// Resets all internal DSP histories.
     pub fn reset(&mut self) {
+        self.transient_mic1.reset();
+        self.transient_mic2.reset();
         self.stft_mic1.reset();
         self.stft_mic2.reset();
         self.beamformer.reset();
         self.agc.reset();
     }
 
-    /// Algorithmic delay in samples introduced by framing.
+    /// Algorithmic delay in samples introduced by streaming overlap-add framing.
     pub fn algorithmic_delay_samples(&self) -> usize {
-        self.config.n_fft
+        self.config.hop_size
     }
 
     /// Processes a single stereo hop (exactly `hop_size` samples for mic1 and mic2).
@@ -106,14 +123,30 @@ impl TacticalAncPipeline {
         assert_eq!(mic1_in.len(), self.config.hop_size);
         assert_eq!(out.len(), self.config.hop_size);
 
+        // 0. Concussion / Impulsive Transient Blanking (Zero Allocation)
+        let mic1_slice = if self.config.enable_transient_blanker {
+            self.mic1_scratch.copy_from_slice(mic1_in);
+            self.transient_mic1.process(&mut self.mic1_scratch);
+            &self.mic1_scratch[..]
+        } else {
+            mic1_in
+        };
+
         // 1. STFT Analysis on Mic 1
-        self.stft_mic1.analyze(mic1_in, &mut self.spec_mic1);
+        self.stft_mic1.analyze(mic1_slice, &mut self.spec_mic1);
 
         // 2. Spatial MVDR Beamforming (if mic2 is provided and enabled)
         if self.config.enable_mvdr {
             if let Some(m2) = mic2_in {
                 if m2.len() == self.config.hop_size {
-                    self.stft_mic2.analyze(m2, &mut self.spec_mic2);
+                    let mic2_slice = if self.config.enable_transient_blanker {
+                        self.mic2_scratch.copy_from_slice(m2);
+                        self.transient_mic2.process(&mut self.mic2_scratch);
+                        &self.mic2_scratch[..]
+                    } else {
+                        m2
+                    };
+                    self.stft_mic2.analyze(mic2_slice, &mut self.spec_mic2);
                     self.beamformer.process_frame(&mut self.spec_mic1, &self.spec_mic2);
                 }
             }

@@ -1,0 +1,105 @@
+name: Continuous Integration & Latency Gate Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  lint-and-format:
+    name: Lint & Code Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check Code Formatting
+        run: cargo fmt --all -- --check
+
+      - name: Clippy Linter
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+  test-workspace:
+    name: Workspace Unit & Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install System Audio & Graphics Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libx11-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run Workspace Tests
+        run: cargo test --workspace --verbose
+
+  latency-gate:
+    name: Real-Time Latency & RTF Gate Verification (<= 35.0 ms)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Verify Low-Latency 256/128 Gate (<= 35 ms)
+        run: |
+          cargo run --release -p anc-rust --bin anc-bench -- --n-fft 256 --hop-size 128 --iterations 1000
+
+      - name: Verify Asymmetric Low-Latency 512/128 Gate (<= 35 ms)
+        run: |
+          cargo run --release -p anc-rust --bin anc-bench -- --window asymmetric --hop-size 128 --n-fft 512 --iterations 1000
+
+  build-release-artifacts:
+    name: Build Production Release Binaries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libx11-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Compile Optimized Workspace Release Binaries
+        run: cargo build --release --workspace
+
+      - name: Verify Executable Presence
+        run: |
+          test -f target/release/anc-edge
+          test -f target/release/anc-bench
+          test -f target/release/anc-process
+          test -f target/release/anc-frontend
+          echo "All 4 standalone binaries compiled successfully."

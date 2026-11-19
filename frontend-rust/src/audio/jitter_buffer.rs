@@ -73,8 +73,8 @@ impl JitterBuffer {
         }
         self.count += samples_to_write.len();
 
-        // Trim back to target buffer size if overflowed
-        if self.count > self.max_samples {
+        // Trim back to target buffer size if at or above capacity cap
+        if self.count >= self.max_samples {
             let drop = self.count - self.target_samples;
             self.read_pos = (self.read_pos + drop) % self.capacity;
             self.count = self.target_samples;

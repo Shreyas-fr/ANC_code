@@ -11,7 +11,7 @@ use std::time::{Duration, Instant};
 
 use anc_rust::dsp::{MvdrConfig, WindowType};
 use anc_rust::metrics::{read_system_temperature_c, PerformanceProfiler};
-use anc_rust::model::{SpeechEnhancer, TractEnhancer};
+use anc_rust::model::{AdaptiveSpectralEnhancer, SpeechEnhancer, TractEnhancer};
 use anc_rust::network::{EdgeSender, EdgeTelemetry, AUDIO_FRAME_SAMPLES, DEFAULT_AUDIO_PORT, DEFAULT_RAW_INPUT_PORT, DEFAULT_TELEMETRY_PORT};
 use anc_rust::streaming::{PipelineConfig, PlayoutScheduler, TacticalAncPipeline};
 
@@ -79,6 +79,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             mic_distance_m: args.mic_distance_m,
             ..Default::default()
         },
+        ..Default::default()
     };
 
     let mut pipeline = TacticalAncPipeline::new(pipeline_config);
@@ -87,12 +88,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("Loading neural enhancement ONNX model: {}", path);
         Box::new(TractEnhancer::load_from_onnx(path, "Tract-ONNX-Engine", 257, 32, 0)?)
     } else {
-        println!("Initializing pure Rust real-time spectral filter engine.");
-        Box::new(TractEnhancer::new_fallback("Analytic-Wiener-Engine", 257, 32))
+        println!("Initializing Decision-Directed Adaptive ERB Spectral Engine.");
+        Box::new(AdaptiveSpectralEnhancer::new(257, 32, 16000.0))
     };
 
     // Chain delay in packets (e.g. 512 samples framing = 2 packets)
-    let chain_delay_packets = (pipeline.algorithmic_delay_samples() + AUDIO_FRAME_SAMPLES - 1) / AUDIO_FRAME_SAMPLES;
+    let chain_delay_packets = pipeline.algorithmic_delay_samples().div_ceil(AUDIO_FRAME_SAMPLES);
     let mut scheduler = PlayoutScheduler::new(chain_delay_packets, args.jitter_packets, AUDIO_FRAME_SAMPLES);
 
     println!("Chain delay: {} packets ({:.1} ms) | Jitter budget: {} packets ({:.1} ms)",

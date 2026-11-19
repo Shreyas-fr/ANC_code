@@ -9,8 +9,11 @@ pub mod model;
 pub mod network;
 pub mod streaming;
 
-pub use dsp::{CausalAgc, CausalMvdrBeamformer, MvdrConfig, SoftLimiter, StreamingStft, WindowType};
+pub use dsp::{
+    CausalAgc, CausalDereverberator, CausalMvdrBeamformer, DereverbConfig, MvdrConfig, SoftLimiter,
+    StreamingStft, TransientBlanker, TransientConfig, WindowType,
+};
 pub use metrics::{compute_active_speech_level, compute_explicit_snr, compute_si_sdr, PerformanceProfiler};
-pub use model::{EnhancerStats, FrozenEnsemble, SpeechEnhancer, TractEnhancer};
+pub use model::{AdaptiveSpectralEnhancer, EnhancerStats, FrozenEnsemble, SpeechEnhancer, TractEnhancer};
 pub use network::{AudioPacket, AudioReceiver, EdgeSender, EdgeTelemetry, TelemetryReceiver};
 pub use streaming::{AudioConsumer, AudioProducer, PipelineConfig, PlayoutScheduler, TacticalAncPipeline};

@@ -7,7 +7,7 @@ use std::time::Instant;
 
 use anc_rust::dsp::{MvdrConfig, WindowType};
 use anc_rust::metrics::{compute_explicit_snr, compute_si_sdr};
-use anc_rust::model::TractEnhancer;
+use anc_rust::model::{AdaptiveSpectralEnhancer, SpeechEnhancer, TractEnhancer};
 use anc_rust::streaming::{PipelineConfig, TacticalAncPipeline};
 
 #[derive(Parser, Debug)]
@@ -80,16 +80,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             sample_rate,
             ..Default::default()
         },
+        ..Default::default()
     };
 
     let mut pipeline = TacticalAncPipeline::new(pipeline_config);
 
-    let mut model = if let Some(ref onnx_path) = args.onnx_model {
+    let mut model: Box<dyn SpeechEnhancer> = if let Some(ref onnx_path) = args.onnx_model {
         println!("Loading neural model from ONNX: {:?}", onnx_path);
-        TractEnhancer::load_from_onnx(onnx_path, "Tract-ONNX", args.n_fft / 2 + 1, 32, 0)?
+        Box::new(TractEnhancer::load_from_onnx(onnx_path, "Tract-ONNX", args.n_fft / 2 + 1, 32, 0)?)
     } else {
-        println!("Using Analytic Wiener filter fallback engine.");
-        TractEnhancer::new_fallback("Analytic-Fallback", args.n_fft / 2 + 1, 32)
+        println!("Using Decision-Directed Adaptive ERB Spectral Enhancer.");
+        Box::new(AdaptiveSpectralEnhancer::new(args.n_fft / 2 + 1, 32, sample_rate))
     };
 
     let mut enhanced_output = Vec::with_capacity(total_frames);
@@ -104,7 +105,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let m1_slice = &mic1[start..end];
         let m2_slice = mic2.as_ref().map(|m| &m[start..end]);
 
-        let _ = pipeline.process_hop(m1_slice, m2_slice, &mut model, &mut hop_out)?;
+        let _ = pipeline.process_hop(m1_slice, m2_slice, model.as_mut(), &mut hop_out)?;
         enhanced_output.extend_from_slice(&hop_out);
     }
 

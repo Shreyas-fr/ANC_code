@@ -2,10 +2,12 @@
 
 pub mod ensemble;
 pub mod filter;
+pub mod spectral;
 pub mod tract_engine;
 pub mod traits;
 
 pub use ensemble::FrozenEnsemble;
 pub use filter::DeepComplexFilter;
+pub use spectral::AdaptiveSpectralEnhancer;
 pub use tract_engine::TractEnhancer;
 pub use traits::{EnhancerStats, ModelError, SpeechEnhancer};
