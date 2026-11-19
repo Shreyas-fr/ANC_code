@@ -1,0 +1,15 @@
+{
+  "n": 590,
+  "means": {
+    "snr_db": 13.463961462567791,
+    "si_sdr_db": 12.351755592654484,
+    "stoi": 0.8844084842369077,
+    "pesq_wb": 2.2389076818854123
+  },
+  "joint_passes": 161,
+  "joint_rate": 0.27288135593220336,
+  "metric_function": "unchanged scripts/evaluate_dfn3_canonical.py::metrics",
+  "samples_per_clip": 47520,
+  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "independence": "reused development benchmark; not independent validation"
+}

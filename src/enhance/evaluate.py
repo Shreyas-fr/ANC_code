@@ -1,10 +1,7 @@
 import torch
 import torchaudio
 import argparse
-try:
-    from pesq import pesq
-except ImportError:
-    pesq = None
+from pesq import pesq
 from pystoi import stoi
 import numpy as np
 
@@ -42,17 +39,13 @@ def evaluate_metrics(clean_path, noisy_path, enhanced_path, sr=16000):
     enhanced_stoi = stoi(clean_np, enhanced_np, sr, extended=False)
     
     # PESQ
-    if pesq is not None:
-        try:
-            noisy_pesq = pesq(sr, clean_np, noisy_np, 'wb')
-            enhanced_pesq = pesq(sr, clean_np, enhanced_np, 'wb')
-        except Exception as e:
-            noisy_pesq = 0.0
-            enhanced_pesq = 0.0
-            print(f"PESQ error (likely audio too short or fully silent): {e}")
-    else:
-        noisy_pesq = float('nan')
-        enhanced_pesq = float('nan')
+    try:
+        noisy_pesq = pesq(sr, clean_np, noisy_np, 'wb')
+        enhanced_pesq = pesq(sr, clean_np, enhanced_np, 'wb')
+    except Exception as e:
+        noisy_pesq = 0.0
+        enhanced_pesq = 0.0
+        print(f"PESQ error (likely audio too short or fully silent): {e}")
         
     # SI-SDR
     noisy_sisdr = si_sdr(clean_np, noisy_np)

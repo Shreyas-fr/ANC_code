@@ -1,0 +1,18 @@
+{
+  "id": "shreyasdivekar/dfn3-v10-a1-sisdr001",
+  "title": "DeepFilterNet3 V10 A1 SISDR001",
+  "code_file": "deepfilternet3_v10_a1_sisdr001.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "shreyasdivekar/anc-sih-training-data",
+    "panavpayappagoudar/sih-26-processed-audio",
+    "shreyasdivekar/sih26052-canonical-exclusions"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}

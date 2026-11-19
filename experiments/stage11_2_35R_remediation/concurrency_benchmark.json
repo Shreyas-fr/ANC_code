@@ -1,0 +1,37 @@
+{
+  "benchmark_metadata": {
+    "num_frames": 10000,
+    "audio_duration_seconds": 160.000,
+    "total_wall_clock_ms": 18566.643,
+    "real_time_factor": 0.116042,
+    "throughput_fps": 538.60
+  },
+  "memory_footprint": {
+    "cold_start_rss_mb": 10.73,
+    "cold_start_rss_mib": 10.23,
+    "post_init_rss_mb": 124.70,
+    "post_init_rss_mib": 118.92,
+    "post_warmup_rss_mb": 128.97,
+    "post_warmup_rss_mib": 123.00,
+    "steady_state_rss_mb": 130.65,
+    "steady_state_rss_mib": 124.59,
+    "steady_state_growth_bytes": 0
+  },
+  "latency_statistics_ms": {
+    "fullsubnet_candidate_b": {
+      "mean": 1.8540, "p50": 1.7970, "p95": 1.9630, "p99": 2.3420, "max": 36.8270
+    },
+    "gtcrn_streaming": {
+      "mean": 0.5659, "p50": 0.5460, "p95": 0.6570, "p99": 0.8670, "max": 7.9120
+    },
+    "dfn3_native_tract": {
+      "mean": 1.0642, "p50": 1.0300, "p95": 1.1880, "p99": 1.4470, "max": 22.3820
+    },
+    "mixer_worker": {
+      "mean": 1.8565, "p50": 1.8000, "p95": 1.9650, "p99": 2.3480, "max": 37.3230
+    },
+    "inter_thread_jitter": {
+      "mean": 1.8564, "p50": 1.8000, "p95": 1.9650, "p99": 2.3480, "max": 37.3220
+    }
+  }
+}

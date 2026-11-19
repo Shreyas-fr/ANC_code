@@ -1,0 +1,7 @@
+[package]
+name = "stage25-rubato-resample"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rubato = "=0.14.1"

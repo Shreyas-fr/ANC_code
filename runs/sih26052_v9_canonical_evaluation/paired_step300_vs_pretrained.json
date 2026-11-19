@@ -1,0 +1,280 @@
+{
+  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "clip_count": 590,
+  "reference": "antigravity/runs/sih26052_dfn3_canonical_pretrained/per_clip.csv",
+  "candidate": "kaggle_output/dfn3_v9_sih26052/canonical_eval_step300/per_clip.csv",
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 26052,
+  "criteria": {
+    "output_snr_db_gt": 15.0,
+    "stoi_gt": 0.85,
+    "pesq_wb_gt": 2.5
+  },
+  "candidate_overall": {
+    "count": 590,
+    "means": {
+      "snr_db": {
+        "n": 590,
+        "mean": 12.796659429389914
+      },
+      "si_sdr_db": {
+        "n": 590,
+        "mean": 11.49973934301775
+      },
+      "stoi": {
+        "n": 590,
+        "mean": 0.871452670796575
+      },
+      "pesq_wb": {
+        "n": 590,
+        "mean": 2.166345954547494
+      }
+    },
+    "pass_counts": {
+      "snr_gt_15_db": 214,
+      "stoi_gt_0_85": 424,
+      "pesq_gt_2_5": 186,
+      "all_three": 144
+    }
+  },
+  "paired_deltas": {
+    "snr_db": {
+      "mean_candidate_minus_reference": 1.1898847462168702,
+      "ci95_low": 1.003326017249226,
+      "ci95_high": 1.3700859661872444
+    },
+    "si_sdr_db": {
+      "mean_candidate_minus_reference": 0.6112582319526544,
+      "ci95_low": 0.41059047625526296,
+      "ci95_high": 0.8096191022704644
+    },
+    "stoi": {
+      "mean_candidate_minus_reference": 0.0028555294217574587,
+      "ci95_low": -8.540914194512221e-05,
+      "ci95_high": 0.005631989307697812
+    },
+    "pesq_wb": {
+      "mean_candidate_minus_reference": 0.03906643087581053,
+      "ci95_low": 0.018986766368655834,
+      "ci95_high": 0.06053328790402007
+    }
+  },
+  "input_snr_ge_9_6_db": {
+    "count": 245,
+    "means": {
+      "snr_db": {
+        "n": 245,
+        "mean": 16.30751299378208
+      },
+      "si_sdr_db": {
+        "n": 245,
+        "mean": 15.69453933791698
+      },
+      "stoi": {
+        "n": 245,
+        "mean": 0.9359704140971872
+      },
+      "pesq_wb": {
+        "n": 245,
+        "mean": 2.6410555250790653
+      }
+    },
+    "pass_counts": {
+      "snr_gt_15_db": 156,
+      "stoi_gt_0_85": 226,
+      "pesq_gt_2_5": 142,
+      "all_three": 120
+    }
+  },
+  "by_target_snr": {
+    "-10": {
+      "count": 30,
+      "means": {
+        "snr_db": {
+          "n": 30,
+          "mean": 5.1775490678357405
+        },
+        "si_sdr_db": {
+          "n": 30,
+          "mean": -0.6887149459473426
+        },
+        "stoi": {
+          "n": 30,
+          "mean": 0.6223332128580673
+        },
+        "pesq_wb": {
+          "n": 30,
+          "mean": 1.319407304128011
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 5,
+        "pesq_gt_2_5": 0,
+        "all_three": 0
+      }
+    },
+    "-5": {
+      "count": 63,
+      "means": {
+        "snr_db": {
+          "n": 63,
+          "mean": 8.90261738690851
+        },
+        "si_sdr_db": {
+          "n": 63,
+          "mean": 7.015314688221028
+        },
+        "stoi": {
+          "n": 63,
+          "mean": 0.7720776480280047
+        },
+        "pesq_wb": {
+          "n": 63,
+          "mean": 1.6238428619172838
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 6,
+        "stoi_gt_0_85": 21,
+        "pesq_gt_2_5": 7,
+        "all_three": 2
+      }
+    },
+    "0": {
+      "count": 117,
+      "means": {
+        "snr_db": {
+          "n": 117,
+          "mean": 10.380999570283116
+        },
+        "si_sdr_db": {
+          "n": 117,
+          "mean": 8.913308701962565
+        },
+        "stoi": {
+          "n": 117,
+          "mean": 0.8420933356186708
+        },
+        "pesq_wb": {
+          "n": 117,
+          "mean": 1.8248365302371163
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 13,
+        "stoi_gt_0_85": 68,
+        "pesq_gt_2_5": 11,
+        "all_three": 8
+      }
+    },
+    "5": {
+      "count": 137,
+      "means": {
+        "snr_db": {
+          "n": 137,
+          "mean": 12.225840372924912
+        },
+        "si_sdr_db": {
+          "n": 137,
+          "mean": 11.171878048050663
+        },
+        "stoi": {
+          "n": 137,
+          "mean": 0.883128400525823
+        },
+        "pesq_wb": {
+          "n": 137,
+          "mean": 2.0770387632133316
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 41,
+        "stoi_gt_0_85": 106,
+        "pesq_gt_2_5": 28,
+        "all_three": 16
+      }
+    },
+    "10": {
+      "count": 121,
+      "means": {
+        "snr_db": {
+          "n": 121,
+          "mean": 14.584646221934419
+        },
+        "si_sdr_db": {
+          "n": 121,
+          "mean": 13.784716687742664
+        },
+        "stoi": {
+          "n": 121,
+          "mean": 0.9244743036416775
+        },
+        "pesq_wb": {
+          "n": 121,
+          "mean": 2.443757194132844
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 62,
+        "stoi_gt_0_85": 109,
+        "pesq_gt_2_5": 58,
+        "all_three": 44
+      }
+    },
+    "15": {
+      "count": 86,
+      "means": {
+        "snr_db": {
+          "n": 86,
+          "mean": 17.309400514389736
+        },
+        "si_sdr_db": {
+          "n": 86,
+          "mean": 16.66882984650873
+        },
+        "stoi": {
+          "n": 86,
+          "mean": 0.9448009317252227
+        },
+        "pesq_wb": {
+          "n": 86,
+          "mean": 2.737250883911931
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 62,
+        "stoi_gt_0_85": 80,
+        "pesq_gt_2_5": 53,
+        "all_three": 47
+      }
+    },
+    "20": {
+      "count": 36,
+      "means": {
+        "snr_db": {
+          "n": 36,
+          "mean": 19.193610500675607
+        },
+        "si_sdr_db": {
+          "n": 36,
+          "mean": 19.129676074216484
+        },
+        "stoi": {
+          "n": 36,
+          "mean": 0.9505112652788471
+        },
+        "pesq_wb": {
+          "n": 36,
+          "mean": 2.975039240386751
+        }
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 30,
+        "stoi_gt_0_85": 35,
+        "pesq_gt_2_5": 29,
+        "all_three": 27
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "source_tag": "v0.5.6",
+  "source_commit": "978576aa8400552a4ce9730838c635aa30db5e61",
+  "runtime_binary_sha256": "8ded76940c54e76920df6821e75f1289ed50887f5cab0b45463a5e9b969fb8df",
+  "selected_ids": [
+    0,
+    1,
+    2,
+    4,
+    6,
+    7,
+    33,
+    162,
+    436
+  ],
+  "one_fresh_process_per_clip": true,
+  "resampler": "Stage11.2.26 polyphase function, unchanged copied into this candidate",
+  "return_codes": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "protected_gold_accessed": false,
+  "network_or_install": false
+}

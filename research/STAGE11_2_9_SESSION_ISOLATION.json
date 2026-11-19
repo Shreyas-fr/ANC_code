@@ -1,0 +1,37 @@
+{
+  "seq1_continuous": {
+    "status": "PASS",
+    "rms": 0.060340860986668354
+  },
+  "seq2_isolation": {
+    "max_abs_diff_reset": 0.0,
+    "max_abs_diff_noreset": 0.32257080078125,
+    "status": "PASS"
+  },
+  "seq3_silence_after_reset": {
+    "energy_with_reset": 0.0,
+    "energy_without_reset": 0.0010124417021870613,
+    "status": "PASS"
+  },
+  "seq4_continuous_equivalence_post_reset": {
+    "max_abs_diff": 0.0,
+    "status": "PASS"
+  },
+  "seq5_multi_utterance_batch": {
+    "n_clips": 10,
+    "clip_max_diffs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "worst_diff": 0.0,
+    "status": "PASS"
+  }
+}

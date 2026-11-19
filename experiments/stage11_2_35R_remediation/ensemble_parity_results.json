@@ -1,0 +1,661 @@
+{
+  "evaluation_metadata": {
+    "stage": "Stage 11.2.35R Remediated Ensemble Evaluation",
+    "host": "Apple M4 (macOS 15.1 ARM64)",
+    "total_clips": 10,
+    "total_evaluated_samples": 480000,
+    "ensemble_weights": "0.15 DFN3 + 0.70 FullSubNet Candidate B + 0.15 GTCRN"
+  },
+  "aggregate_parity_vs_causal_ref": {
+    "mean_sdr_db": 71.38376474785389,
+    "min_sdr_db": 59.412930073474456,
+    "max_sdr_db": 79.11564498239157,
+    "mean_rmse": 1.2334209688568998e-05,
+    "max_abs_error": 2.1979212760925293e-05,
+    "pcm16_total_samples": 480000,
+    "pcm16_identical_samples": 311576,
+    "pcm16_identical_pct": 64.91166666666666,
+    "pcm16_within_1_count_samples": 480000,
+    "pcm16_within_1_count_pct": 100.0,
+    "pcm16_ge_2_count_samples": 0,
+    "pcm16_ge_2_count_pct": 0.0
+  },
+  "aggregate_quality_vs_clean": {
+    "mean_snr_db": 11.809353619477996,
+    "mean_si_sdr_db": 10.66516218931358,
+    "mean_stoi": 0.875471569728916,
+    "mean_pesq_wb": 2.1765485525131227
+  },
+  "per_clip_results": [
+    {
+      "val_index": 0,
+      "manifest_info": {
+        "target_snr": -10.0,
+        "dataset_origin": "EXISTING_PROXY",
+        "clean_hash": "e64b2456b43cda402c906a7c1bb95d67ac79ad9faafcb4da56aa630a3adfa1ad",
+        "noisy_hash": "d6654c7efa6ef5fbf099740893d6191c0c029aecc17cc6d796624bbd356acb1a"
+      },
+      "sample_count": 48000,
+      "duration_seconds": 3.0,
+      "peak_amplitude": 0.4427712559700012,
+      "clipping_sample_count": 0,
+      "waveform_parity_vs_causal_ref": {
+        "sdr_db": 73.0181129604087,
+        "rmse": 1.234038809435087e-05,
+        "max_abs_err": 2.187490463256836e-05,
+        "mean_bias": 1.0686079890547263e-05,
+        "lag_samples": 0,
+        "gain_ratio": 0.999997245459087
+      },
+      "pcm16_parity_vs_causal_ref": {
+        "total_samples": 48000,
+        "identical_samples": 31227,
+        "identical_pct": 65.05625,
+        "within_1_count_samples": 48000,
+        "within_1_count_pct": 100.0,
+        "ge_2_count_samples": 0,
+        "ge_2_count_pct": 0.0,
+        "max_count_diff": 1
+      },
+      "waveform_parity_vs_stage8_baseline": {
+        "sdr_db": 17.33305284115645,
+        "rmse": 0.007957732638289654,
+        "max_abs_err": 0.060720041394233704,
+        "mean_bias": -7.030098602015755e-06,
+        "lag_samples": 0,
+        "gain_ratio": 0.9436073471115479
+      },
+      "pcm16_parity_vs_stage8_baseline": {
+        "total_samples": 48000,
+        "identical_samples": 180,
+        "identical_pct": 0.375,
+        "within_1_count_samples": 568,
+        "within_1_count_pct": 1.1833333333333333,
+        "ge_2_count_samples": 47432,
+        "ge_2_count_pct": 98.81666666666666,
+        "max_count_diff": 1990
+      },
+      "quality_metrics_vs_clean": {
+        "remediated_native": {
+          "snr_db": 4.251613969413633,
+          "si_sdr_db": 1.296304898416424,
+          "stoi": 0.7857743246250717,
+          "pesq_wb": 1.2201493978500366
+        },
+        "stage8_baseline": {
+          "snr_db": 3.9228531041716113,
+          "si_sdr_db": 0.7181126548267642,
+          "stoi": 0.7867038986282702,
+          "pesq_wb": 1.2024610042572021
+        }
+      }
+    },
+    {
+      "val_index": 1,
+      "manifest_info": {
+        "target_snr": 15.0,
+        "dataset_origin": "IoBT_GUNFIRE",
+        "clean_hash": "4e90a48b77f2374e57601e9e20ea12f039991493f6a16a48f9361b85f6ecc430",
+        "noisy_hash": "e85a99463082498f84f48750560525e311a183de85d742114d71d3e20f44aa30"
+      },
+      "sample_count": 48000,
+      "duration_seconds": 3.0,
+      "peak_amplitude": 0.2494310587644577,
+      "clipping_sample_count": 0,
+      "waveform_parity_vs_causal_ref": {
+        "sdr_db": 66.7924244037994,
+        "rmse": 1.2327572183732614e-05,
+        "max_abs_err": 2.140318974852562e-05,
+        "mean_bias": 1.0675403495251127e-05,
+        "lag_samples": 0,
+        "gain_ratio": 0.9999994508597629
+      },
+      "pcm16_parity_vs_causal_ref": {
+        "total_samples": 48000,
+        "identical_samples": 31283,
+        "identical_pct": 65.17291666666667,
+        "within_1_count_samples": 48000,
+        "within_1_count_pct": 100.0,
+        "ge_2_count_samples": 0,
+        "ge_2_count_pct": 0.0,
+        "max_count_diff": 1
+      },
+      "waveform_parity_vs_stage8_baseline": {
+        "sdr_db": 24.820011838763886,
+        "rmse": 0.0015277914959283157,
+        "max_abs_err": 0.014614209532737732,
+        "mean_bias": 9.106295610173732e-06,
+        "lag_samples": 0,
+        "gain_ratio": 1.0125905859423856
+      },
+      "pcm16_parity_vs_stage8_baseline": {
+        "total_samples": 48000,
+        "identical_samples": 2238,
+        "identical_pct": 4.6625,
+        "within_1_count_samples": 6326,
+        "within_1_count_pct": 13.179166666666667,
+        "ge_2_count_samples": 41674,
+        "ge_2_count_pct": 86.82083333333334,
+        "max_count_diff": 479
+      },
+      "quality_metrics_vs_clean": {
+        "remediated_native": {
+          "snr_db": 4.19531349565998,
+          "si_sdr_db": 1.7690644075472868,
+          "stoi": 0.9288350354996842,
+          "pesq_wb": 1.7105989456176758
+        },
+        "stage8_baseline": {
+          "snr_db": 3.854137078439061,
+          "si_sdr_db": 1.1443025662572512,
+          "stoi": 0.9161453381284901,
+          "pesq_wb": 1.6057980060577393
+        }
+      }
+    },
+    {
+      "val_index": 3,
+      "manifest_info": {
+        "target_snr": 0.0,
+        "dataset_origin": "EXISTING_PROXY",
+        "clean_hash": "d08fc37b0d6d673083678c08e2b60675e5795e85ca0ed735df2b47e845041722",
+        "noisy_hash": "ce8d0dac6d16ec06e81e0f22b1f80bd38f819d6e91f0b19fd9e86acaf9c5f9d2"
+      },
+      "sample_count": 48000,
+      "duration_seconds": 3.0,
+      "peak_amplitude": 0.8530560731887817,
+      "clipping_sample_count": 0,
+      "waveform_parity_vs_causal_ref": {
+        "sdr_db": 75.01377687046053,
+        "rmse": 1.2290560162530999e-05,
+        "max_abs_err": 2.161320298910141e-05,
+        "mean_bias": 1.0632989664504425e-05,
+        "lag_samples": 0,
+        "gain_ratio": 1.000000738711976
+      },
+      "pcm16_parity_vs_causal_ref": {
+        "total_samples": 48000,
+        "identical_samples": 31322,
+        "identical_pct": 65.25416666666666,
+        "within_1_count_samples": 48000,
+        "within_1_count_pct": 100.0,
+        "ge_2_count_samples": 0,
+        "ge_2_count_pct": 0.0,
+        "max_count_diff": 1
+      },
+      "waveform_parity_vs_stage8_baseline": {
+        "sdr_db": 22.665514122730613,
+        "rmse": 0.005057288169440731,
+        "max_abs_err": 0.054366898257285357,
+        "mean_bias": 3.2004434323102616e-05,
+        "lag_samples": 0,
+        "gain_ratio": 1.007088100066586
+      },
+      "pcm16_parity_vs_stage8_baseline": {
+        "total_samples": 48000,
+        "identical_samples": 493,
+        "identical_pct": 1.0270833333333333,
+        "within_1_count_samples": 1527,
+        "within_1_count_pct": 3.18125,
+        "ge_2_count_samples": 46473,
+        "ge_2_count_pct": 96.81875,
+        "max_count_diff": 1781
+      },
+      "quality_metrics_vs_clean": {
+        "remediated_native": {
+          "snr_db": 10.35419221621039,
+          "si_sdr_db": 8.142689082568857,
+          "stoi": 0.6252447247259029,
+          "pesq_wb": 2.072840690612793
+        },
+        "stage8_baseline": {
+          "snr_db": 10.239528488228514,
+          "si_sdr_db": 8.024000248362963,
+          "stoi": 0.6214304396231198,
+          "pesq_wb": 2.0502636432647705
+        }
+      }
+    },
+    {
+      "val_index": 4,
+      "manifest_info": {
+        "target_snr": 5.0,
+        "dataset_origin": "IoBT_GUNFIRE",
+        "clean_hash": "33eec3eb9e5137bc3c55400f0ca270447da0b243ddb8339388fcbe808f45752b",
+        "noisy_hash": "03d0f7b8eb997a15235bfc47fd13eb4741e15fb032d9a1618edb8949815f58f6"
+      },
+      "sample_count": 48000,
+      "duration_seconds": 3.0,
+      "peak_amplitude": 0.599867582321167,
+      "clipping_sample_count": 0,
+      "waveform_parity_vs_causal_ref": {
+        "sdr_db": 77.26871064405152,
+        "rmse": 1.2351465203265711e-05,
+        "max_abs_err": 2.1442770957946777e-05,
+        "mean_bias": 1.0696056391591333e-05,
+        "lag_samples": 0,
+        "gain_ratio": 0.999999690786145
+      },
+      "pcm16_parity_vs_causal_ref": {
+        "total_samples": 48000,
+        "identical_samples": 31136,
+        "identical_pct": 64.86666666666666,
+        "within_1_count_samples": 48000,
+        "within_1_count_pct": 100.0,
+        "ge_2_count_samples": 0,
+        "ge_2_count_pct": 0.0,
+        "max_count_diff": 1
+      },
+      "waveform_parity_vs_stage8_baseline": {
+        "sdr_db": 28.043499751350257,
+        "rmse": 0.0035533171160707687,
+        "max_abs_err": 0.06290572136640549,
+        "mean_bias": -2.0066085258568694e-06,
+        "lag_samples": 0,
+        "gain_ratio": 1.0054140533113083
+      },
+      "pcm16_parity_vs_stage8_baseline": {
+        "total_samples": 48000,
+        "identical_samples": 664,
+        "identical_pct": 1.3833333333333333,
+        "within_1_count_samples": 2037,
+        "within_1_count_pct": 4.24375,
+        "ge_2_count_samples": 45963,
+        "ge_2_count_pct": 95.75625,
+        "max_count_diff": 2061
+      },
+      "quality_metrics_vs_clean": {
+        "remediated_native": {
+          "snr_db": 16.274873620720484,
+          "si_sdr_db": 15.614556726125118,
+          "stoi": 0.9501929530472576,
+          "pesq_wb": 2.6528241634368896
+        },
+        "stage8_baseline": {
+          "snr_db": 16.366530789450287,
+          "si_sdr_db": 15.752931978793281,
+          "stoi": 0.9536563307711727,
+          "pesq_wb": 2.5610191822052
+        }
+      }
+    },
+    {
+      "val_index": 9,
+      "manifest_info": {
+        "target_snr": 20.0,
+        "dataset_origin": "IoBT_GUNFIRE",
+        "clean_hash": "934d9e09dbfc0282c3649e6b753872b13012f667470cf5a58cb0a7b74b47567b",
+        "noisy_hash": "c93f09395de67b67e6a9a834e14f741a5b20b55679eff689194cf64e10a1161b"
+      },
+      "sample_count": 48000,
+      "duration_seconds": 3.0,
+      "peak_amplitude": 0.28835368156433105,
+      "clipping_sample_count": 0,
+      "waveform_parity_vs_causal_ref": {
+        "sdr_db": 79.11564498239157,
+        "rmse": 1.2290655704171475e-05,
+        "max_abs_err": 2.1979212760925293e-05,
+        "mean_bias": 1.0634834403395892e-05,
+        "lag_samples": 0,
+        "gain_ratio": 1.000070312522739
+      },
+      "pcm16_parity_vs_causal_ref": {
+        "total_samples": 48000,
+        "identical_samples": 31341,
+        "identical_pct": 65.29374999999999,
+        "within_1_count_samples": 48000,
+        "within_1_count_pct": 100.0,
+        "ge_2_count_samples": 0,
+        "ge_2_count_pct": 0.0,
+        "max_count_diff": 1
+      },
+      "waveform_parity_vs_stage8_baseline": {
+        "sdr_db": 13.071667389891171,
+        "rmse": 0.030020516050972168,
+        "max_abs_err": 0.08321266248822212,
+        "mean_bias": -0.024716377275025587,
+        "lag_samples": 0,
+        "gain_ratio": 0.8210816462698804
+      },
+      "pcm16_parity_vs_stage8_baseline": {
+        "total_samples": 48000,
+        "identical_samples": 48,
+        "identical_pct": 0.1,
+        "within_1_count_samples": 176,
+        "within_1_count_pct": 0.36666666666666664,
+        "ge_2_count_samples": 47824,
+        "ge_2_count_pct": 99.63333333333333,
+        "max_count_diff": 2727
+      },
+      "quality_metrics_vs_clean": {
+        "remediated_native": {
+          "snr_db": 8.054080469985612,
+          "si_sdr_db": 12.045109564328246,
+          "stoi": 0.8412611117168589,
+          "pesq_wb": 2.0461411476135254
+        },
+        "stage8_baseline": {
+          "snr_db": 11.378917892464706,
+          "si_sdr_db": 13.879603109847093,
+          "stoi": 0.8224435654377933,
+          "pesq_wb": 2.1837265491485596
+        }
+      }
+    },
+    {
+      "val_index": 23,
+      "manifest_info": {
+        "target_snr": 10.0,
+        "dataset_origin": "IoBT_GUNFIRE",
+        "clean_hash": "45195fd505db07ca4d9b7add375ecec75039fc761cc8b5b478dbdc4351c9ee96",
+        "noisy_hash": "4ce933e54e017d4400d9bade195c4b657ab018a012f2ada70029eb682878cb94"
+      },
+      "sample_count": 48000,
+      "duration_seconds": 3.0,
+      "peak_amplitude": 0.4057061970233917,
+      "clipping_sample_count": 0,
+      "waveform_parity_vs_causal_ref": {
+        "sdr_db": 69.5766299134364,
+        "rmse": 1.2321062852145239e-05,
+        "max_abs_err": 2.1374784409999847e-05,
+        "mean_bias": 1.067837544554943e-05,
+        "lag_samples": 0,
+        "gain_ratio": 1.0000004255438115
+      },
+      "pcm16_parity_vs_causal_ref": {
+        "total_samples": 48000,
+        "identical_samples": 31309,
+        "identical_pct": 65.22708333333334,
+        "within_1_count_samples": 48000,
+        "within_1_count_pct": 100.0,
+        "ge_2_count_samples": 0,
+        "ge_2_count_pct": 0.0,
+        "max_count_diff": 1
+      },
+      "waveform_parity_vs_stage8_baseline": {
+        "sdr_db": 34.91824732076617,
+        "rmse": 0.000664096223098461,
+        "max_abs_err": 0.03468388319015503,
+        "mean_bias": -2.7254053486996574e-06,
+        "lag_samples": 0,
+        "gain_ratio": 1.0030821610849043
+      },
+      "pcm16_parity_vs_stage8_baseline": {
+        "total_samples": 48000,
+        "identical_samples": 6976,
+        "identical_pct": 14.533333333333335,
+        "within_1_count_samples": 18806,
+        "within_1_count_pct": 39.17916666666667,
+        "ge_2_count_samples": 29194,
+        "ge_2_count_pct": 60.82083333333333,
+        "max_count_diff": 1136
+      },
+      "quality_metrics_vs_clean": {
+        "remediated_native": {
+          "snr_db": 15.552090051704363,
+          "si_sdr_db": 15.209918642736355,
+          "stoi": 0.9643209103470984,
+          "pesq_wb": 2.5744338035583496
+        },
+        "stage8_baseline": {
+          "snr_db": 16.007922725283763,
+          "si_sdr_db": 15.671768157181155,
+          "stoi": 0.9648751362947504,
+          "pesq_wb": 2.5334088802337646
+        }
+      }
+    },
+    {
+      "val_index": 26,
+      "manifest_info": {
+        "target_snr": 15.0,
+        "dataset_origin": "EXISTING_PROXY",
+        "clean_hash": "b7c69584f93d9aca05e76c75a204af195f9e073f019decb155c2fc562a5a8b35",
+        "noisy_hash": "1710b95d51b1d0e4d09dcccc14f20c3eba1275c77ac0671d003ee20a5649ba79"
+      },
+      "sample_count": 48000,
+      "duration_seconds": 3.0,
+      "peak_amplitude": 0.701274037361145,
+      "clipping_sample_count": 0,
+      "waveform_parity_vs_causal_ref": {
+        "sdr_db": 77.46278040183587,
+        "rmse": 1.236300638512399e-05,
+        "max_abs_err": 2.1442770957946777e-05,
+        "mean_bias": 1.0716522036958053e-05,
+        "lag_samples": 0,
+        "gain_ratio": 0.9999990663617676
+      },
+      "pcm16_parity_vs_causal_ref": {
+        "total_samples": 48000,
+        "identical_samples": 31251,
+        "identical_pct": 65.10625,
+        "within_1_count_samples": 48000,
+        "within_1_count_pct": 100.0,
+        "ge_2_count_samples": 0,
+        "ge_2_count_pct": 0.0,
+        "max_count_diff": 1
+      },
+      "waveform_parity_vs_stage8_baseline": {
+        "sdr_db": 41.29244591354443,
+        "rmse": 0.0007965357327592252,
+        "max_abs_err": 0.0068440623581409454,
+        "mean_bias": 5.460387493651334e-06,
+        "lag_samples": 0,
+        "gain_ratio": 0.998700296841362
+      },
+      "pcm16_parity_vs_stage8_baseline": {
+        "total_samples": 48000,
+        "identical_samples": 1697,
+        "identical_pct": 3.5354166666666664,
+        "within_1_count_samples": 5181,
+        "within_1_count_pct": 10.793750000000001,
+        "ge_2_count_samples": 42819,
+        "ge_2_count_pct": 89.20625,
+        "max_count_diff": 224
+      },
+      "quality_metrics_vs_clean": {
+        "remediated_native": {
+          "snr_db": 21.047552582483327,
+          "si_sdr_db": 21.16505928523874,
+          "stoi": 0.9920029037614536,
+          "pesq_wb": 2.74867844581604
+        },
+        "stage8_baseline": {
+          "snr_db": 21.18591073389179,
+          "si_sdr_db": 21.28055746777668,
+          "stoi": 0.9920796877290469,
+          "pesq_wb": 2.7873308658599854
+        }
+      }
+    },
+    {
+      "val_index": 28,
+      "manifest_info": {
+        "target_snr": 5.0,
+        "dataset_origin": "EXISTING_PROXY",
+        "clean_hash": "952bad6a27252b374217edfda94f7bfcc96fd27338443528893a36517d6a65a7",
+        "noisy_hash": "2a275e0c46577a9bda62c7431cf7950162bffd1103421e4b80c42567217b79e1"
+      },
+      "sample_count": 48000,
+      "duration_seconds": 3.0,
+      "peak_amplitude": 0.38082706928253174,
+      "clipping_sample_count": 0,
+      "waveform_parity_vs_causal_ref": {
+        "sdr_db": 72.13777127567509,
+        "rmse": 1.2316215104516239e-05,
+        "max_abs_err": 2.140738070011139e-05,
+        "mean_bias": 1.0663519501358465e-05,
+        "lag_samples": 0,
+        "gain_ratio": 0.9999994292971113
+      },
+      "pcm16_parity_vs_causal_ref": {
+        "total_samples": 48000,
+        "identical_samples": 31233,
+        "identical_pct": 65.06875,
+        "within_1_count_samples": 48000,
+        "within_1_count_pct": 100.0,
+        "ge_2_count_samples": 0,
+        "ge_2_count_pct": 0.0,
+        "max_count_diff": 1
+      },
+      "waveform_parity_vs_stage8_baseline": {
+        "sdr_db": 43.203097490918694,
+        "rmse": 0.0003446555558527103,
+        "max_abs_err": 0.007373109459877014,
+        "mean_bias": 6.752360214180205e-07,
+        "lag_samples": 0,
+        "gain_ratio": 0.9995981708925981
+      },
+      "pcm16_parity_vs_stage8_baseline": {
+        "total_samples": 48000,
+        "identical_samples": 5262,
+        "identical_pct": 10.9625,
+        "within_1_count_samples": 14710,
+        "within_1_count_pct": 30.645833333333332,
+        "ge_2_count_samples": 33290,
+        "ge_2_count_pct": 69.35416666666666,
+        "max_count_diff": 242
+      },
+      "quality_metrics_vs_clean": {
+        "remediated_native": {
+          "snr_db": 15.100130665631248,
+          "si_sdr_db": 13.739548014219444,
+          "stoi": 0.9618848980367404,
+          "pesq_wb": 2.4004197120666504
+        },
+        "stage8_baseline": {
+          "snr_db": 15.096876137225252,
+          "si_sdr_db": 13.735299516044739,
+          "stoi": 0.9616655264184722,
+          "pesq_wb": 2.4038140773773193
+        }
+      }
+    },
+    {
+      "val_index": 33,
+      "manifest_info": {
+        "target_snr": -5.0,
+        "dataset_origin": "IoBT_GUNFIRE",
+        "clean_hash": "b5557185558801c0ff271150917b546624150faeb443d53810b40389e8617d90",
+        "noisy_hash": "d42342979ecbc372efe2ea7c4040d85ac0def358e17500ac6e59ae0e40a3c48f"
+      },
+      "sample_count": 48000,
+      "duration_seconds": 3.0,
+      "peak_amplitude": 0.09053924679756165,
+      "clipping_sample_count": 0,
+      "waveform_parity_vs_causal_ref": {
+        "sdr_db": 59.412930073474456,
+        "rmse": 1.2398796832160639e-05,
+        "max_abs_err": 2.1370069589465857e-05,
+        "mean_bias": 1.0753184623415834e-05,
+        "lag_samples": 0,
+        "gain_ratio": 0.9999930484226137
+      },
+      "pcm16_parity_vs_causal_ref": {
+        "total_samples": 48000,
+        "identical_samples": 30502,
+        "identical_pct": 63.545833333333334,
+        "within_1_count_samples": 48000,
+        "within_1_count_pct": 100.0,
+        "ge_2_count_samples": 0,
+        "ge_2_count_pct": 0.0,
+        "max_count_diff": 1
+      },
+      "waveform_parity_vs_stage8_baseline": {
+        "sdr_db": 21.511289822572138,
+        "rmse": 0.0009605450440878339,
+        "max_abs_err": 0.020403331553097814,
+        "mean_bias": 2.788445079565223e-06,
+        "lag_samples": 0,
+        "gain_ratio": 1.0137732581407293
+      },
+      "pcm16_parity_vs_stage8_baseline": {
+        "total_samples": 48000,
+        "identical_samples": 15282,
+        "identical_pct": 31.837500000000002,
+        "within_1_count_samples": 28762,
+        "within_1_count_pct": 59.920833333333334,
+        "ge_2_count_samples": 19238,
+        "ge_2_count_pct": 40.079166666666666,
+        "max_count_diff": 668
+      },
+      "quality_metrics_vs_clean": {
+        "remediated_native": {
+          "snr_db": 13.958956256396167,
+          "si_sdr_db": 12.159168679739699,
+          "stoi": 0.9748307722113934,
+          "pesq_wb": 2.9209799766540527
+        },
+        "stage8_baseline": {
+          "snr_db": 13.90425194922916,
+          "si_sdr_db": 12.13064055895584,
+          "stoi": 0.9720150251481388,
+          "pesq_wb": 3.230151891708374
+        }
+      }
+    },
+    {
+      "val_index": 61,
+      "manifest_info": {
+        "target_snr": -10.0,
+        "dataset_origin": "IoBT_GUNFIRE",
+        "clean_hash": "8f943c09f8db718ca86833e2d45830a960d62d31f2ac1ac1f3b631852a1d7b46",
+        "noisy_hash": "0992b465e818aa255e64ef4c0cabc1a09b71bad0293c915ac2cbaddb6c9a7029"
+      },
+      "sample_count": 48000,
+      "duration_seconds": 3.0,
+      "peak_amplitude": 0.18487486243247986,
+      "clipping_sample_count": 0,
+      "waveform_parity_vs_causal_ref": {
+        "sdr_db": 64.03886595300536,
+        "rmse": 1.2342374363692208e-05,
+        "max_abs_err": 2.1391424525063485e-05,
+        "mean_bias": 1.0689333280336782e-05,
+        "lag_samples": 0,
+        "gain_ratio": 0.9999966567121201
+      },
+      "pcm16_parity_vs_causal_ref": {
+        "total_samples": 48000,
+        "identical_samples": 30972,
+        "identical_pct": 64.525,
+        "within_1_count_samples": 48000,
+        "within_1_count_pct": 100.0,
+        "ge_2_count_samples": 0,
+        "ge_2_count_pct": 0.0,
+        "max_count_diff": 1
+      },
+      "waveform_parity_vs_stage8_baseline": {
+        "sdr_db": 19.274112097678362,
+        "rmse": 0.00208622506558867,
+        "max_abs_err": 0.023388590663671494,
+        "mean_bias": -8.168353926310499e-07,
+        "lag_samples": 0,
+        "gain_ratio": 1.023938391075273
+      },
+      "pcm16_parity_vs_stage8_baseline": {
+        "total_samples": 48000,
+        "identical_samples": 3934,
+        "identical_pct": 8.195833333333333,
+        "within_1_count_samples": 11042,
+        "within_1_count_pct": 23.004166666666666,
+        "ge_2_count_samples": 36958,
+        "ge_2_count_pct": 76.99583333333334,
+        "max_count_diff": 767
+      },
+      "quality_metrics_vs_clean": {
+        "remediated_native": {
+          "snr_db": 9.304732866574756,
+          "si_sdr_db": 5.510202592215631,
+          "stoi": 0.7303680633177005,
+          "pesq_wb": 1.4184192419052124
+        },
+        "stage8_baseline": {
+          "snr_db": 9.098746370845918,
+          "si_sdr_db": 5.27767964422456,
+          "stoi": 0.71081193411232,
+          "pesq_wb": 1.4461069107055664
+        }
+      }
+    }
+  ]
+}

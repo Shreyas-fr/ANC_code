@@ -1,6 +1,5 @@
 # Environments
 venv/
-.venv/
 env/
 .env
 
@@ -14,40 +13,66 @@ data/
 *.wav
 *.flac
 
-# Python
+# Python & Caches
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Temporary & Swap Files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+backups/
 
 # IDEs
 .idea/
 .vscode/
 .DS_Store
 
-# Logs
+# Logs & Security
 logs/
 *.log
 rpi_key*
-
-# Secrets, Keys, and Large Model Weights
 *.key
 *.pem
-rpi_key*
-.env
-.env.*
 id_rsa*
 id_ed25519*
-*.p12
-*.pfx
-*.hk
+secrets*
 
-# Local workspace mirror
-Documents/
+# Rust & Cargo Build Artifacts & Binaries
+target/
+**/target/
+target*/
+**/target*/
+*.a
+*.rlib
+*.dylib
+*.dylib.*
+*.so
+*.f32
+*.raw
+*.tar.gz
 
-*.ckpt
-*.ckpt.*
-*.best
+# Virtual Environments
+.venv_gtcrn/
+pc_venv/
 
-# Large regenerable manifests
-experiments/logs_archive/dataset_inventory.csv
-experiments/dfn3_v2_rejected/*_manifest.csv
+# Embedded Repos & Large SDKs
+third_party/onnxruntime_c_sdk/
+third_party/FullSubNet/
+runs/sih26052_rpi_deployment_audit/runs/dfn3_pi_optimization/DeepFilterNet/
+
+# Scratch & Presentation caches
+.codex/
+.codex*/
+
+# Cleanup & Archive
+CLEANUP/archive/
+CLEANUP/review_required/
+kaggle_output/
+kaggle_output*/

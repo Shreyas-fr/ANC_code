@@ -1,0 +1,77 @@
+{
+  "python": "3.10.22",
+  "numpy": "1.24.4",
+  "libdf_source": "0.5.6 source commit 978576aa8400552a4ce9730838c635aa30db5e61",
+  "alpha": 0.99,
+  "sr": 48000,
+  "fft_size": 960,
+  "hop_size": 480,
+  "nb_erb": 32,
+  "nb_df": 96,
+  "min_nb_freqs": 2,
+  "frames": [
+    {
+      "id": 6,
+      "frames": 300,
+      "stft_shape": [
+        1,
+        300,
+        481
+      ],
+      "erb_shape": [
+        1,
+        300,
+        32
+      ],
+      "cplx_shape": [
+        1,
+        300,
+        96
+      ],
+      "synthesis_samples": 144000,
+      "input_sha256": "072695f13cca5650e07c17c75bde35deab40fdc492f24de4676944bf563f47bc"
+    },
+    {
+      "id": 93,
+      "frames": 300,
+      "stft_shape": [
+        1,
+        300,
+        481
+      ],
+      "erb_shape": [
+        1,
+        300,
+        32
+      ],
+      "cplx_shape": [
+        1,
+        300,
+        96
+      ],
+      "synthesis_samples": 144000,
+      "input_sha256": "b3559d12dcded184516db4f660d6f09cbd1d0222878cb5eee7fc12c23c14abac"
+    },
+    {
+      "id": 287,
+      "frames": 300,
+      "stft_shape": [
+        1,
+        300,
+        481
+      ],
+      "erb_shape": [
+        1,
+        300,
+        32
+      ],
+      "cplx_shape": [
+        1,
+        300,
+        96
+      ],
+      "synthesis_samples": 144000,
+      "input_sha256": "99973a3d2a7e73de4969821f93bafee9206c7bc23b2f04286be65bfbd5098182"
+    }
+  ]
+}

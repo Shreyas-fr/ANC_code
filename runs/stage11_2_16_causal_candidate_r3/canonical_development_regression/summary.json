@@ -1,0 +1,305 @@
+{
+  "status": "DEVELOPMENT_BENCHMARK_ONLY; not independent validation",
+  "candidate": "DFN3 Step-500 checkpoint bytes with conv_lookahead=0 and df_lookahead=0",
+  "checkpoint_sha256": "bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27",
+  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "clip_count": 590,
+  "model_weights_changed": false,
+  "training_performed": false,
+  "metric_implementation": "unchanged scripts/evaluate_dfn3_canonical.py metrics/active_speech_power/enhance_one",
+  "criteria": {
+    "output_snr_db_gt": 15.0,
+    "output_stoi_gt": 0.85,
+    "output_pesq_wb_gt": 2.5
+  },
+  "overall": {
+    "count": 590,
+    "means": {
+      "snr_db": -1.2729721597960042,
+      "si_sdr_db": -25.62883693802795,
+      "stoi": 0.6155499207987424,
+      "pesq_wb": 1.8057726815595465
+    },
+    "individual_pass_counts": {
+      "snr_gt_15_db": 0,
+      "stoi_gt_0_85": 0,
+      "pesq_wb_gt_2_5": 49
+    },
+    "joint_pass_count": 0,
+    "joint_pass_percent": 0.0
+  },
+  "by_target_snr_db": {
+    "-10": {
+      "count": 30,
+      "means": {
+        "snr_db": -0.7167401381187629,
+        "si_sdr_db": -25.981417930530572,
+        "stoi": 0.49297342305754277,
+        "pesq_wb": 1.2464481472969056
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 0
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "-5": {
+      "count": 63,
+      "means": {
+        "snr_db": -1.304202632331477,
+        "si_sdr_db": -27.819006648001732,
+        "stoi": 0.5689814270114074,
+        "pesq_wb": 1.42254738769834
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 1
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "0": {
+      "count": 117,
+      "means": {
+        "snr_db": -1.0715223127835485,
+        "si_sdr_db": -24.08213926389493,
+        "stoi": 0.6086746683908526,
+        "pesq_wb": 1.590840803252326
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 4
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "5": {
+      "count": 137,
+      "means": {
+        "snr_db": -1.280463879121364,
+        "si_sdr_db": -25.641027874975837,
+        "stoi": 0.6266977423042939,
+        "pesq_wb": 1.7689867959405383
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 5
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "10": {
+      "count": 121,
+      "means": {
+        "snr_db": -1.4450038681296171,
+        "si_sdr_db": -25.659677267639836,
+        "stoi": 0.6324151581453409,
+        "pesq_wb": 1.9850920153058265
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 13
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "15": {
+      "count": 86,
+      "means": {
+        "snr_db": -1.337381504570755,
+        "si_sdr_db": -26.312934058807244,
+        "stoi": 0.6388141876215883,
+        "pesq_wb": 2.1734201353649762
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 19
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "20": {
+      "count": 36,
+      "means": {
+        "snr_db": -1.5759629118646077,
+        "si_sdr_db": -24.744706819645074,
+        "stoi": 0.6668510974820054,
+        "pesq_wb": 2.300058937735028
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 7
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    }
+  },
+  "by_measured_input_snr_db": {
+    "< -7.5": {
+      "count": 26,
+      "means": {
+        "snr_db": -1.0681057346892933,
+        "si_sdr_db": -25.798946238864612,
+        "stoi": 0.4992772060556276,
+        "pesq_wb": 1.239327678313622
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 0
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "[12.5,17.5)": {
+      "count": 83,
+      "means": {
+        "snr_db": -1.3504947508459653,
+        "si_sdr_db": -26.448306980585162,
+        "stoi": 0.632305818811483,
+        "pesq_wb": 2.175747676068042
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 19
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "[-2.5,2.5)": {
+      "count": 112,
+      "means": {
+        "snr_db": -1.1571902847945028,
+        "si_sdr_db": -24.55487175452337,
+        "stoi": 0.6057949738983103,
+        "pesq_wb": 1.5577248196516718
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 2
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "[2.5,7.5)": {
+      "count": 143,
+      "means": {
+        "snr_db": -1.168601263110913,
+        "si_sdr_db": -25.092524907958797,
+        "stoi": 0.6257588808962501,
+        "pesq_wb": 1.767213843085549
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 5
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "[7.5,12.5)": {
+      "count": 120,
+      "means": {
+        "snr_db": -1.4751597676761903,
+        "si_sdr_db": -25.62418137501395,
+        "stoi": 0.6370089659332867,
+        "pesq_wb": 1.9551617880662282
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 10
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    ">=17.5": {
+      "count": 46,
+      "means": {
+        "snr_db": -1.3184157225289697,
+        "si_sdr_db": -25.689291496508314,
+        "stoi": 0.6629512768388782,
+        "pesq_wb": 2.363946082799331
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 13
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "[-7.5,-2.5)": {
+      "count": 60,
+      "means": {
+        "snr_db": -1.2801695496364232,
+        "si_sdr_db": -27.667430660860973,
+        "stoi": 0.5573745210183557,
+        "pesq_wb": 1.3676435271898906
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 0
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    }
+  },
+  "input_snr_bin_edges_db": [
+    "-inf",
+    -7.5,
+    -2.5,
+    2.5,
+    7.5,
+    12.5,
+    17.5,
+    "+inf"
+  ],
+  "by_manifest_origin": {
+    "EXISTING_PROXY": {
+      "count": 148,
+      "means": {
+        "snr_db": -1.3835505935807149,
+        "si_sdr_db": -25.43762340590633,
+        "stoi": 0.6165494450030199,
+        "pesq_wb": 1.8672784639371407
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 20
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    },
+    "IoBT_GUNFIRE": {
+      "count": 442,
+      "means": {
+        "snr_db": -1.235945896899766,
+        "si_sdr_db": -25.692863188602608,
+        "stoi": 0.6152152384859979,
+        "pesq_wb": 1.785177985197818
+      },
+      "individual_pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 0,
+        "pesq_wb_gt_2_5": 29
+      },
+      "joint_pass_count": 0,
+      "joint_pass_percent": 0.0
+    }
+  },
+  "noise_type_limit": "Manifest provides EXISTING_PROXY and IoBT_GUNFIRE origin labels, not finer noise/event labels.",
+  "float_prediction_files": 590
+}

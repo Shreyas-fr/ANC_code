@@ -1,0 +1,42 @@
+Component_ID,Subsystem,Parameter_or_Metric,Frozen_Value,Evidence_Type,Source_Reference,Readiness_Status,Technical_Notes
+IMP-01,Model_Checkpoint,Deployed_Step500_SHA256,bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27,Measured_Fact,antigravity/runs/sih26052_rpi_deployment_audit/runs/step500_from_pi.pt,FROZEN_VERIFIED,Primary Track B edge candidate; 100% bit-exact match.
+IMP-02,Model_Checkpoint,Pretrained_DFN3_SHA256,cc2bb32273b88ac94d9457dbe08b56ec13e13ea43c77f7e27d71c42f01cd68f5,Measured_Fact,antigravity/runs/sih26052_dfn3_canonical_pretrained/checkpoints/pretrained.hk,FROZEN_VERIFIED,Un-finetuned reference baseline for comparison.
+IMP-03,Model_Checkpoint,GTCRN_DNS3_SHA256,a630d992cf792daf4ce2bb5bcf9c4d389f740a8f09c6e0971184697fe6371b79,Measured_Fact,antigravity/checkpoints/gtcrn_stage5/model_trained_on_dns3.tar,FROZEN_VERIFIED,Ultra-lightweight Track B eligible candidate (48.2k params).
+IMP-04,Model_Checkpoint,FullSubNet_Epoch58_SHA256,482615e9709d2d6c10ee0d24f9844ad2da2dae3c0cf897f014839c365917a2e0,Measured_Fact,antigravity/checkpoints/fullsubnet/fullsubnet_best_model_58epochs.tar,FROZEN_VERIFIED,Track A offline quality candidate only; excluded from edge.
+IMP-05,Dataset_Manifest,Canonical_Validation_SHA256,d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4,Measured_Fact,runs/sih26052_canonical_validation/manifest.csv,FROZEN_VERIFIED,590-clip evaluation benchmark; strictly frozen.
+IMP-06,Audio_DSP,Native_Sample_Rate,48000 Hz,Source_Code_Finding,libDF/src/lib.rs & config.ini,FROZEN_VERIFIED,Single-channel 48 kHz float32; zero resampling for DFN3.
+IMP-07,Audio_DSP,STFT_Hop_Size,480 samples (10.0 ms),Source_Code_Finding,libDF/src/tract.rs line 267,FROZEN_VERIFIED,Analysis hop step period; frame rate is exactly 100 Hz.
+IMP-08,Audio_DSP,STFT_Window_Size,960 samples (20.0 ms),Source_Code_Finding,libDF/src/lib.rs line 128,FROZEN_VERIFIED,Vorbis sine-tapered analysis/synthesis window (50% overlap).
+IMP-09,Audio_DSP,FFT_Frequency_Bins,481 bins (0 to 24 kHz),Source_Code_Finding,libDF/src/lib.rs line 54,FROZEN_VERIFIED,Real-to-complex FFT size 960 yields 481 complex bins.
+IMP-10,Audio_DSP,ERB_Bands,32 bands,Source_Code_Finding,libDF/src/lib.rs line 230,FROZEN_VERIFIED,Equivalent Rectangular Bandwidth non-linear grouping.
+IMP-11,Audio_DSP,Deep_Filtering_Order,5 past frames,Source_Code_Finding,libDF/src/tract.rs line 272,FROZEN_VERIFIED,Causal order-5 complex FIR filter; uses frames t-4 to t.
+IMP-12,Neural_Architecture,Lookahead_Configuration,0 lookahead frames (strictly causal),Source_Code_Finding,libDF/src/tract.rs line 313,FROZEN_VERIFIED,conv_lookahead = 0; df_lookahead = 0; zero future frames.
+IMP-13,Runtime_Engine,Persistent_State_Management,GRU hidden states & EMA norm buffers,Source_Code_Finding,libDF/src/tract.rs line 222,FROZEN_VERIFIED,State maintained in Tract memory; no reset per frame.
+IMP-14,Filterbank_Synthesis,Overlap_Add_Reconstruction,50% OLA with 480-sample memory,Source_Code_Finding,libDF/src/lib.rs line 407,FROZEN_VERIFIED,synthesis_mem carries trailing half-window to next frame.
+IMP-15,Algorithmic_Latency,DSP_Reconstruction_Delay,10.00 ms (480 samples),Mathematical_Derivation,libDF analysis-synthesis formulation,MATHEMATICALLY_DERIVED,1-hop delay between input arrival and output emission.
+IMP-16,Algorithmic_Latency,Total_Algo_Latency_Bound,10.0 ms to 20.0 ms,Unresolved_Assumption,Digital loopback test required,PENDING_VERIFICATION,Empirical loopback test via scripts/measure_digital_latency.py.
+IMP-17,Hardware_Platform,Target_SoC,Broadcom BCM2712 Quad Cortex-A76 @ 2.4 GHz,Formally_Approved,STAGE11_1_DEPLOYMENT_TEST_PROTOCOL.md,FROZEN_VERIFIED,Raspberry Pi 5 Model B; ARMv8.2-A with Crypto/NEON.
+IMP-18,Hardware_Platform,Memory_Subsystem,4GB or 8GB LPDDR4X-4267 (>17 GB/s),Formally_Approved,STAGE11_2_FACILITY_AND_HARDWARE_QUALIFICATION.md,FROZEN_VERIFIED,High-bandwidth memory subsystem over Pi 4's 4.4 GB/s.
+IMP-19,Hardware_Platform,Cooling_and_Power,Active Cooler + 27W USB-C PD (5.1V / 5.0A),Formally_Approved,STAGE11_2_FACILITY_AND_HARDWARE_QUALIFICATION.md,FROZEN_VERIFIED,Prevents thermal throttling and under-voltage events.
+IMP-20,Hardware_Platform,Operating_System,Raspberry Pi OS 64-bit Lite (Debian 12),Formally_Approved,STAGE11_1_DEPLOYMENT_TEST_PROTOCOL.md,FROZEN_VERIFIED,16KB kernel page size; performance governor.
+IMP-21,Acceptance_Target,DFN3_Mean_RTF,Mean RTF <= 0.30,Provisional_Planning_Target,BCM2712 architectural analysis,PROVISIONAL_TARGET,Pending physical bench reproduction in Gate 05.
+IMP-22,Acceptance_Target,DFN3_Tail_RTF,p99 RTF <= 0.40; Max RTF < 0.60,Provisional_Planning_Target,BCM2712 architectural analysis,PROVISIONAL_TARGET,Pending physical bench reproduction in Gate 05.
+IMP-23,Acceptance_Target,GTCRN_Mean_RTF,Mean RTF <= 0.15,Provisional_Planning_Target,DNS3 challenge architecture analysis,PROVISIONAL_TARGET,Pending physical bench reproduction in Gate 05.
+IMP-24,Acceptance_Target,Peak_RSS_Memory,Peak RSS <= 300.0 MB,Formally_Approved_Requirement,STAGE11_1_DEPLOYMENT_TEST_PROTOCOL.md,APPROVED_REQUIREMENT,System stability requirement on embedded host.
+IMP-25,Acceptance_Target,Continuous_Soak_Duration,60 minutes (3600 seconds),Measurement_Method,STAGE11_2_FACILITY_AND_HARDWARE_QUALIFICATION.md,APPROVED_METHOD,Continuous streaming under simulated operational noise.
+IMP-26,Acceptance_Target,ALSA_Buffer_Underruns,Exactly 0 XRUNs over 60 minutes,Formally_Approved_Requirement,STAGE11_1_DEPLOYMENT_TEST_PROTOCOL.md,APPROVED_REQUIREMENT,Zero audio dropouts permitted during soak.
+IMP-27,Acceptance_Target,Hardware_Throttled_State,Strictly 0x0 (vcgencmd get_throttled),Formally_Approved_Requirement,STAGE11_2_FACILITY_AND_HARDWARE_QUALIFICATION.md,APPROVED_REQUIREMENT,Zero frequency capping or under-voltage flags.
+IMP-28,Acceptance_Target,Thermal_Ceiling,Core temperature <= 75.0 C,Provisional_Planning_Target,Broadcom BCM2712 thermal curve,PROVISIONAL_TARGET,5.0 C safety margin below 80 C throttle point.
+IMP-29,Acceptance_Target,Physical_Roundtrip_Latency,p95 <= 35.0 ms; Max < 40.0 ms,Provisional_Planning_Target,STAGE11_1_DEPLOYMENT_TEST_PROTOCOL.md,PROVISIONAL_REQUIREMENT,10-stage physical stack; 14.9 ms OS/USB margin.
+IMP-30,Measurement_Method,Physical_Latency_Instrumentation,Dual-channel DSO (Dirac click to IEC 60318-4),Measurement_Method,STAGE11_1_DEPLOYMENT_TEST_PROTOCOL.md,APPROVED_METHOD,Objective electrical-to-acoustic timing across 100 trials.
+IMP-31,Measurement_Method,Digital_Latency_Instrumentation,Kronecker/Dirac digital loopback correlation,Measurement_Method,scripts/measure_digital_latency.py,APPROVED_METHOD,Measures pure software algorithmic delay (tau_algo).
+IMP-32,Legacy_Metric,Prototype_2_12ms_Metric,RETRACTED AND DISCARDED,Review_Action,STAGE11_2_5_PROVENANCE_CORRECTION.md,FORMALLY_DISCARDED,Evaluated wrong model (375994cd); failed RT gate; struck.
+IMP-33,Streaming_Wrapper,Legacy_Python_BlockBackend,FORMALLY DEPRECATED,Review_Action,app/streaming_core.py,FORMALLY_DEPRECATED,Block delay 250-500 ms (total delay >300 ms); excluded.
+IMP-34,Streaming_Core,Native_Rust_Tract_Engine,MANDATORY TRACK B ARCHITECTURE,Review_Action,libDF/src/tract.rs,APPROVED_ARCHITECTURE,Only authorized streaming runtime for Track B edge.
+IMP-35,Qualification_Gate,GATE_01_Ethics_Approval,LOCKED (0/1 Passed),Governance_Gate,STAGE11_2_1_QUALIFICATION_TRACKER.csv,LOCKED_NO_GO,Pending institutional ethics committee sign-off.
+IMP-36,Qualification_Gate,GATE_02_Participant_Consent,LOCKED (0/1 Passed),Governance_Gate,STAGE11_2_1_QUALIFICATION_TRACKER.csv,LOCKED_NO_GO,Pending signed participant information and consent forms.
+IMP-37,Qualification_Gate,GATE_03_Acoustic_Facility,LOCKED (0/1 Passed),Governance_Gate,STAGE11_2_1_QUALIFICATION_TRACKER.csv,LOCKED_NO_GO,Pending booth RT60 <= 120 ms and noise < 25 dBA cert.
+IMP-38,Qualification_Gate,GATE_04_Noise_Licensing,LOCKED (0/1 Passed),Governance_Gate,STAGE11_2_1_QUALIFICATION_TRACKER.csv,LOCKED_NO_GO,Pending legal noise stem licensing attestation.
+IMP-39,Qualification_Gate,GATE_05_Physical_Pi5_Repro,LOCKED (0/1 Passed),Governance_Gate,STAGE11_2_1_QUALIFICATION_TRACKER.csv,LOCKED_NO_GO,Pending PI5_PHYSICAL_BENCH_REPORT.pdf on target hardware.
+IMP-40,Master_Governance,Stage_11_3_Collection_Verdict,STRICT NO-GO (0/5 Gates Passed),Governance_Rule,scripts/verify_stage11_qualification_gates.py,COLLECTION_PROHIBITED,Zero recruitment, zero recording, zero data collection.
+

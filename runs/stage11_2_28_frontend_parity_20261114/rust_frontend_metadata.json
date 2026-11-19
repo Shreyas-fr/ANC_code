@@ -1,0 +1,29 @@
+{
+  "binary_sha256": "f66a54ed64f76ee56c165018b6ada71817d927163ee46817e86c93edfc67127c",
+  "command_template": [
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_28_frontend_parity_20261114/target/release/dump_frontend",
+    "<shared_input.wav>",
+    "<unique_output_dir>",
+    "0.99"
+  ],
+  "runs": [
+    {
+      "id": 6,
+      "returncode": 0,
+      "stdout": "frames=300 samples=144000 alpha=0.99",
+      "stderr": ""
+    },
+    {
+      "id": 93,
+      "returncode": 0,
+      "stdout": "frames=300 samples=144000 alpha=0.99",
+      "stderr": ""
+    },
+    {
+      "id": 287,
+      "returncode": 0,
+      "stdout": "frames=300 samples=144000 alpha=0.99",
+      "stderr": ""
+    }
+  ]
+}

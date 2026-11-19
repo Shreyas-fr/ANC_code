@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/shreyasdivekar/Documents/anc sih/antigravity/scripts/compare_dfn3_canonical.py", line 124, in <module>
+    main()
+    ~~~~^^
+  File "/Users/shreyasdivekar/Documents/anc sih/antigravity/scripts/compare_dfn3_canonical.py", line 78, in main
+    ref, ref_hash = load_rows(args.reference)
+                    ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/shreyasdivekar/Documents/anc sih/antigravity/scripts/compare_dfn3_canonical.py", line 22, in load_rows
+    raise ValueError(f"Missing canonical manifest hash in {summary_path}")
+ValueError: Missing canonical manifest hash in /Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_27_libdf_version_ablation_20261114/metrics/python/summary.json

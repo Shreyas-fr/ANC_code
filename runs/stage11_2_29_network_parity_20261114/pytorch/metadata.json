@@ -1,0 +1,150 @@
+{
+  "checkpoint": "runs/sih26052_rpi_deployment_audit/runs/step500_from_pi.pt",
+  "checkpoint_sha256": "bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27",
+  "config": "Stage 11.2.28 pinned config.ini",
+  "pytorch": "2.14.1",
+  "device": "cpu",
+  "strict_state_dict_load": true,
+  "libdf_runtime": "not called; reused verified 0.5.6 feature arrays",
+  "ids": [
+    {
+      "id": 6,
+      "outputs": {
+        "spec_e": {
+          "shape": [
+            1,
+            1,
+            300,
+            481,
+            2
+          ],
+          "dtype": "float32",
+          "sha256": "ebe8eff1e65d082dc571a177fe13ce52efb767fb515c8581cfe4bb381ebcc88f"
+        },
+        "mask": {
+          "shape": [
+            1,
+            1,
+            300,
+            32
+          ],
+          "dtype": "float32",
+          "sha256": "4fbf6e77acc1ae026d04a1804f0a551f53ee3d1dcf389f98b08629525a16a36f"
+        },
+        "lsnr": {
+          "shape": [
+            1,
+            300,
+            1
+          ],
+          "dtype": "float32",
+          "sha256": "ae1e81d70ada1f940bdc7505a86bdd4020aad4abdf938123436a513769d63c7d"
+        },
+        "coefs": {
+          "shape": [
+            1,
+            5,
+            300,
+            96,
+            2
+          ],
+          "dtype": "float32",
+          "sha256": "f481ac2bcda53e3dc97595ec85d35ee6f66b9aa27d69b98a89b7df8983c89b45"
+        }
+      }
+    },
+    {
+      "id": 93,
+      "outputs": {
+        "spec_e": {
+          "shape": [
+            1,
+            1,
+            300,
+            481,
+            2
+          ],
+          "dtype": "float32",
+          "sha256": "6f2d8cf27853bc4dc6aebb34e311b58705bf5f4580d2563b48d9d95addb10828"
+        },
+        "mask": {
+          "shape": [
+            1,
+            1,
+            300,
+            32
+          ],
+          "dtype": "float32",
+          "sha256": "0b5798d48793f03b4b9dffd3883602079ef1a4e2d5e6d5ae1aec3caa13a85b16"
+        },
+        "lsnr": {
+          "shape": [
+            1,
+            300,
+            1
+          ],
+          "dtype": "float32",
+          "sha256": "75e96ad271b3dea88eda39e1625383c76b5a5a6a7541b97ccb0f30552dd4e1c1"
+        },
+        "coefs": {
+          "shape": [
+            1,
+            5,
+            300,
+            96,
+            2
+          ],
+          "dtype": "float32",
+          "sha256": "859b724d4d17d4d8fb7f15b20718513ea69180a039b5fba58e6752f7eefdb965"
+        }
+      }
+    },
+    {
+      "id": 287,
+      "outputs": {
+        "spec_e": {
+          "shape": [
+            1,
+            1,
+            300,
+            481,
+            2
+          ],
+          "dtype": "float32",
+          "sha256": "afe125f13825a89fd1f410f483e8be2945bcbb932f76de124bb0c7b8059a05ab"
+        },
+        "mask": {
+          "shape": [
+            1,
+            1,
+            300,
+            32
+          ],
+          "dtype": "float32",
+          "sha256": "b047bec441168480dd4a1909fac09c99ebf380bc58b3d0f187fa65c2495510a0"
+        },
+        "lsnr": {
+          "shape": [
+            1,
+            300,
+            1
+          ],
+          "dtype": "float32",
+          "sha256": "19483cf85cd7f53989bb5404f943ee5dbf827921b25f57326f5d34448caba203"
+        },
+        "coefs": {
+          "shape": [
+            1,
+            5,
+            300,
+            96,
+            2
+          ],
+          "dtype": "float32",
+          "sha256": "cd2404ae5456ee26e836055ceefa0cf94fcce8efb0d631a59e547afa7a8ade46"
+        }
+      }
+    }
+  ],
+  "gold_accessed": false
+}

@@ -1,0 +1,73 @@
+{
+  "result": "PASS",
+  "session_a_input_samples": 4096,
+  "session_b_input_samples": 4096,
+  "session_b_output_samples": 4096,
+  "session_b_start_sample": 100000,
+  "max_abs_diff_vs_fresh_adapter": 0.0,
+  "cross_session_output_samples": 0,
+  "status_after_b": "closed",
+  "stage17_adapter_state_after_reset_stream": {
+    "input_samples_seen": 4096,
+    "frames_seen": 17,
+    "next_frame_center": 4352,
+    "next_output_sample": 4096,
+    "conv_cache_frames": {
+      "4526226944": 2,
+      "4527183568": 4,
+      "4527186448": 10,
+      "4527192848": 10,
+      "4527636560": 4,
+      "4527638160": 2
+    },
+    "attention_gru_state_shapes": [
+      [
+        1,
+        1,
+        16
+      ],
+      [
+        1,
+        1,
+        16
+      ],
+      [
+        1,
+        1,
+        16
+      ],
+      [
+        1,
+        1,
+        16
+      ],
+      [
+        1,
+        1,
+        16
+      ],
+      [
+        1,
+        1,
+        16
+      ]
+    ],
+    "inter_gru_state_shapes": [
+      [
+        1,
+        33,
+        16
+      ],
+      [
+        1,
+        33,
+        16
+      ]
+    ],
+    "input_ring_samples": 1,
+    "ola_ring_samples": 256,
+    "max_input_ring_samples": 513,
+    "max_ola_ring_samples": 512,
+    "session_closed": true
+  }
+}

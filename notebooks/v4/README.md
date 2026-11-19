@@ -1,0 +1,13 @@
+# SIH 26052 DeepFilterNet3 V4 Kaggle kernel
+
+This folder is a self-contained Kaggle kernel upload directory. It locates the processed-audio dataset explicitly and validates the metadata schema before loading it. It reads archive-backed clips from their ZIP members and supports loose-file fallback. It requires the private `sih26052-canonical-exclusions` dataset and fails closed when its exclusion file is missing or malformed, so canonical validation sources are removed before partitioning. It creates a deterministic, approximately 90/10 source-group validation split with at least one held-out and one training group per category. Speech is grouped by speaker; non-speech is grouped by `source_group_id`, `session_id`, or `source_recording_id` when available, falling back to file path. The same non-speech group key is used across classes, preventing a session with multiple labels from leaking between train and validation. It also uses independent libDF feature state for every clip; training-only synthetic reverberation with a dry target and clipping; complex L1, magnitude L1, SI-SDR, and multi-resolution STFT losses; and `.hk` plus `.pt` checkpoints every 500 optimizer steps. A separate synthetic 512-mixture internal validation drives in-run loss tracking; only the frozen canonical 590-clip set is used for model selection. The SIH gold set is not mounted or read.
+
+After installing the Kaggle CLI and authenticating the intended account, run:
+
+```bash
+kaggle kernels push -p .
+kaggle kernels status shreyasdivekar/deepfilternet3-v4-sih26052
+kaggle kernels output shreyasdivekar/deepfilternet3-v4-sih26052 -p ../../kaggle_output_v4
+```
+
+The user-started Kaggle run on 2026-11-10 installed runtime dependencies and initialized the upstream model, then failed in the input preflight because no processed-audio `metadata.csv` was mounted under `/kaggle/input`. A subsequent user-provided run log failed earlier because that browser session had no CUDA device. Neither observed attempt produced training steps or checkpoints. For a browser-started run, set Notebook Settings → Accelerator to **GPU T4 x2**, save and restart the session, and attach all three datasets in the Input panel. The local kernel metadata files request a GPU and list `anc-sih-training-data`, `sih-26-processed-audio`, and `sih26052-canonical-exclusions`, but they do not change an existing browser session or prove its inputs are mounted. The setup preflight now explains the GPU setting, and the data preflight reports mounted input names. Confirm the GPU, dataset schemas, and canonical exclusions in runtime before training. Do not promote a checkpoint until the source-group split is verified and the checkpoint passes the fresh-state canonical evaluator.

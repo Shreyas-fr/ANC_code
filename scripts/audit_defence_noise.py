@@ -1,3 +1,10 @@
+try:
+    from legacy_gold_access_guard import deny_legacy_gold_tool
+except ModuleNotFoundError:
+    from scripts.legacy_gold_access_guard import deny_legacy_gold_tool
+
+deny_legacy_gold_tool(__file__)
+
 import csv
 import collections
 import re

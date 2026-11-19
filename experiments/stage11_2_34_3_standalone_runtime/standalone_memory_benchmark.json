@@ -1,0 +1,25 @@
+{
+  "binary": "candidate_b_standalone",
+  "runtime": "Official Microsoft ONNX Runtime C SDK v1.32.0 (Mach-O ARM64)",
+  "python_embedded": false,
+  "frames_executed": 10000,
+  "cold_start_rss_mb": 10.240,
+  "cold_start_rss_mib": 9.766,
+  "post_init_rss_mb": 67.928,
+  "post_init_rss_mib": 64.781,
+  "post_warmup_rss_mb": 74.465,
+  "post_warmup_rss_mib": 71.016,
+  "final_steady_rss_mb": 80.806,
+  "final_steady_rss_mib": 77.062,
+  "peak_rss_mb": 80.806,
+  "peak_rss_mib": 77.062,
+  "growth_bytes": 6324224,
+  "latency_ms": {
+    "mean": 1.563,
+    "p50": 1.517,
+    "p95": 1.729,
+    "p99": 2.358,
+    "max": 8.505,
+    "rtf": 0.0977
+  }
+}

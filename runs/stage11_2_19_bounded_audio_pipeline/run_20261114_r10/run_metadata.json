@@ -1,0 +1,302 @@
+{
+  "stage": "11.2.19",
+  "scope": "synthetic host pipeline only; no project recording or hardware",
+  "environment": {
+    "os": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "numpy": "1.26.4",
+    "torch": "2.14.1",
+    "rss_sampler": "resource.getrusage(ru_maxrss), cumulative process RSS high-water",
+    "torch_threads": 1,
+    "rss_before_model_load_bytes": 222511104,
+    "rss_after_model_load_bytes": 227311616
+  },
+  "seed": 26052,
+  "command": [
+    "/Users/shreyasdivekar/Documents/anc sih/pc_venv/bin/python",
+    "run_stage11_2_19.py",
+    "--output-dir",
+    "../../runs/stage11_2_19_bounded_audio_pipeline/run_20261114_r10",
+    "--duration-s",
+    "20"
+  ],
+  "git_state": {
+    "head": "242e24c6fd803729314a5636d63ae0be235ce2e4",
+    "modified_entry_count": 2,
+    "modified_entries": [
+      " M REPORT.md",
+      " M system_diagrams.md"
+    ],
+    "untracked_entry_count": 98,
+    "untracked_entries_at_stage_start": 97,
+    "stage_directory_absent_at_stage_start": true,
+    "stage_start_snapshot_note": "Before Stage 11.2.19 changes: HEAD 242e24c6fd803729314a5636d63ae0be235ce2e4; 2 modified tracked entries (REPORT.md, system_diagrams.md); 97 untracked entries; this Stage 11.2.19 experiment directory did not exist. A same-turn audit hardening module/report were already among those untracked entries."
+  },
+  "protected_hashes_before": {
+    "step500": "bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27",
+    "fullsubnet": "482615e9709d2d6c10ee0d24f9844ad2da2dae3c0cf897f014839c365917a2e0",
+    "gtcrn": "a630d992cf792daf4ce2bb5bcf9c4d389f740a8f09c6e0971184697fe6371b79",
+    "manifest": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+    "ensemble_summary": "8140618570c6ed8aaf1139b2845b941caed709bc55d1989e4a7b362c0c65d6b5",
+    "ensemble_per_clip": "b1f8ce8b21622672eb744b9ae0b1d7279579908265636ac0fe59e6825b372190",
+    "v10_config": "6fd82652cef2b90375512df15cf028040ac09f9ce353792a4b8ff24e43222b9b",
+    "v10_checkpoint": "57fedd5b608bb7a82e85c7573b0f921f427546a0321cc948182cb1c5695ba40c",
+    "gtcrn_adapter": "ea74cb3286f088fa88859b3121a1a628ce6b459216cefd778627fe4d37f355ab",
+    "step500_tract_archive": "unavailable; expected hash 99e99379e81ecf5a678833912d28418c3cc7fb40345fd4a8fb8f5b82669a559d"
+  },
+  "protected_hashes_after": {
+    "step500": "bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27",
+    "fullsubnet": "482615e9709d2d6c10ee0d24f9844ad2da2dae3c0cf897f014839c365917a2e0",
+    "gtcrn": "a630d992cf792daf4ce2bb5bcf9c4d389f740a8f09c6e0971184697fe6371b79",
+    "manifest": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+    "ensemble_summary": "8140618570c6ed8aaf1139b2845b941caed709bc55d1989e4a7b362c0c65d6b5",
+    "ensemble_per_clip": "b1f8ce8b21622672eb744b9ae0b1d7279579908265636ac0fe59e6825b372190",
+    "v10_config": "6fd82652cef2b90375512df15cf028040ac09f9ce353792a4b8ff24e43222b9b",
+    "v10_checkpoint": "57fedd5b608bb7a82e85c7573b0f921f427546a0321cc948182cb1c5695ba40c",
+    "gtcrn_adapter": "ea74cb3286f088fa88859b3121a1a628ce6b459216cefd778627fe4d37f355ab",
+    "step500_tract_archive": "unavailable; expected hash 99e99379e81ecf5a678833912d28418c3cc7fb40345fd4a8fb8f5b82669a559d"
+  },
+  "gtcrn_checkpoint_strict_load": "PASS",
+  "policy_probe_count": 4,
+  "policy_probe_failures": [],
+  "actual_gtcrn_session_reset": {
+    "result": "PASS",
+    "session_a_input_samples": 4096,
+    "session_b_input_samples": 4096,
+    "session_b_output_samples": 4096,
+    "session_b_start_sample": 100000,
+    "max_abs_diff_vs_fresh_adapter": 0.0,
+    "cross_session_output_samples": 0,
+    "status_after_b": "closed",
+    "stage17_adapter_state_after_reset_stream": {
+      "input_samples_seen": 4096,
+      "frames_seen": 17,
+      "next_frame_center": 4352,
+      "next_output_sample": 4096,
+      "conv_cache_frames": {
+        "4537221536": 2,
+        "4536980880": 4,
+        "4536983760": 10,
+        "4536990160": 10,
+        "4536991440": 4,
+        "4537435472": 2
+      },
+      "attention_gru_state_shapes": [
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ]
+      ],
+      "inter_gru_state_shapes": [
+        [
+          1,
+          33,
+          16
+        ],
+        [
+          1,
+          33,
+          16
+        ]
+      ],
+      "input_ring_samples": 1,
+      "ola_ring_samples": 256,
+      "max_input_ring_samples": 513,
+      "max_ola_ring_samples": 512,
+      "session_closed": true
+    }
+  },
+  "stress_summary": {
+    "session_id": "stress_20s",
+    "status": "closed",
+    "capture_queue": {
+      "name": "capture",
+      "capacity_samples": 8192,
+      "occupancy_samples": 0,
+      "occupancy_fraction": 0.0,
+      "mean_occupancy_samples": 3265.3906887566955,
+      "high_water_samples": 8160,
+      "oldest_age_s": 0.0,
+      "mean_dequeue_age_s": 0.23846448087431674,
+      "dequeue_age_percentile_sample_count": 183,
+      "p95_dequeue_age_s": 0.4500000000000001,
+      "p99_dequeue_age_s": 0.49336,
+      "max_observed_age_s": 0.556,
+      "enqueue_count": 183,
+      "dequeue_count": 183,
+      "backpressure_attempts": 8,
+      "backpressured_attempt_samples": 26624
+    },
+    "playback_queue": {
+      "name": "playback",
+      "capacity_samples": 8192,
+      "occupancy_samples": 0,
+      "occupancy_fraction": 0.0,
+      "mean_occupancy_samples": 2937.940120938007,
+      "high_water_samples": 4096,
+      "oldest_age_s": 0.0,
+      "mean_dequeue_age_s": 0.11363636363636363,
+      "dequeue_age_percentile_sample_count": 176,
+      "p95_dequeue_age_s": 0.2560000000000002,
+      "p99_dequeue_age_s": 0.2560000000000002,
+      "max_observed_age_s": 0.2560000000000002,
+      "enqueue_count": 176,
+      "dequeue_count": 176,
+      "backpressure_attempts": 0,
+      "backpressured_attempt_samples": 0
+    },
+    "input_offer_attempts": 191,
+    "accepted_input_samples": 320000,
+    "processed_input_samples": 320000,
+    "generated_output_samples": 320000,
+    "delivered_output_samples": 320000,
+    "lost_input_samples": 0,
+    "lost_output_samples": 0,
+    "invalid_inputs": 0,
+    "consumer_failures": 0,
+    "last_failure": null,
+    "discontinuities": 0,
+    "capture_backpressure_events": 8,
+    "playback_backpressure_events": 0,
+    "backpressure_duration_s": 0.2650000000000001,
+    "playback_backpressure_duration_s": 0.0,
+    "loss_records": [],
+    "processing_wall_ms": {
+      "count": 183,
+      "mean": 21.429270960751904,
+      "p95": 49.99540786957368,
+      "p99": 51.255988730117686,
+      "percentile_sample_count": 183,
+      "max": 73.19733407348394
+    },
+    "producer_generated_samples": 320000,
+    "producer_generated_chunks": 183,
+    "producer_max_pending_samples": 4096,
+    "producer_config": {
+      "sample_rate_hz": 16000,
+      "burst_chunks": 10,
+      "burst_period_s": 0.6,
+      "burst_spacing_s": 0.001,
+      "chunk_pattern_samples": [
+        1024,
+        256,
+        2048,
+        512,
+        4096,
+        160,
+        320,
+        3072,
+        2048,
+        4096
+      ],
+      "seed": 26052
+    },
+    "simulated_elapsed_s": 20.340999999999998,
+    "producer_accepted_rate_samples_per_s": 15731.773265817808,
+    "modeled_consumer_rate": "sample duration / 0.5 plus a 200 ms stall every 13 consumed chunks",
+    "sink_rate_samples_per_s": 16000.0,
+    "iterations": 194,
+    "peak_rss_bytes_during_stream": 232882176,
+    "rss_baseline_before_stream_bytes": 232046592,
+    "rss_growth_peak_bytes": 835584,
+    "adapter_final_state": {
+      "input_samples_seen": 320000,
+      "frames_seen": 1251,
+      "next_frame_center": 320256,
+      "next_output_sample": 320000,
+      "conv_cache_frames": {
+        "4537221536": 2,
+        "4536980880": 4,
+        "4536983760": 10,
+        "4536990160": 10,
+        "4536991440": 4,
+        "4537435472": 2
+      },
+      "attention_gru_state_shapes": [
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ],
+        [
+          1,
+          1,
+          16
+        ]
+      ],
+      "inter_gru_state_shapes": [
+        [
+          1,
+          33,
+          16
+        ],
+        [
+          1,
+          33,
+          16
+        ]
+      ],
+      "input_ring_samples": 1,
+      "ola_ring_samples": 256,
+      "max_input_ring_samples": 545,
+      "max_ola_ring_samples": 512,
+      "session_closed": true
+    },
+    "expected_input_samples": 320000,
+    "output_timestamp_cursor": 320000
+  },
+  "limitations": [
+    "The simulation uses a flow-controlled producer; physical microphones cannot be assumed to pause.",
+    "Queue capacity and queue-age limits are not end-to-end deadline guarantees.",
+    "Consumer service and sink timing are deterministic simulated rates; GTCRN wall time is measured separately.",
+    "No Raspberry Pi, ALSA, USB/I2S, live audio, canonical validation or gold data was accessed.",
+    "This verifies only bounded host queues and sample accounting under the tested synthetic workload."
+  ]
+}

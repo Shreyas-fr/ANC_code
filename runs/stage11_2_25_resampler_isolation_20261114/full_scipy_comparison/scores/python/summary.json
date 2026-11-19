@@ -1,0 +1,7 @@
+{
+  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "count": 590,
+  "model_label": "python_common_47_520_sample_crop",
+  "samples_per_clip": 47520,
+  "metric_function": "scripts/evaluate_dfn3_canonical.py::metrics (unchanged)"
+}

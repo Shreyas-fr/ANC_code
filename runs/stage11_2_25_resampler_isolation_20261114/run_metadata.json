@@ -1,0 +1,60 @@
+{
+  "purpose": "diagnostic isolate of Rust/Rubato sample-rate conversion; feed SciPy-resampled 48kHz input, so native runtime performs no resampling, then SciPy-downsample native output",
+  "selected_ids": [
+    0,
+    1,
+    2,
+    4,
+    6,
+    7,
+    33,
+    162,
+    436
+  ],
+  "one_per_target_snr_bin_ids": {
+    "-10.0": 0,
+    "15.0": 1,
+    "0.0": 2,
+    "5.0": 4,
+    "10.0": 6,
+    "20.0": 7,
+    "-5.0": 33
+  },
+  "additional_phase_b_correlation_exception_ids": [
+    162,
+    436
+  ],
+  "native_command": [
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/sih26052_rpi_deployment_audit/runs/dfn3_pi_optimization/DeepFilterNet/target/release/deep-filter",
+    "--model",
+    "/Users/shreyasdivekar/Documents/anc sih/models/dfn3_step500_tract.tar.gz",
+    "--compensate-delay",
+    "--output-dir",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_25_resampler_isolation_20261114/native_48k_outputs",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_25_resampler_isolation_20261114/scipy_48k_float_inputs/0000_noisy_48k.wav",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_25_resampler_isolation_20261114/scipy_48k_float_inputs/0001_noisy_48k.wav",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_25_resampler_isolation_20261114/scipy_48k_float_inputs/0002_noisy_48k.wav",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_25_resampler_isolation_20261114/scipy_48k_float_inputs/0004_noisy_48k.wav",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_25_resampler_isolation_20261114/scipy_48k_float_inputs/0006_noisy_48k.wav",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_25_resampler_isolation_20261114/scipy_48k_float_inputs/0007_noisy_48k.wav",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_25_resampler_isolation_20261114/scipy_48k_float_inputs/0033_noisy_48k.wav",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_25_resampler_isolation_20261114/scipy_48k_float_inputs/0162_noisy_48k.wav",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage11_2_25_resampler_isolation_20261114/scipy_48k_float_inputs/0436_noisy_48k.wav"
+  ],
+  "native_returncode": 0,
+  "native_wall_seconds": 3.663479416980408,
+  "metric_method": "unchanged scripts/evaluate_dfn3_canonical.py::metrics; first 47,520 samples",
+  "manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "protected_hashes_before": {
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/sih26052_canonical_validation/manifest.csv": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/sih26052_rpi_deployment_audit/runs/step500_from_pi.pt": "bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27",
+    "/Users/shreyasdivekar/Documents/anc sih/models/dfn3_step500_tract.tar.gz": "99e99379e81ecf5a678833912d28418c3cc7fb40345fd4a8fb8f5b82669a559d"
+  },
+  "protected_hashes_after": {
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/sih26052_canonical_validation/manifest.csv": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+    "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/sih26052_rpi_deployment_audit/runs/step500_from_pi.pt": "bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27",
+    "/Users/shreyasdivekar/Documents/anc sih/models/dfn3_step500_tract.tar.gz": "99e99379e81ecf5a678833912d28418c3cc7fb40345fd4a8fb8f5b82669a559d"
+  },
+  "gold_accessed": false,
+  "training_or_tuning": false
+}

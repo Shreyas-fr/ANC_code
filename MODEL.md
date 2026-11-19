@@ -1,68 +1,106 @@
-# Canonical Model Specification: DeepFilterNet3 (Fine-Tuned)
+# ANC Model Specifications & Verification Registry (SIH 26052)
 
-## 1. Overview
-The canonical, authoritative model for SIH26052 (DRDO AI Noise Suppression on Raspberry Pi 5) is a fine-tuned **DeepFilterNet3 (DFN3)** neural filter operating at **48 kHz**.
-
-All earlier experiments (Polar-D, Stateful PolarLSTM, Complex CRN) have been retired to `experiments/` due to recursive state feedback artifacts (16 ms acoustic reverberation) and high latency overhead.
-
----
-
-## 2. Model Metadata & Integrity
-
-| Parameter | Value |
-| :--- | :--- |
-| **Model Architecture** | DeepFilterNet3 (ERB Filterbank + Deep Complex Filtering) |
-| **Sample Rate** | 48,000 Hz (48 kHz) |
-| **Trainable Parameters** | 2,135,484 (`sum(p.numel() for p in model.parameters())`) |
-| **Model Buffers** | 32,485 (ERB filterbank tables & STFT windows) |
-| **Total Checkpoint Tensors** | 2,167,969 (total elements in `model.hk` checkpoint) |
-| **Status** | **FROZEN — CANONICAL CANDIDATE** |
-| **Binary Checksum (SHA256)** | `522c87ac9e7ff15a09e5d2043139d1b77ec3a6187cea9f91fff10addcabedfbe` |
-| **Weight Format** | `.hk` (Haiku / NumPy binary checkpoint) |
+**Authoritative Software Baseline:** **B0 Ensemble**  
+**Target Hardware:** Embedded Linux / Raspberry Pi 5 (Cortex-A76)  
+**Sample Rate:** 16 kHz (MVDR / FullSubNet / GTCRN) and 48 kHz (DFN3 Tract)  
+**Status:** Validated Host Software Baseline (Host Measured; Physical Pi 5 Real-Time Validation: **Pending/Unverified**)
 
 ---
 
-## 3. Storage Locations
+## 1. Selected Software Baseline: B0 Ensemble
 
-The model binary `model.hk` (~8.7 MB) is excluded from git version control via `.gitignore` to prevent repository bloat. It resides in the following canonical locations:
+The production software baseline for this project is the **B0 Ensemble**, consisting of a causal dual-microphone MVDR spatial frontend followed by a weighted streaming three-model neural ensemble.
 
-- **Local Development / Evaluation**: `final_model/model.hk`
-- **Raspberry Pi 5 Target**: `~/sih26052_edge/models/model.hk` (symlinked or referenced as `dfn3_final.hk`)
-- **Training Artifact Source**: Kaggle output checkpoint (`deepfilternet3_hknt/model.hk`)
-
-A matching checksum file is stored in `final_model/model.sha256`:
 ```
-522c87ac9e7ff15a09e5d2043139d1b77ec3a6187cea9f91fff10addcabedfbe  model.hk
+Dual-Mic Input [Mic 1, Mic 2] (16 kHz / 48 kHz)
+                     │
+                     ▼
+       ┌───────────────────────────┐
+       │   Causal Dual-Mic MVDR    │  Spatial filtering & covariance tracking
+       └───────────────────────────┘
+                     │
+                     ▼ Beamformed Stream
+       ┌────────────────────────────────────────────────────────┐
+       │             Three-Model Streaming Ensemble             │
+       │                                                        │
+       │   1. DeepFilterNet3 (DFN3 Step-500)      Weight: 15%   │
+       │   2. FullSubNet (Epoch 58)               Weight: 70%   │
+       │   3. GTCRN (DNS-3 Pretrained)            Weight: 15%   │
+       └────────────────────────────────────────────────────────┘
+                     │
+                     ▼
+            Enhanced Speech Output
 ```
 
+### Ensemble Performance on Canonical 590 Validation Set [MEASURED ON HOST]
+- **SI-SDR:** 13.28 dB
+- **Local SNR:** 14.52 dB
+- **STOI:** 0.8924
+- **PESQ-WB:** 2.220
+- **Pass Rates:** >15 dB SNR: 253/590 clips; All 3 thresholds met: 162/590 clips
+
 ---
 
-## 4. Verification Instructions
+## 2. Checkpoint Verification Registry & Provenance
 
-To verify the integrity of the model file before deployment or evaluation, run:
+All model weights for Baseline B0 are frozen and strictly preserved. Their bit-exact SHA-256 checksums and acquisition instructions are detailed below:
+
+| Model Component | Checkpoint File Path | Size (Bytes) | Size (MB) | SHA-256 Checksum | Provenance & Source |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| **DFN3 Step-500** | `runs/sih26052_rpi_deployment_audit/runs/step500_from_pi.pt` | 8,704,788 | 8.30 MB | `bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27` | Fine-tuned DFN3 checkpoint extracted from Raspberry Pi deployment test. Trained on SIH-26 augmented dataset. |
+| **FullSubNet (Ep 58)** | `checkpoints/fullsubnet/fullsubnet_best_model_58epochs.tar` | 67,669,069 | 64.53 MB | `482615e9709d2d6c10ee0d24f9844ad2da2dae3c0cf897f014839c365917a2e0` | FullSubNet best model after 58 training epochs on DNS Challenge dataset. |
+| **GTCRN (DNS-3)** | `checkpoints/gtcrn_stage5/model_trained_on_dns3.tar` | 579,819 | 0.55 MB | `a630d992cf792daf4ce2bb5bcf9c4d389f740a8f09c6e0971184697fe6371b79` | Pretrained GTCRN causal speech enhancement model trained on DNS Challenge 3. |
+| **DFN3 Tract Engine** | `models/dfn3_step500_tract.tar.gz` | 7,995,509 | 7.63 MB | `99e99379e81ecf5a678833912d28418c3cc7fb40345fd4a8fb8f5b82669a559d` | Exported Tract ONNX graph bundle optimized for embedded ARM64/NEON inference. |
+| **Canonical Manifest** | `runs/sih26052_canonical_validation/manifest.csv` | 141,708 | 0.14 MB | `d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4` | Ground-truth metadata for the 590 canonical evaluation clips. |
+
+---
+
+## 3. Explicit Candidate Disclaimers
+
+### 3.1 Experimental UL-UNAS Package
+- The files located in `deploy/pi5/` and the evaluation stages in Stage 11.2.58B-U/V/W/X represent **UL-UNAS experimental deployment exploration**, NOT Software Baseline B0.
+- UL-UNAS is an exploratory single-model candidate (IEEE TASLP 2026, Rong et al.). On the 40-speaker independent holdout set, the B0 ensemble outperforms UL-UNAS.
+- UL-UNAS is retained for experimental reference only. It does not replace B0.
+
+### 3.2 Real-Time Raspberry Pi 5 Status
+- **Host Performance:** Verified and measured on Apple Silicon host.
+- **Physical Pi 5 Real-Time Status:** The full three-model B0 ensemble has **NOT** passed physical Raspberry Pi 5 real-time testing. Real-time Pi 5 benchmarks have only been confirmed for the single-model DFN3 Tract engine (RTF $\approx 0.18$). The multi-model ensemble is projected to require optimization or pipelined compute before real-time Pi 5 deployment is achieved.
+
+---
+
+## 4. Instructions for Contributor 2
+
+### Acquiring and Verifying Weights
+
+Because GitHub warns above 50 MB and blocks files above 100 MB, large binary checkpoints are excluded from standard Git tracking via `.gitignore`. Contributor 2 can obtain the model checkpoints from the project release bundle or team cloud storage and place them in the corresponding paths:
 
 ```bash
-# Direct SHA256 checksum:
-shasum -a 256 final_model/model.hk
+# Verify integrity of all B0 model files:
+python -c "
+import hashlib, os, sys
 
-# Automated check using checksum file:
-cd final_model && shasum -c model.sha256
+checkpoints = [
+    ('runs/sih26052_rpi_deployment_audit/runs/step500_from_pi.pt', 'bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27'),
+    ('checkpoints/fullsubnet/fullsubnet_best_model_58epochs.tar', '482615e9709d2d6c10ee0d24f9844ad2da2dae3c0cf897f014839c365917a2e0'),
+    ('checkpoints/gtcrn_stage5/model_trained_on_dns3.tar', 'a630d992cf792daf4ce2bb5bcf9c4d389f740a8f09c6e0971184697fe6371b79'),
+    ('models/dfn3_step500_tract.tar.gz', '99e99379e81ecf5a678833912d28418c3cc7fb40345fd4a8fb8f5b82669a559d')
+]
+
+all_ok = True
+for path, expected in checkpoints:
+    if not os.path.exists(path):
+        print(f'MISSING: {path}')
+        all_ok = False
+        continue
+    h = hashlib.sha256(open(path, 'rb').read()).hexdigest()
+    if h == expected:
+        print(f'BIT-EXACT MATCH: {path}')
+    else:
+        print(f'MISMATCH ({path}): got {h}')
+        all_ok = False
+
+if not all_ok:
+    sys.exit(1)
+print('ALL B0 CHECKPOINTS VERIFIED BIT-EXACT!')
+"
 ```
-
-Expected output:
-```
-522c87ac9e7ff15a09e5d2043139d1b77ec3a6187cea9f91fff10addcabedfbe  final_model/model.hk
-model.hk: OK
-```
-
----
-
-## 5. Architectural & Deployment Characteristics
-
-- **Acoustic Domain**: Complex STFT spectrogram + 32 ERB sub-bands.
-- **Deep Complex Filtering (DF)**: Predicts complex filter coefficients per ERB band to restore speech phases without distortion.
-- **Pi 5 Deployment Configuration**: 
-  - Audio chunking: **500 ms block** with **300 ms past context** (total window 800 ms).
-  - Compute latency: Median **213.0 ms**, P95 **236.4 ms**, Max **424.6 ms** per 500 ms block on 1 Cortex-A76 core.
-  - End-to-end latency: 576 ms (measured chain delay) + 213 ms (median compute) = **~790 ms** (in batch-block streaming mode).
-  - Algorithmic latency: **~16 ms** (only when operated frame-by-frame with streaming GRU state).

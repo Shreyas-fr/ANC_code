@@ -1,143 +1,132 @@
-# SIH26052 — AI Noise Suppression on Raspberry Pi 5
+# SIH 26052: Dual-Microphone Speech Enhancement & Noise Cancellation
 
-**DRDO Problem Statement SIH26052:** Real-Time AI-Based Active Noise Suppression for Tactical Communications on Embedded Hardware (Raspberry Pi 5).
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Baseline: B0 Ensemble](https://img.shields.io/badge/Baseline-B0%20Ensemble-green.svg)](#software-baseline-b0)
+
+Real-time, edge-deployable speech enhancement system developed for Smart India Hackathon (SIH 26052). The project targets non-stationary, high-noise environments (defense, tactical, vehicular, and industrial) utilizing dual-microphone spatial filtering combined with low-latency deep neural network streaming ensembles.
 
 ---
 
-## 1. System Architecture
+## 1. Selected Software Baseline: B0 Ensemble
 
-The system operates as an autonomous edge-to-operator tactical communication pipeline:
+The authoritative, validated production software baseline for this project is the **B0 Ensemble**.
+
+### Architecture Overview
 
 ```
-[ Tactical Environment ]
-          │ (Acoustic Noise: Gunfire, Artillery, Engine Rumble)
-          ▼
- [ Bluetooth / ALSA Mic ]
-          │ (16 kHz / 48 kHz PCM)
-          ▼
-[ Raspberry Pi 5 (Edge) ] ── (Inference: DeepFilterNet3 48 kHz, 1 Thread)
-   ├── PipeWire Capture
-   ├── Block Backend (500ms block + 300ms context)
-   └── UDP Network Streamer
-          │
-          │ UDP (Port 5005: Enhanced Audio | Port 5006: Telemetry | Port 5007: Raw)
-          ▼
- [ Operator Dashboard ] (PC Frontend)
-   ├── Jitter Ring Buffer (In-memory, zero disk writes)
-   ├── Real-Time Rolling Waveforms & 0-8 kHz FFT Spectrum
-   ├── Telemetry Monitor (Latency, Thermals, Packet Loss)
-   └── Soundcard Playback (Automatic fail-safe mute on disconnect)
+Dual-Mic Input [Mic 1, Mic 2]
+         │
+         ▼
+ ┌─────────────────────────────────┐
+ │ Causal MVDR Spatial Frontend    │ (Steering vector calibration & covariance tracking)
+ └─────────────────────────────────┘
+         │
+         ▼ Beamformed Mono Stream
+ ┌────────────────────────────────────────────────────────┐
+ │ Three-Model Streaming Neural Ensemble                  │
+ │                                                        │
+ │  ├─ DeepFilterNet3 (DFN3 Step-500)       [Weight: 15%] │
+ │  ├─ FullSubNet (Epoch 58)                [Weight: 70%] │
+ │  └─ GTCRN (DNS-3 Pretrained)             [Weight: 15%] │
+ └────────────────────────────────────────────────────────┘
+         │
+         ▼
+ Enhanced Speech Output
 ```
 
-- **Authoritative Edge Node (Raspberry Pi 5):** Executes all audio capture, resampling, and DeepFilterNet3 neural inference natively on the Cortex-A76 CPU.
-- **Operator Frontend (PC):** Lightweight PySide6 visualization dashboard and low-latency audio renderer. The PC performs **zero AI computation**.
+### Verified Baseline Components & Checksums
+
+All baseline checkpoints are frozen and verified bit-exact via SHA-256:
+
+| Component | Path | Size | SHA-256 Checksum |
+| :--- | :--- | :---: | :--- |
+| **DFN3 Step-500** | `runs/sih26052_rpi_deployment_audit/runs/step500_from_pi.pt` | 8.30 MB | `bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27` |
+| **FullSubNet (Ep 58)** | `checkpoints/fullsubnet/fullsubnet_best_model_58epochs.tar` | 64.53 MB | `482615e9709d2d6c10ee0d24f9844ad2da2dae3c0cf897f014839c365917a2e0` |
+| **GTCRN (DNS-3)** | `checkpoints/gtcrn_stage5/model_trained_on_dns3.tar` | 0.55 MB | `a630d992cf792daf4ce2bb5bcf9c4d389f740a8f09c6e0971184697fe6371b79` |
+| **Tract Engine Export**| `models/dfn3_step500_tract.tar.gz` | 7.63 MB | `99e99379e81ecf5a678833912d28418c3cc7fb40345fd4a8fb8f5b82669a559d` |
+| **Canonical 590 Manifest**| `runs/sih26052_canonical_validation/manifest.csv` | 0.14 MB | `d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4` |
 
 ---
 
-## 2. Canonical Model: DeepFilterNet3 (48 kHz)
+## 2. Critical Architectural Distinction: B0 vs. UL-UNAS
 
-- **Architecture:** DeepFilterNet3 (Complex ERB Filterbank + Deep Complex Filtering)
-- **Parameters:** 2,167,969 (Exact verified count)
-- **Sample Rate:** 48,000 Hz (48 kHz Native)
-- **Status:** **CANONICAL FROZEN CANDIDATE**
-- **SHA256 Checksum:** `522c87ac9e7ff15a09e5d2043139d1b77ec3a6187cea9f91fff10addcabedfbe`
-- **Specification:** See [`MODEL.md`](MODEL.md) for verification procedures (`shasum -a 256 final_model/model.hk`).
-- *Note:* Earlier experimental architectures (Polar-D / Stateful PolarLSTM and Complex CRN) have been retired to `experiments/` due to acoustic reverberation artifacts and high compute overhead. See [`docs/experiments.md`](docs/experiments.md).
+> [!IMPORTANT]
+> **Production Baseline vs. Experimental Candidate:**
+> - **B0 Ensemble** is the validated software baseline.
+> - The files located in `deploy/pi5/` and evaluated in Stages 11.2.58B-U through 11.2.58B-X represent **UL-UNAS experimental deployment files**, NOT Software Baseline B0.
+> - UL-UNAS is an exploratory single-model candidate under research evaluation. It does not replace B0.
 
 ---
 
-## 3. Quick Start
-
-### Step 1: Launch Operator Frontend (PC / Mac)
-```bash
-# Activate frontend environment
-source frontend/venv/bin/activate  # or use system python with PySide6
-python frontend/main.py
-```
-*Dependencies:* `PySide6`, `pyqtgraph`, `sounddevice`, `numpy`.
-
-### Step 2: Launch Autonomous Edge Sender (Raspberry Pi 5)
-```bash
-# Set destination PC IP address
-export SIH_PC_IP="<OPERATOR_PC_IP>"
-
-# Launch autonomous live streaming with DFN3 enhancement
-python edge/pi_sender_v2.py \
-    --mode dfn3 \
-    --target-ip "$SIH_PC_IP" \
-    --name-match Rockerz
-```
-
-### Operational Modes
-| Mode Flag | Behavior |
-| :--- | :--- |
-| `--mode dfn3` | Full neural noise suppression via DeepFilterNet3 (Default) |
-| `--mode raw` | Direct microphone passthrough for latency calibration |
-| `--mode resampled` | Polyphase FIR resampler without neural filtering |
-
----
-
-## 4. Hardware Stress Test Validation (Raspberry Pi 5)
-
-During continuous 6-minute in-memory stress testing on Raspberry Pi 5 hardware (running headless on a single Cortex-A76 core with standard 5V/3A supply), the canonical DFN3 pipeline demonstrated rock-solid real-time stability:
-
-| Metric | Measured Value | Operational Assessment |
-| :--- | :---: | :--- |
-| **Median Compute Time** | `213.2 ms` | Comfortably runs at ~0.43x real-time per 500 ms block |
-| **Max Compute Time** | `424.6 ms` | Safely below the 500 ms block deadline |
-| **Peak Operating Temp** | `60.9 °C` | Passive cooling; well below the 82.0 °C throttle threshold |
-| **Supply Voltage (EXT5V)** | `4.78V - 5.03V` | Stable voltage; **0x0 throttling events** registered |
-| **Network Transmission** | `18,737 frames` | **0 packet drops**; maximum jitter < 0.02 ms |
-| **Memory Footprint** | `~1.3 GB free` | Zero memory leaks; all runtime buffers reside in `/dev/shm` |
-
----
-
-## 5. Latency Characteristics
-
-- **Deployed End-to-End Latency:** **~790 ms** (576 ms measured chain delay + 213 ms median compute time). In the deployed 500 ms-block configuration, throughput is prioritized over low latency to ensure zero deadline misses on embedded hardware.
-- **Model Algorithmic Latency:** **~16 ms** (STFT hop length: 256 samples at 16 kHz or 10 ms at 48 kHz). This latency is achievable only when operating in sample-by-sample streaming mode without block windowing.
-
----
-
-## 6. Repository Layout
+## 3. Repository Structure
 
 ```
 .
-├── src/                # Core neural network models & DSP modules
-├── eval/               # Validation & benchmark evaluation harnesses
-├── scripts/            # Training, audio mixing, and audit scripts
-├── deploy/             # Embedded benchmarks and NLMS postfilter
-├── edge/               # Raspberry Pi 5 streaming, capture, & hardware code
-├── frontend/           # PySide6 operator GUI & unit tests
-├── configs/            # Runtime & model configuration files
-├── results/            # Benchmark metrics, CSVs, and spectrograms
-├── docs/               # System documentation & visual diagrams
-│   ├── diagnostics/    # Hardware and forensic diagnostic logs
-│   ├── system_diagrams.md
-│   └── experiments.md  # Non-canonical model documentation
-├── experiments/        # Historical Polar-D, CRN, and ablation runs
-├── assets/             # Media, audio recordings, and plots
-├── final_model/        # Frozen canonical model descriptor & SHA256
-├── MODEL.md            # Authoritative model specification
-├── PROJECT_INDEX.md    # Component status & benchmark index
-├── REPORT.md           # Formal deliverables & claims report
-└── CLEANUP_LOG.md      # Sanitization & migration audit log
+├── configs/            # Configuration files for training, inference, and beamforming
+├── docs/               # Technical documentation, latency models, and mathematical proofs
+├── MASTER_SIH_COMPLIANCE.md # Authoritative compliance log and verification registry
+├── models/             # Model architectures and exported Tract/ONNX engines
+├── notebooks/          # Exploratory research and diagnostic analysis notebooks
+├── research/           # Research papers, survey logs, and theoretical derivations
+├── runs/               # Validation run logs, evaluation metrics, and canonical manifests
+├── scripts/            # Evaluation runners, diagnostic tools, and export scripts
+├── src/
+│   ├── enhance/        # Core neural enhancement models and stateful wrappers
+│   ├── audio/          # STFT, feature extraction, and audio I/O pipelines
+│   └── beamformer/     # Causal MVDR and spatial covariance estimators
+├── tests/              # Unit tests and regression test suites
+└── third_party/        # Third-party implementations (FullSubNet, DeepFilterNet, GTCRN)
 ```
 
 ---
 
-## 7. Verification & Tests
+## 4. Getting Started
 
-### Frontend Unit Tests
-Verify the complete packet parsing, sequence tracking, and circular jitter buffer state machine:
+### Prerequisites
+- Python 3.10+ (tested on Python 3.10, 3.11, and 3.14)
+- Libsndfile & FFmpeg
+- (Optional for Tract/Rust inference) Rust toolchain (`cargo`, `rustc`)
+
+### Environment Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Shreyas-fr/ANC_code.git
+   cd ANC_code
+   ```
+
+2. **Create and activate a virtual environment:**
+   ```bash
+   python3 -m venv pc_venv
+   source pc_venv/bin/activate
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
+
+### Running Inference & Verification
+
+To verify the B0 ensemble components against the canonical validation set:
 ```bash
-pytest frontend/tests/
-# Expected: 16 passed
+python scripts/evaluate_dfn3_canonical.py
 ```
 
-### Model Integrity Check
-Verify the frozen model checkpoint checksum against the authoritative hash:
+To run offline dual-microphone enhancement:
 ```bash
-shasum -a 256 final_model/model.hk
-# Expected: 522c87ac9e7ff15a09e5d2043139d1b77ec3a6187cea9f91fff10addcabedfbe
+python scripts/run_full_evaluation.py
 ```
+
+---
+
+## 5. Governance & Integrity Rules
+
+1. **`GOLD_TEST_READ = NO`**:
+   The gold test set (`data/SIH_GOLD_TEST/`) is strictly sealed and protected. No automated script, evaluation harness, or contributor may read, decode, hash, or score against it during active development.
+2. **Deterministic Checkpoint Integrity**:
+   Frozen checkpoints in `runs/` and `checkpoints/` must not be retrained, modified, or overwritten.
+3. **Collaboration Protocol**:
+   Please review [CONTRIBUTING.md](CONTRIBUTING.md) and [COLLABORATION.md](COLLABORATION.md) before submitting code.

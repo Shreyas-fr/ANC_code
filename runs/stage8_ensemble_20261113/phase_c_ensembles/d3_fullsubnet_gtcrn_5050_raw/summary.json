@@ -1,0 +1,231 @@
+{
+  "variant": "d3_fullsubnet_gtcrn_5050_raw",
+  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
+  "metric_implementation": "scripts/evaluate_dfn3_canonical.py::metrics",
+  "metric_implementation_sha256": "66e448cc47b0ae60846399d803d8f6321068c5e4a9faa18f6ebb09305219b16a",
+  "input_waveforms": {
+    "step500": "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage8_ensemble_20261113/step500_predictions",
+    "fullsubnet": "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/stage8_ensemble_20261113/fullsubnet_predictions",
+    "gtcrn": "/Users/shreyasdivekar/Documents/anc sih/antigravity/runs/gtcrn_dns3_canonical_20261113/predictions"
+  },
+  "input_hashes_verified": {
+    "step500": 590,
+    "fullsubnet": 590,
+    "gtcrn": 590
+  },
+  "weights": {
+    "step500": 0.0,
+    "fullsubnet": 0.5,
+    "gtcrn": 0.5
+  },
+  "global_model_scales": {
+    "step500": 1.0,
+    "fullsubnet": 1.0,
+    "gtcrn": 1.0
+  },
+  "amplitude_policy": "raw float32 weighted sum; no clipping or output normalization",
+  "scale_reference_median_rms": null,
+  "summary_all": {
+    "count": 590,
+    "means": {
+      "snr_db": 14.76975103884697,
+      "si_sdr_db": 13.634811543046201,
+      "stoi": 0.9025797516353913,
+      "pesq_wb": 2.523430724669311
+    },
+    "medians": {
+      "snr_db": 14.461724591725588,
+      "si_sdr_db": 13.484102818210205,
+      "stoi": 0.9347480344859459,
+      "pesq_wb": 2.4861518144607544
+    },
+    "pass_counts": {
+      "snr_gt_15_db": 272,
+      "stoi_gt_0_85": 475,
+      "pesq_gt_2_5": 288,
+      "all_three": 216,
+      "all_three_rate": 0.36610169491525424
+    }
+  },
+  "summary_target_snr_le_0_db": {
+    "count": 210,
+    "means": {
+      "snr_db": 10.88657180170848,
+      "si_sdr_db": 9.350610842382428,
+      "stoi": 0.8400578259196916,
+      "pesq_wb": 1.9187339351290749
+    },
+    "medians": {
+      "snr_db": 10.662601589616678,
+      "si_sdr_db": 9.487579561556576,
+      "stoi": 0.874893482373319,
+      "pesq_wb": 1.8150115013122559
+    },
+    "pass_counts": {
+      "snr_gt_15_db": 27,
+      "stoi_gt_0_85": 122,
+      "pesq_gt_2_5": 27,
+      "all_three": 15,
+      "all_three_rate": 0.07142857142857142
+    }
+  },
+  "by_target_snr": {
+    "-10": {
+      "count": 30,
+      "means": {
+        "snr_db": 7.262977658092767,
+        "si_sdr_db": 4.421263950368594,
+        "stoi": 0.7198292596870749,
+        "pesq_wb": 1.4899242242177329
+      },
+      "medians": {
+        "snr_db": 6.430342501877435,
+        "si_sdr_db": 4.394781970273333,
+        "stoi": 0.7257527452646125,
+        "pesq_wb": 1.356175184249878
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 0,
+        "stoi_gt_0_85": 5,
+        "pesq_gt_2_5": 0,
+        "all_three": 0,
+        "all_three_rate": 0.0
+      }
+    },
+    "-5": {
+      "count": 63,
+      "means": {
+        "snr_db": 10.690412065801723,
+        "si_sdr_db": 9.205872205428426,
+        "stoi": 0.8331844718431829,
+        "pesq_wb": 1.8562155999834575
+      },
+      "medians": {
+        "snr_db": 9.628524495626598,
+        "si_sdr_db": 8.267415719685419,
+        "stoi": 0.8489603393421897,
+        "pesq_wb": 1.6482751369476318
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 8,
+        "stoi_gt_0_85": 30,
+        "pesq_gt_2_5": 8,
+        "all_three": 3,
+        "all_three_rate": 0.047619047619047616
+      }
+    },
+    "0": {
+      "count": 117,
+      "means": {
+        "snr_db": 11.921322978380248,
+        "si_sdr_db": 10.692482132027871,
+        "stoi": 0.8745867002256619,
+        "pesq_wb": 2.0623488619796233
+      },
+      "medians": {
+        "snr_db": 11.531766576789193,
+        "si_sdr_db": 10.520754959577374,
+        "stoi": 0.8979845293943407,
+        "pesq_wb": 1.937993049621582
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 19,
+        "stoi_gt_0_85": 87,
+        "pesq_gt_2_5": 19,
+        "all_three": 12,
+        "all_three_rate": 0.10256410256410256
+      }
+    },
+    "5": {
+      "count": 137,
+      "means": {
+        "snr_db": 14.410709258723232,
+        "si_sdr_db": 13.291653599010646,
+        "stoi": 0.9108878826743173,
+        "pesq_wb": 2.4222077200882626
+      },
+      "medians": {
+        "snr_db": 14.490643371849503,
+        "si_sdr_db": 13.416858726291128,
+        "stoi": 0.9288618314989665,
+        "pesq_wb": 2.3953030109405518
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 59,
+        "stoi_gt_0_85": 122,
+        "pesq_gt_2_5": 57,
+        "all_three": 33,
+        "all_three_rate": 0.24087591240875914
+      }
+    },
+    "10": {
+      "count": 121,
+      "means": {
+        "snr_db": 16.603483588733972,
+        "si_sdr_db": 15.743169996259134,
+        "stoi": 0.9377847911315386,
+        "pesq_wb": 2.895457003727432
+      },
+      "medians": {
+        "snr_db": 16.653118452821055,
+        "si_sdr_db": 16.00126539647931,
+        "stoi": 0.957834342798265,
+        "pesq_wb": 2.8749032020568848
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 84,
+        "stoi_gt_0_85": 112,
+        "pesq_gt_2_5": 94,
+        "all_three": 69,
+        "all_three_rate": 0.5702479338842975
+      }
+    },
+    "15": {
+      "count": 86,
+      "means": {
+        "snr_db": 19.423758621699392,
+        "si_sdr_db": 18.572136767571294,
+        "stoi": 0.961894349841427,
+        "pesq_wb": 3.203171031419621
+      },
+      "medians": {
+        "snr_db": 20.678333874748184,
+        "si_sdr_db": 19.617621755441764,
+        "stoi": 0.9757241566105941,
+        "pesq_wb": 3.2897719144821167
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 70,
+        "stoi_gt_0_85": 84,
+        "pesq_gt_2_5": 75,
+        "all_three": 67,
+        "all_three_rate": 0.7790697674418605
+      }
+    },
+    "20": {
+      "count": 36,
+      "means": {
+        "snr_db": 21.506697511469163,
+        "si_sdr_db": 21.050740524277902,
+        "stoi": 0.9756498967245891,
+        "pesq_wb": 3.561792704794142
+      },
+      "medians": {
+        "snr_db": 22.12114468335755,
+        "si_sdr_db": 21.508641145378363,
+        "stoi": 0.985422047285246,
+        "pesq_wb": 3.6242750883102417
+      },
+      "pass_counts": {
+        "snr_gt_15_db": 32,
+        "stoi_gt_0_85": 35,
+        "pesq_gt_2_5": 35,
+        "all_three": 32,
+        "all_three_rate": 0.8888888888888888
+      }
+    }
+  },
+  "prediction_count": 590,
+  "per_clip_csv_sha256": "a9743901a97ee83833fedb4006219698139e6d3c59b9f945242d632d300bc2e8",
+  "prediction_files_csv_sha256": "c3a7e6a116cce5922a4afee94a3f3149f96accd97856d14ef9e9296c147e10ad"
+}

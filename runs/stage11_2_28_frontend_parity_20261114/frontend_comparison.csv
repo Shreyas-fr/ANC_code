@@ -1,0 +1,13 @@
+val_index,stage,shape,elements,exact_equal,max_abs_diff,mean_abs_diff,rmse
+6,stft,300x481x2,288600,True,0.0,0.0,0.0
+6,erb_features,300x32,9600,True,0.0,0.0,0.0
+6,complex_features,300x96x2,57600,True,0.0,0.0,0.0
+6,synthesis,144000,144000,True,0.0,0.0,0.0
+93,stft,300x481x2,288600,True,0.0,0.0,0.0
+93,erb_features,300x32,9600,True,0.0,0.0,0.0
+93,complex_features,300x96x2,57600,True,0.0,0.0,0.0
+93,synthesis,144000,144000,True,0.0,0.0,0.0
+287,stft,300x481x2,288600,True,0.0,0.0,0.0
+287,erb_features,300x32,9600,True,0.0,0.0,0.0
+287,complex_features,300x96x2,57600,True,0.0,0.0,0.0
+287,synthesis,144000,144000,True,0.0,0.0,0.0
