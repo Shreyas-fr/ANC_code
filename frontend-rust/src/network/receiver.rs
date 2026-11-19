@@ -1,0 +1,195 @@
+//! Network receivers for SIH 26052 UDP audio and telemetry streams.
+
+use std::net::UdpSocket;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::{Arc, Mutex};
+use std::thread::{self, JoinHandle};
+use std::time::{Duration, Instant};
+
+use anc_rust::network::{AudioPacket, EdgeTelemetry, AUDIO_PACKET_BYTES};
+
+pub struct StreamStats {
+    pub packets_received: u64,
+    pub packets_lost: u64,
+    pub last_sequence: Option<u64>,
+    pub last_arrival: Option<Instant>,
+    pub loss_percentage: f32,
+}
+
+impl Default for StreamStats {
+    fn default() -> Self {
+        Self {
+            packets_received: 0,
+            packets_lost: 0,
+            last_sequence: None,
+            last_arrival: None,
+            loss_percentage: 0.0,
+        }
+    }
+}
+
+pub type SharedStreamStats = Arc<Mutex<StreamStats>>;
+pub type AudioFrameCallback = Arc<dyn Fn(&AudioPacket) + Send + Sync>;
+
+/// Asynchronous UDP Audio Receiver thread.
+pub struct UdpAudioReceiver {
+    port: u16,
+    running: Arc<AtomicBool>,
+    handle: Option<JoinHandle<()>>,
+    pub stats: SharedStreamStats,
+}
+
+impl UdpAudioReceiver {
+    pub fn new(port: u16, callback: AudioFrameCallback) -> Self {
+        let running = Arc::new(AtomicBool::new(true));
+        let stats = Arc::new(Mutex::new(StreamStats::default()));
+
+        let is_running = Arc::clone(&running);
+        let stream_stats = Arc::clone(&stats);
+
+        let handle = thread::spawn(move || {
+            let socket = match UdpSocket::bind(format!("0.0.0.0:{}", port)) {
+                Ok(s) => {
+                    let _ = s.set_read_timeout(Some(Duration::from_millis(200)));
+                    s
+                }
+                Err(e) => {
+                    eprintln!("Failed to bind UDP audio socket on port {}: {}", port, e);
+                    return;
+                }
+            };
+
+            let mut buf = [0u8; AUDIO_PACKET_BYTES + 64];
+
+            while is_running.load(Ordering::Relaxed) {
+                match socket.recv_from(&mut buf) {
+                    Ok((len, _)) => {
+                        if let Ok(packet) = AudioPacket::deserialize(&buf[..len]) {
+                            if let Ok(mut st) = stream_stats.lock() {
+                                if let Some(last) = st.last_sequence {
+                                    if packet.sequence > last + 1 {
+                                        st.packets_lost += packet.sequence - (last + 1);
+                                    }
+                                }
+                                st.last_sequence = Some(packet.sequence);
+                                st.packets_received += 1;
+                                st.last_arrival = Some(Instant::now());
+
+                                let total = st.packets_received + st.packets_lost;
+                                if total > 0 {
+                                    st.loss_percentage = (st.packets_lost as f32 / total as f32) * 100.0;
+                                }
+                            }
+                            callback(&packet);
+                        }
+                    }
+                    Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock || e.kind() == std::io::ErrorKind::TimedOut => {
+                        // Read timeout - loop again
+                    }
+                    Err(e) => {
+                        eprintln!("UDP receive error on port {}: {}", port, e);
+                    }
+                }
+            }
+        });
+
+        Self {
+            port,
+            running,
+            handle: Some(handle),
+            stats,
+        }
+    }
+
+    pub fn port(&self) -> u16 {
+        self.port
+    }
+
+    pub fn stop(&mut self) {
+        self.running.store(false, Ordering::Relaxed);
+        if let Some(h) = self.handle.take() {
+            let _ = h.join();
+        }
+    }
+}
+
+pub type TelemetryCallback = Arc<dyn Fn(&EdgeTelemetry) + Send + Sync>;
+
+/// Asynchronous UDP Telemetry Receiver thread.
+pub struct UdpTelemetryReceiver {
+    port: u16,
+    running: Arc<AtomicBool>,
+    handle: Option<JoinHandle<()>>,
+    pub latest_telemetry: Arc<Mutex<Option<EdgeTelemetry>>>,
+    pub last_arrival: Arc<Mutex<Option<Instant>>>,
+}
+
+impl UdpTelemetryReceiver {
+    pub fn new(port: u16, callback: Option<TelemetryCallback>) -> Self {
+        let running = Arc::new(AtomicBool::new(true));
+        let latest_telemetry = Arc::new(Mutex::new(None));
+        let last_arrival = Arc::new(Mutex::new(None));
+
+        let is_running = Arc::clone(&running);
+        let telem_store = Arc::clone(&latest_telemetry);
+        let arrival_store = Arc::clone(&last_arrival);
+
+        let handle = thread::spawn(move || {
+            let socket = match UdpSocket::bind(format!("0.0.0.0:{}", port)) {
+                Ok(s) => {
+                    let _ = s.set_read_timeout(Some(Duration::from_millis(500)));
+                    s
+                }
+                Err(e) => {
+                    eprintln!("Failed to bind UDP telemetry socket on port {}: {}", port, e);
+                    return;
+                }
+            };
+
+            let mut buf = [0u8; 4096];
+
+            while is_running.load(Ordering::Relaxed) {
+                match socket.recv_from(&mut buf) {
+                    Ok((len, _)) => {
+                        if let Ok(telem) = serde_json::from_slice::<EdgeTelemetry>(&buf[..len]) {
+                            if let Ok(mut store) = telem_store.lock() {
+                                *store = Some(telem.clone());
+                            }
+                            if let Ok(mut arr) = arrival_store.lock() {
+                                *arr = Some(Instant::now());
+                            }
+                            if let Some(ref cb) = callback {
+                                cb(&telem);
+                            }
+                        }
+                    }
+                    Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock || e.kind() == std::io::ErrorKind::TimedOut => {
+                        // Read timeout
+                    }
+                    Err(e) => {
+                        eprintln!("UDP telemetry receive error on port {}: {}", port, e);
+                    }
+                }
+            }
+        });
+
+        Self {
+            port,
+            running,
+            handle: Some(handle),
+            latest_telemetry,
+            last_arrival,
+        }
+    }
+
+    pub fn port(&self) -> u16 {
+        self.port
+    }
+
+    pub fn stop(&mut self) {
+        self.running.store(false, Ordering::Relaxed);
+        if let Some(h) = self.handle.take() {
+            let _ = h.join();
+        }
+    }
+}
