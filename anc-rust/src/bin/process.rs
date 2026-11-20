@@ -55,6 +55,18 @@ struct Args {
     enable_limiter: bool,
 
     #[arg(long)]
+    enable_doa: bool,
+
+    #[arg(long)]
+    enable_pitch_comb: bool,
+
+    #[arg(long)]
+    enable_ashp: bool,
+
+    #[arg(long)]
+    enable_dereverb: bool,
+
+    #[arg(long)]
     no_align_delay: bool,
 }
 
@@ -112,6 +124,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         enable_agc: args.enable_agc,
         enable_limiter: args.enable_limiter,
         aggressive_snr: args.aggressive_snr,
+        enable_doa_tracking: args.enable_doa,
+        enable_pitch_comb: args.enable_pitch_comb,
+        enable_ashp: args.enable_ashp,
+        enable_dereverb: args.enable_dereverb,
         mvdr_config: MvdrConfig {
             num_bins,
             sample_rate,

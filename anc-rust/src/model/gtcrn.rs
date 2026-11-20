@@ -100,6 +100,10 @@ impl SpeechEnhancer for GtcrnEnhancer {
         self.min_gain = 10.0_f32.powf(min_gain_db / 20.0).clamp(0.01, 1.0);
     }
 
+    fn set_aggressive_snr(&mut self, enabled: bool) {
+        self.min_gain = if enabled { 0.03 } else { 0.05 };
+    }
+
     fn process_stft_frame(&mut self, spec: &mut [Complex32]) -> Result<EnhancerStats, ModelError> {
         let t0 = Instant::now();
         let num_bins = spec.len().min(self.num_bins);

@@ -41,6 +41,9 @@ pub struct Dfn3Enhancer {
     erb_masks: Vec<f32>,
     linear_gains: Vec<f32>,
 
+    feat_erb: tract_ndarray::Array4<f32>,
+    feat_spec: tract_ndarray::Array4<f32>,
+
     min_gain: f32,
 }
 
@@ -101,6 +104,8 @@ impl Dfn3Enhancer {
             erb_energies: vec![0.0f32; DFN3_NUM_BANDS],
             erb_masks: vec![1.0f32; DFN3_NUM_BANDS],
             linear_gains: vec![1.0f32; DFN3_NUM_BINS],
+            feat_erb: tract_ndarray::Array4::<f32>::zeros((1, 1, 1, DFN3_NUM_BANDS)),
+            feat_spec: tract_ndarray::Array4::<f32>::zeros((1, 2, 1, DFN3_DF_BINS)),
             min_gain: 0.08,
         })
     }
@@ -120,6 +125,8 @@ impl Dfn3Enhancer {
             erb_energies: vec![0.0f32; DFN3_NUM_BANDS],
             erb_masks: vec![1.0f32; DFN3_NUM_BANDS],
             linear_gains: vec![1.0f32; num_bins],
+            feat_erb: tract_ndarray::Array4::<f32>::zeros((1, 1, 1, DFN3_NUM_BANDS)),
+            feat_spec: tract_ndarray::Array4::<f32>::zeros((1, 2, 1, DFN3_DF_BINS)),
             min_gain: 0.08,
         }
     }
@@ -184,6 +191,10 @@ impl SpeechEnhancer for Dfn3Enhancer {
         self.min_gain = 10.0_f32.powf(min_gain_db / 20.0).clamp(0.01, 1.0);
     }
 
+    fn set_aggressive_snr(&mut self, enabled: bool) {
+        self.min_gain = if enabled { 0.05 } else { 0.08 };
+    }
+
     fn process_stft_frame(&mut self, spec: &mut [Complex32]) -> Result<EnhancerStats, ModelError> {
         let t0 = Instant::now();
         let num_bins = spec.len().min(self.num_bins);
@@ -207,21 +218,19 @@ impl SpeechEnhancer for Dfn3Enhancer {
                 .extract_erb_energies(&self.spec_power, &mut self.erb_energies);
 
             // 3. Prepare encoder inputs: feat_erb [1, 1, 1, 32], feat_spec [1, 2, 1, 96]
-            let mut feat_erb = tract_ndarray::Array4::<f32>::zeros((1, 1, 1, DFN3_NUM_BANDS));
             for b in 0..DFN3_NUM_BANDS {
-                feat_erb[[0, 0, 0, b]] = self.erb_energies[b];
+                self.feat_erb[[0, 0, 0, b]] = self.erb_energies[b];
             }
 
-            let mut feat_spec = tract_ndarray::Array4::<f32>::zeros((1, 2, 1, DFN3_DF_BINS));
             for k in 0..DFN3_DF_BINS {
-                feat_spec[[0, 0, 0, k]] = spec[k].re;
-                feat_spec[[0, 1, 0, k]] = spec[k].im;
+                self.feat_spec[[0, 0, 0, k]] = spec[k].re;
+                self.feat_spec[[0, 1, 0, k]] = spec[k].im;
             }
 
             let enc_outputs = enc_plan
                 .run(tvec!(
-                    Tensor::from(feat_erb).into(),
-                    Tensor::from(feat_spec).into()
+                    Tensor::from(self.feat_erb.clone()).into(),
+                    Tensor::from(self.feat_spec.clone()).into()
                 ))
                 .map_err(|e| ModelError::Inference(format!("ENC run failed: {:?}", e)))?;
 

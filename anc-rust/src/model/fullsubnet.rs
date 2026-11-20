@@ -116,6 +116,8 @@ pub struct FullSubNetEnhancer {
     unfold_noisy: Vec<f32>,
     sb_in_raw: Vec<f32>,
     sb_norm_out: Vec<f32>,
+    fb_x: tract_ndarray::Array3<f32>,
+    sb_x: tract_ndarray::Array3<f32>,
 
     min_gain: f32,
 }
@@ -170,6 +172,8 @@ impl FullSubNetEnhancer {
             unfold_noisy: vec![0.0f32; NUM_FREQS * (2 * SB_NEIGHBORS + 1)],
             sb_in_raw: vec![0.0f32; NUM_FREQS * SB_FEATURES],
             sb_norm_out: vec![0.0f32; NUM_FREQS * SB_FEATURES],
+            fb_x: tract_ndarray::Array3::<f32>::zeros((1, 1, NUM_FREQS)),
+            sb_x: tract_ndarray::Array3::<f32>::zeros((NUM_FREQS, 1, SB_FEATURES)),
             min_gain: 0.08,
         })
     }
@@ -198,6 +202,8 @@ impl FullSubNetEnhancer {
             unfold_noisy: vec![0.0f32; num_bins * (2 * SB_NEIGHBORS + 1)],
             sb_in_raw: vec![0.0f32; num_bins * SB_FEATURES],
             sb_norm_out: vec![0.0f32; num_bins * SB_FEATURES],
+            fb_x: tract_ndarray::Array3::<f32>::zeros((1, 1, num_bins)),
+            sb_x: tract_ndarray::Array3::<f32>::zeros((num_bins, 1, SB_FEATURES)),
             min_gain: 0.08,
         }
     }
@@ -254,6 +260,10 @@ impl SpeechEnhancer for FullSubNetEnhancer {
         self.min_gain = 10.0_f32.powf(min_gain_db / 20.0).clamp(0.01, 1.0);
     }
 
+    fn set_aggressive_snr(&mut self, enabled: bool) {
+        self.min_gain = if enabled { 0.05 } else { 0.08 };
+    }
+
     fn process_stft_frame(&mut self, spec: &mut [Complex32]) -> Result<EnhancerStats, ModelError> {
         let t0 = Instant::now();
         let num_bins = spec.len().min(self.num_bins);
@@ -269,11 +279,10 @@ impl SpeechEnhancer for FullSubNetEnhancer {
                 .normalize_frame(&self.mag_in, &mut self.fb_norm_out);
 
             // 3. Fullband LSTM step: input x [1, 1, 257], h_in, c_in
-            let mut fb_x = tract_ndarray::Array3::<f32>::zeros((1, 1, NUM_FREQS));
             for k in 0..NUM_FREQS {
-                fb_x[[0, 0, k]] = self.fb_norm_out[k];
+                self.fb_x[[0, 0, k]] = self.fb_norm_out[k];
             }
-            let fb_x_tensor: Tensor = fb_x.into();
+            let fb_x_tensor: Tensor = self.fb_x.clone().into();
 
             let fb_outputs = fb_plan
                 .run(tvec!(
@@ -322,13 +331,12 @@ impl SpeechEnhancer for FullSubNetEnhancer {
                 .normalize_frame(&self.sb_in_raw, &mut self.sb_norm_out);
 
             // 6. Subband LSTM step: input x [257, 1, 32], h_in, c_in
-            let mut sb_x = tract_ndarray::Array3::<f32>::zeros((NUM_FREQS, 1, SB_FEATURES));
             for f in 0..NUM_FREQS {
                 for i in 0..SB_FEATURES {
-                    sb_x[[f, 0, i]] = self.sb_norm_out[f * SB_FEATURES + i];
+                    self.sb_x[[f, 0, i]] = self.sb_norm_out[f * SB_FEATURES + i];
                 }
             }
-            let sb_x_tensor: Tensor = sb_x.into();
+            let sb_x_tensor: Tensor = self.sb_x.clone().into();
 
             let sb_outputs = sb_plan
                 .run(tvec!(

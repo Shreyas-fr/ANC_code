@@ -58,6 +58,12 @@ struct CliArgs {
 
     #[arg(long)]
     aggressive_snr: bool,
+
+    #[arg(long)]
+    enable_doa: bool,
+
+    #[arg(long)]
+    enable_pitch_comb: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -93,6 +99,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         enable_agc: true,
         enable_limiter: true,
         aggressive_snr: args.aggressive_snr,
+        enable_doa_tracking: args.enable_doa,
+        enable_pitch_comb: args.enable_pitch_comb,
         mvdr_config: MvdrConfig {
             num_bins: 257,
             sample_rate: 16000.0,

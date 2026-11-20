@@ -11,7 +11,7 @@ import subprocess
 import argparse
 import numpy as np
 
-def run_evaluation(aggressive: bool = False, model: str = "gtcrn"):
+def run_evaluation(aggressive: bool = False, model: str = "gtcrn", enable_doa: bool = False, enable_pitch_comb: bool = False):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     bench_dir = os.path.join(base_dir, "data", "eval", "benchmarks")
     enhanced_dir = os.path.join(base_dir, "data", "eval", "enhanced")
@@ -31,7 +31,15 @@ def run_evaluation(aggressive: bool = False, model: str = "gtcrn"):
         print("No benchmark clips found in", bench_dir)
         return
 
-    mode_str = "Aggressive Max SNR Mode" if aggressive else f"Standard Intelligibility Mode (Neural: {model.upper()})"
+    features = []
+    if aggressive:
+        features.append("Aggressive")
+    if enable_doa:
+        features.append("DOA-Tracking")
+    if enable_pitch_comb:
+        features.append("Pitch-Comb")
+    feat_str = f" + [{', '.join(features)}]" if features else ""
+    mode_str = f"Standard Intelligibility Mode (Neural: {model.upper()}){feat_str}"
     print(f"\nOptimization Mode: {mode_str}")
     print(f"Found {len(stereo_files)} benchmark clips. Beginning batch evaluation...\n")
 
@@ -56,6 +64,10 @@ def run_evaluation(aggressive: bool = False, model: str = "gtcrn"):
         ]
         if aggressive:
             cmd.append("--aggressive-snr")
+        if enable_doa:
+            cmd.append("--enable-doa")
+        if enable_pitch_comb:
+            cmd.append("--enable-pitch-comb")
 
         proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         output = proc.stdout
@@ -154,6 +166,8 @@ def run_evaluation(aggressive: bool = False, model: str = "gtcrn"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate 30mm spatial ANC benchmark suite")
     parser.add_argument("--aggressive", action="store_true", help="Enable Aggressive Max SNR mode")
+    parser.add_argument("--doa", action="store_true", help="Enable Real-Time GCC-PHAT DOA Steering Tracking")
+    parser.add_argument("--pitch-comb", action="store_true", help="Enable Pitch-Synchronous Harmonic Comb Post-Filter")
     parser.add_argument("--model", type=str, default="gtcrn", choices=["gtcrn", "fullsubnet", "dfn3", "ensemble", "spectral"], help="Neural enhancement model to evaluate")
     args = parser.parse_args()
-    run_evaluation(aggressive=args.aggressive, model=args.model)
+    run_evaluation(aggressive=args.aggressive, model=args.model, enable_doa=args.doa, enable_pitch_comb=args.pitch_comb)
