@@ -1,9 +1,0 @@
-variant,improves_all_four_vs_step500_count,improves_all_four_vs_fullsubnet_count,improves_all_four_vs_gtcrn_count,snr_up_but_stoi_or_pesq_down_vs_step500_count,snr_up_but_stoi_or_pesq_down_vs_fullsubnet_count,snr_up_but_stoi_or_pesq_down_vs_gtcrn_count,worse_all_four_than_step500_count,worse_all_four_than_fullsubnet_count,worse_all_four_than_gtcrn_count,worse_all_four_than_all_three_models_count,alignment_exception_ids_162_436
-d1_equal_333_raw,370,148,457,87,90,20,22,118,3,0,flagged; no clip-specific adjustment
-d1_equal_333_rms_matched,373,155,461,89,102,18,20,123,3,0,flagged; no clip-specific adjustment
-d2_fs60_raw,370,253,473,87,104,25,21,38,4,0,flagged; no clip-specific adjustment
-d2_fs50_raw,377,210,468,90,105,22,17,70,2,0,flagged; no clip-specific adjustment
-d2_fs70_raw,359,304,471,88,96,26,24,27,4,0,flagged; no clip-specific adjustment
-d3_step500_fullsubnet_5050_raw,456,213,425,58,99,30,6,79,8,0,flagged; no clip-specific adjustment
-d3_step500_gtcrn_5050_raw,246,62,389,149,92,35,74,266,16,0,flagged; no clip-specific adjustment
-d3_fullsubnet_gtcrn_5050_raw,268,82,499,124,106,19,63,191,2,0,flagged; no clip-specific adjustment
