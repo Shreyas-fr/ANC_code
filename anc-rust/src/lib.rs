@@ -22,7 +22,8 @@ pub use metrics::{
     compute_active_speech_level, compute_explicit_snr, compute_si_sdr, PerformanceProfiler,
 };
 pub use model::{
-    AdaptiveSpectralEnhancer, EnhancerStats, FrozenEnsemble, SpeechEnhancer, TractEnhancer,
+    AdaptiveSpectralEnhancer, EnhancerStats, FrozenEnsemble, GtcrnDeepFilterModel, GtcrnTelemetry,
+    SpeechEnhancer, TractEnhancer,
 };
 pub use network::{
     AudioPacket, AudioReceiver, EdgeSender, EdgeTelemetry, FecDecoder, FecEncoder, FecStats,

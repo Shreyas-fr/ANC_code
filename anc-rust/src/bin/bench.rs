@@ -1,7 +1,7 @@
 //! Real-time latency, throughput, and RTF micro-benchmarking suite for SIH 26052.
 
 use anc_rust::dsp::{MvdrConfig, WindowType};
-use anc_rust::model::TractEnhancer;
+use anc_rust::model::{GtcrnDeepFilterModel, SpeechEnhancer, TractEnhancer};
 use anc_rust::streaming::{PipelineConfig, TacticalAncPipeline};
 use clap::Parser;
 use std::time::Instant;
@@ -28,6 +28,9 @@ struct Args {
 
     #[arg(long, default_value = "asymmetric")]
     window: String,
+
+    #[arg(long, default_value = "gtcrn")]
+    model: String,
 }
 
 fn main() {
@@ -65,7 +68,17 @@ fn main() {
     };
 
     let mut pipeline = TacticalAncPipeline::new(pipeline_config);
-    let mut model = TractEnhancer::new_fallback("Analytic-Wiener-Fallback", args.n_fft / 2 + 1, 32);
+    let mut model: Box<dyn SpeechEnhancer> = match args.model.as_str() {
+        "wiener" | "fallback" => Box::new(TractEnhancer::new_fallback(
+            "Analytic-Wiener-Fallback",
+            args.n_fft / 2 + 1,
+            32,
+        )),
+        _ => Box::new(GtcrnDeepFilterModel::new(
+            args.n_fft / 2 + 1,
+            args.sample_rate as f32,
+        )),
+    };
 
     let hop_duration_ms = (args.hop_size as f32 / args.sample_rate as f32) * 1000.0;
     let framing_latency_ms = match window_type {
@@ -81,7 +94,7 @@ fn main() {
 
     // Warm-up cycles
     for _ in 0..50 {
-        let _ = pipeline.process_hop(&mic1_in, Some(&mic2_in), &mut model, &mut out);
+        let _ = pipeline.process_hop(&mic1_in, Some(&mic2_in), model.as_mut(), &mut out);
     }
 
     println!(
@@ -93,7 +106,7 @@ fn main() {
     let t_start = Instant::now();
     for _ in 0..args.iterations {
         let step_t0 = Instant::now();
-        let _ = pipeline.process_hop(&mic1_in, Some(&mic2_in), &mut model, &mut out);
+        let _ = pipeline.process_hop(&mic1_in, Some(&mic2_in), model.as_mut(), &mut out);
         latencies_us.push(step_t0.elapsed().as_micros() as u64);
     }
     let total_elapsed = t_start.elapsed();

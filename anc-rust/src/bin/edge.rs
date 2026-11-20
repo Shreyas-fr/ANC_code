@@ -11,7 +11,9 @@ use std::time::{Duration, Instant};
 
 use anc_rust::dsp::{MvdrConfig, WindowType};
 use anc_rust::metrics::{read_system_temperature_c, PerformanceProfiler};
-use anc_rust::model::{AdaptiveSpectralEnhancer, SpeechEnhancer, TractEnhancer};
+use anc_rust::model::{
+    AdaptiveSpectralEnhancer, GtcrnDeepFilterModel, SpeechEnhancer, TractEnhancer,
+};
 use anc_rust::network::{
     EdgeSender, EdgeTelemetry, FecEncoder, AUDIO_FRAME_SAMPLES, DEFAULT_AUDIO_PORT,
     DEFAULT_RAW_INPUT_PORT, DEFAULT_TELEMETRY_PORT,
@@ -110,9 +112,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             32,
             0,
         )?)
-    } else {
+    } else if args.mode == "spectral" {
         println!("Initializing Decision-Directed Adaptive ERB Spectral Engine.");
         Box::new(AdaptiveSpectralEnhancer::new(257, 32, 16000.0))
+    } else {
+        println!("Initializing SOTA Hybrid GTCRN-cDF Neural Enhancer (compiled-in INT8 weights).");
+        Box::new(GtcrnDeepFilterModel::new(257, 16000.0))
     };
 
     if args.aggressive_snr {

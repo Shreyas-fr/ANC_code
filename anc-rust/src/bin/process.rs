@@ -7,7 +7,9 @@ use std::time::Instant;
 
 use anc_rust::dsp::{MvdrConfig, WindowType};
 use anc_rust::metrics::{compute_explicit_snr, compute_si_sdr};
-use anc_rust::model::{AdaptiveSpectralEnhancer, SpeechEnhancer, TractEnhancer};
+use anc_rust::model::{
+    AdaptiveSpectralEnhancer, GtcrnDeepFilterModel, SpeechEnhancer, TractEnhancer,
+};
 use anc_rust::streaming::{PipelineConfig, TacticalAncPipeline};
 
 #[derive(Parser, Debug)]
@@ -38,6 +40,9 @@ struct Args {
 
     #[arg(long)]
     aggressive_snr: bool,
+
+    #[arg(long)]
+    spectral: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -111,13 +116,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             32,
             0,
         )?)
-    } else {
+    } else if args.spectral {
         println!("Using Decision-Directed Adaptive ERB Spectral Enhancer.");
         Box::new(AdaptiveSpectralEnhancer::new(
             args.n_fft / 2 + 1,
             32,
             sample_rate,
         ))
+    } else {
+        println!("Using SOTA Hybrid GTCRN-cDF Neural Enhancer (compiled-in INT8 weights).");
+        Box::new(GtcrnDeepFilterModel::new(args.n_fft / 2 + 1, sample_rate))
     };
 
     if args.aggressive_snr {

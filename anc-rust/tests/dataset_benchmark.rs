@@ -12,7 +12,7 @@
 use anc_rust::dsp::{MvdrConfig, WindowType};
 use anc_rust::metrics::pesq::PesqEvaluator;
 use anc_rust::metrics::snr::compute_si_sdr;
-use anc_rust::model::TractEnhancer;
+use anc_rust::model::{GtcrnDeepFilterModel, SpeechEnhancer, TractEnhancer};
 use anc_rust::streaming::{PipelineConfig, TacticalAncPipeline};
 use std::f32::consts::PI;
 
@@ -198,4 +198,84 @@ fn test_dataset_benchmark_artillery_gunfire_impulse() {
         out_pesq >= 2.5,
         "PESQ MOS under impulse noise must be acceptable"
     );
+}
+
+#[test]
+fn test_dataset_benchmark_gtcrn_deep_filter_model() {
+    let sample_rate = 16000.0f32;
+    let n_fft = 512;
+    let hop_size = 256;
+    let num_bins = n_fft / 2 + 1;
+
+    let config = PipelineConfig {
+        n_fft,
+        hop_size,
+        sample_rate,
+        window_type: WindowType::AsymmetricLowLatency,
+        enable_mvdr: true,
+        enable_agc: true,
+        enable_limiter: true,
+        ..Default::default()
+    };
+
+    let mut pipeline = TacticalAncPipeline::new(config);
+    let mut model = GtcrnDeepFilterModel::new(num_bins, sample_rate);
+
+    let total_hops = 100;
+    let total_samples = total_hops * hop_size;
+
+    let mut clean = Vec::with_capacity(total_samples);
+    let mut noisy_m1 = Vec::with_capacity(total_samples);
+    let mut noisy_m2 = Vec::with_capacity(total_samples);
+    let mut enhanced = Vec::with_capacity(total_samples);
+
+    for n in 0..total_samples {
+        let t = n as f32 / sample_rate;
+        let speech = (2.0 * PI * 220.0 * t).sin() * 0.40 + (2.0 * PI * 440.0 * t).sin() * 0.25;
+        let noise = (2.0 * PI * 80.0 * t).sin() * 0.35 + (((n % 7) as f32 - 3.0) / 10.0);
+        clean.push(speech);
+        noisy_m1.push(speech + noise);
+        noisy_m2.push(speech + noise * 0.9);
+    }
+
+    let mut out_frame = [0.0f32; 256];
+    for h in 0..total_hops {
+        let offset = h * hop_size;
+        let mic1 = &noisy_m1[offset..offset + hop_size];
+        let mic2 = &noisy_m2[offset..offset + hop_size];
+
+        pipeline
+            .process_hop(mic1, Some(mic2), &mut model, &mut out_frame)
+            .expect("GTCRN process_hop must succeed");
+
+        enhanced.extend_from_slice(&out_frame);
+    }
+
+    let delay = hop_size;
+    let eval_start = 20 * hop_size;
+    let eval_end = total_samples - delay;
+
+    let in_sdr = compute_si_sdr(
+        &clean[eval_start..eval_end],
+        &noisy_m1[eval_start..eval_end],
+    );
+    let out_sdr = compute_si_sdr(
+        &clean[eval_start..eval_end],
+        &enhanced[(eval_start + delay)..(eval_end + delay)],
+    );
+
+    println!(
+        "[GTCRN-cDF Benchmark] In SDR: {:.2} dB -> Out SDR: {:.2} dB (Gain: +{:.2} dB)",
+        in_sdr,
+        out_sdr,
+        out_sdr - in_sdr
+    );
+
+    assert!(
+        out_sdr > in_sdr,
+        "GTCRN-cDF enhanced SDR ({:.2} dB) must exceed input SDR ({:.2} dB)",
+        out_sdr,
+        in_sdr
+    );
+    assert_eq!(model.algorithmic_lookahead_samples(), 0);
 }
