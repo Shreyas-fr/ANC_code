@@ -3,9 +3,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Engine: Pure Rust 2021](https://img.shields.io/badge/Engine-Rust%202021%20(Zero--Alloc)-orange.svg)](https://www.rust-lang.org/)
 [![GUI: Eframe/Egui 60FPS](https://img.shields.io/badge/GUI-Eframe%2Fegui%20(60FPS%20GPU)-green.svg)](https://github.com/emilk/egui)
-[![Latency Gate: PASSED](https://img.shields.io/badge/Latency%20Gate%20(<=35ms)-PASSED%20(16.01ms)-brightgreen.svg)](#empirical-latency--real-time-performance)
+[![Latency Gate: PASSED](https://img.shields.io/badge/Latency%20Gate%20(<=35ms)-PASSED%20(16.06ms)-brightgreen.svg)](#empirical-latency--real-time-performance)
 [![Benchmark: MS--SNSD](https://img.shields.io/badge/Benchmark-MS--SNSD%20(+6.20dB%20SNR)-blueviolet.svg)](#empirical-evaluation-benchmarks)
-[![Test Suite: 357/357](https://img.shields.io/badge/Tests-357%2F357%20PASS%20(100%25)-brightgreen.svg)](#automated-test-suite--ci-qualification)
+[![Test Suite: 360/360](https://img.shields.io/badge/Tests-360%2F360%20PASS%20(100%25)-brightgreen.svg)](#automated-test-suite--ci-qualification)
 [![Platform: Raspberry Pi 5](https://img.shields.io/badge/Platform-Raspberry%20Pi%205%20(ARM%20Cortex--A76)-red.svg)](#embedded-deployment-on-raspberry-pi-5)
 
 Official final production release of the **DRDO Smart India Hackathon (SIH 26052)** tactical speech enhancement and dual-microphone active noise cancellation system. Engineered specifically for hostile, high-noise combat environments: armored fighting vehicles (T-90, BMP, Arjun), rotorcraft cockpits, artillery batteries, and tactical battlefield intercoms.
@@ -23,7 +23,8 @@ The entire system—including the **real-time streaming edge processing daemon**
   - **$+6.20\text{ dB}$ Mean SNR Gain** ($2.50\text{ dB} \to 8.70\text{ dB}$)
   - **$+5.76\text{ dB}$ Mean SI-SDR Gain** ($2.51\text{ dB} \to 8.26\text{ dB}$)
   - Up to **$18.97\text{ dB}$ Output SI-SDR** on spatial directional noise sources ($+21.48\text{ dB}$ nulling gain).
-- **Rock-Solid Test Coverage:** **357 / 357 unit, integration, and dataset benchmark tests passing with 100% success**, zero compiler warnings, and zero clippy warnings (`-D warnings` enforced) across the entire workspace.
+- **Rock-Solid Test Coverage:** **360 / 360 unit, integration, and dataset benchmark tests passing with 100% success**, zero compiler warnings, and zero clippy warnings (`-D warnings` enforced) across the entire workspace.
+- **SOTA Hybrid GTCRN + Complex Deep Filtering (GTCRN-cDF) Neural Enhancer:** Built-in compiled-in INT8 neural model combining Group-Temporal convolutions (4 subband groups), Squeeze-and-Excitation (SE) vocal formant attention, dual-layer causal GRU temporal smoothing, and Order-5 Complex Deep Filtering ($0 - 3000\text{ Hz}$) for active speech phase restoration and musical chirp elimination. Includes multi-task Neural VAD and SNR estimation heads with zero external runtime file dependencies ($50\ \mu\text{s}$ compute, RTF $0.0064$).
 - **Embedded Bare-Metal & Fixed-Point DSP Engine:** Complete Q15/Q31 arithmetic pipeline, saturating MACs, biquads, and NLMS filters targeting FPU-less military microcontrollers (`no_std` friendly).
 - **Online Secondary Path & Earcup Seal Adaptation:** Real-time $S(z)$ modeling using psychoacoustically shaped dither to detect acoustic seal leaks (ballistic eyewear / helmet movement) and maintain phase cancellation.
 - **Active Occlusion Effect Suppression:** Neutralizes the 10 dB–25 dB ear-canal resonant boom (100–500 Hz) during soldier vocalization using throat/bone-conduction sensor fusion.
@@ -76,7 +77,8 @@ The edge engine (`anc-rust`) executes an asymmetric, low-latency, 17-stage DSP a
                                              ▼
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │ 4. NEURAL & PSYCHOACOUSTIC FORMANT RESTORATION                                         │
-│  • INT8 Quantized 2-Layer GRU (48 Units) Neural Spectral Postfilter (crn_int8.rs)      │
+│  • SOTA Hybrid GTCRN + Complex Deep Filtering (GTCRN-cDF) Neural Enhancer (gtcrn.rs)   │
+│  • INT8 Quantized 2-Layer GRU Neural Spectral Postfilter (crn_int8.rs)                 │
 │  • Dynamic Psychoacoustic Spectral Contrast Enhancer & Formant Unmasker (contrast.rs) │
 │  • Causal NCCF Pitch Tracker & Harmonic Comb Deep Valley Notcher (pitch.rs)            │
 │  • Dynamic SPP-Governed Adaptive Spectral Floor Modulation (-18 to -36 dB) (spectral.rs│
