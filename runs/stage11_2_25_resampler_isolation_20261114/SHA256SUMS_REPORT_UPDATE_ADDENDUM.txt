@@ -1,8 +1,0 @@
-Post-run report/register hash addendum
-
-The original SHA256SUMS.txt is preserved as the run-time ledger. These entries record files updated after that ledger was generated; they do not alter the original run artifacts.
-
-9a00c29d7425483ef7180ac952f77809b5d2a844181ddc9e900d9766b9481637  /Users/shreyasdivekar/Documents/anc sih/antigravity/MASTER_SIH_COMPLIANCE.md
-743d879fd7d055bbdcc902244924c0a4ffaaca47a6fce36713f52f549e4106ae  /Users/shreyasdivekar/Documents/anc sih/antigravity/research/STAGE11_2_23_NATIVE_TRACT_CANONICAL_PARITY.md
-0cf33fee11af3811bf0aa1e261e3908bc8d54fdcc5ab3cf49f11c4ba1f75caf4  /Users/shreyasdivekar/Documents/anc sih/antigravity/research/STAGE11_2_25_BASELINE_REGISTER.csv
-bf427212fff0871ea2388b167f2f94a75229389b319b079db50630727865bba4  /Users/shreyasdivekar/Documents/anc sih/antigravity/research/STAGE11_2_25_NATIVE_RESAMPLER_ROOT_CAUSE.md

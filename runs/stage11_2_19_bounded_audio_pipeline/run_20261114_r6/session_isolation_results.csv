@@ -1,2 +1,0 @@
-case,result,session_a_start_sample,session_b_start_sample,output_samples_each,cross_session_sample_leakage,reset_proof
-repeated_session_state_reset,PASS,0,10000,256,0,stateful synthetic adapter output after reset equals fresh-state output

@@ -1,1 +1,0 @@
-step,lr,loss,loss_complex,loss_mag,loss_sisdr,snr,sisdr,stoi,pesq,lvl_ratio,pre_snr,pre_sisdr,pre_stoi,pre_pesq,pre_lvl_ratio,gunfire_sisdr,pre_gunfire_sisdr,sisdr_-10dB,sisdr_-5dB,sisdr_+0dB,sisdr_+5dB,sisdr_+10dB,sisdr_+15dB,sisdr_+20dB,sisdr_+25dB,sisdr_near_clean,sisdr_zero_noise

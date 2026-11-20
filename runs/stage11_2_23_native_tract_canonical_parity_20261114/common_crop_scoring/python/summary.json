@@ -1,9 +1,0 @@
-{
-  "canonical_manifest_sha256": "d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4",
-  "count": 590,
-  "model_label": "python_step500_common_crop",
-  "compared_samples_per_clip": 47520,
-  "delay_compensated_native_output_samples": 47520,
-  "metric_function": "scripts/evaluate_dfn3_canonical.py::metrics (unchanged)",
-  "numpy_stoi_import_compatibility": "process-local numpy.exceptions.RankWarning alias to numpy.RankWarning"
-}

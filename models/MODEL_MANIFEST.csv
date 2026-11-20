@@ -1,8 +1,0 @@
-model_name,checkpoint_path,size_bytes,size_mb,sha256_checksum,role,provenance
-DFN3 Step-500,runs/sih26052_rpi_deployment_audit/runs/step500_from_pi.pt,8704788,8.30,bc1fc9b769589da1754c4ee529c8578edf3262f7d2d4515fe69455c8a467bb27,B0 Ensemble (15%),Fine-tuned DeepFilterNet3 from Pi deployment audit
-FullSubNet Epoch 58,checkpoints/fullsubnet/fullsubnet_best_model_58epochs.tar,67669069,64.53,482615e9709d2d6c10ee0d24f9844ad2da2dae3c0cf897f014839c365917a2e0,B0 Ensemble (70%),FullSubNet best model after 58 epochs on DNS Challenge
-GTCRN DNS-3,checkpoints/gtcrn_stage5/model_trained_on_dns3.tar,579819,0.55,a630d992cf792daf4ce2bb5bcf9c4d389f740a8f09c6e0971184697fe6371b79,B0 Ensemble (15%),Pretrained GTCRN model trained on DNS Challenge 3
-DFN3 Tract Engine,models/dfn3_step500_tract.tar.gz,7995509,7.63,99e99379e81ecf5a678833912d28418c3cc7fb40345fd4a8fb8f5b82669a559d,B0 Tract Export,Exported Tract graph bundle for ARM64/NEON
-Canonical 590 Manifest,runs/sih26052_canonical_validation/manifest.csv,141708,0.14,d09a520d566fc1dc28c4bf07e9c860ce4ef9a2b5aae3a377ca109cb84c0049d4,Canonical Benchmark,Ground-truth metadata for 590 canonical evaluation clips
-UL-UNAS Stream ONNX,models/external/ulunas_stream_simple.onnx,328472,0.31,23d20f0113824ec763261a86b97ec7d2db3cb8292850ae33827bebe0516df7e0,Experimental Candidate,UL-UNAS streaming ONNX (IEEE TASLP 2026 Rong et al.)
-H-GTCRN ONNX,models/external/hgtcrn_simple.onnx,2547632,2.43,62b55fcae13783a375497b77f98fc822003c27636e2f1ba639343046f41e06fe,Experimental Candidate,H-GTCRN streaming ONNX (Interspeech 2024 Wang et al.)

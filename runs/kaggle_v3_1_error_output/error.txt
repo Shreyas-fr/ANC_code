@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "/tmp/ipykernel_23/1499517283.py", line 125, in <cell line: 0>
-    gc.collect()
-    ^^
-NameError: name 'gc' is not defined. Did you forget to import 'gc'?

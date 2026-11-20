@@ -1,4 +1,0 @@
-spawn ssh shreyas@shreyas.local journalctl --user -u pipewire -u wireplumber -n 50
-shreyas@shreyas.local's password: 
--- No entries --
-No journal files were found.

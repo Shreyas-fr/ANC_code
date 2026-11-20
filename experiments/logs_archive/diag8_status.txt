@@ -1,5 +1,0 @@
-spawn ssh shreyas@shreyas.local wpctl status | grep -E "bluez_input|Noise|VS102"
-shreyas@shreyas.local's password: 
- │      77. Noise Buds VS102                    [bluez5]
- │  *   78. Noise Buds VS102                    [vol: 0.76]
- │  *   46. bluez_input.E4:16:5F:F7:5D:47                                [Audio/Source]

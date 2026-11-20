@@ -1,5 +1,0 @@
-spawn ssh shreyas@shreyas.local systemctl list-units --all | grep sih26052; systemctl --user list-units --all | grep sih26052; find /etc/systemd /home -name "*sih26052*" -type f 2>/dev/null
-shreyas@shreyas.local's password: 
-  sih26052-edge.service                                                                                                                                         loaded    active   running   SIH26052 StatefulPolarLSTM ANC Edge Service
-/home/shreyas/sih26052_edge/backups/config_backup_20260930_013143/config/sih26052-edge.service
-/home/shreyas/sih26052_edge/config/sih26052-edge.service

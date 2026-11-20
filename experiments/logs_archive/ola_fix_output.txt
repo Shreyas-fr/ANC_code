@@ -1,12 +1,0 @@
-spawn scp apply_ola_fix.py shreyas@shreyas.local:~/sih26052_edge/prototype/apply_ola_fix.py
-shreyas@shreyas.local's password: 
-apply_ola_fix.py                                0%    0     0.0KB/s   --:-- ETAapply_ola_fix.py                              100%   22KB 299.9KB/s   00:00    
-spawn ssh shreyas@shreyas.local export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app; /home/shreyas/env/bin/python ~/sih26052_edge/prototype/apply_ola_fix.py
-shreyas@shreyas.local's password: 
-=== STEP 0: BACKUP + HASHES ===
-Backed up: /home/shreyas/sih26052_edge/app/anc_stream.py.pre_ola_fix
-SHA-256 anc_stream.py.pre_ola_fix : e4f6e99c95784013e27b6585933a42f8bed85594e39256e312d26999bb3b4246
-SHA-256 best.pt                   : b105b714b0ca510662050b4fc6e099a8e779d9042549486a79d8119708e51d9a
-
-=== STEP 1: APPLYING OLA FIX TO anc_stream.py ===
-ERROR: Could not find the exact OLA block to replace — aborting without changes.

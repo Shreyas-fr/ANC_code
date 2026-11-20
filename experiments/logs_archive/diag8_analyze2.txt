@@ -1,12 +1,0 @@
-spawn scp analyze_audio.py shreyas@shreyas.local:~/analyze_audio.py
-shreyas@shreyas.local's password: 
-analyze_audio.py                                0%    0     0.0KB/s   --:-- ETAanalyze_audio.py                              100% 1271    64.4KB/s   00:00    
-spawn ssh shreyas@shreyas.local python3 ~/analyze_audio.py ~/sih26052-edge/audio/vs102_mic_test.wav
-shreyas@shreyas.local's password: 
-duration: 9.98s
-sample_rate: 48000 Hz
-channels: 2
-sampwidth: 2 bytes
-rms: 480.28
-peak: 7386
-speech_detected: YES (non-zero audio)

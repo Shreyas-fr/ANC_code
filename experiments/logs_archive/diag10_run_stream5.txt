@@ -1,12 +1,0 @@
-spawn ssh shreyas@shreyas.local cat << 'EOF' > ~/run_stream.sh
-#!/bin/bash
-export PYTHONPATH=/home/shreyas/sih26052_edge:/home/shreyas/sih26052_edge/app
-/home/shreyas/env/bin/python ~/sih26052_edge/prototype/vs102_ai_stream.py > /tmp/out.log 2>&1
-echo $? > /tmp/exit_code.log
-EOF
-chmod +x ~/run_stream.sh
-~/run_stream.sh
-cat /tmp/out.log
-cat /tmp/exit_code.log
-
-shreyas@shreyas.local's password: 

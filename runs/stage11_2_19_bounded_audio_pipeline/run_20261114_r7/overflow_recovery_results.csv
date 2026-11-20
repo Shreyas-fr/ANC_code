@@ -1,5 +1,0 @@
-case,result,capture_capacity_samples,capture_high_water_samples,capture_backpressure_events,playback_backpressure_events,accepted_samples,processed_samples,delivered_samples,lost_input_samples,lost_output_samples,recovery,playback_capacity_samples,playback_high_water_samples
-capture_full_retry_same_chunk,PASS,512,512,1,0,640,640,640,0,0,same timestamped chunk retried after capture dequeue,,
-unpausable_capture_overflow_abort,PASS,512,512,1,0,812,300,0,529,0,session terminated; exact loss ranges recorded; new session starts at sample 529,,
-playback_full_consumer_backpressure,PASS,1024,1024,0,1,1024,1024,1024,0,0,sink drain released bounded playback capacity; consumer resumed in order,768,512
-consumer_exception_and_recovery,PASS,512,512,0,0,768,256,256,512,0,adapter reset; old session queues cleared; fresh session output tagged with new session ID,,
