@@ -11,7 +11,7 @@ import subprocess
 import argparse
 import numpy as np
 
-def run_evaluation(aggressive: bool = False):
+def run_evaluation(aggressive: bool = False, model: str = "gtcrn"):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     bench_dir = os.path.join(base_dir, "data", "eval", "benchmarks")
     enhanced_dir = os.path.join(base_dir, "data", "eval", "enhanced")
@@ -31,7 +31,7 @@ def run_evaluation(aggressive: bool = False):
         print("No benchmark clips found in", bench_dir)
         return
 
-    mode_str = "Aggressive Max SNR Mode (Deep Pause Floor -36dB & Deep Harmonic Valley Comb)" if aggressive else "Balanced Tactical Intelligibility Mode (Dynamic SPP Floor -30dB & TSNR)"
+    mode_str = "Aggressive Max SNR Mode" if aggressive else f"Standard Intelligibility Mode (Neural: {model.upper()})"
     print(f"\nOptimization Mode: {mode_str}")
     print(f"Found {len(stereo_files)} benchmark clips. Beginning batch evaluation...\n")
 
@@ -50,6 +50,7 @@ def run_evaluation(aggressive: bool = False):
             "--input", s_path,
             "--clean-ref", ref_path,
             "--output", out_path,
+            "--model", model,
             "--n-fft", "512",
             "--hop-size", "256",
         ]
@@ -153,5 +154,6 @@ def run_evaluation(aggressive: bool = False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate 30mm spatial ANC benchmark suite")
     parser.add_argument("--aggressive", action="store_true", help="Enable Aggressive Max SNR mode")
+    parser.add_argument("--model", type=str, default="gtcrn", choices=["gtcrn", "fullsubnet", "dfn3", "ensemble", "spectral"], help="Neural enhancement model to evaluate")
     args = parser.parse_args()
-    run_evaluation(aggressive=args.aggressive)
+    run_evaluation(aggressive=args.aggressive, model=args.model)

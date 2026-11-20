@@ -12,13 +12,16 @@ use std::time::{Duration, Instant};
 use anc_rust::dsp::{MvdrConfig, WindowType};
 use anc_rust::metrics::{read_system_temperature_c, PerformanceProfiler};
 use anc_rust::model::{
-    AdaptiveSpectralEnhancer, GtcrnDeepFilterModel, SpeechEnhancer, TractEnhancer,
+    AdaptiveSpectralEnhancer, Dfn3Enhancer, FrozenEnsemble, FullSubNetEnhancer, GtcrnEnhancer,
+    SpeechEnhancer, TractEnhancer,
 };
 use anc_rust::network::{
     EdgeSender, EdgeTelemetry, FecEncoder, AUDIO_FRAME_SAMPLES, DEFAULT_AUDIO_PORT,
     DEFAULT_RAW_INPUT_PORT, DEFAULT_TELEMETRY_PORT,
 };
 use anc_rust::streaming::{PipelineConfig, PlayoutScheduler, TacticalAncPipeline};
+
+
 
 #[derive(Parser, Debug)]
 #[command(
@@ -102,22 +105,45 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let mut pipeline = TacticalAncPipeline::new(pipeline_config);
+    let num_bins = 257;
+    let sample_rate = 16000.0f32;
 
     let mut model: Box<dyn SpeechEnhancer> = if let Some(ref path) = args.onnx_model {
         println!("Loading neural enhancement ONNX model: {}", path);
         Box::new(TractEnhancer::load_from_onnx(
             path,
             "Tract-ONNX-Engine",
-            257,
+            num_bins,
             32,
             0,
         )?)
-    } else if args.mode == "spectral" {
-        println!("Initializing Decision-Directed Adaptive ERB Spectral Engine.");
-        Box::new(AdaptiveSpectralEnhancer::new(257, 32, 16000.0))
     } else {
-        println!("Initializing SOTA Hybrid GTCRN-cDF Neural Enhancer (compiled-in INT8 weights).");
-        Box::new(GtcrnDeepFilterModel::new(257, 16000.0))
+        match args.mode.as_str() {
+            "ensemble" | "b0" => {
+                println!("Initializing B0 Frozen Heterogeneous Ensemble (DFN3 + FullSubNet + GTCRN)...");
+                Box::new(FrozenEnsemble::create_b0(sample_rate, num_bins))
+            }
+            "fullsubnet" => {
+                println!("Initializing FullSubNet Neural Enhancer (Tract)...");
+                Box::new(FullSubNetEnhancer::new(num_bins, sample_rate))
+            }
+            "dfn3" => {
+                println!("Initializing DFN3 Neural Enhancer (Tract)...");
+                Box::new(Dfn3Enhancer::new(num_bins, sample_rate))
+            }
+            "gtcrn" => {
+                println!("Initializing GTCRN Neural Enhancer (Tract)...");
+                Box::new(GtcrnEnhancer::new(num_bins, sample_rate))
+            }
+            "spectral" => {
+                println!("Initializing Decision-Directed Adaptive ERB Spectral Engine.");
+                Box::new(AdaptiveSpectralEnhancer::new(num_bins, 32, sample_rate))
+            }
+            _ => {
+                println!("Defaulting to GTCRN Neural Enhancer (Tract)...");
+                Box::new(GtcrnEnhancer::new(num_bins, sample_rate))
+            }
+        }
     };
 
     if args.aggressive_snr {

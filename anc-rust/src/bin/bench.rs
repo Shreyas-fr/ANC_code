@@ -1,10 +1,15 @@
 //! Real-time latency, throughput, and RTF micro-benchmarking suite for SIH 26052.
 
 use anc_rust::dsp::{MvdrConfig, WindowType};
-use anc_rust::model::{GtcrnDeepFilterModel, SpeechEnhancer, TractEnhancer};
+use anc_rust::model::{
+    AdaptiveSpectralEnhancer, Dfn3Enhancer, FrozenEnsemble, FullSubNetEnhancer, GtcrnEnhancer,
+    SpeechEnhancer, TractEnhancer,
+};
 use anc_rust::streaming::{PipelineConfig, TacticalAncPipeline};
 use clap::Parser;
 use std::time::Instant;
+
+
 
 #[derive(Parser, Debug)]
 #[command(
@@ -68,16 +73,41 @@ fn main() {
     };
 
     let mut pipeline = TacticalAncPipeline::new(pipeline_config);
+    let num_bins = args.n_fft / 2 + 1;
+    let sample_rate = args.sample_rate as f32;
     let mut model: Box<dyn SpeechEnhancer> = match args.model.as_str() {
-        "wiener" | "fallback" => Box::new(TractEnhancer::new_fallback(
-            "Analytic-Wiener-Fallback",
-            args.n_fft / 2 + 1,
-            32,
-        )),
-        _ => Box::new(GtcrnDeepFilterModel::new(
-            args.n_fft / 2 + 1,
-            args.sample_rate as f32,
-        )),
+        "ensemble" | "b0" => {
+            println!("Loading B0 Frozen Heterogeneous Ensemble (DFN3 + FullSubNet + GTCRN)...");
+            Box::new(FrozenEnsemble::create_b0(sample_rate, num_bins))
+        }
+        "fullsubnet" => {
+            println!("Loading FullSubNet Neural Enhancer (Tract)...");
+            Box::new(FullSubNetEnhancer::new(num_bins, sample_rate))
+        }
+        "dfn3" => {
+            println!("Loading DFN3 Neural Enhancer (Tract)...");
+            Box::new(Dfn3Enhancer::new(num_bins, sample_rate))
+        }
+        "gtcrn" => {
+            println!("Loading GTCRN Neural Enhancer (Tract)...");
+            Box::new(GtcrnEnhancer::new(num_bins, sample_rate))
+        }
+        "spectral" => {
+            println!("Initializing Adaptive Spectral Enhancer...");
+            Box::new(AdaptiveSpectralEnhancer::new(num_bins, 32, sample_rate))
+        }
+        "wiener" | "fallback" => {
+            println!("Initializing Analytic Wiener Fallback...");
+            Box::new(TractEnhancer::new_fallback(
+                "Analytic-Wiener-Fallback",
+                num_bins,
+                32,
+            ))
+        }
+        other => {
+            eprintln!("Unknown model '{}', attempting to load as GTCRN", other);
+            Box::new(GtcrnEnhancer::new(num_bins, sample_rate))
+        }
     };
 
     let hop_duration_ms = (args.hop_size as f32 / args.sample_rate as f32) * 1000.0;
