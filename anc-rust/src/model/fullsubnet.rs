@@ -66,7 +66,11 @@ impl EmaNormalizer {
                 } else {
                     0.0
                 };
-                let alp = if ratio < self.alpha { ratio } else { self.alpha };
+                let alp = if ratio < self.alpha {
+                    ratio
+                } else {
+                    self.alpha
+                };
                 let alp = alp.max(0.0);
                 self.running_mu = (1.0 - alp) * self.running_mu + alp * cur_mean;
             } else {
@@ -254,10 +258,7 @@ impl SpeechEnhancer for FullSubNetEnhancer {
         let t0 = Instant::now();
         let num_bins = spec.len().min(self.num_bins);
 
-        if self.fb_plan.is_some() && self.sb_plan.is_some() {
-            let fb_plan = self.fb_plan.as_ref().unwrap();
-            let sb_plan = self.sb_plan.as_ref().unwrap();
-
+        if let (Some(fb_plan), Some(sb_plan)) = (&self.fb_plan, &self.sb_plan) {
             // 1. Compute magnitude spectrum
             for k in 0..num_bins {
                 self.mag_in[k] = spec[k].norm();
@@ -349,7 +350,7 @@ impl SpeechEnhancer for FullSubNetEnhancer {
             let limit = 9.9f32;
 
             for f in 0..num_bins {
-                let mr = sb_out_slice[f * 2 + 0].clamp(-limit, limit);
+                let mr = sb_out_slice[f * 2].clamp(-limit, limit);
                 let mi = sb_out_slice[f * 2 + 1].clamp(-limit, limit);
 
                 let cirm_r = -k_param * ((k_param - mr) / (k_param + mr)).ln();

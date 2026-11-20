@@ -21,8 +21,6 @@ use anc_rust::network::{
 };
 use anc_rust::streaming::{PipelineConfig, PlayoutScheduler, TacticalAncPipeline};
 
-
-
 #[derive(Parser, Debug)]
 #[command(
     name = "anc-edge",
@@ -120,7 +118,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     } else {
         match args.mode.as_str() {
             "ensemble" | "b0" => {
-                println!("Initializing B0 Frozen Heterogeneous Ensemble (DFN3 + FullSubNet + GTCRN)...");
+                println!(
+                    "Initializing B0 Frozen Heterogeneous Ensemble (DFN3 + FullSubNet + GTCRN)..."
+                );
                 Box::new(FrozenEnsemble::create_b0(sample_rate, num_bins))
             }
             "fullsubnet" => {

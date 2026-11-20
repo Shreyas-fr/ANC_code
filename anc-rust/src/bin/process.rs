@@ -141,11 +141,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         )?)
     } else if args.spectral || args.model.to_lowercase() == "spectral" {
         println!("Using Decision-Directed Adaptive ERB Spectral Enhancer.");
-        Box::new(AdaptiveSpectralEnhancer::new(
-            num_bins,
-            32,
-            sample_rate,
-        ))
+        Box::new(AdaptiveSpectralEnhancer::new(num_bins, 32, sample_rate))
     } else {
         match args.model.to_lowercase().as_str() {
             "gtcrn" => {

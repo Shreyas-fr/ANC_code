@@ -196,11 +196,9 @@ impl SpeechEnhancer for Dfn3Enhancer {
         }
         self.df_history[0][..num_df].copy_from_slice(&spec[..num_df]);
 
-        if self.enc_plan.is_some() && self.erb_plan.is_some() && self.df_plan.is_some() {
-            let enc_plan = self.enc_plan.as_ref().unwrap();
-            let erb_plan = self.erb_plan.as_ref().unwrap();
-            let df_plan = self.df_plan.as_ref().unwrap();
-
+        if let (Some(enc_plan), Some(erb_plan), Some(df_plan)) =
+            (&self.enc_plan, &self.erb_plan, &self.df_plan)
+        {
             // 2. Extract ERB energies from power spectrum
             for k in 0..num_bins {
                 self.spec_power[k] = spec[k].norm_sqr().max(1e-9);
@@ -272,7 +270,7 @@ impl SpeechEnhancer for Dfn3Enhancer {
                 // 5 taps * 2 (re, im) = 10 values per bin
                 let coef_offset = k * 10;
                 for l in 0..DFN3_DF_ORDER {
-                    let c_re = coefs_slice[coef_offset + l * 2 + 0];
+                    let c_re = coefs_slice[coef_offset + l * 2];
                     let c_im = coefs_slice[coef_offset + l * 2 + 1];
                     let hist_sample = self.df_history[l][k];
 

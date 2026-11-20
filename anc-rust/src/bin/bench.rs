@@ -9,8 +9,6 @@ use anc_rust::streaming::{PipelineConfig, TacticalAncPipeline};
 use clap::Parser;
 use std::time::Instant;
 
-
-
 #[derive(Parser, Debug)]
 #[command(
     name = "anc-bench",
