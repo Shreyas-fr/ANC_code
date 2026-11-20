@@ -33,8 +33,8 @@ impl FecJitterBridge {
     /// concealed by `JitterBuffer`'s pitch-synchronous Packet Loss Concealment (PLC).
     pub fn handle_packet(&mut self, packet: &AudioPacket, jitter_buf: &mut JitterBuffer) {
         let n_rec = self.decoder.process_packet(packet, &mut self.rec_buffer);
-        for i in 0..n_rec {
-            jitter_buf.write(&self.rec_buffer[i].samples);
+        for item in self.rec_buffer.iter().take(n_rec) {
+            jitter_buf.write(&item.samples);
         }
         jitter_buf.write(&packet.samples);
     }

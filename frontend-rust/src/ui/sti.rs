@@ -175,8 +175,8 @@ impl RastiWidget {
                             .size(9.0)
                             .color(Theme::TEXT_MUTED),
                     );
-                    for i in 0..NUM_RASTI_MOD_FREQS {
-                        let m = self.telemetry.mtf_bands[i].clamp(0.0, 1.0);
+                    for &band in &self.telemetry.mtf_bands {
+                        let m = band.clamp(0.0, 1.0);
                         let bar_w = 6.0_f32;
                         let bar_h = 10.0_f32;
                         let (b_rect, _) =
