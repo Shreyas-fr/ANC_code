@@ -1,4 +1,5 @@
 pub mod ambisonics;
+pub mod atak_hud;
 pub mod audiogram_test;
 pub mod battery;
 pub mod blast;
@@ -9,7 +10,9 @@ pub mod event_feed;
 pub mod jamming;
 pub mod kurtosis;
 pub mod lufs_meter;
+pub mod mesh_radar;
 pub mod metrics;
+pub mod occlusion_view;
 pub mod phase_scope;
 pub mod polar_pattern;
 pub mod radar;
@@ -24,6 +27,7 @@ pub mod waterfall_3d;
 pub mod waveforms;
 
 pub use ambisonics::AmbisonicsScopeWidget;
+pub use atak_hud::AtakWidget;
 pub use audiogram_test::{AudiogramTestWizard, WIZARD_FREQUENCIES};
 pub use battery::TacticalBatteryWidget;
 pub use blast::BlastImpulseWidget;
@@ -34,9 +38,11 @@ pub use event_feed::{EventFeed, EventSeverity};
 pub use jamming::JammingWidget;
 pub use kurtosis::{SpectralKurtosisWidget, HUD_BANDS};
 pub use lufs_meter::TacticalLufsRadarWidget;
+pub use mesh_radar::MeshRadarWidget;
 pub use metrics::{
     IntelligibilityBadge, MetricCard, RfLinkBadge, ShockTransientBadge, StatusBadge, VadBeacon,
 };
+pub use occlusion_view::OcclusionWidget;
 pub use phase_scope::{PhaseScopeStats, PhaseScopeWidget};
 pub use polar_pattern::PolarDirectivityWidget;
 pub use radar::TacticalRadarWidget;

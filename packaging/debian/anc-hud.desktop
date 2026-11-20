@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ANC Tactical HUD
+Comment=DRDO SIH 26052 Military Active Noise Cancellation & Spatial Audio HUD
+Exec=/usr/bin/anc-frontend
+Icon=audio-card
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;AudioVideoEditing;
+Keywords=Audio;ANC;Tactical;Noise;Cancellation;DSP;
+StartupNotify=true

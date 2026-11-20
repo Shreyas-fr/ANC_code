@@ -17,7 +17,7 @@ struct Args {
     #[arg(long, default_value_t = 512)]
     n_fft: usize,
 
-    #[arg(long, default_value_t = 256)]
+    #[arg(long, default_value_t = 128)]
     hop_size: usize,
 
     #[arg(long, default_value_t = 16000)]
@@ -26,7 +26,7 @@ struct Args {
     #[arg(long, default_value_t = 500)]
     iterations: usize,
 
-    #[arg(long, default_value = "symmetric")]
+    #[arg(long, default_value = "asymmetric")]
     window: String,
 }
 

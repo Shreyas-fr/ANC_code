@@ -11,13 +11,14 @@ use crate::audio::{
 use crate::dsp::SpectrumAnalyzer;
 use crate::network::{SharedStreamStats, UdpAudioReceiver, UdpTelemetryReceiver};
 use crate::ui::{
-    AmbisonicsScopeWidget, AudiogramTestWizard, BlastImpulseWidget, CableDiagnosticWidget,
-    DiagnosticsPanel, DspTimelineWidget, EventFeed, EventSeverity, IntelligibilityBadge,
-    JammingWidget, MetricCard, PhaseScopeWidget, PolarDirectivityWidget, RastiWidget, RfLinkBadge,
-    RollingWaveform, ShockTransientBadge, SpectralKurtosisWidget, SpectrumView, StatusBadge,
-    TacticalBatteryWidget, TacticalEqWidget, TacticalEqualizer, TacticalLufsRadarWidget,
-    TacticalRadarWidget, TacticalStressWidget, Theme, ThreatRadarWidget, VadBeacon,
-    Waterfall3dMesh, WaterfallSpectrogram,
+    AmbisonicsScopeWidget, AtakWidget, AudiogramTestWizard, BlastImpulseWidget,
+    CableDiagnosticWidget, DiagnosticsPanel, DspTimelineWidget, EventFeed, EventSeverity,
+    IntelligibilityBadge, JammingWidget, MeshRadarWidget, MetricCard, OcclusionWidget,
+    PhaseScopeWidget, PolarDirectivityWidget, RastiWidget, RfLinkBadge, RollingWaveform,
+    ShockTransientBadge, SpectralKurtosisWidget, SpectrumView, StatusBadge, TacticalBatteryWidget,
+    TacticalEqWidget, TacticalEqualizer, TacticalLufsRadarWidget, TacticalRadarWidget,
+    TacticalStressWidget, Theme, ThreatRadarWidget, VadBeacon, Waterfall3dMesh,
+    WaterfallSpectrogram,
 };
 use anc_rust::dsp::ambisonics::AmbisonicsTelemetry;
 use anc_rust::dsp::deesser::DeEsserTelemetry;
@@ -74,6 +75,9 @@ pub struct AncDashboardApp {
     pub ambisonics_scope: AmbisonicsScopeWidget,
     pub jamming_widget: JammingWidget,
     pub rasti_widget: RastiWidget,
+    pub mesh_radar: MeshRadarWidget,
+    pub occlusion_widget: OcclusionWidget,
+    pub atak_widget: AtakWidget,
 
     // App State
     is_demo_mode: bool,
@@ -219,6 +223,9 @@ impl AncDashboardApp {
             ambisonics_scope: AmbisonicsScopeWidget::new(),
             jamming_widget: JammingWidget::new(),
             rasti_widget: RastiWidget::new(),
+            mesh_radar: MeshRadarWidget::new(),
+            occlusion_widget: OcclusionWidget::new(),
+            atak_widget: AtakWidget::new(),
             is_demo_mode: false,
             is_aggressive_snr: false,
             is_transparency_active: false,
@@ -1545,6 +1552,15 @@ impl eframe::App for AncDashboardApp {
 
                         ui.add_space(8.0);
                         self.rasti_widget.show(ui, 75.0);
+
+                        ui.add_space(8.0);
+                        self.occlusion_widget.render(ui);
+
+                        ui.add_space(8.0);
+                        self.mesh_radar.render(ui);
+
+                        ui.add_space(8.0);
+                        self.atak_widget.render(ui);
                     });
 
                     cols[2].vertical(|ui| {

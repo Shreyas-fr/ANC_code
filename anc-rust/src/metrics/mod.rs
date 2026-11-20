@@ -4,6 +4,7 @@ pub mod blast;
 pub mod cable;
 pub mod convergence;
 pub mod distortion;
+pub mod pesq;
 pub mod snr;
 pub mod sti;
 pub mod stress;
@@ -22,6 +23,7 @@ pub use distortion::{
     DistortionAnalyzer, DistortionConfig, DistortionMetrics, VoiceCoilHealthStatus,
     DEFAULT_ANALYZER_FFT_SIZE, MAX_SPECTRUM_BINS,
 };
+pub use pesq::{PesqEvaluator, PesqResult, BARK_EDGES_HZ, NUM_BARK_BANDS};
 pub use snr::{compute_active_speech_level, compute_explicit_snr, compute_si_sdr};
 pub use sti::{
     RastiPredictor, StiConfig, StiRating, StiTelemetry, NUM_RASTI_MOD_FREQS, RASTI_HISTORY_HOPS,

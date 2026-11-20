@@ -1,0 +1,19 @@
+[Unit]
+Description=DRDO SIH 26052 Real-Time Tactical ANC Audio Daemon
+After=network.target sound.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/anc-edge --alsaloop
+Restart=on-failure
+RestartSec=2
+LimitRTPRIO=95
+LimitMEMLOCK=infinity
+CPUSchedulingPolicy=rr
+CPUSchedulingPriority=85
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+Package: anc-tactical-suite
+Version: 0.1.0
+Section: sound
+Priority: optional
+Architecture: amd64
+Depends: libasound2 (>= 1.2.0), libx11-6, libxcursor1, libxrandr2, libxi6
+Maintainer: DRDO SIH 26052 Core Team <tactical-anc@drdo.gov.in>
+Description: Real-Time Tactical AI Active Noise Cancellation & Spatial Audio Daemon
+ Military-grade sub-16ms low-latency DSP suite for dismounted combat communications.
+ Features dual-mic MVDR beamforming, AuxIVA blind source separation,
+ IEC 60268-16 RASTI/STI speech intelligibility HUD, bone-air sensor fusion,
+ ATAK Cursor-on-Target telemetry, and ad-hoc squad mesh networking.

@@ -1,13 +1,18 @@
 //! Network wire protocols, low-latency UDP streamers, and receivers.
 
+pub mod atak;
 pub mod codec;
 pub mod crypto;
 pub mod fec;
 pub mod jamming;
+pub mod mesh;
 pub mod protocol;
 pub mod receiver;
 pub mod sender;
 
+pub use atak::{
+    AtakCotBridge, AtakTelemetry, TacticalSoldierProfile, ATAK_MULTICAST_ADDR, MAX_COT_XML_BYTES,
+};
 pub use codec::{
     AdpcmDecoder, AdpcmEncoder, AdpcmFecCodec, AdpcmPacket, ADPCM_FEC_PACKET_BYTES,
     ADPCM_FRAME_SAMPLES, ADPCM_PACKET_BYTES, ADPCM_PAYLOAD_BYTES,
@@ -20,6 +25,11 @@ pub use fec::{FecDecoder, FecEncoder, FecStats};
 pub use jamming::{
     JammingDetector, JammingDetectorConfig, JammingRemediation, JammingTelemetry, JammingType,
     JAMMING_HISTORY_SIZE,
+};
+pub use mesh::{
+    CryptoRatchet, MeshPacket, MeshPacketType, MeshRouter, Position3D, RoutingAction,
+    SpatialConsensusEngine, SquadMemberNode, MAX_SQUAD_MEMBERS, MESH_BROADCAST_ID,
+    MESH_PAYLOAD_BYTES,
 };
 pub use protocol::{
     AudioPacket, DspStageTimings, EdgeTelemetry, AUDIO_FRAME_SAMPLES, AUDIO_PACKET_BYTES,

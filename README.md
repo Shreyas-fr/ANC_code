@@ -5,7 +5,7 @@
 [![GUI: Eframe/Egui 60FPS](https://img.shields.io/badge/GUI-Eframe%2Fegui%20(60FPS%20GPU)-green.svg)](https://github.com/emilk/egui)
 [![Latency Gate: PASSED](https://img.shields.io/badge/Latency%20Gate%20(<=35ms)-PASSED%20(16.01ms)-brightgreen.svg)](#empirical-latency--real-time-performance)
 [![Benchmark: MS--SNSD](https://img.shields.io/badge/Benchmark-MS--SNSD%20(+6.20dB%20SNR)-blueviolet.svg)](#empirical-evaluation-benchmarks)
-[![Test Suite: 333/333](https://img.shields.io/badge/Tests-333%2F333%20PASS%20(100%25)-brightgreen.svg)](#automated-test-suite--ci-qualification)
+[![Test Suite: 357/357](https://img.shields.io/badge/Tests-357%2F357%20PASS%20(100%25)-brightgreen.svg)](#automated-test-suite--ci-qualification)
 [![Platform: Raspberry Pi 5](https://img.shields.io/badge/Platform-Raspberry%20Pi%205%20(ARM%20Cortex--A76)-red.svg)](#embedded-deployment-on-raspberry-pi-5)
 
 Official final production release of the **DRDO Smart India Hackathon (SIH 26052)** tactical speech enhancement and dual-microphone active noise cancellation system. Engineered specifically for hostile, high-noise combat environments: armored fighting vehicles (T-90, BMP, Arjun), rotorcraft cockpits, artillery batteries, and tactical battlefield intercoms.
@@ -23,7 +23,14 @@ The entire system—including the **real-time streaming edge processing daemon**
   - **$+6.20\text{ dB}$ Mean SNR Gain** ($2.50\text{ dB} \to 8.70\text{ dB}$)
   - **$+5.76\text{ dB}$ Mean SI-SDR Gain** ($2.51\text{ dB} \to 8.26\text{ dB}$)
   - Up to **$18.97\text{ dB}$ Output SI-SDR** on spatial directional noise sources ($+21.48\text{ dB}$ nulling gain).
-- **Rock-Solid Test Coverage:** **333 / 333 unit and integration tests passing with 100% success**, zero compiler warnings, and zero clippy warnings across the entire workspace.
+- **Rock-Solid Test Coverage:** **357 / 357 unit, integration, and dataset benchmark tests passing with 100% success**, zero compiler warnings, and zero clippy warnings (`-D warnings` enforced) across the entire workspace.
+- **Embedded Bare-Metal & Fixed-Point DSP Engine:** Complete Q15/Q31 arithmetic pipeline, saturating MACs, biquads, and NLMS filters targeting FPU-less military microcontrollers (`no_std` friendly).
+- **Online Secondary Path & Earcup Seal Adaptation:** Real-time $S(z)$ modeling using psychoacoustically shaped dither to detect acoustic seal leaks (ballistic eyewear / helmet movement) and maintain phase cancellation.
+- **Active Occlusion Effect Suppression:** Neutralizes the 10 dB–25 dB ear-canal resonant boom (100–500 Hz) during soldier vocalization using throat/bone-conduction sensor fusion.
+- **Hardware NPU Acceleration & 4-bit/8-bit Quantization:** Heterogeneous inference bridge for Qualcomm Hexagon QNN, Rockchip RKNN, Apple Neural Engine, and AVX2/NEON SIMD.
+- **Tactical Squad Mesh & 3D Spatial Audio Consensus:** Ad-hoc multi-hop voice mesh with forward secrecy crypto ratchets, auto-positioning squad chatter to teammates' physical GPS azimuth and distance.
+- **Objective PESQ / MOS-LQO & Military Dataset Harness:** ITU-T P.862 / P.862.1 automated speech quality evaluator verified across simulated tank, helicopter, babble, and artillery noise.
+- **ATAK Cursor-on-Target (CoT) & Production Packaging:** Native broadcast to ATAK military field tablets (239.2.3.1:6969) and automated Debian package build (`.deb`) with systemd service descriptors.
 
 ---
 

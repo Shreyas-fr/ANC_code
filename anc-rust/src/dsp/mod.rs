@@ -19,6 +19,7 @@ pub mod diffraction;
 pub mod dither;
 pub mod doa;
 pub mod erb;
+pub mod fixed_point;
 pub mod geigel;
 pub mod gsc;
 pub mod howling;
@@ -27,11 +28,13 @@ pub mod kurtosis;
 pub mod limiter;
 pub mod lombard;
 pub mod lufs;
+pub mod occlusion;
 pub mod phase_align;
 pub mod pitch;
 pub mod polar_pattern;
 pub mod polyphase;
 pub mod resample;
+pub mod secondary_path;
 pub mod sensor_cal;
 pub mod simd;
 pub mod stft;
@@ -75,6 +78,7 @@ pub use diffraction::{CreepingWaveDiffraction, DiffractionConfig};
 pub use dither::{DitherEngine, DitherMode};
 pub use doa::{DoaConfig, GccPhatDoaTracker, MouthTrackingKalman};
 pub use erb::ErbFilterbank;
+pub use fixed_point::*;
 pub use geigel::{GeigelConfig, GeigelDetector, GeigelStats};
 pub use gsc::{GscConfig, GscStats, SubbandGsc};
 pub use howling::{AntiHowlingShifter, HowlingConfig, HowlingTelemetry};
@@ -85,6 +89,9 @@ pub use kurtosis::{
 pub use limiter::SoftLimiter;
 pub use lombard::{InverseLombardCompensator, LombardConfig, LombardTelemetry};
 pub use lufs::{LufsConfig, LufsGovernor, LufsTelemetry};
+pub use occlusion::{
+    OcclusionConfig, OcclusionSuppressor, OcclusionTelemetry, OCCLUSION_FILTER_TAPS,
+};
 pub use phase_align::{
     AcousticPhaseAligner, AllPassBiquad, PhaseAlignConfig, PhaseAlignmentProfile,
 };
@@ -97,6 +104,9 @@ pub use polyphase::{
     MinimumPhasePolyphaseDecimator3x, MinimumPhasePolyphaseInterpolator3x, MIN_PHASE_FIR_48,
 };
 pub use resample::StatefulResampler;
+pub use secondary_path::{
+    OnlineSecondaryPathEstimator, SecondaryPathConfig, SecondaryPathTelemetry, SECONDARY_PATH_TAPS,
+};
 pub use sensor_cal::{OnlineSensorCalibrator, SensorCalConfig, SensorCalTelemetry};
 pub use simd::*;
 pub use stft::StreamingStft;
