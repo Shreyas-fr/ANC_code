@@ -13,9 +13,9 @@
 //! - Apparent Speech-to-Noise Ratio (dB) derived from Modulation Transfer Function (MTF).
 //! - Multi-octave modulation transfer factor bar graph.
 
-use eframe::egui::{self, Color32, Frame, Margin, Rect, Rounding, Stroke, Ui, Vec2};
 use crate::ui::theme::Theme;
 pub use anc_rust::metrics::sti::{StiRating, StiTelemetry, NUM_RASTI_MOD_FREQS};
+use eframe::egui::{self, Color32, Frame, Margin, Rect, Rounding, Stroke, Ui, Vec2};
 
 /// Interactive RASTI Speech Transmission Index Gauge Widget.
 #[derive(Debug, Clone)]
@@ -57,7 +57,11 @@ impl RastiWidget {
             .show(ui, |ui| {
                 // Header
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("🗣").color(Theme::ACCENT_GREEN).size(13.0));
+                    ui.label(
+                        egui::RichText::new("🗣")
+                            .color(Theme::ACCENT_GREEN)
+                            .size(13.0),
+                    );
                     ui.label(
                         egui::RichText::new("IEC 60268-16 SPEECH TRANSMISSION INDEX (RASTI)")
                             .strong()
@@ -109,16 +113,27 @@ impl RastiWidget {
 
                     ui.vertical(|ui| {
                         ui.horizontal(|ui| {
-                            ui.label(egui::RichText::new("APPARENT SNR:").size(9.5).color(Theme::TEXT_MUTED));
                             ui.label(
-                                egui::RichText::new(format!("{:>+5.1} dB", self.telemetry.mean_apparent_snr_db))
-                                    .size(11.0)
-                                    .monospace()
-                                    .color(Theme::TEXT_PRIMARY),
+                                egui::RichText::new("APPARENT SNR:")
+                                    .size(9.5)
+                                    .color(Theme::TEXT_MUTED),
+                            );
+                            ui.label(
+                                egui::RichText::new(format!(
+                                    "{:>+5.1} dB",
+                                    self.telemetry.mean_apparent_snr_db
+                                ))
+                                .size(11.0)
+                                .monospace()
+                                .color(Theme::TEXT_PRIMARY),
                             );
 
                             ui.add_space(10.0);
-                            ui.label(egui::RichText::new("MEAN MTF:").size(9.5).color(Theme::TEXT_MUTED));
+                            ui.label(
+                                egui::RichText::new("MEAN MTF:")
+                                    .size(9.5)
+                                    .color(Theme::TEXT_MUTED),
+                            );
                             ui.label(
                                 egui::RichText::new(format!("{:.2}", self.telemetry.mean_mtf))
                                     .size(11.0)
@@ -132,9 +147,16 @@ impl RastiWidget {
                         // Horizontal STI quality progress bar
                         let bar_width = 180.0_f32;
                         let bar_height = 6.0_f32;
-                        let (bar_rect, _) = ui.allocate_exact_size(Vec2::new(bar_width, bar_height), egui::Sense::hover());
+                        let (bar_rect, _) = ui.allocate_exact_size(
+                            Vec2::new(bar_width, bar_height),
+                            egui::Sense::hover(),
+                        );
                         let bar_painter = ui.painter_at(bar_rect);
-                        bar_painter.rect_filled(bar_rect, Rounding::same(3.0), Color32::from_rgb(26, 32, 44));
+                        bar_painter.rect_filled(
+                            bar_rect,
+                            Rounding::same(3.0),
+                            Color32::from_rgb(26, 32, 44),
+                        );
 
                         let fill_rect = Rect::from_min_size(
                             bar_rect.min,
@@ -148,12 +170,17 @@ impl RastiWidget {
 
                 // Modulation Frequency Bars (14 RASTI sub-modulation bands)
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("MTF BANDS:").size(9.0).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("MTF BANDS:")
+                            .size(9.0)
+                            .color(Theme::TEXT_MUTED),
+                    );
                     for i in 0..NUM_RASTI_MOD_FREQS {
                         let m = self.telemetry.mtf_bands[i].clamp(0.0, 1.0);
                         let bar_w = 6.0_f32;
                         let bar_h = 10.0_f32;
-                        let (b_rect, _) = ui.allocate_exact_size(Vec2::new(bar_w, bar_h), egui::Sense::hover());
+                        let (b_rect, _) =
+                            ui.allocate_exact_size(Vec2::new(bar_w, bar_h), egui::Sense::hover());
                         let p = ui.painter_at(b_rect);
                         p.rect_filled(b_rect, Rounding::same(1.0), Color32::from_rgb(26, 32, 44));
                         let f_h = bar_h * m;

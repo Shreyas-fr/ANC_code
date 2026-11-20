@@ -144,7 +144,8 @@ impl ThermalNoiseEstimator {
         // 3. Subband bin noise voltage at ADC input:
         //    V_bin_adc^2 = total_input_vn2_per_hz * bin_width * G_preamp^2
         let preamp_gain_linear = 10.0f32.powf(self.config.preamp_gain_db / 20.0);
-        let v_bin_adc_sq = total_input_vn2_per_hz * self.bin_width_hz * (preamp_gain_linear * preamp_gain_linear);
+        let v_bin_adc_sq =
+            total_input_vn2_per_hz * self.bin_width_hz * (preamp_gain_linear * preamp_gain_linear);
 
         // 4. Digital full-scale power conversion:
         //    Full scale 1.0 peak = 0.5 mean square for full sine wave
@@ -184,7 +185,10 @@ impl ThermalNoiseEstimator {
     ///
     /// Modifies `subband_gains` in-place so no subband drops below the physical thermal boundary.
     pub fn bound_wiener_gains(&mut self, subband_gains: &mut [f32], subband_power: &[f32]) {
-        let n = subband_gains.len().min(subband_power.len()).min(MAX_THERMAL_BINS);
+        let n = subband_gains
+            .len()
+            .min(subband_power.len())
+            .min(MAX_THERMAL_BINS);
         let thermal_pwr = self.thermal_bin_power_digital;
         let min_floor = self.config.min_wiener_floor;
 
@@ -265,7 +269,10 @@ mod tests {
         est.update_temperature(55.0); // Desert extreme
         let hot_floor = est.thermal_bin_power();
 
-        assert!(hot_floor > cold_floor, "Thermal noise power must increase with temperature (T_hot > T_cold)");
+        assert!(
+            hot_floor > cold_floor,
+            "Thermal noise power must increase with temperature (T_hot > T_cold)"
+        );
     }
 
     #[test]
@@ -279,7 +286,10 @@ mod tests {
         est.bound_wiener_gains(&mut gains, &pwr);
 
         for &g in &gains {
-            assert!(g >= 0.05, "Gain must be bounded above minimum floor to prevent pumping");
+            assert!(
+                g >= 0.05,
+                "Gain must be bounded above minimum floor to prevent pumping"
+            );
         }
         assert!(est.telemetry().pumping_prevention_events > 0);
     }

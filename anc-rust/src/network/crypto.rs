@@ -470,7 +470,10 @@ mod tests {
             0xa8, 0x06, 0x1d, 0xc1, 0x30, 0x51, 0x36, 0xc6, 0xc2, 0x2b, 0x8b, 0xaf, 0x0c, 0x01,
             0x27, 0xa9,
         ];
-        assert_eq!(tag, expected, "Poly1305 tag must match RFC 8439 test vector");
+        assert_eq!(
+            tag, expected,
+            "Poly1305 tag must match RFC 8439 test vector"
+        );
     }
 
     #[test]

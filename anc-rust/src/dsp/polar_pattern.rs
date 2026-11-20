@@ -199,9 +199,16 @@ impl PolarPatternShaper {
                 let fbr = if angle_deg >= 175.0 {
                     30.0
                 } else {
-                    20.0 * ((1.0 + angle_rad.cos().abs()) / (1.0 - angle_rad.cos().abs()).max(1e-3)).log10()
+                    20.0 * ((1.0 + angle_rad.cos().abs()) / (1.0 - angle_rad.cos().abs()).max(1e-3))
+                        .log10()
                 };
-                (1.0f32, tau.max(0.0), angle_deg, 4.5f32, fbr.clamp(0.0, 40.0))
+                (
+                    1.0f32,
+                    tau.max(0.0),
+                    angle_deg,
+                    4.5f32,
+                    fbr.clamp(0.0, 40.0),
+                )
             }
         };
 
@@ -221,7 +228,8 @@ impl PolarPatternShaper {
         // Equalizer design: 1st-order integrating filter compensating for omega*d/c slope.
         // Corner frequency f_corner = c / (2 * pi * d) (e.g. 2730 Hz for 20 mm).
         // Low cutoff f_hp = 80 Hz to prevent extreme DC boost.
-        let f_corner = (SPEED_OF_SOUND_M_S / (2.0 * std::f32::consts::PI * d)).clamp(500.0, fs * 0.45);
+        let f_corner =
+            (SPEED_OF_SOUND_M_S / (2.0 * std::f32::consts::PI * d)).clamp(500.0, fs * 0.45);
         let f_hp = 80.0f32;
 
         let w_hp = 2.0 * std::f32::consts::PI * f_hp / fs;
@@ -425,7 +433,10 @@ mod tests {
         }
 
         let mean_residual = residual_power / 250.0;
-        assert!(mean_residual < 0.02, "Cardioid must deeply nullify rear-incident acoustic sound");
+        assert!(
+            mean_residual < 0.02,
+            "Cardioid must deeply nullify rear-incident acoustic sound"
+        );
     }
 
     #[test]
@@ -440,8 +451,14 @@ mod tests {
         let sens_110 = shaper.sensitivity_at_angle(110.0);
         let sens_0 = shaper.sensitivity_at_angle(0.0);
 
-        assert!(sens_110 < 0.05, "Sensitivity at steered null angle 110° should be near zero");
-        assert!((sens_0 - 1.0).abs() < 0.01, "Sensitivity on-axis (0°) should be normalized to 1.0");
+        assert!(
+            sens_110 < 0.05,
+            "Sensitivity at steered null angle 110° should be near zero"
+        );
+        assert!(
+            (sens_0 - 1.0).abs() < 0.01,
+            "Sensitivity on-axis (0°) should be normalized to 1.0"
+        );
     }
 
     #[test]

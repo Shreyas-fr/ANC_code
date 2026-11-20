@@ -291,10 +291,7 @@ impl GccPhatDoaTracker {
         let eps = self.config.phat_eps;
         let half = n_fft / 2;
 
-        self.full_spec[0] = Complex32::new(
-            (mic2_spec[0] * mic1_spec[0].conj()).re.signum(),
-            0.0,
-        );
+        self.full_spec[0] = Complex32::new((mic2_spec[0] * mic1_spec[0].conj()).re.signum(), 0.0);
 
         for k in 1..half {
             let cross = mic2_spec[k] * mic1_spec[k].conj();
@@ -368,14 +365,21 @@ impl GccPhatDoaTracker {
 
         if spp_mean >= self.config.spp_threshold && self.confidence > 0.05 {
             // Speech active: fuse measurement via Kalman gain
-            self.kalman.update(measured_angle_deg, self.confidence, self.config.kalman_meas_var);
+            self.kalman.update(
+                measured_angle_deg,
+                self.confidence,
+                self.config.kalman_meas_var,
+            );
             self.current_delay_samples = 0.90 * self.current_delay_samples + 0.10 * sub_sample_lag;
         } else {
             // Speech pause: freeze angle, damp velocity
             self.kalman.dot_theta_dps *= 0.90;
         }
 
-        self.kalman.theta_deg = self.kalman.theta_deg.clamp(-self.config.max_angle_deg, self.config.max_angle_deg);
+        self.kalman.theta_deg = self
+            .kalman
+            .theta_deg
+            .clamp(-self.config.max_angle_deg, self.config.max_angle_deg);
         self.kalman.theta_deg
     }
 }
@@ -554,7 +558,8 @@ mod tests {
             let t = frame as f32 * 0.016;
             let jitter = 5.0 * (2.0 * PI * 15.0 * t).sin();
             let true_angle = 10.0 + jitter;
-            let delta_t = (config.mic_distance_m * (true_angle * PI / 180.0).sin()) / config.speed_of_sound_m_s;
+            let delta_t = (config.mic_distance_m * (true_angle * PI / 180.0).sin())
+                / config.speed_of_sound_m_s;
 
             let mut mic1 = vec![Complex32::default(); num_bins];
             let mut mic2 = vec![Complex32::default(); num_bins];

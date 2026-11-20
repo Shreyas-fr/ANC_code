@@ -6,12 +6,12 @@
 //! 3. 32-band Auditory ERB Filterbank psychoacoustic gain smoothing.
 //! 4. Zero-allocation real-time execution (< 3 microseconds compute).
 
-use std::time::Instant;
 use num_complex::Complex32;
+use std::time::Instant;
 
-use crate::dsp::erb::ErbFilterbank;
 use super::comfort_noise::{ComfortNoiseConfig, ComfortNoiseGenerator};
 use super::traits::{EnhancerStats, ModelError, SpeechEnhancer};
+use crate::dsp::erb::ErbFilterbank;
 
 /// Fast 4th-order Padé rational approximation for e^x.
 /// Accelerates spectral exponentials by ~3x over transcendental f32::exp().
@@ -171,8 +171,10 @@ impl AdaptiveSpectralEnhancer {
         if alpha_factors.len() == self.num_bins && floor_factors.len() == self.num_bins {
             self.diffuse_alpha.copy_from_slice(alpha_factors);
             self.diffuse_floor.copy_from_slice(floor_factors);
-            self.erb.extract_erb_energies(&self.diffuse_alpha, &mut self.erb_alpha);
-            self.erb.extract_erb_energies(&self.diffuse_floor, &mut self.erb_floor);
+            self.erb
+                .extract_erb_energies(&self.diffuse_alpha, &mut self.erb_alpha);
+            self.erb
+                .extract_erb_energies(&self.diffuse_floor, &mut self.erb_floor);
             self.has_diffuse_factors = true;
         }
     }
@@ -255,8 +257,10 @@ impl SpeechEnhancer for AdaptiveSpectralEnhancer {
         }
 
         // Step 3: Compute ERB subband energies for psychoacoustic envelope (SIMD chunk-optimized)
-        self.erb.extract_erb_energies(&self.smoothed_power, &mut self.erb_power_y);
-        self.erb.extract_erb_energies(&self.noise_psd, &mut self.erb_power_n);
+        self.erb
+            .extract_erb_energies(&self.smoothed_power, &mut self.erb_power_y);
+        self.erb
+            .extract_erb_energies(&self.noise_psd, &mut self.erb_power_n);
 
         if self.has_diffuse_factors {
             // CDR-modulated ERB subband processing: diffuse noise increases alpha and drops floor
@@ -269,31 +273,43 @@ impl SpeechEnhancer for AdaptiveSpectralEnhancer {
             }
         } else {
             // Auto-vectorized 8-wide chunk processing across ERB subbands
-            for ((chunk_y, chunk_n), chunk_g) in self.erb_power_y.chunks_exact(8)
+            for ((chunk_y, chunk_n), chunk_g) in self
+                .erb_power_y
+                .chunks_exact(8)
                 .zip(self.erb_power_n.chunks_exact(8))
                 .zip(self.erb_gains.chunks_exact_mut(8))
             {
                 for b in 0..8 {
                     let diff = (chunk_y[b] - chunk_n[b]).clamp(-12.0, 12.0);
                     let snr_b = (fast_exp(diff) - 1.0).max(0.0);
-                    chunk_g[b] = (snr_b / (snr_b + self.over_subtraction)).clamp(self.min_gain, 1.0);
+                    chunk_g[b] =
+                        (snr_b / (snr_b + self.over_subtraction)).clamp(self.min_gain, 1.0);
                 }
             }
         }
-        self.erb.interpolate_band_gains(&self.erb_gains, &mut self.linear_erb_gains);
+        self.erb
+            .interpolate_band_gains(&self.erb_gains, &mut self.linear_erb_gains);
 
         // Step 3b: Auditory Masking Threshold via Bark Spreading Function (AVX2/NEON vector-friendly)
         // Precompute fast_exp once per band in 8-wide chunks (reduces exp calls from 1024 to 32)
-        for (chunk_in, chunk_out) in self.erb_power_y.chunks_exact(8).zip(self.erb_exp_y.chunks_exact_mut(8)) {
+        for (chunk_in, chunk_out) in self
+            .erb_power_y
+            .chunks_exact(8)
+            .zip(self.erb_exp_y.chunks_exact_mut(8))
+        {
             for i in 0..8 {
                 chunk_out[i] = fast_exp(chunk_in[i]);
             }
         }
 
         for j in 0..self.num_bands {
-            let col_slice = &self.spread_matrix_col_major[j * self.num_bands..(j + 1) * self.num_bands];
+            let col_slice =
+                &self.spread_matrix_col_major[j * self.num_bands..(j + 1) * self.num_bands];
             let mut sum_masked_pwr = 0.0f32;
-            for (w_chunk, p_chunk) in col_slice.chunks_exact(8).zip(self.erb_exp_y.chunks_exact(8)) {
+            for (w_chunk, p_chunk) in col_slice
+                .chunks_exact(8)
+                .zip(self.erb_exp_y.chunks_exact(8))
+            {
                 let mut acc = 0.0f32;
                 for k in 0..8 {
                     acc += w_chunk[k] * p_chunk[k];
@@ -303,7 +319,10 @@ impl SpeechEnhancer for AdaptiveSpectralEnhancer {
             // Formant tone-to-noise masking offset: -16.0 dB (factor 0.025)
             self.masking_threshold_bands[j] = (sum_masked_pwr * 0.025).max(1e-8);
         }
-        self.erb.interpolate_band_gains(&self.masking_threshold_bands, &mut self.masking_threshold_bins);
+        self.erb.interpolate_band_gains(
+            &self.masking_threshold_bands,
+            &mut self.masking_threshold_bins,
+        );
 
         // Step 4a: Pitch Harmonic Comb Estimation for Voiced Speech Intelligibility
         // Scan pitch candidate bins 3..=11 (approx 93 Hz to 344 Hz @ 16 kHz, 31.25 Hz/bin)
@@ -329,7 +348,8 @@ impl SpeechEnhancer for AdaptiveSpectralEnhancer {
         }
 
         // Voiced speech detected if harmonic power exceeds local noise floor by > 3.5 dB
-        let is_voiced = best_pitch_bin > 0 && max_harmonic_energy > 2.25 * baseline_energy.max(1e-6);
+        let is_voiced =
+            best_pitch_bin > 0 && max_harmonic_energy > 2.25 * baseline_energy.max(1e-6);
 
         // Step 4b: Two-Step Noise Reduction (TSNR) Step 1 & 2
         // Step 1: Compute standard Decision-Directed a priori SNR and initial gain G_DD
@@ -345,7 +365,8 @@ impl SpeechEnhancer for AdaptiveSpectralEnhancer {
 
             // A priori SNR: xi = alpha * (|S_prev|^2 / lambda_n) + (1 - alpha) * max(gamma - 1, 0)
             let prev_snr = self.speech_power_prev[k] / noise_k;
-            let xi_dd = (self.alpha_dd * prev_snr + (1.0 - self.alpha_dd) * (gamma - 1.0).max(0.0)).clamp(0.001, 500.0);
+            let xi_dd = (self.alpha_dd * prev_snr + (1.0 - self.alpha_dd) * (gamma - 1.0).max(0.0))
+                .clamp(0.001, 500.0);
 
             let alpha_k = if self.has_diffuse_factors {
                 self.diffuse_alpha[k]
@@ -424,9 +445,11 @@ impl SpeechEnhancer for AdaptiveSpectralEnhancer {
         let alpha_att = 0.20f32; // ~10 ms attack @ 16 ms hop (reaches active floor within 1 frame)
         let alpha_rel = 0.72f32; // ~50 ms release (glides into pause floor over 3-4 frames)
         if target_pause_weight < self.smoothed_pause_weight {
-            self.smoothed_pause_weight = alpha_att * self.smoothed_pause_weight + (1.0 - alpha_att) * target_pause_weight;
+            self.smoothed_pause_weight =
+                alpha_att * self.smoothed_pause_weight + (1.0 - alpha_att) * target_pause_weight;
         } else {
-            self.smoothed_pause_weight = alpha_rel * self.smoothed_pause_weight + (1.0 - alpha_rel) * target_pause_weight;
+            self.smoothed_pause_weight =
+                alpha_rel * self.smoothed_pause_weight + (1.0 - alpha_rel) * target_pause_weight;
         }
 
         let pause_floor_val = if self.aggressive_snr {
@@ -467,7 +490,11 @@ impl SpeechEnhancer for AdaptiveSpectralEnhancer {
             // Boost local spectral formant peaks in core speech region (300 Hz - 3.2 kHz)
             if spp > 0.35 && (10..=100).contains(&k) {
                 let prev_pwr = self.smoothed_power[k - 1];
-                let next_pwr = if k + 1 < self.num_bins { self.smoothed_power[k + 1] } else { pwr };
+                let next_pwr = if k + 1 < self.num_bins {
+                    self.smoothed_power[k + 1]
+                } else {
+                    pwr
+                };
                 if pwr > prev_pwr * 1.15 && pwr > next_pwr * 1.15 {
                     combined_gain = (combined_gain * 1.18).min(1.0);
                 }
@@ -540,7 +567,8 @@ impl SpeechEnhancer for AdaptiveSpectralEnhancer {
         // Adaptive AR(1) Shaped Pink Comfort Noise Injection during speech pauses
         if self.enable_comfort_noise {
             self.comfort_noise.adapt_to_noise_psd(&self.noise_psd);
-            self.comfort_noise.inject_frame(spec, &self.spp_scratch, &self.noise_psd);
+            self.comfort_noise
+                .inject_frame(spec, &self.spp_scratch, &self.noise_psd);
         }
 
         self.has_diffuse_factors = false;

@@ -13,11 +13,11 @@
 //!    - Sibilance ratio sparkline and active consonant damping beacon.
 //! 3. Interactive controls to steer acoustic nulls directly toward incoming tactical threats.
 
+use crate::ui::theme::Theme;
+pub use anc_rust::dsp::deesser::DeEsserTelemetry;
+pub use anc_rust::dsp::polar_pattern::{PolarPatternTelemetry, PolarPatternType};
 use eframe::egui::{self, Color32, Frame, Margin, Pos2, Rect, Rounding, Stroke, Ui, Vec2};
 use std::f32::consts::PI;
-use crate::ui::theme::Theme;
-pub use anc_rust::dsp::polar_pattern::{PolarPatternTelemetry, PolarPatternType};
-pub use anc_rust::dsp::deesser::DeEsserTelemetry;
 
 /// Interactive Polar Sensitivity & Anti-Sibilance HUD Widget.
 pub struct PolarDirectivityWidget {
@@ -70,7 +70,9 @@ impl PolarDirectivityWidget {
             PolarPatternType::CustomSteered => {
                 let null_rad = self.steered_null_deg.to_radians();
                 let tau_norm = -null_rad.cos().max(0.0);
-                ((tau_norm + cos_theta) / (tau_norm + 1.0).max(1e-4)).abs().clamp(0.0, 1.0)
+                ((tau_norm + cos_theta) / (tau_norm + 1.0).max(1e-4))
+                    .abs()
+                    .clamp(0.0, 1.0)
             }
         }
     }
@@ -89,7 +91,11 @@ impl PolarDirectivityWidget {
             .show(ui, |ui| {
                 // Header bar
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("🎯").color(Theme::ACCENT_CYAN).size(13.0));
+                    ui.label(
+                        egui::RichText::new("🎯")
+                            .color(Theme::ACCENT_CYAN)
+                            .size(13.0),
+                    );
                     ui.label(
                         egui::RichText::new("POLAR DIRECTIVITY & DE-ESSER")
                             .strong()
@@ -128,7 +134,8 @@ impl PolarDirectivityWidget {
 
                 let available_w = ui.available_width();
                 let actual_h = height.max(120.0);
-                let (rect, _response) = ui.allocate_exact_size(Vec2::new(available_w, actual_h), egui::Sense::hover());
+                let (rect, _response) =
+                    ui.allocate_exact_size(Vec2::new(available_w, actual_h), egui::Sense::hover());
 
                 let painter = ui.painter_at(rect);
 
@@ -138,12 +145,24 @@ impl PolarDirectivityWidget {
                 let plot_radius = plot_diameter * 0.46;
 
                 // 1. Draw concentric range rings (0 dB, -6 dB, -12 dB, -18 dB)
-                for &(frac, label) in &[(1.0f32, "0dB"), (0.75, "-6dB"), (0.50, "-12dB"), (0.25, "-18dB")] {
+                for &(frac, label) in &[
+                    (1.0f32, "0dB"),
+                    (0.75, "-6dB"),
+                    (0.50, "-12dB"),
+                    (0.25, "-18dB"),
+                ] {
                     let r = plot_radius * frac;
                     painter.circle_stroke(
                         plot_center,
                         r,
-                        Stroke::new(1.0_f32, if frac == 1.0 { Theme::BORDER_DEFAULT } else { Theme::BORDER_DEFAULT.gamma_multiply(0.4) }),
+                        Stroke::new(
+                            1.0_f32,
+                            if frac == 1.0 {
+                                Theme::BORDER_DEFAULT
+                            } else {
+                                Theme::BORDER_DEFAULT.gamma_multiply(0.4)
+                            },
+                        ),
                     );
                     painter.text(
                         Pos2::new(plot_center.x + 3.0, plot_center.y - r + 2.0),
@@ -157,8 +176,14 @@ impl PolarDirectivityWidget {
                 // 2. Draw crosshair angle rays
                 for &deg in &[0.0f32, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0] {
                     let rad = (deg - 90.0).to_radians();
-                    let p_end = Pos2::new(plot_center.x + plot_radius * rad.cos(), plot_center.y + plot_radius * rad.sin());
-                    painter.line_segment([plot_center, p_end], Stroke::new(1.0_f32, Theme::BORDER_DEFAULT.gamma_multiply(0.3)));
+                    let p_end = Pos2::new(
+                        plot_center.x + plot_radius * rad.cos(),
+                        plot_center.y + plot_radius * rad.sin(),
+                    );
+                    painter.line_segment(
+                        [plot_center, p_end],
+                        Stroke::new(1.0_f32, Theme::BORDER_DEFAULT.gamma_multiply(0.3)),
+                    );
                 }
 
                 // Label 0° Front and 180° Rear
@@ -185,16 +210,26 @@ impl PolarDirectivityWidget {
                     let sens = self.sensitivity_at_angle(theta).clamp(0.04, 1.0);
                     let r = plot_radius * sens;
                     let draw_angle = theta - PI * 0.5; // rotate so 0 rad is up
-                    let pt = Pos2::new(plot_center.x + r * draw_angle.cos(), plot_center.y + r * draw_angle.sin());
+                    let pt = Pos2::new(
+                        plot_center.x + r * draw_angle.cos(),
+                        plot_center.y + r * draw_angle.sin(),
+                    );
                     lobe_points.push(pt);
                 }
 
                 // Translucent fill for sensitivity lobe
                 let lobe_fill = Color32::from_rgba_unmultiplied(40, 220, 200, 30);
-                painter.add(egui::Shape::convex_polygon(lobe_points.clone(), lobe_fill, Stroke::NONE));
+                painter.add(egui::Shape::convex_polygon(
+                    lobe_points.clone(),
+                    lobe_fill,
+                    Stroke::NONE,
+                ));
                 // Lobe outline
                 for i in 0..steps {
-                    painter.line_segment([lobe_points[i], lobe_points[i + 1]], Stroke::new(1.5_f32, Theme::ACCENT_CYAN));
+                    painter.line_segment(
+                        [lobe_points[i], lobe_points[i + 1]],
+                        Stroke::new(1.5_f32, Theme::ACCENT_CYAN),
+                    );
                 }
 
                 // 4. Highlight null markers (e.g. ±null_angle)
@@ -202,8 +237,14 @@ impl PolarDirectivityWidget {
                     let null_deg = self.steered_null_deg;
                     for &sign in &[-1.0f32, 1.0] {
                         let null_angle = (sign * null_deg - 90.0).to_radians();
-                        let p_null = Pos2::new(plot_center.x + plot_radius * null_angle.cos(), plot_center.y + plot_radius * null_angle.sin());
-                        painter.line_segment([plot_center, p_null], Stroke::new(1.2_f32, Theme::ACCENT_RED.gamma_multiply(0.7)));
+                        let p_null = Pos2::new(
+                            plot_center.x + plot_radius * null_angle.cos(),
+                            plot_center.y + plot_radius * null_angle.sin(),
+                        );
+                        painter.line_segment(
+                            [plot_center, p_null],
+                            Stroke::new(1.2_f32, Theme::ACCENT_RED.gamma_multiply(0.7)),
+                        );
                         painter.circle_filled(p_null, 3.0, Theme::ACCENT_RED);
                     }
                 }
@@ -212,25 +253,66 @@ impl PolarDirectivityWidget {
                 let right_min_x = plot_center.x + plot_radius + 18.0;
                 let right_w = rect.max.x - right_min_x;
 
-                let right_rect = Rect::from_min_size(Pos2::new(right_min_x, rect.min.y + 2.0), Vec2::new(right_w, actual_h - 4.0));
+                let right_rect = Rect::from_min_size(
+                    Pos2::new(right_min_x, rect.min.y + 2.0),
+                    Vec2::new(right_w, actual_h - 4.0),
+                );
                 ui.allocate_new_ui(egui::UiBuilder::new().max_rect(right_rect), |right_ui| {
                     // Metrics row
                     right_ui.horizontal(|ui| {
-                        ui.label(egui::RichText::new("F/B RATIO:").size(9.5).color(Theme::TEXT_MUTED));
-                        ui.label(egui::RichText::new(format!("{:.1} dB", self.polar_telemetry.front_to_back_ratio_db)).size(9.5).strong().color(Theme::ACCENT_CYAN));
+                        ui.label(
+                            egui::RichText::new("F/B RATIO:")
+                                .size(9.5)
+                                .color(Theme::TEXT_MUTED),
+                        );
+                        ui.label(
+                            egui::RichText::new(format!(
+                                "{:.1} dB",
+                                self.polar_telemetry.front_to_back_ratio_db
+                            ))
+                            .size(9.5)
+                            .strong()
+                            .color(Theme::ACCENT_CYAN),
+                        );
                         ui.label(egui::RichText::new("·").color(Theme::TEXT_MUTED));
-                        ui.label(egui::RichText::new("DI:").size(9.5).color(Theme::TEXT_MUTED));
-                        ui.label(egui::RichText::new(format!("{:.1} dB", self.polar_telemetry.directivity_index_db)).size(9.5).strong().color(Theme::ACCENT_GREEN));
+                        ui.label(
+                            egui::RichText::new("DI:")
+                                .size(9.5)
+                                .color(Theme::TEXT_MUTED),
+                        );
+                        ui.label(
+                            egui::RichText::new(format!(
+                                "{:.1} dB",
+                                self.polar_telemetry.directivity_index_db
+                            ))
+                            .size(9.5)
+                            .strong()
+                            .color(Theme::ACCENT_GREEN),
+                        );
                         ui.label(egui::RichText::new("·").color(Theme::TEXT_MUTED));
-                        ui.label(egui::RichText::new("NULL:").size(9.5).color(Theme::TEXT_MUTED));
-                        ui.label(egui::RichText::new(format!("{:.0}°", self.steered_null_deg)).size(9.5).strong().color(Theme::ACCENT_AMBER));
+                        ui.label(
+                            egui::RichText::new("NULL:")
+                                .size(9.5)
+                                .color(Theme::TEXT_MUTED),
+                        );
+                        ui.label(
+                            egui::RichText::new(format!("{:.0}°", self.steered_null_deg))
+                                .size(9.5)
+                                .strong()
+                                .color(Theme::ACCENT_AMBER),
+                        );
                     });
 
                     right_ui.add_space(4.0);
 
                     // De-Esser Gain Reduction LED Meter
                     right_ui.horizontal(|ui| {
-                        ui.label(egui::RichText::new("DE-ESS REDUCTION:").size(9.5).strong().color(Theme::TEXT_SECONDARY));
+                        ui.label(
+                            egui::RichText::new("DE-ESS REDUCTION:")
+                                .size(9.5)
+                                .strong()
+                                .color(Theme::TEXT_SECONDARY),
+                        );
                         let red_db = self.deesser_telemetry.gain_reduction_db;
                         let red_text = format!("{:.1} dB", red_db);
                         let red_col = if red_db < -6.0 {
@@ -240,21 +322,31 @@ impl PolarDirectivityWidget {
                         } else {
                             Theme::ACCENT_GREEN
                         };
-                        ui.label(egui::RichText::new(red_text).size(9.5).strong().color(red_col));
+                        ui.label(
+                            egui::RichText::new(red_text)
+                                .size(9.5)
+                                .strong()
+                                .color(red_col),
+                        );
                     });
 
                     // LED meter bar
                     let led_w = (right_w - 8.0).max(100.0);
-                    let (led_rect, _) = right_ui.allocate_exact_size(Vec2::new(led_w, 10.0), egui::Sense::hover());
+                    let (led_rect, _) =
+                        right_ui.allocate_exact_size(Vec2::new(led_w, 10.0), egui::Sense::hover());
                     let led_painter = right_ui.painter_at(led_rect);
                     let num_leds = 18;
                     let cur_reduction = self.deesser_telemetry.gain_reduction_db.abs().min(18.0);
                     let active_leds = (cur_reduction / 18.0 * num_leds as f32).round() as usize;
 
-                    let segment_w = (led_rect.width() - (num_leds - 1) as f32 * 2.0) / num_leds as f32;
+                    let segment_w =
+                        (led_rect.width() - (num_leds - 1) as f32 * 2.0) / num_leds as f32;
                     for i in 0..num_leds {
                         let seg_x = led_rect.min.x + i as f32 * (segment_w + 2.0);
-                        let seg_rect = Rect::from_min_size(Pos2::new(seg_x, led_rect.min.y), Vec2::new(segment_w, led_rect.height()));
+                        let seg_rect = Rect::from_min_size(
+                            Pos2::new(seg_x, led_rect.min.y),
+                            Vec2::new(segment_w, led_rect.height()),
+                        );
                         let is_lit = i < active_leds;
                         let col = if is_lit {
                             if i >= 12 {
@@ -284,7 +376,13 @@ impl PolarDirectivityWidget {
 
                         for (pat, label) in patterns {
                             let is_active = self.selected_pattern == pat;
-                            if ui.selectable_label(is_active, egui::RichText::new(label).size(9.0).strong()).clicked() {
+                            if ui
+                                .selectable_label(
+                                    is_active,
+                                    egui::RichText::new(label).size(9.0).strong(),
+                                )
+                                .clicked()
+                            {
                                 self.selected_pattern = pat;
                                 user_action = Some((pat, self.steered_null_deg));
                             }
@@ -295,7 +393,11 @@ impl PolarDirectivityWidget {
 
                     // Null Steering Slider
                     right_ui.horizontal(|ui| {
-                        ui.label(egui::RichText::new("STEER NULL:").size(9.0).color(Theme::TEXT_MUTED));
+                        ui.label(
+                            egui::RichText::new("STEER NULL:")
+                                .size(9.0)
+                                .color(Theme::TEXT_MUTED),
+                        );
                         let mut angle = self.steered_null_deg;
                         let slider = egui::Slider::new(&mut angle, 90.0..=180.0)
                             .suffix("°")

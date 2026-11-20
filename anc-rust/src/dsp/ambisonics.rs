@@ -282,8 +282,7 @@ impl AmbisonicsSpatializer {
 
         // Diffuseness: psi = 1.0 - ||I|| / (E + eps)
         let raw_diffuseness = (1.0 - (intensity_mag / self.smooth_energy)).clamp(0.0, 1.0);
-        self.smooth_diffuseness =
-            alpha * self.smooth_diffuseness + (1.0 - alpha) * raw_diffuseness;
+        self.smooth_diffuseness = alpha * self.smooth_diffuseness + (1.0 - alpha) * raw_diffuseness;
 
         // Azimuth and Elevation
         let az_deg = self.smooth_iy.atan2(self.smooth_ix).to_degrees();
@@ -463,14 +462,18 @@ mod tests {
         let mut z = vec![0.0f32; 128];
 
         // Encode point source at 0 degrees (pure front)
-        AmbisonicsSpatializer::encode_point_source(&input, 0.0, 0.0, &mut w, &mut x, &mut y, &mut z);
+        AmbisonicsSpatializer::encode_point_source(
+            &input, 0.0, 0.0, &mut w, &mut x, &mut y, &mut z,
+        );
         assert!((w[0] - std::f32::consts::FRAC_1_SQRT_2).abs() < 1e-5);
         assert!((x[0] - 1.0).abs() < 1e-5);
         assert!(y[0].abs() < 1e-5);
         assert!(z[0].abs() < 1e-5);
 
         // Encode point source at +90 degrees (pure left)
-        AmbisonicsSpatializer::encode_point_source(&input, 90.0, 0.0, &mut w, &mut x, &mut y, &mut z);
+        AmbisonicsSpatializer::encode_point_source(
+            &input, 90.0, 0.0, &mut w, &mut x, &mut y, &mut z,
+        );
         assert!((w[0] - std::f32::consts::FRAC_1_SQRT_2).abs() < 1e-5);
         assert!(x[0].abs() < 1e-5);
         assert!((y[0] - 1.0).abs() < 1e-5);
@@ -492,7 +495,9 @@ mod tests {
         let mut z = vec![0.0f32; 256];
 
         // 45 degrees azimuth
-        AmbisonicsSpatializer::encode_point_source(&input, 45.0, 0.0, &mut w, &mut x, &mut y, &mut z);
+        AmbisonicsSpatializer::encode_point_source(
+            &input, 45.0, 0.0, &mut w, &mut x, &mut y, &mut z,
+        );
         let telem = spat.analyze_intensity(&w, &x, &y, &z);
 
         // A single point source must have low diffuseness (< 0.15) and correct angle (~45°)
@@ -548,7 +553,9 @@ mod tests {
         let mut right = vec![0.0f32; 256];
 
         for &angle in &[0.0, 30.0, 60.0, 90.0, 135.0, 180.0, -90.0] {
-            AmbisonicsSpatializer::encode_point_source(&input, angle, 0.0, &mut w, &mut x, &mut y, &mut z);
+            AmbisonicsSpatializer::encode_point_source(
+                &input, angle, 0.0, &mut w, &mut x, &mut y, &mut z,
+            );
 
             let e_bformat: f32 = w
                 .iter()

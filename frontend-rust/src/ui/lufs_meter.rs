@@ -9,10 +9,10 @@
 //! - Dynamic Range Compression (DRC) Gain Reduction Curve
 //! - Interactive Target LUFS Slider (-28 to -16 LUFS) with Tactical Presets
 
-use egui::{Color32, Frame, Margin, Pos2, Rect, Rounding, Sense, Stroke, Ui, Vec2};
-use std::f32::consts::PI;
 use super::theme::Theme;
 use anc_rust::network::EdgeTelemetry;
+use egui::{Color32, Frame, Margin, Pos2, Rect, Rounding, Sense, Stroke, Ui, Vec2};
+use std::f32::consts::PI;
 
 /// Number of rolling history points for dynamic gain reduction curve.
 const GAIN_RED_HISTORY_LEN: usize = 64;
@@ -124,7 +124,11 @@ impl TacticalLufsRadarWidget {
             .show(ui, |ui| {
                 // 1. Header Bar
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("●").color(Theme::ACCENT_CYAN).size(11.0));
+                    ui.label(
+                        egui::RichText::new("●")
+                            .color(Theme::ACCENT_CYAN)
+                            .size(11.0),
+                    );
                     ui.label(
                         egui::RichText::new("ITU-R BS.1770-4 / EBU R128 LOUDNESS RADAR")
                             .strong()
@@ -223,19 +227,11 @@ impl TacticalLufsRadarWidget {
 
                     // Short-Term Loudness (S) Ring: Green solid
                     let r_s = max_r * Self::lufs_to_radius(self.short_term_lufs);
-                    painter.circle_stroke(
-                        center,
-                        r_s,
-                        Stroke::new(2.0_f32, Theme::ACCENT_GREEN),
-                    );
+                    painter.circle_stroke(center, r_s, Stroke::new(2.0_f32, Theme::ACCENT_GREEN));
 
                     // Momentary Loudness (M) Arc: Cyan bright
                     let r_m = max_r * Self::lufs_to_radius(self.momentary_lufs);
-                    painter.circle_stroke(
-                        center,
-                        r_m,
-                        Stroke::new(2.5_f32, Theme::ACCENT_CYAN),
-                    );
+                    painter.circle_stroke(center, r_m, Stroke::new(2.5_f32, Theme::ACCENT_CYAN));
 
                     // Target marker: Amber tick
                     let r_target = max_r * Self::lufs_to_radius(self.target_lufs);
@@ -282,10 +278,13 @@ impl TacticalLufsRadarWidget {
                             );
                             ui.label(egui::RichText::new("·").size(9.5).color(Theme::TEXT_MUTED));
                             ui.label(
-                                egui::RichText::new(format!("LRA: {:.1} LU", self.loudness_range_lu))
-                                    .size(9.5)
-                                    .monospace()
-                                    .color(Theme::TEXT_SECONDARY),
+                                egui::RichText::new(format!(
+                                    "LRA: {:.1} LU",
+                                    self.loudness_range_lu
+                                ))
+                                .size(9.5)
+                                .monospace()
+                                .color(Theme::TEXT_SECONDARY),
                             );
                         });
 
@@ -293,13 +292,19 @@ impl TacticalLufsRadarWidget {
 
                         // True-Peak dBFS Bar
                         ui.horizontal(|ui| {
-                            ui.label(egui::RichText::new("TRUE-PEAK:").size(9.0).color(Theme::TEXT_MUTED));
-                            let (tp_bar_rect, _) = ui.allocate_exact_size(
-                                Vec2::new(120.0, 10.0),
-                                Sense::hover(),
+                            ui.label(
+                                egui::RichText::new("TRUE-PEAK:")
+                                    .size(9.0)
+                                    .color(Theme::TEXT_MUTED),
                             );
+                            let (tp_bar_rect, _) =
+                                ui.allocate_exact_size(Vec2::new(120.0, 10.0), Sense::hover());
                             let tp_painter = ui.painter_at(tp_bar_rect);
-                            tp_painter.rect_filled(tp_bar_rect, Rounding::same(2.0), Theme::BG_VOID);
+                            tp_painter.rect_filled(
+                                tp_bar_rect,
+                                Rounding::same(2.0),
+                                Theme::BG_VOID,
+                            );
 
                             let tp_norm = ((self.true_peak_dbfs - (-36.0)) / 36.0).clamp(0.0, 1.0);
                             let filled_w = tp_bar_rect.width() * tp_norm;
@@ -310,7 +315,10 @@ impl TacticalLufsRadarWidget {
                             } else {
                                 (Theme::ACCENT_GREEN, "NOMINAL")
                             };
-                            let fill_rect = Rect::from_min_size(tp_bar_rect.min, Vec2::new(filled_w, tp_bar_rect.height()));
+                            let fill_rect = Rect::from_min_size(
+                                tp_bar_rect.min,
+                                Vec2::new(filled_w, tp_bar_rect.height()),
+                            );
                             tp_painter.rect_filled(fill_rect, Rounding::same(2.0), bar_col);
 
                             ui.label(
@@ -325,18 +333,27 @@ impl TacticalLufsRadarWidget {
 
                         // Dynamic Gain Reduction (DRC) Display & Sparkline
                         ui.horizontal(|ui| {
-                            ui.label(egui::RichText::new("DRC GAIN:").size(9.0).color(Theme::TEXT_MUTED));
-                            let (spark_rect, _) = ui.allocate_exact_size(
-                                Vec2::new(120.0, 12.0),
-                                Sense::hover(),
+                            ui.label(
+                                egui::RichText::new("DRC GAIN:")
+                                    .size(9.0)
+                                    .color(Theme::TEXT_MUTED),
                             );
+                            let (spark_rect, _) =
+                                ui.allocate_exact_size(Vec2::new(120.0, 12.0), Sense::hover());
                             let spark_painter = ui.painter_at(spark_rect);
-                            spark_painter.rect_filled(spark_rect, Rounding::same(2.0), Theme::BG_VOID);
+                            spark_painter.rect_filled(
+                                spark_rect,
+                                Rounding::same(2.0),
+                                Theme::BG_VOID,
+                            );
 
                             // Draw baseline 0 dB line (center)
                             let mid_y = spark_rect.center().y;
                             spark_painter.line_segment(
-                                [Pos2::new(spark_rect.min.x, mid_y), Pos2::new(spark_rect.max.x, mid_y)],
+                                [
+                                    Pos2::new(spark_rect.min.x, mid_y),
+                                    Pos2::new(spark_rect.max.x, mid_y),
+                                ],
                                 Stroke::new(1.0_f32, Theme::BORDER_SUBTLE),
                             );
 
@@ -359,7 +376,8 @@ impl TacticalLufsRadarWidget {
                                     } else {
                                         Theme::TEXT_MUTED
                                     };
-                                    spark_painter.line_segment([prev, pt], Stroke::new(1.2_f32, curve_col));
+                                    spark_painter
+                                        .line_segment([prev, pt], Stroke::new(1.2_f32, curve_col));
                                 }
                                 prev_pt = Some(pt);
                             }
@@ -372,14 +390,23 @@ impl TacticalLufsRadarWidget {
                             } else {
                                 Theme::TEXT_SECONDARY
                             };
-                            ui.label(egui::RichText::new(gr_label).size(9.0).monospace().color(gr_col));
+                            ui.label(
+                                egui::RichText::new(gr_label)
+                                    .size(9.0)
+                                    .monospace()
+                                    .color(gr_col),
+                            );
                         });
 
                         ui.add_space(4.0);
 
                         // Interactive Target LUFS Slider & Tactical Mission Presets
                         ui.horizontal(|ui| {
-                            ui.label(egui::RichText::new("TARGET:").size(9.0).color(Theme::TEXT_MUTED));
+                            ui.label(
+                                egui::RichText::new("TARGET:")
+                                    .size(9.0)
+                                    .color(Theme::TEXT_MUTED),
+                            );
                             let slider = egui::Slider::new(&mut self.target_lufs, -28.0..=-16.0)
                                 .step_by(0.5)
                                 .suffix(" LUFS")
@@ -389,15 +416,24 @@ impl TacticalLufsRadarWidget {
                             }
 
                             // Quick tactical preset buttons
-                            if ui.button(egui::RichText::new("EBU (-23)").size(8.5)).clicked() {
+                            if ui
+                                .button(egui::RichText::new("EBU (-23)").size(8.5))
+                                .clicked()
+                            {
                                 self.target_lufs = -23.0;
                                 target_changed = Some(-23.0);
                             }
-                            if ui.button(egui::RichText::new("TAC (-18)").size(8.5)).clicked() {
+                            if ui
+                                .button(egui::RichText::new("TAC (-18)").size(8.5))
+                                .clicked()
+                            {
                                 self.target_lufs = -18.0;
                                 target_changed = Some(-18.0);
                             }
-                            if ui.button(egui::RichText::new("RECON (-26)").size(8.5)).clicked() {
+                            if ui
+                                .button(egui::RichText::new("RECON (-26)").size(8.5))
+                                .clicked()
+                            {
                                 self.target_lufs = -26.0;
                                 target_changed = Some(-26.0);
                             }

@@ -7,8 +7,8 @@
 //! - Cumulative vocal fatigue progress bar.
 //! - Scrolling stress history sparkline.
 
-use eframe::egui::{self, Color32, Pos2, Rect, Stroke, Ui, Vec2};
 use crate::ui::theme::Theme;
+use eframe::egui::{self, Color32, Pos2, Rect, Stroke, Ui, Vec2};
 
 /// Rolling history length for the stress sparkline.
 const STRESS_HISTORY_LEN: usize = 64;
@@ -98,10 +98,13 @@ impl TacticalStressWidget {
 
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                         ui.label(
-                            egui::RichText::new(format!("{:.1}% [{}]", self.stress_index_pct, status_text))
-                                .size(10.0)
-                                .strong()
-                                .color(indicator_col),
+                            egui::RichText::new(format!(
+                                "{:.1}% [{}]",
+                                self.stress_index_pct, status_text
+                            ))
+                            .size(10.0)
+                            .strong()
+                            .color(indicator_col),
                         );
                     });
                 });
@@ -123,7 +126,8 @@ impl TacticalStressWidget {
                 );
 
                 // Fill bar
-                let fill_w = (rect.width() * (self.stress_index_pct / 100.0)).clamp(0.0, rect.width());
+                let fill_w =
+                    (rect.width() * (self.stress_index_pct / 100.0)).clamp(0.0, rect.width());
                 let fill_col = if self.stress_index_pct > 65.0 {
                     Theme::ACCENT_RED
                 } else if self.stress_index_pct > 35.0 {
@@ -148,8 +152,14 @@ impl TacticalStressWidget {
                     let v1 = self.history[idx1] / 100.0;
                     let v2 = self.history[idx2] / 100.0;
 
-                    let p1 = Pos2::new(rect.min.x + i as f32 * step_x, spark_y + spark_h * (1.0 - v1));
-                    let p2 = Pos2::new(rect.min.x + (i + 1) as f32 * step_x, spark_y + spark_h * (1.0 - v2));
+                    let p1 = Pos2::new(
+                        rect.min.x + i as f32 * step_x,
+                        spark_y + spark_h * (1.0 - v1),
+                    );
+                    let p2 = Pos2::new(
+                        rect.min.x + (i + 1) as f32 * step_x,
+                        spark_y + spark_h * (1.0 - v2),
+                    );
 
                     painter.line_segment([p1, p2], Stroke::new(1.2_f32, fill_col));
                 }

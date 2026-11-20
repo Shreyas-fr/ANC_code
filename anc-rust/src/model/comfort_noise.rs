@@ -174,12 +174,7 @@ impl ComfortNoiseGenerator {
     /// - `spec`: STFT complex spectrum frame to be modified in-place.
     /// - `spp`: Per-bin Speech Presence Probability [num_bins].
     /// - `noise_floor_ref`: Background noise PSD estimate [num_bins].
-    pub fn inject_frame(
-        &mut self,
-        spec: &mut [Complex32],
-        spp: &[f32],
-        noise_floor_ref: &[f32],
-    ) {
+    pub fn inject_frame(&mut self, spec: &mut [Complex32], spp: &[f32], noise_floor_ref: &[f32]) {
         assert_eq!(spec.len(), self.config.num_bins);
         assert_eq!(spp.len(), self.config.num_bins);
 
@@ -276,7 +271,10 @@ mod tests {
             gen.inject_frame(&mut spec_active, &spp_active, &noise_floor);
         }
         let energy_active: f32 = spec_active.iter().map(|c| c.norm_sqr()).sum();
-        assert_eq!(energy_active, 0.0, "Active speech must receive zero comfort noise");
+        assert_eq!(
+            energy_active, 0.0,
+            "Active speech must receive zero comfort noise"
+        );
 
         // 2. In speech pauses (spp = 0.0): comfort noise must smoothly blend in
         let spp_pause = vec![0.0f32; 65];

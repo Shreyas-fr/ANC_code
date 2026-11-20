@@ -158,7 +158,7 @@ impl InverseLombardCompensator {
         // 1. Compute acoustic biomarkers: Energy, Spectral Centroid, and Spectral Tilt
         let mut total_energy = 0.0f32;
         let mut weighted_freq_energy = 0.0f32;
-        let mut low_band_energy = 1e-8f32;  // 200 Hz - 1000 Hz (vocal body)
+        let mut low_band_energy = 1e-8f32; // 200 Hz - 1000 Hz (vocal body)
         let mut high_band_energy = 1e-8f32; // 1500 Hz - 4000 Hz (strained harmonic splash)
 
         let use_spp = if let Some(spp) = spp_opt {
@@ -222,7 +222,11 @@ impl InverseLombardCompensator {
         };
 
         // Smooth biomarkers with leaky integrator
-        let alpha = if is_speech { self.config.adaptation_rate } else { 0.05 };
+        let alpha = if is_speech {
+            self.config.adaptation_rate
+        } else {
+            0.05
+        };
         self.smoothed_centroid = (1.0 - alpha) * self.smoothed_centroid + alpha * inst_centroid;
         self.smoothed_tilt = (1.0 - alpha) * self.smoothed_tilt + alpha * inst_tilt;
         self.smoothed_f0 = (1.0 - alpha) * self.smoothed_f0 + alpha * inst_f0;
@@ -261,7 +265,8 @@ impl InverseLombardCompensator {
 
             if freq > 1200.0 {
                 // Gentle logarithmic shelf attenuation up to Nyquist
-                let freq_norm = ((freq - 1200.0) / (self.config.sample_rate * 0.5 - 1200.0)).clamp(0.0, 1.0);
+                let freq_norm =
+                    ((freq - 1200.0) / (self.config.sample_rate * 0.5 - 1200.0)).clamp(0.0, 1.0);
                 let tilt_gain = 1.0 - strain * (1.0 - max_atten_lin) * freq_norm;
                 gain *= tilt_gain;
             }
@@ -270,7 +275,8 @@ impl InverseLombardCompensator {
             if (1600.0..=3000.0).contains(&freq) {
                 let dist = ((freq - 2200.0) / 600.0).abs().min(1.0);
                 let formant_bell = (1.0 - dist * dist).max(0.0);
-                let formant_relax = 1.0 - strain * self.config.formant_relaxation_factor * formant_bell;
+                let formant_relax =
+                    1.0 - strain * self.config.formant_relaxation_factor * formant_bell;
                 gain *= formant_relax;
             }
 

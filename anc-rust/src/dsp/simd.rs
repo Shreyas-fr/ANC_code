@@ -250,7 +250,12 @@ mod tests {
         let expected: f32 = a.iter().zip(b.iter()).map(|(x, y)| x * y).sum();
         let actual = vector_dot_product(&a, &b);
 
-        assert!((expected - actual).abs() < 1e-4, "Expected {}, got {}", expected, actual);
+        assert!(
+            (expected - actual).abs() < 1e-4,
+            "Expected {}, got {}",
+            expected,
+            actual
+        );
     }
 
     #[test]
@@ -293,7 +298,14 @@ mod tests {
         for (i, &x) in inputs.iter().enumerate() {
             let exact = x.tanh();
             let err = (actual[i] - exact).abs();
-            assert!(err < 0.005, "x={}, exact={}, actual={}, err={}", x, exact, actual[i], err);
+            assert!(
+                err < 0.005,
+                "x={}, exact={}, actual={}, err={}",
+                x,
+                exact,
+                actual[i],
+                err
+            );
         }
     }
 }

@@ -25,7 +25,7 @@ impl Default for ElasticGovernorConfig {
     fn default() -> Self {
         Self {
             sample_rate: 16000,
-            target_samples: 256, // 16.0 ms @ 16 kHz
+            target_samples: 256,   // 16.0 ms @ 16 kHz
             max_rate_delta: 0.001, // +/- 0.1%
             kp: 0.000004,
             ki: 0.00000005,
@@ -171,12 +171,18 @@ mod tests {
         // Test buffer overfull (+500 samples above target)
         gov.update_governor(756);
         assert!(gov.current_ratio() > 1.0);
-        assert!(gov.current_ratio() <= 1.001001, "Governor ratio must not exceed +0.1%");
+        assert!(
+            gov.current_ratio() <= 1.001001,
+            "Governor ratio must not exceed +0.1%"
+        );
 
         // Test buffer starved (100 samples below target)
         gov.update_governor(156);
         assert!(gov.current_ratio() < 1.0);
-        assert!(gov.current_ratio() >= 0.998999, "Governor ratio must not fall below -0.1%");
+        assert!(
+            gov.current_ratio() >= 0.998999,
+            "Governor ratio must not fall below -0.1%"
+        );
     }
 
     #[test]

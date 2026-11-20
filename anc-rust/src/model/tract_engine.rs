@@ -4,9 +4,9 @@
 //! with full INT8 quantization support, zero C runtime dependencies,
 //! and native recurrent state preservation.
 
+use num_complex::Complex32;
 use std::path::Path;
 use std::time::Instant;
-use num_complex::Complex32;
 use tract_onnx::prelude::*;
 
 use super::traits::{EnhancerStats, ModelError, SpeechEnhancer};
@@ -96,18 +96,18 @@ impl SpeechEnhancer for TractEnhancer {
                 input_data.push(c.im);
             }
 
-            let tensor: Tensor = tract_ndarray::Array3::from_shape_vec(
-                (1, 2, num_bins),
-                input_data,
-            )
-            .map_err(|e| ModelError::Inference(format!("Tensor shape error: {:?}", e)))?
-            .into();
+            let tensor: Tensor =
+                tract_ndarray::Array3::from_shape_vec((1, 2, num_bins), input_data)
+                    .map_err(|e| ModelError::Inference(format!("Tensor shape error: {:?}", e)))?
+                    .into();
 
-            let outputs = plan.run(tvec!(tensor.into()))
+            let outputs = plan
+                .run(tvec!(tensor.into()))
                 .map_err(|e| ModelError::Inference(format!("Execution error: {:?}", e)))?;
 
             let out_tensor = &outputs[0];
-            let out_slice: &[f32] = out_tensor.as_slice()
+            let out_slice: &[f32] = out_tensor
+                .as_slice()
                 .map_err(|e| ModelError::Inference(format!("Slice extract error: {:?}", e)))?;
 
             if out_slice.len() >= num_bins * 2 {

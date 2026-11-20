@@ -248,7 +248,11 @@ impl WhisperReconstructor {
         let raw_prob = (whisper_score * self.config.sensitivity).clamp(0.0, 1.0);
 
         // Smooth probability: fast attack (~25 ms), smooth release (~80 ms)
-        let alpha = if raw_prob > self.whisper_prob { 0.70 } else { 0.88 };
+        let alpha = if raw_prob > self.whisper_prob {
+            0.70
+        } else {
+            0.88
+        };
         self.whisper_prob = alpha * self.whisper_prob + (1.0 - alpha) * raw_prob;
 
         // 4. Formant Envelope Extraction (Spectral Peak Tracking)
@@ -381,7 +385,8 @@ mod tests {
         // 1. Voiced Speech Frame: Low frequency concentration (e.g. 200 Hz tone + low formants)
         for n in 0..hop_size {
             let t = n as f32 / 16000.0;
-            time_samples[n] = 0.05 * (2.0 * PI * 200.0 * t).sin() + 0.03 * (2.0 * PI * 600.0 * t).sin();
+            time_samples[n] =
+                0.05 * (2.0 * PI * 200.0 * t).sin() + 0.03 * (2.0 * PI * 600.0 * t).sin();
         }
         for k in 0..257 {
             let f = k as f32 * (8000.0 / 256.0);

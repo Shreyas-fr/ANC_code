@@ -24,8 +24,8 @@
 //!
 //! Zero heap allocations in the real-time processing loop.
 
-use std::f32::consts::PI;
 use num_complex::Complex32;
+use std::f32::consts::PI;
 
 /// Configuration for Creeping-Wave Helmet & Cranial Obstacle Diffraction.
 #[derive(Debug, Clone)]
@@ -179,7 +179,11 @@ mod tests {
         let diff = CreepingWaveDiffraction::new(DiffractionConfig::default());
         // At 100 Hz, sound wraps around cranial obstacle with minimal diffraction loss
         let h = diff.diffraction_transfer(100.0, 30.0);
-        assert!((h.norm() - 1.0).abs() < 0.15, "Low frequency |H| should be close to 1.0, got {:.3}", h.norm());
+        assert!(
+            (h.norm() - 1.0).abs() < 0.15,
+            "Low frequency |H| should be close to 1.0, got {:.3}",
+            h.norm()
+        );
     }
 
     #[test]

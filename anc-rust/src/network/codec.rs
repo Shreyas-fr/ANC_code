@@ -11,26 +11,26 @@
 //! - Integrated sliding-window XOR parity FEC for ADPCM payload packets
 //! - Strictly ZERO heap allocations in real-time encode/decode loop.
 
-use std::io::{self, Cursor};
 use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
+use std::io::{self, Cursor};
 
 pub const ADPCM_FRAME_SAMPLES: usize = 256;
 pub const ADPCM_PAYLOAD_BYTES: usize = ADPCM_FRAME_SAMPLES / 2; // 128 bytes
 pub const ADPCM_HEADER_BYTES: usize = 12; // seq(8) + pred(2) + step_idx(1) + flags(1)
 pub const ADPCM_PACKET_BYTES: usize = ADPCM_HEADER_BYTES + ADPCM_PAYLOAD_BYTES; // 140 bytes
 pub const ADPCM_FEC_HEADER_BYTES: usize = 12; // base_seq(8) + window(1) + pad(3)
-pub const ADPCM_FEC_PACKET_BYTES: usize = ADPCM_PACKET_BYTES + ADPCM_FEC_HEADER_BYTES + ADPCM_PAYLOAD_BYTES; // 280 bytes
+pub const ADPCM_FEC_PACKET_BYTES: usize =
+    ADPCM_PACKET_BYTES + ADPCM_FEC_HEADER_BYTES + ADPCM_PAYLOAD_BYTES; // 280 bytes
 
 pub const ADPCM_MAGIC_FLAG: u8 = 0xA4;
 
 /// Standard IMA/DVI ADPCM step size table (89 entries).
 pub static STEP_SIZE_TABLE: [i32; 89] = [
     7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45, 50, 55, 60, 66,
-    73, 80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230, 253, 279, 307, 337, 371, 408,
-    449, 494, 544, 598, 658, 724, 796, 876, 963, 1060, 1166, 1282, 1411, 1552, 1707, 1878, 2066,
-    2272, 2499, 2749, 3024, 3327, 3660, 4026, 4428, 4871, 5358, 5894, 6484, 7132, 7845, 8630,
-    9493, 10442, 11487, 12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794,
-    32767,
+    73, 80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230, 253, 279, 307, 337, 371, 408, 449,
+    494, 544, 598, 658, 724, 796, 876, 963, 1060, 1166, 1282, 1411, 1552, 1707, 1878, 2066, 2272,
+    2499, 2749, 3024, 3327, 3660, 4026, 4428, 4871, 5358, 5894, 6484, 7132, 7845, 8630, 9493,
+    10442, 11487, 12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767,
 ];
 
 /// IMA/DVI index adaptation table for 4-bit nibbles.
@@ -102,9 +102,14 @@ impl AdpcmPacket {
 
         let mut buf = Vec::with_capacity(total_len);
         buf.write_u64::<LittleEndian>(self.sequence).unwrap();
-        buf.write_i16::<LittleEndian>(self.initial_predictor).unwrap();
+        buf.write_i16::<LittleEndian>(self.initial_predictor)
+            .unwrap();
         buf.write_u8(self.initial_step_index).unwrap();
-        let flags = if has_fec { self.flags | 0x01 } else { self.flags & !0x01 };
+        let flags = if has_fec {
+            self.flags | 0x01
+        } else {
+            self.flags & !0x01
+        };
         buf.write_u8(flags).unwrap();
         buf.extend_from_slice(&self.data);
 
@@ -153,21 +158,22 @@ impl AdpcmPacket {
         let offset = ADPCM_HEADER_BYTES;
         data.copy_from_slice(&bytes[offset..offset + ADPCM_PAYLOAD_BYTES]);
 
-        let (fec_base_seq, fec_window, fec_parity) = if bytes.len() >= ADPCM_FEC_PACKET_BYTES && (flags & 0x01 != 0) {
-            let mut fec_rdr = Cursor::new(&bytes[offset + ADPCM_PAYLOAD_BYTES..]);
-            let base_seq = fec_rdr.read_u64::<LittleEndian>()?;
-            let window = fec_rdr.read_u8()?;
-            let _pad0 = fec_rdr.read_u8()?;
-            let _pad1 = fec_rdr.read_u8()?;
-            let _pad2 = fec_rdr.read_u8()?;
+        let (fec_base_seq, fec_window, fec_parity) =
+            if bytes.len() >= ADPCM_FEC_PACKET_BYTES && (flags & 0x01 != 0) {
+                let mut fec_rdr = Cursor::new(&bytes[offset + ADPCM_PAYLOAD_BYTES..]);
+                let base_seq = fec_rdr.read_u64::<LittleEndian>()?;
+                let window = fec_rdr.read_u8()?;
+                let _pad0 = fec_rdr.read_u8()?;
+                let _pad1 = fec_rdr.read_u8()?;
+                let _pad2 = fec_rdr.read_u8()?;
 
-            let mut parity = [0u8; ADPCM_PAYLOAD_BYTES];
-            let p_offset = offset + ADPCM_PAYLOAD_BYTES + ADPCM_FEC_HEADER_BYTES;
-            parity.copy_from_slice(&bytes[p_offset..p_offset + ADPCM_PAYLOAD_BYTES]);
-            (Some(base_seq), window, Some(parity))
-        } else {
-            (None, 0, None)
-        };
+                let mut parity = [0u8; ADPCM_PAYLOAD_BYTES];
+                let p_offset = offset + ADPCM_PAYLOAD_BYTES + ADPCM_FEC_HEADER_BYTES;
+                parity.copy_from_slice(&bytes[p_offset..p_offset + ADPCM_PAYLOAD_BYTES]);
+                (Some(base_seq), window, Some(parity))
+            } else {
+                (None, 0, None)
+            };
 
         Ok(Self {
             sequence,
@@ -210,7 +216,11 @@ impl AdpcmEncoder {
     }
 
     /// Encodes a 256-sample audio frame into an `AdpcmPacket` with zero heap allocations.
-    pub fn encode_frame(&mut self, sequence: u64, samples: &[f32; ADPCM_FRAME_SAMPLES]) -> AdpcmPacket {
+    pub fn encode_frame(
+        &mut self,
+        sequence: u64,
+        samples: &[f32; ADPCM_FRAME_SAMPLES],
+    ) -> AdpcmPacket {
         let initial_sample = (samples[0] * 32767.0).round().clamp(-32768.0, 32767.0) as i32;
         self.predicted_sample = initial_sample;
 
@@ -222,7 +232,9 @@ impl AdpcmEncoder {
             let s1 = (samples[i * 2] * 32767.0).round().clamp(-32768.0, 32767.0) as i32;
             let nibble1 = self.encode_sample(s1);
 
-            let s2 = (samples[i * 2 + 1] * 32767.0).round().clamp(-32768.0, 32767.0) as i32;
+            let s2 = (samples[i * 2 + 1] * 32767.0)
+                .round()
+                .clamp(-32768.0, 32767.0) as i32;
             let nibble2 = self.encode_sample(s2);
 
             data[i] = (nibble1 & 0x0F) | ((nibble2 & 0x0F) << 4);
@@ -385,7 +397,10 @@ impl AdpcmFecCodec {
         received_packets: &[AdpcmPacket],
         parity_packet: &AdpcmPacket,
     ) -> Option<[u8; ADPCM_PAYLOAD_BYTES]> {
-        let (Some(base_seq), Some(parity)) = (parity_packet.fec_base_seq, parity_packet.fec_parity.as_ref()) else {
+        let (Some(base_seq), Some(parity)) = (
+            parity_packet.fec_base_seq,
+            parity_packet.fec_parity.as_ref(),
+        ) else {
             return None;
         };
 
@@ -461,20 +476,14 @@ mod tests {
             *b = (i % 256) as u8;
         }
 
-        let packet = AdpcmPacket::new_with_fec(
-            1042,
-            1234,
-            42,
-            data,
-            1040,
-            2,
-            [0xAA; ADPCM_PAYLOAD_BYTES],
-        );
+        let packet =
+            AdpcmPacket::new_with_fec(1042, 1234, 42, data, 1040, 2, [0xAA; ADPCM_PAYLOAD_BYTES]);
 
         let bytes = packet.serialize();
         assert_eq!(bytes.len(), ADPCM_FEC_PACKET_BYTES);
 
-        let deserialized = AdpcmPacket::deserialize(&bytes).expect("Failed to deserialize ADPCM packet");
+        let deserialized =
+            AdpcmPacket::deserialize(&bytes).expect("Failed to deserialize ADPCM packet");
         assert_eq!(deserialized.sequence, 1042);
         assert_eq!(deserialized.initial_predictor, 1234);
         assert_eq!(deserialized.initial_step_index, 42);

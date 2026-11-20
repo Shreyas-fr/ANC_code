@@ -328,7 +328,8 @@ mod tests {
 
         // Measure input crest factor
         let in_max = dispersed_pulse.iter().copied().fold(0.0f32, f32::max);
-        let in_rms = (dispersed_pulse.iter().map(|&x| x * x).sum::<f32>() / block_len as f32).sqrt();
+        let in_rms =
+            (dispersed_pulse.iter().map(|&x| x * x).sum::<f32>() / block_len as f32).sqrt();
         let in_crest = in_max / in_rms;
 
         aligner.process_block(&mut dispersed_pulse);

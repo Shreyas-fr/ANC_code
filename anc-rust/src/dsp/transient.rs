@@ -97,7 +97,8 @@ impl TransientBlanker {
             let crest = abs_val / bg;
 
             // Transient detection: instantaneous violent step AND extreme crest factor, or hard overscale
-            let is_transient_onset = (delta > self.config.delta_threshold && crest > self.config.crest_threshold)
+            let is_transient_onset = (delta > self.config.delta_threshold
+                && crest > self.config.crest_threshold)
                 || abs_val > 1.25;
 
             if is_transient_onset {
@@ -112,7 +113,8 @@ impl TransientBlanker {
                     self.transient_active = false;
                 }
                 // Smooth exponential release back to unity gain
-                self.current_gain = (1.0 - self.release_alpha) * 1.0 + self.release_alpha * self.current_gain;
+                self.current_gain =
+                    (1.0 - self.release_alpha) * 1.0 + self.release_alpha * self.current_gain;
             }
 
             *s *= self.current_gain;
@@ -144,7 +146,11 @@ mod tests {
 
         assert!(blanker.transients_detected() >= 1);
         // The peak sample must be attenuated significantly below 1.0
-        assert!(impulse_block[10] <= 0.75, "Impulse should be clamped to ceiling, got {}", impulse_block[10]);
+        assert!(
+            impulse_block[10] <= 0.75,
+            "Impulse should be clamped to ceiling, got {}",
+            impulse_block[10]
+        );
     }
 
     #[test]
@@ -156,13 +162,19 @@ mod tests {
             .map(|i| (2.0 * std::f32::consts::PI * 300.0 * (i as f32) / 16000.0).sin() * 0.3)
             .collect();
 
-        let original_rms: f32 = (tone.iter().map(|s| s * s).sum::<f32>() / tone.len() as f32).sqrt();
+        let original_rms: f32 =
+            (tone.iter().map(|s| s * s).sum::<f32>() / tone.len() as f32).sqrt();
         blanker.process(&mut tone);
-        let processed_rms: f32 = (tone.iter().map(|s| s * s).sum::<f32>() / tone.len() as f32).sqrt();
+        let processed_rms: f32 =
+            (tone.iter().map(|s| s * s).sum::<f32>() / tone.len() as f32).sqrt();
 
         // Steady signal should not trigger false transient blanking
         assert_eq!(blanker.transients_detected(), 0);
         let ratio = processed_rms / original_rms;
-        assert!((ratio - 1.0).abs() < 0.05, "Steady tone RMS should remain intact, ratio = {}", ratio);
+        assert!(
+            (ratio - 1.0).abs() < 0.05,
+            "Steady tone RMS should remain intact, ratio = {}",
+            ratio
+        );
     }
 }

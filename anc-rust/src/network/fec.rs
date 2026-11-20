@@ -169,7 +169,9 @@ impl FecDecoder {
                 // Single packet loss recovery via XOR Parity
                 if dropped_count == 1 && !recovered_out.is_empty() {
                     let missing_seq = last + 1;
-                    if let (Some(base_seq), Some(parity)) = (packet.fec_base_seq, packet.fec_parity.as_ref()) {
+                    if let (Some(base_seq), Some(parity)) =
+                        (packet.fec_base_seq, packet.fec_parity.as_ref())
+                    {
                         let win = packet.fec_window as u64;
                         if missing_seq >= base_seq && missing_seq < base_seq + win {
                             // Check if all other packets in the window exist in history

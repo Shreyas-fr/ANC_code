@@ -62,7 +62,11 @@ impl StatefulResampler {
     /// For 16 kHz -> 48 kHz: `up = 3`, `down = 1`.
     /// For 48 kHz -> 16 kHz: `up = 1`, `down = 3`.
     pub fn new(up: usize, down: usize, num_taps: usize, beta: f32) -> Self {
-        let taps_odd = if num_taps.is_multiple_of(2) { num_taps + 1 } else { num_taps };
+        let taps_odd = if num_taps.is_multiple_of(2) {
+            num_taps + 1
+        } else {
+            num_taps
+        };
         let max_rate = up.max(down) as f32;
         let cutoff = 0.90 / max_rate; // 90% of Nyquist to prevent spectral aliasing
 

@@ -99,7 +99,10 @@ pub fn compute_active_speech_level(waveform: &[f32], frame_len: usize) -> f32 {
     }
 
     let threshold = max_energy * 0.001; // -30 dB below peak
-    let active_energies: Vec<f32> = frame_energies.into_iter().filter(|&e| e > threshold).collect();
+    let active_energies: Vec<f32> = frame_energies
+        .into_iter()
+        .filter(|&e| e > threshold)
+        .collect();
 
     if active_energies.is_empty() {
         return 1e-6;
@@ -115,7 +118,11 @@ mod tests {
     fn test_si_sdr_identical() {
         let x: Vec<f32> = (0..1000).map(|i| (i as f32 * 0.1).sin()).collect();
         let score = compute_si_sdr(&x, &x);
-        assert!(score > 40.0, "Expected high SI-SDR for identical signal, got {}", score);
+        assert!(
+            score > 40.0,
+            "Expected high SI-SDR for identical signal, got {}",
+            score
+        );
     }
 
     #[test]
@@ -123,6 +130,10 @@ mod tests {
         let x: Vec<f32> = (0..1000).map(|i| (i as f32 * 0.1).sin()).collect();
         let scaled: Vec<f32> = x.iter().map(|&v| v * 2.5).collect();
         let score = compute_si_sdr(&x, &scaled);
-        assert!(score > 40.0, "SI-SDR must be scale-invariant, got {}", score);
+        assert!(
+            score > 40.0,
+            "SI-SDR must be scale-invariant, got {}",
+            score
+        );
     }
 }

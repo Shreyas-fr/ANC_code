@@ -180,17 +180,39 @@ impl CableDiagnostics {
         let mean_m1 = sum_m1 / n;
         self.dc_offset = alpha * self.dc_offset + (1.0 - alpha) * mean_m1;
 
-        let var_m1: f32 = mic1.iter().map(|&s| (s - mean_m1) * (s - mean_m1)).sum::<f32>() / n;
-        let peak_m1 = mic1.iter().map(|&s| (s - mean_m1).abs()).fold(0.0f32, f32::max);
-        let crest_factor = if var_m1 > 1e-9 { peak_m1 / var_m1.sqrt() } else { 1.0 };
+        let var_m1: f32 = mic1
+            .iter()
+            .map(|&s| (s - mean_m1) * (s - mean_m1))
+            .sum::<f32>()
+            / n;
+        let peak_m1 = mic1
+            .iter()
+            .map(|&s| (s - mean_m1).abs())
+            .fold(0.0f32, f32::max);
+        let crest_factor = if var_m1 > 1e-9 {
+            peak_m1 / var_m1.sqrt()
+        } else {
+            1.0
+        };
 
         // 2. Inter-channel cross-power and coherence analysis
         let (has_mic2, coherence, crest_m2) = if let Some(m2) = mic2 {
             if m2.len() == mic1.len() {
                 let mean_m2: f32 = m2.iter().copied().sum::<f32>() / n;
-                let var_m2: f32 = m2.iter().map(|&s| (s - mean_m2) * (s - mean_m2)).sum::<f32>() / n;
-                let peak_m2 = m2.iter().map(|&s| (s - mean_m2).abs()).fold(0.0f32, f32::max);
-                let cf_m2 = if var_m2 > 1e-9 { peak_m2 / var_m2.sqrt() } else { 1.0 };
+                let var_m2: f32 = m2
+                    .iter()
+                    .map(|&s| (s - mean_m2) * (s - mean_m2))
+                    .sum::<f32>()
+                    / n;
+                let peak_m2 = m2
+                    .iter()
+                    .map(|&s| (s - mean_m2).abs())
+                    .fold(0.0f32, f32::max);
+                let cf_m2 = if var_m2 > 1e-9 {
+                    peak_m2 / var_m2.sqrt()
+                } else {
+                    1.0
+                };
 
                 let cross: f32 = mic1
                     .iter()
@@ -248,11 +270,20 @@ impl CableDiagnostics {
         } else if is_high_impedance_fray {
             (CableFaultStatus::HighImpedanceFray, 14500.0, 45.0)
         } else {
-            (CableFaultStatus::Nominal, self.config.nominal_impedance_ohms, 100.0)
+            (
+                CableFaultStatus::Nominal,
+                self.config.nominal_impedance_ohms,
+                100.0,
+            )
         };
 
-        let eff_alpha = if is_short_circuit || is_open_circuit { 0.70 } else { alpha };
-        self.impedance_ohms = eff_alpha * self.impedance_ohms + (1.0 - eff_alpha) * target_impedance;
+        let eff_alpha = if is_short_circuit || is_open_circuit {
+            0.70
+        } else {
+            alpha
+        };
+        self.impedance_ohms =
+            eff_alpha * self.impedance_ohms + (1.0 - eff_alpha) * target_impedance;
         self.health_pct = eff_alpha * self.health_pct + (1.0 - eff_alpha) * target_health;
 
         self.telemetry = CableTelemetry {
@@ -307,7 +338,10 @@ mod tests {
         let telem = diag.telemetry();
         assert_eq!(telem.status, CableFaultStatus::Nominal);
         assert!(telem.health_pct > 95.0, "Nominal health should be > 95%");
-        assert!(telem.low_freq_coherence > 0.90, "Coherence should be high for correlated acoustic tone");
+        assert!(
+            telem.low_freq_coherence > 0.90,
+            "Coherence should be high for correlated acoustic tone"
+        );
     }
 
     #[test]

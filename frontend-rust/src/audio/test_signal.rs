@@ -87,7 +87,7 @@ impl TestSignalGenerator {
         let impulse_period = (self.sample_rate * 0.5) as usize; // 500 ms
 
         match self.mode {
-            TestSignalMode::Off => {},
+            TestSignalMode::Off => {}
             TestSignalMode::Sine1kHz => {
                 // -12 dBFS = 0.251 amplitude
                 for s in buffer.iter_mut() {
@@ -101,11 +101,7 @@ impl TestSignalGenerator {
             TestSignalMode::Impulse => {
                 // Single 0.95 peak impulse every 500 ms
                 for s in buffer.iter_mut() {
-                    *s = if self.impulse_counter == 0 {
-                        0.95
-                    } else {
-                        0.0
-                    };
+                    *s = if self.impulse_counter == 0 { 0.95 } else { 0.0 };
                     self.impulse_counter = (self.impulse_counter + 1) % impulse_period;
                 }
             }
@@ -141,7 +137,11 @@ mod tests {
         gen.set_mode(TestSignalMode::Sine1kHz);
         gen.generate(&mut buf);
         let max_amp = buf.iter().map(|x| x.abs()).fold(0.0f32, f32::max);
-        assert!((max_amp - 0.251).abs() < 0.02, "Expected ~0.251 amp, got {}", max_amp);
+        assert!(
+            (max_amp - 0.251).abs() < 0.02,
+            "Expected ~0.251 amp, got {}",
+            max_amp
+        );
 
         // 3. Dirac Impulse mode: produces an impulse at sample 0
         gen.set_mode(TestSignalMode::Impulse);
@@ -153,6 +153,10 @@ mod tests {
         gen.set_mode(TestSignalMode::PinkNoise);
         gen.generate(&mut buf);
         let rms = (buf.iter().map(|&x| x * x).sum::<f32>() / buf.len() as f32).sqrt();
-        assert!(rms > 0.02 && rms < 0.20, "Expected pink noise RMS ~0.1, got {}", rms);
+        assert!(
+            rms > 0.02 && rms < 0.20,
+            "Expected pink noise RMS ~0.1, got {}",
+            rms
+        );
     }
 }

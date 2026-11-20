@@ -9,9 +9,11 @@
 //! - Burst packet loss clustering factor.
 //! - Tactical remediation action: 4-bit ADPCM Fallback & Max FEC parity redundancy.
 
-use eframe::egui::{self, Color32, Frame, Margin, Rect, Rounding, Stroke, Ui, Vec2};
 use crate::ui::theme::Theme;
-pub use anc_rust::network::jamming::{JammingDetectorConfig, JammingRemediation, JammingTelemetry, JammingType};
+pub use anc_rust::network::jamming::{
+    JammingDetectorConfig, JammingRemediation, JammingTelemetry, JammingType,
+};
+use eframe::egui::{self, Color32, Frame, Margin, Rect, Rounding, Stroke, Ui, Vec2};
 
 /// Interactive Jamming & Link Diagnostics HUD Widget.
 #[derive(Debug, Clone)]
@@ -53,7 +55,11 @@ impl JammingWidget {
             .show(ui, |ui| {
                 // Header
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("📡").color(Theme::ACCENT_AMBER).size(13.0));
+                    ui.label(
+                        egui::RichText::new("📡")
+                            .color(Theme::ACCENT_AMBER)
+                            .size(13.0),
+                    );
                     ui.label(
                         egui::RichText::new("TACTICAL RF & EW LINK HEALTH")
                             .strong()
@@ -64,9 +70,15 @@ impl JammingWidget {
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                         let (badge_text, badge_color) = match self.telemetry.jamming_type {
                             JammingType::NominalRF => ("NOMINAL RF LINK", Theme::ACCENT_GREEN),
-                            JammingType::SpotJamming => ("EW: SPOT JAMMING DETECTED", Theme::ACCENT_AMBER),
-                            JammingType::BarrageJamming => ("EW: BARRAGE JAMMING ACTIVE", Theme::ACCENT_RED),
-                            JammingType::SweepJamming => ("EW: SWEEP CHIRP JAMMING", Theme::ACCENT_RED),
+                            JammingType::SpotJamming => {
+                                ("EW: SPOT JAMMING DETECTED", Theme::ACCENT_AMBER)
+                            }
+                            JammingType::BarrageJamming => {
+                                ("EW: BARRAGE JAMMING ACTIVE", Theme::ACCENT_RED)
+                            }
+                            JammingType::SweepJamming => {
+                                ("EW: SWEEP CHIRP JAMMING", Theme::ACCENT_RED)
+                            }
                         };
 
                         ui.label(
@@ -83,7 +95,11 @@ impl JammingWidget {
 
                 // Row 1: Loss Rate & Jitter Variance
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("PACKET LOSS:").size(9.5).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("PACKET LOSS:")
+                            .size(9.5)
+                            .color(Theme::TEXT_MUTED),
+                    );
                     let loss_pct = self.telemetry.packet_loss_rate * 100.0;
                     let loss_col = if loss_pct < 1.0 {
                         Theme::ACCENT_GREEN
@@ -101,7 +117,11 @@ impl JammingWidget {
                     );
 
                     ui.add_space(10.0);
-                    ui.label(egui::RichText::new("JITTER VAR:").size(9.5).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("JITTER VAR:")
+                            .size(9.5)
+                            .color(Theme::TEXT_MUTED),
+                    );
                     let j_col = if self.telemetry.jitter_variance_ms2 < 5.0 {
                         Theme::TEXT_PRIMARY
                     } else if self.telemetry.jitter_variance_ms2 < 15.0 {
@@ -110,15 +130,22 @@ impl JammingWidget {
                         Theme::ACCENT_RED
                     };
                     ui.label(
-                        egui::RichText::new(format!("{:>5.1} ms²", self.telemetry.jitter_variance_ms2))
-                            .size(11.0)
-                            .strong()
-                            .monospace()
-                            .color(j_col),
+                        egui::RichText::new(format!(
+                            "{:>5.1} ms²",
+                            self.telemetry.jitter_variance_ms2
+                        ))
+                        .size(11.0)
+                        .strong()
+                        .monospace()
+                        .color(j_col),
                     );
 
                     ui.add_space(10.0);
-                    ui.label(egui::RichText::new("BURST CLUSTERING:").size(9.5).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("BURST CLUSTERING:")
+                            .size(9.5)
+                            .color(Theme::TEXT_MUTED),
+                    );
                     ui.label(
                         egui::RichText::new(format!("{:.2}", self.telemetry.burst_clustering))
                             .size(11.0)
@@ -131,7 +158,11 @@ impl JammingWidget {
 
                 // Row 2: Tactical Remediation Action
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("REMEDIATION:").size(9.5).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("REMEDIATION:")
+                            .size(9.5)
+                            .color(Theme::TEXT_MUTED),
+                    );
                     let (rem_text, rem_col) = if self.telemetry.remediation_active {
                         ("ENGAGED: 4-BIT ADPCM + 100% FEC PARITY", Theme::ACCENT_CYAN)
                     } else {
@@ -146,7 +177,11 @@ impl JammingWidget {
                     );
 
                     ui.add_space(10.0);
-                    ui.label(egui::RichText::new("CONFIDENCE:").size(9.5).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("CONFIDENCE:")
+                            .size(9.5)
+                            .color(Theme::TEXT_MUTED),
+                    );
                     ui.label(
                         egui::RichText::new(format!("{:.0}%", self.telemetry.confidence * 100.0))
                             .size(10.0)
@@ -160,14 +195,17 @@ impl JammingWidget {
                 // Mini sparkline for packet loss history
                 let bar_width = 240.0_f32;
                 let bar_height = 4.0_f32;
-                let (bar_rect, _) = ui.allocate_exact_size(Vec2::new(bar_width, bar_height), egui::Sense::hover());
+                let (bar_rect, _) =
+                    ui.allocate_exact_size(Vec2::new(bar_width, bar_height), egui::Sense::hover());
                 let bar_painter = ui.painter_at(bar_rect);
-                bar_painter.rect_filled(bar_rect, Rounding::same(2.0), Color32::from_rgb(26, 32, 44));
-                let loss_norm = (self.telemetry.packet_loss_rate * 5.0).clamp(0.0, 1.0);
-                let fill_rect = Rect::from_min_size(
-                    bar_rect.min,
-                    Vec2::new(bar_width * loss_norm, bar_height),
+                bar_painter.rect_filled(
+                    bar_rect,
+                    Rounding::same(2.0),
+                    Color32::from_rgb(26, 32, 44),
                 );
+                let loss_norm = (self.telemetry.packet_loss_rate * 5.0).clamp(0.0, 1.0);
+                let fill_rect =
+                    Rect::from_min_size(bar_rect.min, Vec2::new(bar_width * loss_norm, bar_height));
                 let fill_color = if loss_norm < 0.1 {
                     Theme::ACCENT_GREEN
                 } else if loss_norm < 0.4 {

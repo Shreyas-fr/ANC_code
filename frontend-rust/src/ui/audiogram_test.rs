@@ -7,9 +7,11 @@
 //! - Includes presets for acoustic trauma (4 kHz gunfire notch, tank crew NIHL).
 //! - "PROGRAM DSP WDRC" action instantly calibrates the NAL-NL2 dynamic compressor.
 
-use eframe::egui::{self, Color32, Pos2, Rect, Stroke, Vec2};
 use crate::ui::theme::Theme;
-pub use anc_rust::dsp::audiogram::{Ear, PersonalAudiogram, AUDIOMETRIC_FREQUENCIES, NUM_AUDIOMETRIC_BANDS};
+pub use anc_rust::dsp::audiogram::{
+    Ear, PersonalAudiogram, AUDIOMETRIC_FREQUENCIES, NUM_AUDIOMETRIC_BANDS,
+};
+use eframe::egui::{self, Color32, Pos2, Rect, Stroke, Vec2};
 
 /// Wizard test frequencies subset for quick in-headset triage.
 pub const WIZARD_FREQUENCIES: [f32; 6] = [500.0, 1000.0, 2000.0, 4000.0, 6000.0, 8000.0];
@@ -111,7 +113,11 @@ impl AudiogramTestWizard {
             .show(ui, |ui| {
                 // Header
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("🩺").color(Theme::ACCENT_CYAN).size(13.0));
+                    ui.label(
+                        egui::RichText::new("🩺")
+                            .color(Theme::ACCENT_CYAN)
+                            .size(13.0),
+                    );
                     ui.label(
                         egui::RichText::new("IN-HEADSET AUDIOMETRY & NIHL COMPENSATOR")
                             .strong()
@@ -125,7 +131,15 @@ impl AudiogramTestWizard {
                             Ear::Left => ("EAR: LEFT (BLUE 'X')", Theme::ACCENT_CYAN),
                             Ear::Right => ("EAR: RIGHT (RED 'O')", Theme::ACCENT_RED),
                         };
-                        if ui.button(egui::RichText::new(ear_label).size(10.0).strong().color(ear_col)).clicked() {
+                        if ui
+                            .button(
+                                egui::RichText::new(ear_label)
+                                    .size(10.0)
+                                    .strong()
+                                    .color(ear_col),
+                            )
+                            .clicked()
+                        {
                             self.selected_ear = match self.selected_ear {
                                 Ear::Left => Ear::Right,
                                 Ear::Right => Ear::Left,
@@ -134,18 +148,34 @@ impl AudiogramTestWizard {
 
                         // Presets menu
                         egui::ComboBox::from_id_salt("audiogram_preset_combo")
-                            .selected_text(egui::RichText::new("PRESETS").size(10.0).color(Theme::TEXT_SECONDARY))
+                            .selected_text(
+                                egui::RichText::new("PRESETS")
+                                    .size(10.0)
+                                    .color(Theme::TEXT_SECONDARY),
+                            )
                             .show_ui(ui, |ui| {
-                                if ui.selectable_label(false, "Normal Hearing (0 dB HL)").clicked() {
+                                if ui
+                                    .selectable_label(false, "Normal Hearing (0 dB HL)")
+                                    .clicked()
+                                {
                                     self.audiogram = PersonalAudiogram::normal();
                                 }
-                                if ui.selectable_label(false, "Gunfire / 4 kHz Blast Dip").clicked() {
+                                if ui
+                                    .selectable_label(false, "Gunfire / 4 kHz Blast Dip")
+                                    .clicked()
+                                {
                                     self.audiogram = PersonalAudiogram::mild_4khz_notch();
                                 }
-                                if ui.selectable_label(false, "Severe Artillery Blast Trauma").clicked() {
+                                if ui
+                                    .selectable_label(false, "Severe Artillery Blast Trauma")
+                                    .clicked()
+                                {
                                     self.audiogram = PersonalAudiogram::severe_artillery_blast();
                                 }
-                                if ui.selectable_label(false, "Tank Crew High-Noise NIHL").clicked() {
+                                if ui
+                                    .selectable_label(false, "Tank Crew High-Noise NIHL")
+                                    .clicked()
+                                {
                                     self.audiogram = PersonalAudiogram::tank_crew_nihl();
                                 }
                             });
@@ -169,11 +199,20 @@ impl AudiogramTestWizard {
                         let band_idx = self.band_index_for_freq(cur_freq);
 
                         ui.horizontal(|ui| {
-                            ui.label(egui::RichText::new(format!("FREQ: {:.0} Hz", cur_freq)).strong().size(11.0).color(Theme::ACCENT_AMBER));
-                            if ui.button(egui::RichText::new("◀").size(10.0)).clicked() && self.current_freq_idx > 0 {
+                            ui.label(
+                                egui::RichText::new(format!("FREQ: {:.0} Hz", cur_freq))
+                                    .strong()
+                                    .size(11.0)
+                                    .color(Theme::ACCENT_AMBER),
+                            );
+                            if ui.button(egui::RichText::new("◀").size(10.0)).clicked()
+                                && self.current_freq_idx > 0
+                            {
                                 self.current_freq_idx -= 1;
                             }
-                            if ui.button(egui::RichText::new("▶").size(10.0)).clicked() && self.current_freq_idx < WIZARD_FREQUENCIES.len() - 1 {
+                            if ui.button(egui::RichText::new("▶").size(10.0)).clicked()
+                                && self.current_freq_idx < WIZARD_FREQUENCIES.len() - 1
+                            {
                                 self.current_freq_idx += 1;
                             }
                         });
@@ -185,11 +224,27 @@ impl AudiogramTestWizard {
                         };
 
                         ui.horizontal(|ui| {
-                            ui.label(egui::RichText::new("THRESHOLD:").size(10.0).color(Theme::TEXT_MUTED));
-                            ui.label(egui::RichText::new(format!("{:.0} dB HL", cur_htl)).strong().size(10.5).color(Theme::TEXT_PRIMARY));
+                            ui.label(
+                                egui::RichText::new("THRESHOLD:")
+                                    .size(10.0)
+                                    .color(Theme::TEXT_MUTED),
+                            );
+                            ui.label(
+                                egui::RichText::new(format!("{:.0} dB HL", cur_htl))
+                                    .strong()
+                                    .size(10.5)
+                                    .color(Theme::TEXT_PRIMARY),
+                            );
                         });
 
-                        if ui.add(egui::Slider::new(&mut cur_htl, 0.0..=80.0).step_by(5.0).show_value(false)).changed() {
+                        if ui
+                            .add(
+                                egui::Slider::new(&mut cur_htl, 0.0..=80.0)
+                                    .step_by(5.0)
+                                    .show_value(false),
+                            )
+                            .changed()
+                        {
                             self.audiogram.set_htl(self.selected_ear, band_idx, cur_htl);
                         }
 
@@ -201,7 +256,15 @@ impl AudiogramTestWizard {
                                 ("▶ PLAY TEST TONE", Theme::ACCENT_GREEN)
                             };
 
-                            if ui.button(egui::RichText::new(play_lbl).size(10.5).strong().color(play_col)).clicked() {
+                            if ui
+                                .button(
+                                    egui::RichText::new(play_lbl)
+                                        .size(10.5)
+                                        .strong()
+                                        .color(play_col),
+                                )
+                                .clicked()
+                            {
                                 self.is_tone_playing = !self.is_tone_playing;
                                 self.tone_duration_sec = 0.0;
                             }
@@ -210,12 +273,15 @@ impl AudiogramTestWizard {
                         ui.add_space(4.0);
 
                         // Big Action Button: PROGRAM DSP WDRC
-                        if ui.button(
-                            egui::RichText::new("⚡ PROGRAM DSP WDRC")
-                                .size(11.0)
-                                .strong()
-                                .color(Theme::ACCENT_CYAN),
-                        ).clicked() {
+                        if ui
+                            .button(
+                                egui::RichText::new("⚡ PROGRAM DSP WDRC")
+                                    .size(11.0)
+                                    .strong()
+                                    .color(Theme::ACCENT_CYAN),
+                            )
+                            .clicked()
+                        {
                             programmed_audiogram = Some(self.audiogram);
                         }
                     });
@@ -257,13 +323,20 @@ impl AudiogramTestWizard {
             Pos2::new(rect.min.x + pad_l, y_from_db(0.0)),
             Pos2::new(rect.max.x - pad_r, y_from_db(20.0)),
         );
-        painter.rect_filled(normal_rect, 0.0, Color32::from_rgba_unmultiplied(16, 185, 129, 25));
+        painter.rect_filled(
+            normal_rect,
+            0.0,
+            Color32::from_rgba_unmultiplied(16, 185, 129, 25),
+        );
 
         // Horizontal grid lines (0, 20, 40, 60, 80 dB HL)
         for &db in &[0.0, 20.0, 40.0, 60.0, 80.0] {
             let y = y_from_db(db);
             painter.line_segment(
-                [Pos2::new(rect.min.x + pad_l, y), Pos2::new(rect.max.x - pad_r, y)],
+                [
+                    Pos2::new(rect.min.x + pad_l, y),
+                    Pos2::new(rect.max.x - pad_r, y),
+                ],
                 Stroke::new(0.8_f32, Theme::BORDER_SUBTLE),
             );
             painter.text(
@@ -279,7 +352,10 @@ impl AudiogramTestWizard {
         for (i, &f) in WIZARD_FREQUENCIES.iter().enumerate() {
             let x = x_from_band(i);
             painter.line_segment(
-                [Pos2::new(x, rect.min.y + pad_t), Pos2::new(x, rect.max.y - pad_b)],
+                [
+                    Pos2::new(x, rect.min.y + pad_t),
+                    Pos2::new(x, rect.max.y - pad_b),
+                ],
                 Stroke::new(0.8_f32, Theme::BORDER_SUBTLE),
             );
 
@@ -311,8 +387,14 @@ impl AudiogramTestWizard {
 
             // Draw 'X' marker
             let d = 3.5;
-            painter.line_segment([Pos2::new(pt.x - d, pt.y - d), Pos2::new(pt.x + d, pt.y + d)], Stroke::new(1.8_f32, Theme::ACCENT_CYAN));
-            painter.line_segment([Pos2::new(pt.x - d, pt.y + d), Pos2::new(pt.x + d, pt.y - d)], Stroke::new(1.8_f32, Theme::ACCENT_CYAN));
+            painter.line_segment(
+                [Pos2::new(pt.x - d, pt.y - d), Pos2::new(pt.x + d, pt.y + d)],
+                Stroke::new(1.8_f32, Theme::ACCENT_CYAN),
+            );
+            painter.line_segment(
+                [Pos2::new(pt.x - d, pt.y + d), Pos2::new(pt.x + d, pt.y - d)],
+                Stroke::new(1.8_f32, Theme::ACCENT_CYAN),
+            );
         }
 
         // Plot Right Ear (Red 'O' and solid lines)

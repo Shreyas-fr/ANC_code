@@ -24,13 +24,28 @@ impl fmt::Display for AlsaError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Overrun { hw_ptr, appl_ptr } => {
-                write!(f, "ALSA Capture Overrun (XRUN): hw_ptr={}, appl_ptr={}", hw_ptr, appl_ptr)
+                write!(
+                    f,
+                    "ALSA Capture Overrun (XRUN): hw_ptr={}, appl_ptr={}",
+                    hw_ptr, appl_ptr
+                )
             }
             Self::Underrun { hw_ptr, appl_ptr } => {
-                write!(f, "ALSA Playback Underrun (XRUN): hw_ptr={}, appl_ptr={}", hw_ptr, appl_ptr)
+                write!(
+                    f,
+                    "ALSA Playback Underrun (XRUN): hw_ptr={}, appl_ptr={}",
+                    hw_ptr, appl_ptr
+                )
             }
-            Self::InvalidFrameCount { requested, available } => {
-                write!(f, "Invalid frame count: requested {}, available {}", requested, available)
+            Self::InvalidFrameCount {
+                requested,
+                available,
+            } => {
+                write!(
+                    f,
+                    "Invalid frame count: requested {}, available {}",
+                    requested, available
+                )
             }
         }
     }
@@ -153,8 +168,10 @@ impl AlsaMmapSimulator {
             sum += (x & 0x00FF_FFFF) as f32 / 16777216.0;
         }
         let standard_normal = sum - 6.0; // Mean 0, Variance 1
-        (standard_normal * self.config.irq_jitter_std_dev_us)
-            .clamp(-self.config.irq_max_jitter_us, self.config.irq_max_jitter_us)
+        (standard_normal * self.config.irq_jitter_std_dev_us).clamp(
+            -self.config.irq_max_jitter_us,
+            self.config.irq_max_jitter_us,
+        )
     }
 
     /// Returns nominal period duration in microseconds: T = (period_size / f_s) * 1e6
@@ -172,7 +189,8 @@ impl AlsaMmapSimulator {
     /// Available writable playback space in frames.
     #[inline]
     pub fn avail_playback_frames(&self) -> usize {
-        self.ring_frames.saturating_sub(self.hw_ptr.saturating_sub(self.appl_ptr))
+        self.ring_frames
+            .saturating_sub(self.hw_ptr.saturating_sub(self.appl_ptr))
     }
 
     /// Zero-copy MMAP capture slice acquisition:
@@ -190,7 +208,10 @@ impl AlsaMmapSimulator {
         let start_elem = offset_frame * self.config.channels;
         let num_elems = contig_frames * self.config.channels;
 
-        Ok((&self.dma_buffer[start_elem..start_elem + num_elems], contig_frames))
+        Ok((
+            &self.dma_buffer[start_elem..start_elem + num_elems],
+            contig_frames,
+        ))
     }
 
     /// Commits processed capture frames, advancing application pointer `appl_ptr`.
@@ -208,7 +229,10 @@ impl AlsaMmapSimulator {
 
     /// Zero-copy MMAP playback slice acquisition:
     /// Returns a direct mutable slice to contiguous mapped memory for zero-copy DMA writes.
-    pub fn mmap_begin_playback(&mut self, max_frames: usize) -> Result<(&mut [f32], usize), AlsaError> {
+    pub fn mmap_begin_playback(
+        &mut self,
+        max_frames: usize,
+    ) -> Result<(&mut [f32], usize), AlsaError> {
         let avail = self.avail_playback_frames();
         if avail == 0 {
             return Ok((&mut [], 0));
@@ -221,7 +245,10 @@ impl AlsaMmapSimulator {
         let start_elem = offset_frame * self.config.channels;
         let num_elems = contig_frames * self.config.channels;
 
-        Ok((&mut self.dma_buffer[start_elem..start_elem + num_elems], contig_frames))
+        Ok((
+            &mut self.dma_buffer[start_elem..start_elem + num_elems],
+            contig_frames,
+        ))
     }
 
     /// Commits written playback frames.
@@ -260,7 +287,9 @@ impl AlsaMmapSimulator {
         }
 
         let period_idx = (self.hw_ptr / self.config.period_size) % self.config.periods;
-        Ok(AlsaIrqEvent::PeriodTransferred { period_index: period_idx })
+        Ok(AlsaIrqEvent::PeriodTransferred {
+            period_index: period_idx,
+        })
     }
 
     /// Writes simulated audio samples into the DMA buffer at the current hardware capture write pointer.
@@ -270,7 +299,8 @@ impl AlsaMmapSimulator {
         for f in 0..num_frames {
             let buf_f = (start_frame + f) % self.ring_frames;
             for ch in 0..self.config.channels {
-                self.dma_buffer[buf_f * self.config.channels + ch] = pcm[f * self.config.channels + ch];
+                self.dma_buffer[buf_f * self.config.channels + ch] =
+                    pcm[f * self.config.channels + ch];
             }
         }
     }
@@ -308,22 +338,36 @@ impl AlsaMmapSimulator {
 
         // Calculate statistics
         let mean_jitter = if !self.jitter_history_us.is_empty() {
-            self.jitter_history_us.iter().map(|&j| j.abs()).sum::<f32>() / self.jitter_history_us.len() as f32
+            self.jitter_history_us.iter().map(|&j| j.abs()).sum::<f32>()
+                / self.jitter_history_us.len() as f32
         } else {
             0.0
         };
 
-        let peak_jitter = self.jitter_history_us.iter().map(|&j| j.abs()).fold(0.0f32, |a, b| a.max(b));
+        let peak_jitter = self
+            .jitter_history_us
+            .iter()
+            .map(|&j| j.abs())
+            .fold(0.0f32, |a, b| a.max(b));
 
-        let mut sorted = self.jitter_history_us.iter().map(|&j| j.abs()).collect::<Vec<f32>>();
+        let mut sorted = self
+            .jitter_history_us
+            .iter()
+            .map(|&j| j.abs())
+            .collect::<Vec<f32>>();
         sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
         let p99_idx = (((0.99) * sorted.len() as f32) as usize).min(sorted.len().saturating_sub(1));
-        let p99_jitter = if !sorted.is_empty() { sorted[p99_idx] } else { 0.0 };
+        let p99_jitter = if !sorted.is_empty() {
+            sorted[p99_idx]
+        } else {
+            0.0
+        };
 
         let total_frames = self.total_periods * period_size as u64;
         let bytes_transferred = total_frames * channels as u64 * 4;
         let total_audio_sec = total_frames as f32 / self.config.sample_rate;
-        let dma_throughput_mb_s = (bytes_transferred as f32 / 1_000_000.0) / total_audio_sec.max(1e-4);
+        let dma_throughput_mb_s =
+            (bytes_transferred as f32 / 1_000_000.0) / total_audio_sec.max(1e-4);
 
         AlsaHwReport {
             total_periods: self.total_periods,
@@ -393,7 +437,12 @@ mod tests {
             assert_eq!(frames, 64);
             assert_eq!(slice.len(), 64);
             sim.mmap_commit_capture(64).unwrap();
-            assert_eq!(sim.avail_capture_frames(), 0, "Period {} did not commit cleanly", i);
+            assert_eq!(
+                sim.avail_capture_frames(),
+                0,
+                "Period {} did not commit cleanly",
+                i
+            );
         }
 
         assert_eq!(sim.total_periods, 10);
@@ -442,7 +491,13 @@ mod tests {
 
         assert_eq!(report.total_xruns, 0, "Fast DSP should have 0 XRUNs");
         assert!(report.mean_jitter_us > 0.0, "Jitter should be logged");
-        assert!(report.p99_jitter_us <= 100.0, "P99 jitter must be bounded by irq_max_jitter_us");
-        assert!(report.dma_throughput_mb_s > 0.1, "DMA throughput must be positive");
+        assert!(
+            report.p99_jitter_us <= 100.0,
+            "P99 jitter must be bounded by irq_max_jitter_us"
+        );
+        assert!(
+            report.dma_throughput_mb_s > 0.1,
+            "DMA throughput must be positive"
+        );
     }
 }

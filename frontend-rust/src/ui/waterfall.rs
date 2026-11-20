@@ -3,8 +3,8 @@
 //! Renders a real-time time-frequency-energy waterfall heatmap (0–8 kHz)
 //! styled in high-contrast tactical military phosphor/plasma colors.
 
-use egui::{Color32, Margin, Pos2, Rect, Rounding, Stroke, Ui, Vec2};
 use super::theme::Theme;
+use egui::{Color32, Margin, Pos2, Rect, Rounding, Stroke, Ui, Vec2};
 
 /// 2D Scrolling Waterfall Spectrogram Buffer.
 pub struct WaterfallSpectrogram {
@@ -36,7 +36,9 @@ impl WaterfallSpectrogram {
             let start = (b as f32 * bins_per_band) as usize;
             let end = (((b + 1) as f32 * bins_per_band) as usize).min(spectrum_db.len());
             if start < end {
-                let max_in_band = spectrum_db[start..end].iter().fold(-120.0f64, |m, &v| m.max(v));
+                let max_in_band = spectrum_db[start..end]
+                    .iter()
+                    .fold(-120.0f64, |m, &v| m.max(v));
                 *energy = max_in_band as f32;
             }
         }
@@ -91,7 +93,11 @@ impl WaterfallSpectrogram {
             .inner_margin(Margin::same(10.0))
             .show(ui, |ui| {
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("●").color(Theme::ACCENT_VIOLET).size(11.0));
+                    ui.label(
+                        egui::RichText::new("●")
+                            .color(Theme::ACCENT_VIOLET)
+                            .size(11.0),
+                    );
                     ui.label(
                         egui::RichText::new("2D TACTICAL SPECTRAL WATERFALL")
                             .strong()
@@ -106,21 +112,43 @@ impl WaterfallSpectrogram {
                                 .color(Theme::TEXT_MUTED),
                         );
                         // Mini gradient legend
-                        ui.label(egui::RichText::new("Peak").size(9.5).color(Theme::ACCENT_RED));
-                        ui.label(egui::RichText::new("High").size(9.5).color(Theme::ACCENT_AMBER));
-                        ui.label(egui::RichText::new("Voice").size(9.5).color(Theme::ACCENT_GREEN));
-                        ui.label(egui::RichText::new("Noise").size(9.5).color(Theme::ACCENT_CYAN));
-                        ui.label(egui::RichText::new("Floor").size(9.5).color(Theme::TEXT_MUTED));
+                        ui.label(
+                            egui::RichText::new("Peak")
+                                .size(9.5)
+                                .color(Theme::ACCENT_RED),
+                        );
+                        ui.label(
+                            egui::RichText::new("High")
+                                .size(9.5)
+                                .color(Theme::ACCENT_AMBER),
+                        );
+                        ui.label(
+                            egui::RichText::new("Voice")
+                                .size(9.5)
+                                .color(Theme::ACCENT_GREEN),
+                        );
+                        ui.label(
+                            egui::RichText::new("Noise")
+                                .size(9.5)
+                                .color(Theme::ACCENT_CYAN),
+                        );
+                        ui.label(
+                            egui::RichText::new("Floor")
+                                .size(9.5)
+                                .color(Theme::TEXT_MUTED),
+                        );
                     });
                 });
 
                 ui.add_space(4.0);
 
                 let available_width = ui.available_width();
-                let (rect, _) = ui.allocate_exact_size(Vec2::new(available_width, height), egui::Sense::hover());
+                let (rect, _) = ui
+                    .allocate_exact_size(Vec2::new(available_width, height), egui::Sense::hover());
 
                 if self.history.is_empty() {
-                    ui.painter().rect_filled(rect, Rounding::same(4.0), Theme::BG_VOID);
+                    ui.painter()
+                        .rect_filled(rect, Rounding::same(4.0), Theme::BG_VOID);
                     return;
                 }
 
@@ -129,7 +157,8 @@ impl WaterfallSpectrogram {
                 let dy = rect.height() / self.num_bands as f32;
 
                 // Draw background
-                ui.painter().rect_filled(rect, Rounding::same(4.0), Theme::BG_VOID);
+                ui.painter()
+                    .rect_filled(rect, Rounding::same(4.0), Theme::BG_VOID);
 
                 // Render heatmap cells
                 for (frame_idx, frame) in self.history.iter().enumerate() {
@@ -137,7 +166,8 @@ impl WaterfallSpectrogram {
                     for (b, &db) in frame.iter().enumerate() {
                         // Invert Y so low frequencies are at the bottom, high at top
                         let y = rect.bottom() - ((b + 1) as f32 * dy);
-                        let cell_rect = Rect::from_min_size(Pos2::new(x, y), Vec2::new(dx + 0.5, dy + 0.5));
+                        let cell_rect =
+                            Rect::from_min_size(Pos2::new(x, y), Vec2::new(dx + 0.5, dy + 0.5));
                         let color = Self::db_to_tactical_color(db);
                         ui.painter().rect_filled(cell_rect, Rounding::ZERO, color);
                     }
@@ -147,14 +177,20 @@ impl WaterfallSpectrogram {
                 // 300 Hz / 8000 Hz = 3.75% of height from bottom
                 let y_300 = rect.bottom() - (0.0375 * rect.height());
                 ui.painter().line_segment(
-                    [Pos2::new(rect.left(), y_300), Pos2::new(rect.right(), y_300)],
+                    [
+                        Pos2::new(rect.left(), y_300),
+                        Pos2::new(rect.right(), y_300),
+                    ],
                     Stroke::new(1.0_f32, Color32::from_rgba_unmultiplied(80, 110, 150, 90)),
                 );
 
                 // 3.4 kHz / 8000 Hz = 42.5% of height from bottom
                 let y_3400 = rect.bottom() - (0.425 * rect.height());
                 ui.painter().line_segment(
-                    [Pos2::new(rect.left(), y_3400), Pos2::new(rect.right(), y_3400)],
+                    [
+                        Pos2::new(rect.left(), y_3400),
+                        Pos2::new(rect.right(), y_3400),
+                    ],
                     Stroke::new(1.0_f32, Color32::from_rgba_unmultiplied(80, 110, 150, 90)),
                 );
             });

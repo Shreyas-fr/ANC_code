@@ -248,13 +248,19 @@ impl LufsGovernor {
         // 400 ms momentary window in number of hops
         let momentary_hops = (0.400 / hop_duration_sec).round().max(1.0) as usize;
         // 3.0 s short-term window in number of hops
-        let short_term_hops = (3.000 / hop_duration_sec).round().max(momentary_hops as f32) as usize;
+        let short_term_hops = (3.000 / hop_duration_sec)
+            .round()
+            .max(momentary_hops as f32) as usize;
 
         // Lookahead delay in samples
-        let lookahead_len = ((config.lookahead_ms / 1000.0) * sample_rate).round().max(0.0) as usize;
+        let lookahead_len = ((config.lookahead_ms / 1000.0) * sample_rate)
+            .round()
+            .max(0.0) as usize;
 
-        let alpha_attack = (-1.0 / (config.attack_ms * 0.001 * sample_rate / hop_size as f32)).exp();
-        let alpha_release = (-1.0 / (config.release_ms * 0.001 * sample_rate / hop_size as f32)).exp();
+        let alpha_attack =
+            (-1.0 / (config.attack_ms * 0.001 * sample_rate / hop_size as f32)).exp();
+        let alpha_release =
+            (-1.0 / (config.release_ms * 0.001 * sample_rate / hop_size as f32)).exp();
 
         let k_filter = KWeightingFilter::new(sample_rate);
 

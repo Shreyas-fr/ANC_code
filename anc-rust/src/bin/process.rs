@@ -11,7 +11,12 @@ use anc_rust::model::{AdaptiveSpectralEnhancer, SpeechEnhancer, TractEnhancer};
 use anc_rust::streaming::{PipelineConfig, TacticalAncPipeline};
 
 #[derive(Parser, Debug)]
-#[command(name = "anc-process", author, version, about = "Batch Speech Enhancement & Objective Validation")]
+#[command(
+    name = "anc-process",
+    author,
+    version,
+    about = "Batch Speech Enhancement & Objective Validation"
+)]
 struct Args {
     #[arg(short, long)]
     input: PathBuf,
@@ -48,7 +53,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         hound::SampleFormat::Float => reader.samples::<f32>().map(|s| s.unwrap()).collect(),
         hound::SampleFormat::Int => {
             let max_val = (1 << (spec.bits_per_sample - 1)) as f32;
-            reader.samples::<i32>().map(|s| s.unwrap() as f32 / max_val).collect()
+            reader
+                .samples::<i32>()
+                .map(|s| s.unwrap() as f32 / max_val)
+                .collect()
         }
     };
 
@@ -67,8 +75,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("Audio loaded: {} frames, {} channels, {} Hz ({:.2} s)",
-        total_frames, channels, sample_rate, total_frames as f32 / sample_rate);
+    println!(
+        "Audio loaded: {} frames, {} channels, {} Hz ({:.2} s)",
+        total_frames,
+        channels,
+        sample_rate,
+        total_frames as f32 / sample_rate
+    );
 
     let pipeline_config = PipelineConfig {
         n_fft: args.n_fft,
@@ -91,10 +104,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut model: Box<dyn SpeechEnhancer> = if let Some(ref onnx_path) = args.onnx_model {
         println!("Loading neural model from ONNX: {:?}", onnx_path);
-        Box::new(TractEnhancer::load_from_onnx(onnx_path, "Tract-ONNX", args.n_fft / 2 + 1, 32, 0)?)
+        Box::new(TractEnhancer::load_from_onnx(
+            onnx_path,
+            "Tract-ONNX",
+            args.n_fft / 2 + 1,
+            32,
+            0,
+        )?)
     } else {
         println!("Using Decision-Directed Adaptive ERB Spectral Enhancer.");
-        Box::new(AdaptiveSpectralEnhancer::new(args.n_fft / 2 + 1, 32, sample_rate))
+        Box::new(AdaptiveSpectralEnhancer::new(
+            args.n_fft / 2 + 1,
+            32,
+            sample_rate,
+        ))
     };
 
     if args.aggressive_snr {
@@ -122,8 +145,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let elapsed = t0.elapsed();
     let rtf = elapsed.as_secs_f32() / (total_frames as f32 / sample_rate);
 
-    println!("Processing complete in {:.2} s (RTF: {:.4}, {:.1}x real-time)",
-        elapsed.as_secs_f32(), rtf, 1.0 / rtf.max(1e-4));
+    println!(
+        "Processing complete in {:.2} s (RTF: {:.4}, {:.1}x real-time)",
+        elapsed.as_secs_f32(),
+        rtf,
+        1.0 / rtf.max(1e-4)
+    );
 
     // Save output WAV
     let out_spec = WavSpec {
@@ -141,14 +168,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Objective scoring if clean reference is provided
     if let Some(ref clean_path) = args.clean_ref {
-        println!("\nCalculating objective metrics against clean reference: {:?}", clean_path);
+        println!(
+            "\nCalculating objective metrics against clean reference: {:?}",
+            clean_path
+        );
         let mut clean_reader = WavReader::open(clean_path)?;
         let clean_spec = clean_reader.spec();
         let clean_samples: Vec<f32> = match clean_spec.sample_format {
-            hound::SampleFormat::Float => clean_reader.samples::<f32>().map(|s| s.unwrap()).collect(),
+            hound::SampleFormat::Float => {
+                clean_reader.samples::<f32>().map(|s| s.unwrap()).collect()
+            }
             hound::SampleFormat::Int => {
                 let max_val = (1 << (clean_spec.bits_per_sample - 1)) as f32;
-                clean_reader.samples::<i32>().map(|s| s.unwrap() as f32 / max_val).collect()
+                clean_reader
+                    .samples::<i32>()
+                    .map(|s| s.unwrap() as f32 / max_val)
+                    .collect()
             }
         };
 
@@ -166,9 +201,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let out_snr = compute_explicit_snr(c_eval, e_eval);
 
             println!("Input SI-SDR:     {:.2} dB", in_sisdr);
-            println!("Output SI-SDR:    {:.2} dB (Delta: {:+.2} dB)", out_sisdr, out_sisdr - in_sisdr);
+            println!(
+                "Output SI-SDR:    {:.2} dB (Delta: {:+.2} dB)",
+                out_sisdr,
+                out_sisdr - in_sisdr
+            );
             println!("Input SNR:        {:.2} dB", in_snr);
-            println!("Output SNR:       {:.2} dB (Delta: {:+.2} dB)", out_snr, out_snr - in_snr);
+            println!(
+                "Output SNR:       {:.2} dB (Delta: {:+.2} dB)",
+                out_snr,
+                out_snr - in_snr
+            );
         }
     }
 

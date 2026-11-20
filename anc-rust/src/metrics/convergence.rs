@@ -161,7 +161,8 @@ impl SingleFilterTracker {
             1.0
         } else {
             let step_delta = (metric_val - self.prev_metric).abs() / (metric_val.abs() + 1e-6);
-            let smooth_delta = (metric_val - self.smoothed_metric).abs() / (self.smoothed_metric.abs() + 1e-6);
+            let smooth_delta =
+                (metric_val - self.smoothed_metric).abs() / (self.smoothed_metric.abs() + 1e-6);
             step_delta.min(smooth_delta)
         };
 
@@ -323,7 +324,10 @@ mod tests {
         }
 
         let st = tracker.status();
-        assert!(st.is_converged, "Filter should be declared converged after stable dwell");
+        assert!(
+            st.is_converged,
+            "Filter should be declared converged after stable dwell"
+        );
         assert!(st.convergence_time_ms > 0.0);
         assert!(!st.has_diverged);
     }

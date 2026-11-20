@@ -1,9 +1,9 @@
 //! Real-Time Rolling Waveform Visualizer using egui_plot.
 
+use super::theme::Theme;
 use egui::{Color32, Margin, Rounding, Stroke, Ui};
 use egui_plot::{Line, Plot, PlotPoints};
 use std::collections::VecDeque;
-use super::theme::Theme;
 
 pub struct RollingWaveform {
     samples: VecDeque<f32>,
@@ -95,9 +95,17 @@ impl RollingWaveform {
                             ];
                             for (&th, &col) in thresholds.iter().zip(colors.iter()) {
                                 let is_lit = peak_db >= th;
-                                let lit_color = if is_lit { col } else { Color32::from_rgb(22, 30, 48) };
-                                let (rect, _) = ui.allocate_exact_size(egui::vec2(5.0, 9.0), egui::Sense::hover());
-                                ui.painter().rect_filled(rect, Rounding::same(1.5), lit_color);
+                                let lit_color = if is_lit {
+                                    col
+                                } else {
+                                    Color32::from_rgb(22, 30, 48)
+                                };
+                                let (rect, _) = ui.allocate_exact_size(
+                                    egui::vec2(5.0, 9.0),
+                                    egui::Sense::hover(),
+                                );
+                                ui.painter()
+                                    .rect_filled(rect, Rounding::same(1.5), lit_color);
                                 ui.add_space(1.5);
                             }
                         });
@@ -124,10 +132,7 @@ impl RollingWaveform {
                     .map(|(i, &s)| [i as f64 * dt - total_time, s as f64])
                     .collect();
 
-                let line = Line::new(points)
-                    .color(color)
-                    .width(1.5_f32)
-                    .fill(0.0_f32);
+                let line = Line::new(points).color(color).width(1.5_f32).fill(0.0_f32);
 
                 Plot::new(title)
                     .height(plot_height)

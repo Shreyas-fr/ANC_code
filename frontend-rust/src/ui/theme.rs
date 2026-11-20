@@ -26,10 +26,10 @@ impl Theme {
     pub const TEXT_MUTED: Color32 = Color32::from_rgb(102, 120, 148);
 
     // Tactical Neon Status & Signal Accents
-    pub const ACCENT_CYAN: Color32 = Color32::from_rgb(0, 229, 255);   // Enhanced Speech Output
-    pub const ACCENT_AMBER: Color32 = Color32::from_rgb(255, 179, 0);  // Raw Sensor Feed
-    pub const ACCENT_GREEN: Color32 = Color32::from_rgb(0, 230, 118);  // Qualified / Live / Voice
-    pub const ACCENT_RED: Color32 = Color32::from_rgb(255, 23, 68);    // Alert / Packet Loss
+    pub const ACCENT_CYAN: Color32 = Color32::from_rgb(0, 229, 255); // Enhanced Speech Output
+    pub const ACCENT_AMBER: Color32 = Color32::from_rgb(255, 179, 0); // Raw Sensor Feed
+    pub const ACCENT_GREEN: Color32 = Color32::from_rgb(0, 230, 118); // Qualified / Live / Voice
+    pub const ACCENT_RED: Color32 = Color32::from_rgb(255, 23, 68); // Alert / Packet Loss
     pub const ACCENT_VIOLET: Color32 = Color32::from_rgb(168, 85, 247); // Neural / Compute RTF
     pub const ACCENT_BLUE: Color32 = Color32::from_rgb(41, 121, 255);
 

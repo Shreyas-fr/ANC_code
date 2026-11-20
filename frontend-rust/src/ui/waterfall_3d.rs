@@ -15,8 +15,8 @@
 //!   - Burning crimson (#FF003C) for gunfire / shockwave kurtosis bursts (> -12 dBFS).
 //! - Back-to-front depth sorted polygon rasterization with tactical phosphor wireframe accents.
 
-use egui::{epaint::PathShape, Color32, Margin, Pos2, Rounding, Sense, Stroke, Ui, Vec2};
 use super::theme::Theme;
+use egui::{epaint::PathShape, Color32, Margin, Pos2, Rounding, Sense, Stroke, Ui, Vec2};
 
 pub const WATERFALL_3D_FRAMES: usize = 40;
 pub const WATERFALL_3D_BANDS: usize = 32;
@@ -125,29 +125,16 @@ impl Waterfall3dMesh {
         } else if db <= -12.0 {
             // Glowing amber #FFB000 to burning crimson #FF003C
             let t = (db + 25.0) / 13.0;
-            Color32::from_rgb(
-                255,
-                (176.0 * (1.0 - t)) as u8,
-                (t * 60.0) as u8,
-            )
+            Color32::from_rgb(255, (176.0 * (1.0 - t)) as u8, (t * 60.0) as u8)
         } else {
             // Burning crimson #FF003C for intense combat blasts
             let t = ((db + 12.0) / 12.0).clamp(0.0, 1.0);
-            Color32::from_rgb(
-                255,
-                (t * 80.0) as u8,
-                (60.0 + t * 40.0) as u8,
-            )
+            Color32::from_rgb(255, (t * 80.0) as u8, (60.0 + t * 40.0) as u8)
         }
     }
 
     /// Projects a 3D coordinate (x, y, z) to 2D screen coordinate (Pos2) with depth y_depth.
-    fn project_3d(
-        x: f32,
-        y: f32,
-        z: f32,
-        cam: &CameraAngles,
-    ) -> (Pos2, f32) {
+    fn project_3d(x: f32, y: f32, z: f32, cam: &CameraAngles) -> (Pos2, f32) {
         // 1. Yaw rotation around Z axis
         let x_yaw = x * cam.cos_yaw - y * cam.sin_yaw;
         let y_yaw = x * cam.sin_yaw + y * cam.cos_yaw;
@@ -177,7 +164,11 @@ impl Waterfall3dMesh {
             .inner_margin(Margin::same(10.0))
             .show(ui, |ui| {
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("●").color(Theme::ACCENT_CYAN).size(11.0));
+                    ui.label(
+                        egui::RichText::new("●")
+                            .color(Theme::ACCENT_CYAN)
+                            .size(11.0),
+                    );
                     ui.label(
                         egui::RichText::new("3D TACTICAL BATTLEFIELD SPECTRAL TERRAIN MESH")
                             .strong()
@@ -231,8 +222,7 @@ impl Waterfall3dMesh {
 
                 let available_width = ui.available_width();
                 let desired_size = Vec2::new(available_width, height);
-                let (rect, response) =
-                    ui.allocate_exact_size(desired_size, Sense::drag());
+                let (rect, response) = ui.allocate_exact_size(desired_size, Sense::drag());
 
                 // Interactive mouse drag to rotate pitch & yaw
                 if response.dragged() {
@@ -271,7 +261,8 @@ impl Waterfall3dMesh {
 
                     // Pre-project all grid vertices to 2D
                     // [frame_idx][band_idx] -> (Pos2, depth)
-                    let mut proj_grid = [[(Pos2::ZERO, 0.0f32); WATERFALL_3D_BANDS]; WATERFALL_3D_FRAMES];
+                    let mut proj_grid =
+                        [[(Pos2::ZERO, 0.0f32); WATERFALL_3D_BANDS]; WATERFALL_3D_FRAMES];
                     let mut energy_grid = [[-90.0f32; WATERFALL_3D_BANDS]; WATERFALL_3D_FRAMES];
 
                     for t in 0..num_frames {
@@ -341,10 +332,15 @@ impl Waterfall3dMesh {
                     }
 
                     // Sort back-to-front: largest mean_depth first (furthest away)
-                    quads.sort_by(|a, b| b.mean_depth.partial_cmp(&a.mean_depth).unwrap_or(std::cmp::Ordering::Equal));
+                    quads.sort_by(|a, b| {
+                        b.mean_depth
+                            .partial_cmp(&a.mean_depth)
+                            .unwrap_or(std::cmp::Ordering::Equal)
+                    });
 
                     // Draw depth-sorted filled quads and optional wireframe accents
-                    let wire_stroke = Stroke::new(0.6_f32, Color32::from_rgba_unmultiplied(0, 240, 255, 35));
+                    let wire_stroke =
+                        Stroke::new(0.6_f32, Color32::from_rgba_unmultiplied(0, 240, 255, 35));
 
                     for quad in quads {
                         let fill_rgba = Color32::from_rgba_unmultiplied(

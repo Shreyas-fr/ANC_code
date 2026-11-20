@@ -188,8 +188,11 @@ impl OnlineSensorCalibrator {
                 let g_corr = (1.0 / g_meas.max(1e-4)).clamp(min_boost_lin, max_boost_lin);
 
                 // Phase mismatch: in diffuse field, expectation of cross-spectrum is real
-                let phase_skew = self.smoothed_cross_12[k].im.atan2(self.smoothed_cross_12[k].re);
-                let phase_skew_clamped = phase_skew.clamp(-self.config.max_phase_rad, self.config.max_phase_rad);
+                let phase_skew = self.smoothed_cross_12[k]
+                    .im
+                    .atan2(self.smoothed_cross_12[k].re);
+                let phase_skew_clamped =
+                    phase_skew.clamp(-self.config.max_phase_rad, self.config.max_phase_rad);
                 sum_phase_skew_deg += phase_skew_clamped.to_degrees().abs();
 
                 // Correction phasor: C_eq = g_corr * exp(-j * phase_skew)
@@ -197,7 +200,8 @@ impl OnlineSensorCalibrator {
 
                 // Smoothly update correction filter
                 let alpha_filt = self.config.filter_smoothing;
-                self.correction_filter[k] = self.correction_filter[k] * alpha_filt + target_corr * (1.0 - alpha_filt);
+                self.correction_filter[k] =
+                    self.correction_filter[k] * alpha_filt + target_corr * (1.0 - alpha_filt);
             }
         }
 

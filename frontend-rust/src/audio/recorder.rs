@@ -32,12 +32,12 @@ pub enum RecorderState {
 
 /// Tactical incident bitflags stored in BEXT forensic metadata.
 pub mod incident_flags {
-    pub const MANUAL_TRIGGER: u32     = 1 << 0;
-    pub const SHOCK_TRANSIENT: u32    = 1 << 1;
-    pub const HIGH_VOCAL_STRESS: u32  = 1 << 2;
-    pub const PACKET_LOSS_ALARM: u32  = 1 << 3;
-    pub const CONCUSSION_BLAST: u32   = 1 << 4;
-    pub const ACOUSTIC_HOWLING: u32   = 1 << 5;
+    pub const MANUAL_TRIGGER: u32 = 1 << 0;
+    pub const SHOCK_TRANSIENT: u32 = 1 << 1;
+    pub const HIGH_VOCAL_STRESS: u32 = 1 << 2;
+    pub const PACKET_LOSS_ALARM: u32 = 1 << 3;
+    pub const CONCUSSION_BLAST: u32 = 1 << 4;
+    pub const ACOUSTIC_HOWLING: u32 = 1 << 5;
 }
 
 /// Forensic BEXT metadata header structure.
@@ -264,7 +264,7 @@ impl TacticalAudioRecorder {
         // 2. fmt Chunk
         file.write_all(b"fmt ")?;
         file.write_all(&16u32.to_le_bytes())?; // Subchunk1Size (16 for PCM)
-        file.write_all(&1u16.to_le_bytes())?;  // AudioFormat (1 = PCM)
+        file.write_all(&1u16.to_le_bytes())?; // AudioFormat (1 = PCM)
         file.write_all(&num_channels.to_le_bytes())?;
         file.write_all(&self.sample_rate.to_le_bytes())?;
         file.write_all(&byte_rate.to_le_bytes())?;

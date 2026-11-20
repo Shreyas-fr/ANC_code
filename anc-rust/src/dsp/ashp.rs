@@ -36,13 +36,21 @@ const ASHP_TAPS_PER_BRANCH: usize = 8;
 /// Designed for <= 0.05 dB passband ripple and > 45 dB stopband rejection.
 const ASHP_POLYPHASE_COEFFS: [[f32; ASHP_TAPS_PER_BRANCH]; ASHP_POLYPHASE_BRANCHES] = [
     // Phase 0 (center delay tap)
-    [0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 0.000000],
+    [
+        0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 0.000000,
+    ],
     // Phase 1 (t = +0.25)
-    [-0.016358, 0.061035, -0.165039, 0.897461, 0.281250, -0.089844, 0.038574, -0.007079],
+    [
+        -0.016358, 0.061035, -0.165039, 0.897461, 0.281250, -0.089844, 0.038574, -0.007079,
+    ],
     // Phase 2 (t = +0.50)
-    [-0.031250, 0.109375, -0.281250, 0.687500, 0.687500, -0.281250, 0.109375, -0.031250],
+    [
+        -0.031250, 0.109375, -0.281250, 0.687500, 0.687500, -0.281250, 0.109375, -0.031250,
+    ],
     // Phase 3 (t = +0.75)
-    [-0.007079, 0.038574, -0.089844, 0.281250, 0.897461, -0.165039, 0.061035, -0.016358],
+    [
+        -0.007079, 0.038574, -0.089844, 0.281250, 0.897461, -0.165039, 0.061035, -0.016358,
+    ],
 ];
 
 /// Maximum block size supported without reallocation.
@@ -222,11 +230,7 @@ impl AshpLimiter {
                 self.telemetry.max_true_peak_dbfs = peak_dbfs;
             }
 
-            self.gain_scratch[i] = if tp > ceiling {
-                ceiling / tp
-            } else {
-                1.0
-            };
+            self.gain_scratch[i] = if tp > ceiling { ceiling / tp } else { 1.0 };
         }
 
         // Pass 2: Backward pass lookahead attack smoothing (smooth ramp down before peak)

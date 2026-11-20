@@ -191,7 +191,8 @@ impl PowerGovernor {
 
         // Real-Time Factor
         let rtf = compute_us as f32 / budget_us as f32;
-        let headroom_pct = ((budget_us.saturating_sub(compute_us)) as f32 / budget_us as f32) * 100.0;
+        let headroom_pct =
+            ((budget_us.saturating_sub(compute_us)) as f32 / budget_us as f32) * 100.0;
 
         if headroom_pct < 50.0 {
             self.deadline_risk_count += 1;
@@ -226,7 +227,8 @@ impl PowerGovernor {
 
         // Energy savings calculation
         let unmanaged_watts = self.config.baseline_unmanaged_watts;
-        let savings_pct = ((unmanaged_watts - effective_power_watts) / unmanaged_watts * 100.0).clamp(0.0, 99.0);
+        let savings_pct =
+            ((unmanaged_watts - effective_power_watts) / unmanaged_watts * 100.0).clamp(0.0, 99.0);
 
         // Accumulate energy saved this hop in Joules (Watts * seconds)
         let hop_seconds = budget_us as f32 * 1e-6;
@@ -271,7 +273,10 @@ mod tests {
         let tele = gov.telemetry();
         assert!(tele.rtf < 0.005, "RTF must be ultra-low, got {}", tele.rtf);
         assert!(tele.headroom_pct > 95.0, "Headroom must be > 95%");
-        assert_eq!(tele.current_mhz, 600, "Governor should downclock to 600 MHz on ultra-low load");
+        assert_eq!(
+            tele.current_mhz, 600,
+            "Governor should downclock to 600 MHz on ultra-low load"
+        );
         assert!(
             tele.energy_savings_pct > 65.0,
             "Micro-sleep should deliver > 65% energy savings, got {}%",
@@ -295,7 +300,10 @@ mod tests {
         }
 
         let tele = gov.telemetry();
-        assert_eq!(tele.current_mhz, 2400, "Governor must boost to 2400 MHz on heavy load");
+        assert_eq!(
+            tele.current_mhz, 2400,
+            "Governor must boost to 2400 MHz on heavy load"
+        );
         assert!(tele.deadline_risk_count > 0);
     }
 }

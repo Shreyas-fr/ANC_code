@@ -5,9 +5,9 @@
 //! for combat shock transients (gunfire, artillery detonations, supersonic bullet cracks)
 //! with interactive simulation triggers.
 
-use egui::{Color32, Frame, Margin, Pos2, Rect, Rounding, Sense, Stroke, Ui, Vec2};
 use super::theme::Theme;
 use anc_rust::dsp::{KurtosisTelemetry, KURTOSIS_HUD_BANDS};
+use egui::{Color32, Frame, Margin, Pos2, Rect, Rounding, Sense, Stroke, Ui, Vec2};
 
 /// Number of display bands on the Diagnostic HUD.
 pub const HUD_BANDS: usize = KURTOSIS_HUD_BANDS;
@@ -172,25 +172,45 @@ impl SpectralKurtosisWidget {
 
                 // Telemetry metrics readout strip
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("Crest Factor:").size(10.0).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("Crest Factor:")
+                            .size(10.0)
+                            .color(Theme::TEXT_MUTED),
+                    );
                     ui.label(
                         egui::RichText::new(format!("{:.1} dB", self.crest_factor_db))
                             .size(11.0)
                             .strong()
-                            .color(if self.crest_factor_db > 14.0 { Theme::ACCENT_RED } else { Theme::ACCENT_GREEN }),
+                            .color(if self.crest_factor_db > 14.0 {
+                                Theme::ACCENT_RED
+                            } else {
+                                Theme::ACCENT_GREEN
+                            }),
                     );
 
                     ui.add_space(8.0);
-                    ui.label(egui::RichText::new("Peak K(f):").size(10.0).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("Peak K(f):")
+                            .size(10.0)
+                            .color(Theme::TEXT_MUTED),
+                    );
                     ui.label(
                         egui::RichText::new(format!("{:.1}", self.peak_kurtosis))
                             .size(11.0)
                             .strong()
-                            .color(if self.peak_kurtosis > 10.0 { Theme::ACCENT_RED } else { Theme::ACCENT_CYAN }),
+                            .color(if self.peak_kurtosis > 10.0 {
+                                Theme::ACCENT_RED
+                            } else {
+                                Theme::ACCENT_CYAN
+                            }),
                     );
 
                     ui.add_space(8.0);
-                    ui.label(egui::RichText::new("Peak Freq:").size(10.0).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("Peak Freq:")
+                            .size(10.0)
+                            .color(Theme::TEXT_MUTED),
+                    );
                     ui.label(
                         egui::RichText::new(format!("{:.0} Hz", self.peak_frequency_hz))
                             .size(11.0)
@@ -198,7 +218,11 @@ impl SpectralKurtosisWidget {
                     );
 
                     ui.add_space(8.0);
-                    ui.label(egui::RichText::new("Shocks Blocked:").size(10.0).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("Shocks Blocked:")
+                            .size(10.0)
+                            .color(Theme::TEXT_MUTED),
+                    );
                     ui.label(
                         egui::RichText::new(format!("{}", self.shock_event_count))
                             .size(11.0)
@@ -229,7 +253,10 @@ impl SpectralKurtosisWidget {
 
                 // Draw 10.0 shock threshold dashed line
                 painter.line_segment(
-                    [Pos2::new(rect.left(), shock_thresh_y), Pos2::new(rect.right(), shock_thresh_y)],
+                    [
+                        Pos2::new(rect.left(), shock_thresh_y),
+                        Pos2::new(rect.right(), shock_thresh_y),
+                    ],
                     Stroke::new(1.0_f32, Color32::from_rgba_unmultiplied(255, 45, 85, 90)),
                 );
 
@@ -258,18 +285,34 @@ impl SpectralKurtosisWidget {
 
                 // Interactive Diagnostic Simulation Controls
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("Simulate:").size(9.5).color(Theme::TEXT_MUTED));
+                    ui.label(
+                        egui::RichText::new("Simulate:")
+                            .size(9.5)
+                            .color(Theme::TEXT_MUTED),
+                    );
 
-                    if ui.button(egui::RichText::new("💥 Gunfire Blast").size(9.5)).clicked() {
+                    if ui
+                        .button(egui::RichText::new("💥 Gunfire Blast").size(9.5))
+                        .clicked()
+                    {
                         self.inject_test_signal("gunfire");
                     }
-                    if ui.button(egui::RichText::new("⚡ Supersonic Crack").size(9.5)).clicked() {
+                    if ui
+                        .button(egui::RichText::new("⚡ Supersonic Crack").size(9.5))
+                        .clicked()
+                    {
                         self.inject_test_signal("crack");
                     }
-                    if ui.button(egui::RichText::new("🌊 Gaussian Noise").size(9.5)).clicked() {
+                    if ui
+                        .button(egui::RichText::new("🌊 Gaussian Noise").size(9.5))
+                        .clicked()
+                    {
                         self.inject_test_signal("gaussian");
                     }
-                    if ui.button(egui::RichText::new("🔄 Reset").size(9.5)).clicked() {
+                    if ui
+                        .button(egui::RichText::new("🔄 Reset").size(9.5))
+                        .clicked()
+                    {
                         self.inject_test_signal("reset");
                     }
                 });

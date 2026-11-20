@@ -105,8 +105,7 @@ impl AcousticCamouflageEngine {
         // Precompute Absolute Threshold of Hearing (Terhardt/ISO 226 approximation)
         for b in 1..num_bins {
             let f_khz = (b as f32 * bin_hz / 1000.0).max(0.02);
-            let ath_db = 3.64 * f_khz.powf(-0.8)
-                - 6.5 * (-(f_khz - 3.3).powi(2) * 0.6).exp()
+            let ath_db = 3.64 * f_khz.powf(-0.8) - 6.5 * (-(f_khz - 3.3).powi(2) * 0.6).exp()
                 + 1e-3 * f_khz.powi(4);
             // Convert dB SPL relative to reference power
             let p = 10.0f32.powf((ath_db - 70.0) / 10.0).clamp(1e-8, 1.0);
@@ -250,8 +249,16 @@ impl AcousticCamouflageEngine {
             let ath = self.ath_power[f];
 
             // Local 3-bin spreading
-            let f_prev = if f > 0 { self.ambient_power[f - 1] } else { amb_p };
-            let f_next = if f + 1 < num_bins { self.ambient_power[f + 1] } else { amb_p };
+            let f_prev = if f > 0 {
+                self.ambient_power[f - 1]
+            } else {
+                amb_p
+            };
+            let f_next = if f + 1 < num_bins {
+                self.ambient_power[f + 1]
+            } else {
+                amb_p
+            };
             let spread_p = amb_p * 0.6 + (f_prev + f_next) * 0.2;
 
             self.masking_power[f] = spread_p.max(ath);
@@ -282,8 +289,10 @@ impl AcousticCamouflageEngine {
         }
         self.telemetry.cloaking_active = leakage_detected;
 
-        let amb_energy_db = (10.0 * (ambient_tot / num_bins as f32).max(1e-9).log10()).clamp(-120.0, 0.0);
-        let cloak_energy_db = (10.0 * (cloaked_tot / num_bins as f32).max(1e-9).log10()).clamp(-120.0, 0.0);
+        let amb_energy_db =
+            (10.0 * (ambient_tot / num_bins as f32).max(1e-9).log10()).clamp(-120.0, 0.0);
+        let cloak_energy_db =
+            (10.0 * (cloaked_tot / num_bins as f32).max(1e-9).log10()).clamp(-120.0, 0.0);
 
         self.telemetry.ambient_energy_db = amb_energy_db;
         self.telemetry.cloaking_energy_db = cloak_energy_db;

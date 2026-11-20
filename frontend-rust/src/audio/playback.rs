@@ -2,12 +2,12 @@
 //!
 //! Stream is memory-only; NEVER records or writes audio files to disk.
 
+use super::jitter_buffer::SharedJitterBuffer;
+use crate::ui::eq::TacticalEqualizer;
+use anc_rust::dsp::{BinauralConfig, BinauralSpatialRenderer};
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
-use anc_rust::dsp::{BinauralConfig, BinauralSpatialRenderer};
-use crate::ui::eq::TacticalEqualizer;
-use super::jitter_buffer::SharedJitterBuffer;
 
 pub struct AudioPlayback {
     _stream: Option<cpal::Stream>,
@@ -35,7 +35,10 @@ impl AudioPlayback {
         let target_rate = cpal::SampleRate(sample_rate);
         let mut chosen_config = None;
         for c in supported_configs_range {
-            if c.channels() >= 1 && c.min_sample_rate() <= target_rate && c.max_sample_rate() >= target_rate {
+            if c.channels() >= 1
+                && c.min_sample_rate() <= target_rate
+                && c.max_sample_rate() >= target_rate
+            {
                 chosen_config = Some(c.with_sample_rate(target_rate));
                 break;
             }
@@ -82,7 +85,11 @@ impl AudioPlayback {
                             if stereo_buf.len() < frames * 2 {
                                 stereo_buf.resize(frames * 2, 0.0);
                             }
-                            spatial_renderer.render_interleaved(&mono_buf, None, &mut stereo_buf[..frames * 2]);
+                            spatial_renderer.render_interleaved(
+                                &mono_buf,
+                                None,
+                                &mut stereo_buf[..frames * 2],
+                            );
                             for frame_idx in 0..frames {
                                 data[frame_idx * channels] = stereo_buf[frame_idx * 2];
                                 data[frame_idx * channels + 1] = stereo_buf[frame_idx * 2 + 1];
@@ -104,7 +111,9 @@ impl AudioPlayback {
                 )
                 .map_err(|e| format!("Failed to build audio output stream: {}", e))?;
 
-            stream.play().map_err(|e| format!("Failed to start audio stream: {}", e))?;
+            stream
+                .play()
+                .map_err(|e| format!("Failed to start audio stream: {}", e))?;
             Some(stream)
         } else {
             // If soundcard doesn't support 16kHz directly, build with default config and resample/pad

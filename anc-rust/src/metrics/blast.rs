@@ -92,7 +92,7 @@ impl Default for BlastMeterConfig {
             sample_rate: 16000.0,
             blast_detection_threshold_db_spl: 140.0, // 200 Pa threshold for blast impulse
             earcup_attenuation_db: 32.0, // Tactical dual-layer earcup + active ANC attenuation
-            daily_dose_limit: 100.0, // 100% MIL-STD-1474E allowable daily dose
+            daily_dose_limit: 100.0,     // 100% MIL-STD-1474E allowable daily dose
         }
     }
 }
@@ -189,7 +189,8 @@ impl BlastImpulseMeter {
                 }
             } else if self.is_in_blast {
                 // Blast wave has returned below threshold: close event
-                let a_duration_ms = (self.blast_sample_count as f32 / self.config.sample_rate) * 1000.0;
+                let a_duration_ms =
+                    (self.blast_sample_count as f32 / self.config.sample_rate) * 1000.0;
                 let peak_pa = self.sample_to_pascals(self.blast_peak_sample);
                 let peak_psi = self.pascals_to_psi(peak_pa);
                 let peak_spl = self.pascals_to_db_spl(peak_pa);
@@ -198,7 +199,9 @@ impl BlastImpulseMeter {
                 // Attenuated level reaching soldier's eardrum:
                 let effective_spl = (peak_spl - self.config.earcup_attenuation_db).max(85.0);
                 // Normalized dose: 140 dB effective with 1.0 ms duration corresponds to ~0.5% daily dose
-                let single_dose_pct = 0.5 * 10.0f32.powf((effective_spl - 140.0) / 10.0) * (a_duration_ms / 1.0).max(0.1);
+                let single_dose_pct = 0.5
+                    * 10.0f32.powf((effective_spl - 140.0) / 10.0)
+                    * (a_duration_ms / 1.0).max(0.1);
 
                 let event = BlastEvent {
                     frame_index: self.frame_counter,
@@ -234,7 +237,8 @@ impl BlastImpulseMeter {
         self.telemetry.peak_overpressure_psi = frame_psi;
 
         // Evaluate hazard status
-        self.telemetry.hazard_status = if self.telemetry.cumulative_dose_pct >= self.config.daily_dose_limit
+        self.telemetry.hazard_status = if self.telemetry.cumulative_dose_pct
+            >= self.config.daily_dose_limit
             || frame_spl >= 175.0
         {
             BlastHazardStatus::Hazardous

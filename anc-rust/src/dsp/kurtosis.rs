@@ -119,7 +119,9 @@ impl SpectralKurtosisDetector {
         let mut hud_band_ranges = [(0usize, 0usize); KURTOSIS_HUD_BANDS];
         for b in 0..KURTOSIS_HUD_BANDS {
             let start = (b * num_bins) / KURTOSIS_HUD_BANDS;
-            let end = (((b + 1) * num_bins) / KURTOSIS_HUD_BANDS).max(start + 1).min(num_bins);
+            let end = (((b + 1) * num_bins) / KURTOSIS_HUD_BANDS)
+                .max(start + 1)
+                .min(num_bins);
             hud_band_ranges[b] = (start, end);
         }
 
@@ -280,8 +282,15 @@ mod tests {
         }
 
         let telem = detector.telemetry();
-        assert!(!telem.is_shock_transient, "Gaussian noise must not trigger shock alert");
-        assert!(telem.mean_kurtosis < 2.0, "Gaussian noise mean kurtosis must be near 0 (was {})", telem.mean_kurtosis);
+        assert!(
+            !telem.is_shock_transient,
+            "Gaussian noise must not trigger shock alert"
+        );
+        assert!(
+            telem.mean_kurtosis < 2.0,
+            "Gaussian noise mean kurtosis must be near 0 (was {})",
+            telem.mean_kurtosis
+        );
         assert_eq!(telem.suggested_attenuation, 1.0);
     }
 
@@ -314,9 +323,23 @@ mod tests {
         detector.process_frame(&shock_spec, Some(&shock_pcm));
         let telem = detector.telemetry();
 
-        assert!(telem.is_shock_transient, "Combat impulse shock transient must trigger shock detection");
-        assert!(telem.peak_kurtosis > 10.0, "Impulse peak kurtosis must be >> 10 (was {})", telem.peak_kurtosis);
-        assert!(telem.crest_factor_db > 10.0, "Crest factor must be elevated (was {})", telem.crest_factor_db);
-        assert!(telem.suggested_attenuation < 1.0, "Must recommend attenuation for ear protection");
+        assert!(
+            telem.is_shock_transient,
+            "Combat impulse shock transient must trigger shock detection"
+        );
+        assert!(
+            telem.peak_kurtosis > 10.0,
+            "Impulse peak kurtosis must be >> 10 (was {})",
+            telem.peak_kurtosis
+        );
+        assert!(
+            telem.crest_factor_db > 10.0,
+            "Crest factor must be elevated (was {})",
+            telem.crest_factor_db
+        );
+        assert!(
+            telem.suggested_attenuation < 1.0,
+            "Must recommend attenuation for ear protection"
+        );
     }
 }

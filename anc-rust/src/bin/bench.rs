@@ -1,13 +1,18 @@
 //! Real-time latency, throughput, and RTF micro-benchmarking suite for SIH 26052.
 
-use clap::Parser;
-use std::time::Instant;
 use anc_rust::dsp::{MvdrConfig, WindowType};
 use anc_rust::model::TractEnhancer;
 use anc_rust::streaming::{PipelineConfig, TacticalAncPipeline};
+use clap::Parser;
+use std::time::Instant;
 
 #[derive(Parser, Debug)]
-#[command(name = "anc-bench", author, version, about = "SIH 26052 Latency & RTF Benchmark")]
+#[command(
+    name = "anc-bench",
+    author,
+    version,
+    about = "SIH 26052 Latency & RTF Benchmark"
+)]
 struct Args {
     #[arg(long, default_value_t = 512)]
     n_fft: usize,
@@ -32,7 +37,10 @@ fn main() {
     println!("  SIH 26052 REAL-TIME EMBEDDED LATENCY & RTF BENCHMARK");
     println!("============================================================");
     println!("Target Platform: Embedded ARM Cortex-A76 / x86_64 Host");
-    println!("Configuration: n_fft={}, hop_size={}, fs={} Hz", args.n_fft, args.hop_size, args.sample_rate);
+    println!(
+        "Configuration: n_fft={}, hop_size={}, fs={} Hz",
+        args.n_fft, args.hop_size, args.sample_rate
+    );
 
     let window_type = if args.window == "asymmetric" {
         WindowType::AsymmetricLowLatency
@@ -61,7 +69,9 @@ fn main() {
 
     let hop_duration_ms = (args.hop_size as f32 / args.sample_rate as f32) * 1000.0;
     let framing_latency_ms = match window_type {
-        WindowType::AsymmetricLowLatency => (args.n_fft as f32 * 0.25 / args.sample_rate as f32) * 1000.0,
+        WindowType::AsymmetricLowLatency => {
+            (args.n_fft as f32 * 0.25 / args.sample_rate as f32) * 1000.0
+        }
         _ => (args.n_fft as f32 / args.sample_rate as f32) * 1000.0,
     };
 
@@ -74,7 +84,10 @@ fn main() {
         let _ = pipeline.process_hop(&mic1_in, Some(&mic2_in), &mut model, &mut out);
     }
 
-    println!("\nExecuting {} streaming iteration steps...", args.iterations);
+    println!(
+        "\nExecuting {} streaming iteration steps...",
+        args.iterations
+    );
     let mut latencies_us = Vec::with_capacity(args.iterations);
 
     let t_start = Instant::now();
@@ -101,19 +114,32 @@ fn main() {
     let total_roundtrip_ms = framing_latency_ms + p99 + io_buffer_ms;
 
     println!("\n------------------ BENCHMARK RESULTS ------------------");
-    println!("Hop Frame Duration:        {:.2} ms ({} samples)", hop_duration_ms, args.hop_size);
+    println!(
+        "Hop Frame Duration:        {:.2} ms ({} samples)",
+        hop_duration_ms, args.hop_size
+    );
     println!("STFT Framing Latency:      {:.2} ms", framing_latency_ms);
     println!("Inference Compute (Median):{:.3} ms", p50);
     println!("Inference Compute (P95):   {:.3} ms", p95);
     println!("Inference Compute (P99):   {:.3} ms", p99);
     println!("Inference Compute (Max):   {:.3} ms", max);
-    println!("Real-Time Factor (RTF):    {:.4} (Headroom: {:.1}x real-time)", rtf, 1.0 / rtf.max(1e-4));
-    println!("Projected Roundtrip Delay: {:.2} ms (Gate: <= 35.0 ms)", total_roundtrip_ms);
+    println!(
+        "Real-Time Factor (RTF):    {:.4} (Headroom: {:.1}x real-time)",
+        rtf,
+        1.0 / rtf.max(1e-4)
+    );
+    println!(
+        "Projected Roundtrip Delay: {:.2} ms (Gate: <= 35.0 ms)",
+        total_roundtrip_ms
+    );
 
     if total_roundtrip_ms <= 35.0 {
         println!("\n>>> QUALIFICATION GATE STATUS: [PASS] (<= 35.0 ms)");
     } else {
-        println!("\n>>> QUALIFICATION GATE STATUS: [FAIL] ({:.2} ms > 35.0 ms)", total_roundtrip_ms);
+        println!(
+            "\n>>> QUALIFICATION GATE STATUS: [FAIL] ({:.2} ms > 35.0 ms)",
+            total_roundtrip_ms
+        );
         println!("    Recommendation: To pass 35 ms, switch from symmetric 512-window to");
         println!("    asymmetric low-latency window or 256/128 framing.");
     }

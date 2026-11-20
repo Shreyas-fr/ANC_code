@@ -13,8 +13,8 @@
 use num_complex::Complex32;
 use std::time::Instant;
 
-use crate::dsp::erb::ErbFilterbank;
 use super::traits::{EnhancerStats, ModelError, SpeechEnhancer};
+use crate::dsp::erb::ErbFilterbank;
 
 /// Fast Padé rational approximation for hyperbolic tangent: tanh(x)
 /// Accurate to within 0.1% over [-4.0, 4.0] with zero transcendental calls.
@@ -343,9 +343,11 @@ impl CrnInt8Postfilter {
             self.spec_power[k] = spec[k].norm_sqr().max(1e-9);
         }
 
-        self.erb.extract_erb_energies(&self.spec_power, &mut self.erb_energies);
+        self.erb
+            .extract_erb_energies(&self.spec_power, &mut self.erb_energies);
         self.forward_erb_int8();
-        self.erb.interpolate_band_gains(&self.postfilter_gains, &mut self.linear_gains);
+        self.erb
+            .interpolate_band_gains(&self.postfilter_gains, &mut self.linear_gains);
 
         for k in 0..self.num_bins {
             spec[k] *= self.linear_gains[k];
@@ -405,7 +407,10 @@ mod tests {
         let total_us = t0.elapsed().as_micros();
         let avg_us = total_us as f64 / 100.0;
 
-        println!("CRN-INT8 Average per-frame compute latency: {:.2} µs", avg_us);
+        println!(
+            "CRN-INT8 Average per-frame compute latency: {:.2} µs",
+            avg_us
+        );
         let max_allowed = if cfg!(debug_assertions) { 500.0 } else { 40.0 };
         assert!(
             avg_us < max_allowed,

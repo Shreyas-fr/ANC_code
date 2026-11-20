@@ -219,12 +219,16 @@ impl I2sDmaDriver {
         // If DSP is still busy reading the previous buffer, an xrun has occurred
         if self.dsp_busy.load(Ordering::Acquire) {
             self.xrun_counter.fetch_add(1, Ordering::Relaxed);
-            DmaInterruptResult::XrunDetected { active_buffer: current_dma }
+            DmaInterruptResult::XrunDetected {
+                active_buffer: current_dma,
+            }
         } else {
             // Swap buffer: 0 -> 1, 1 -> 0
             let next_dma = 1 - current_dma;
             self.active_dma_buffer.store(next_dma, Ordering::Release);
-            DmaInterruptResult::BufferSwapped { new_active_buffer: next_dma }
+            DmaInterruptResult::BufferSwapped {
+                new_active_buffer: next_dma,
+            }
         }
     }
 
@@ -323,12 +327,8 @@ mod tests {
 
     #[test]
     fn test_dma_ping_pong_swapping() {
-        let mut dma = I2sDmaDriver::new(
-            CodecModel::Wm8960,
-            16000.0,
-            128,
-            DmaJitterConfig::default(),
-        );
+        let mut dma =
+            I2sDmaDriver::new(CodecModel::Wm8960, 16000.0, 128, DmaJitterConfig::default());
 
         let mic1 = vec![0.5f32; 128];
         let mic2 = vec![-0.5f32; 128];
@@ -338,7 +338,12 @@ mod tests {
 
         // 2. Interrupt fires: swaps active DMA buffer to Pong (1), freeing Ping (0) for DSP
         let res = dma.trigger_dma_interrupt(Some(12.5));
-        assert_eq!(res, DmaInterruptResult::BufferSwapped { new_active_buffer: 1 });
+        assert_eq!(
+            res,
+            DmaInterruptResult::BufferSwapped {
+                new_active_buffer: 1
+            }
+        );
 
         // 3. DSP acquires Ping buffer (0)
         let (rx1, rx2) = dma.dsp_acquire_rx();
@@ -353,7 +358,12 @@ mod tests {
 
         // 5. Next interrupt fires: swaps active DMA buffer back to Ping (0)
         let res2 = dma.trigger_dma_interrupt(Some(-8.0));
-        assert_eq!(res2, DmaInterruptResult::BufferSwapped { new_active_buffer: 0 });
+        assert_eq!(
+            res2,
+            DmaInterruptResult::BufferSwapped {
+                new_active_buffer: 0
+            }
+        );
 
         // 6. DMA reads DAC samples from Ping (0) which was populated by DSP
         let mut dac_l = vec![0.0f32; 128];

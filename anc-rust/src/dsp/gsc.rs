@@ -151,7 +151,10 @@ impl SubbandGsc {
         spec_mic2: &[Complex32],
         spp: Option<&[f32]>,
     ) -> GscStats {
-        if !self.enabled || spec_mic1.len() != self.config.num_bins || spec_mic2.len() != self.config.num_bins {
+        if !self.enabled
+            || spec_mic1.len() != self.config.num_bins
+            || spec_mic2.len() != self.config.num_bins
+        {
             return self.stats;
         }
 
@@ -213,7 +216,11 @@ impl SubbandGsc {
             } else {
                 // Internal heuristic: if quiescent power greatly exceeds blocked power, speech is present
                 let u_pwr = u.norm_sqr();
-                if d_pwr > 2.5 * u_pwr + 1e-6 { 0.85 } else { 0.10 }
+                if d_pwr > 2.5 * u_pwr + 1e-6 {
+                    0.85
+                } else {
+                    0.10
+                }
             };
 
             let freeze_adaptation = bin_spp > self.config.spp_freeze_threshold;
@@ -251,7 +258,8 @@ impl SubbandGsc {
             }
         }
 
-        let cancellation_db = (10.0 * (total_d_power / total_out_power).max(1e-3).log10()).clamp(0.0, 40.0);
+        let cancellation_db =
+            (10.0 * (total_d_power / total_out_power).max(1e-3).log10()).clamp(0.0, 40.0);
         let mean_filter_norm = sum_norm / num_bins as f32;
         let speech_freeze_ratio = frozen_bins as f32 / num_bins as f32;
 

@@ -123,7 +123,8 @@ impl TransauralXtc {
     /// Sets the cross-talk cancellation coupling gain [0.0, 0.70].
     pub fn set_cancellation_gain(&mut self, gain: f32) {
         self.config.cancellation_gain = gain.clamp(0.0, 0.70);
-        self.norm_factor = 1.0 / (1.0 + self.config.cancellation_gain * self.config.cancellation_gain).sqrt();
+        self.norm_factor =
+            1.0 / (1.0 + self.config.cancellation_gain * self.config.cancellation_gain).sqrt();
     }
 
     /// Processes separate left and right channel slices in-place with cross-talk cancellation.

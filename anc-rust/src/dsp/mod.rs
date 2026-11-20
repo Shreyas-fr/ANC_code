@@ -66,8 +66,8 @@ pub use camouflage::{
 };
 pub use cdr::{CdrConfig, CdrEstimator};
 pub use contrast::{
-    SpectralContrastConfig, SpectralContrastEnhancer, SpectralContrastTelemetry,
-    MAX_CONTRAST_BINS, NUM_CONTRAST_SUBBANDS,
+    SpectralContrastConfig, SpectralContrastEnhancer, SpectralContrastTelemetry, MAX_CONTRAST_BINS,
+    NUM_CONTRAST_SUBBANDS,
 };
 pub use deesser::{DeEsser, DeEsserConfig, DeEsserTelemetry, DEESSER_MAX_BLOCK_SIZE};
 pub use dereverb::{CausalDereverberator, DereverbConfig};
@@ -79,7 +79,9 @@ pub use geigel::{GeigelConfig, GeigelDetector, GeigelStats};
 pub use gsc::{GscConfig, GscStats, SubbandGsc};
 pub use howling::{AntiHowlingShifter, HowlingConfig, HowlingTelemetry};
 pub use intelligibility::{IntelligibilityConfig, IntelligibilityEnhancer};
-pub use kurtosis::{KurtosisConfig, KurtosisTelemetry, SpectralKurtosisDetector, KURTOSIS_HUD_BANDS};
+pub use kurtosis::{
+    KurtosisConfig, KurtosisTelemetry, SpectralKurtosisDetector, KURTOSIS_HUD_BANDS,
+};
 pub use limiter::SoftLimiter;
 pub use lombard::{InverseLombardCompensator, LombardConfig, LombardTelemetry};
 pub use lufs::{LufsConfig, LufsGovernor, LufsTelemetry};

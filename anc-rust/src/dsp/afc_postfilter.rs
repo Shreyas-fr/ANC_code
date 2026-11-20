@@ -195,7 +195,8 @@ impl SubbandResPostfilter {
         }
 
         let mean_spk_pwr = total_spk_pwr / num_bins.max(1) as f32;
-        let res_suppression_db = if mean_spk_pwr > self.config.min_speaker_power && !is_double_talk {
+        let res_suppression_db = if mean_spk_pwr > self.config.min_speaker_power && !is_double_talk
+        {
             let ratio = (total_lin_pwr.max(1e-8)) / (total_out_pwr.max(1e-8));
             10.0 * ratio.log10().max(0.0)
         } else {

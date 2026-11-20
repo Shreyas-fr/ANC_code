@@ -240,7 +240,8 @@ impl RastiPredictor {
         // Precompute Hann window sum
         let mut hann_sum = 0.0f32;
         for k in 0..RASTI_HISTORY_HOPS {
-            let w = 0.5 * (1.0 - (2.0 * std::f32::consts::PI * k as f32 / RASTI_HISTORY_HOPS as f32).cos());
+            let w = 0.5
+                * (1.0 - (2.0 * std::f32::consts::PI * k as f32 / RASTI_HISTORY_HOPS as f32).cos());
             hann_sum += w;
         }
         let inv_hann_sum = 1.0 / hann_sum.max(1e-6);
@@ -253,7 +254,10 @@ impl RastiPredictor {
             for k in 0..RASTI_HISTORY_HOPS {
                 let p = self.envelope_history[(self.head + k) % RASTI_HISTORY_HOPS];
                 let ac = p - mean_dc;
-                let w = 0.5 * (1.0 - (2.0 * std::f32::consts::PI * k as f32 / RASTI_HISTORY_HOPS as f32).cos());
+                let w = 0.5
+                    * (1.0
+                        - (2.0 * std::f32::consts::PI * k as f32 / RASTI_HISTORY_HOPS as f32)
+                            .cos());
                 let ac_windowed = ac * w;
                 let phase = omega * k as f32;
                 re += ac_windowed * phase.cos();
@@ -356,12 +360,11 @@ mod tests {
         for h in 0..(RASTI_HISTORY_HOPS + 20) {
             let t = h as f32 * dt;
             // Multi-frequency speech articulation envelope
-            let mod_env = 0.25 * (
-                (1.0 + (2.0 * std::f32::consts::PI * 1.0 * t).sin())
-                + (1.0 + (2.0 * std::f32::consts::PI * 2.5 * t).sin())
-                + (1.0 + (2.0 * std::f32::consts::PI * 5.0 * t).sin())
-                + (1.0 + (2.0 * std::f32::consts::PI * 10.0 * t).sin())
-            );
+            let mod_env = 0.25
+                * ((1.0 + (2.0 * std::f32::consts::PI * 1.0 * t).sin())
+                    + (1.0 + (2.0 * std::f32::consts::PI * 2.5 * t).sin())
+                    + (1.0 + (2.0 * std::f32::consts::PI * 5.0 * t).sin())
+                    + (1.0 + (2.0 * std::f32::consts::PI * 10.0 * t).sin()));
             let hop: Vec<f32> = (0..256)
                 .map(|i| mod_env * ((i as f32 * 0.2).sin()))
                 .collect();

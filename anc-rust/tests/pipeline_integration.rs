@@ -96,7 +96,11 @@ fn test_end_to_end_pipeline_stability_and_snr_gain() {
         // Verify no NaNs or Infs
         for &s in &hop_out {
             assert!(s.is_finite(), "Output sample must be finite, got {}", s);
-            assert!(s.abs() <= 1.0, "Limiter must clamp samples to [-1, 1], got {}", s);
+            assert!(
+                s.abs() <= 1.0,
+                "Limiter must clamp samples to [-1, 1], got {}",
+                s
+            );
         }
 
         enhanced_output.extend_from_slice(&hop_out);
@@ -142,13 +146,17 @@ fn test_pipeline_reset_and_reproducibility() {
     let mut out2 = vec![0.0f32; 256];
 
     // Process a hop
-    pipeline.process_hop(&hop_in, None, &mut model, &mut out1).unwrap();
+    pipeline
+        .process_hop(&hop_in, None, &mut model, &mut out1)
+        .unwrap();
 
     // Reset pipeline
     pipeline.reset();
 
     // Process the exact same initial hop
-    pipeline.process_hop(&hop_in, None, &mut model, &mut out2).unwrap();
+    pipeline
+        .process_hop(&hop_in, None, &mut model, &mut out2)
+        .unwrap();
 
     for i in 0..256 {
         assert!(
@@ -184,7 +192,10 @@ fn test_dynamic_mission_profile_switching() {
 
     // Switch to DismountedInfantry (situational awareness)
     pipeline.set_mission_profile(MissionProfile::DismountedInfantry, Some(&mut enhancer));
-    assert_eq!(pipeline.active_profile(), MissionProfile::DismountedInfantry);
+    assert_eq!(
+        pipeline.active_profile(),
+        MissionProfile::DismountedInfantry
+    );
     assert!(
         !pipeline.config.enable_dereverb,
         "Dismounted infantry profile should not run dereverberation"
@@ -252,11 +263,16 @@ fn test_pipeline_online_doa_tracking_and_headset_slip_compensation() {
             m2[n] = s2;
         }
 
-        pipeline.process_hop(&m1, Some(&m2), &mut model, &mut hop_out).unwrap();
+        pipeline
+            .process_hop(&m1, Some(&m2), &mut model, &mut hop_out)
+            .unwrap();
     }
 
     let tracked = pipeline.tracked_talker_angle_deg();
-    println!("Pipeline Tracked Angle for +25 deg target: {:.2} deg", tracked);
+    println!(
+        "Pipeline Tracked Angle for +25 deg target: {:.2} deg",
+        tracked
+    );
     assert!(
         (tracked - target_slip_deg).abs() < 15.0,
         "Online DOA tracking should adapt to slipped headset (+25 deg), got {:.2} deg",
@@ -299,7 +315,9 @@ fn test_pipeline_coupled_dereverb_integration() {
 
     // Stream 20 hops to verify stability and absence of NaNs / infinities
     for _ in 0..20 {
-        pipeline.process_hop(&m1, Some(&m2), &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&m1, Some(&m2), &mut model, &mut out)
+            .unwrap();
         for &s in &out {
             assert!(s.is_finite());
             assert!(s.abs() <= 1.0);
@@ -341,8 +359,13 @@ fn test_pipeline_subband_dual_beamforming_integration() {
     let mut out = vec![0.0f32; hop_size];
 
     for _ in 0..30 {
-        let stats = pipeline.process_hop(&m1, Some(&m2), &mut model, &mut out).unwrap();
-        assert!(stats.compute_time_us < 50_000, "Compute must remain well under real-time deadline");
+        let stats = pipeline
+            .process_hop(&m1, Some(&m2), &mut model, &mut out)
+            .unwrap();
+        assert!(
+            stats.compute_time_us < 50_000,
+            "Compute must remain well under real-time deadline"
+        );
         for &s in &out {
             assert!(s.is_finite());
         }
@@ -381,7 +404,14 @@ fn test_pipeline_comfort_noise_combat_profile_integration() {
 
     // Process silent frames: comfort noise should be blended in to prevent acoustic vacuum
     for _ in 0..25 {
-        pipeline.process_hop(&silent_mic1, Some(&silent_mic2), &mut spectral_enhancer, &mut out).unwrap();
+        pipeline
+            .process_hop(
+                &silent_mic1,
+                Some(&silent_mic2),
+                &mut spectral_enhancer,
+                &mut out,
+            )
+            .unwrap();
         for &s in &out {
             assert!(s.is_finite());
         }
@@ -432,7 +462,14 @@ fn test_pipeline_alsa_mmap_direct_integration() {
             mic2_scratch[f] = capture_slice[f * 2 + 1];
         }
 
-        pipeline.process_hop(&mic1_scratch, Some(&mic2_scratch), &mut model, &mut mono_out).unwrap();
+        pipeline
+            .process_hop(
+                &mic1_scratch,
+                Some(&mic2_scratch),
+                &mut model,
+                &mut mono_out,
+            )
+            .unwrap();
 
         // Duplicate mono enhanced output to stereo playback slice
         for f in 0..hop_size {
@@ -443,7 +480,10 @@ fn test_pipeline_alsa_mmap_direct_integration() {
         t0.elapsed().as_micros() as f32
     });
 
-    assert_eq!(report.total_xruns, 0, "Pipeline with ALSA MMAP should have zero XRUNs");
+    assert_eq!(
+        report.total_xruns, 0,
+        "Pipeline with ALSA MMAP should have zero XRUNs"
+    );
     assert_eq!(report.total_periods, 20);
     assert!(report.dma_throughput_mb_s > 0.1);
 }
@@ -584,7 +624,9 @@ fn test_pipeline_cdr_diffuse_field_suppression_integration() {
             let t = (h * hop_size + n) as f32 / sample_rate;
             m1[n] = 0.5 * (2.0 * PI * 350.0 * t).sin();
         }
-        pipeline.process_hop(&m1, Some(&m1), &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&m1, Some(&m1), &mut model, &mut out)
+            .unwrap();
     }
 
     assert!(
@@ -653,7 +695,9 @@ fn test_pipeline_transaural_xtc_spatial_positioning_integration() {
     let mut stereo_out = vec![0.0f32; hop_size * 2];
 
     // Position a directional threat alert (e.g. incoming fire) at +60 degrees
-    pipeline.xtc.position_source_3d(&mono_threat, 60.0, &mut stereo_out);
+    pipeline
+        .xtc
+        .position_source_3d(&mono_threat, 60.0, &mut stereo_out);
 
     // Right channel (ipsilateral) must be stronger than left channel (contralateral)
     let left_energy: f32 = stereo_out.chunks_exact(2).map(|c| c[0] * c[0]).sum();
@@ -689,11 +733,17 @@ fn test_pipeline_intelligibility_enhancer_combat_profile_activation() {
     let mut pipeline = TacticalAncPipeline::new(config);
     let mut model = TractEnhancer::new_fallback("Analytic-Wiener-Fallback", num_bins, 32);
 
-    assert!(!pipeline.intelligibility.is_enabled(), "Intelligibility enhancer must be disabled by default");
+    assert!(
+        !pipeline.intelligibility.is_enabled(),
+        "Intelligibility enhancer must be disabled by default"
+    );
 
     // Switch mission profile to CombatVehicle (T-90 / BMP)
     pipeline.set_mission_profile(MissionProfile::CombatVehicle, Some(&mut model));
-    assert!(pipeline.config.enable_intelligibility, "CombatVehicle profile must enable intelligibility enhancer");
+    assert!(
+        pipeline.config.enable_intelligibility,
+        "CombatVehicle profile must enable intelligibility enhancer"
+    );
     assert!(pipeline.intelligibility.is_enabled());
 
     // Stream low-frequency cabin rumble (100 Hz) + F2 speech formant (2000 Hz) + DC bias (0.2)
@@ -710,7 +760,10 @@ fn test_pipeline_intelligibility_enhancer_combat_profile_activation() {
         }
 
         let res = pipeline.process_hop(&m1, Some(&m1), &mut model, &mut out);
-        assert!(res.is_ok(), "Process hop with Intelligibility Enhancer must succeed");
+        assert!(
+            res.is_ok(),
+            "Process hop with Intelligibility Enhancer must succeed"
+        );
 
         for &s in &out {
             assert!(s.is_finite());
@@ -862,7 +915,10 @@ fn test_pipeline_blackbox_forensic_incident_recording_integration() {
     assert_eq!(summary.concussion_events, 1);
 
     let mut csv_buf = Vec::new();
-    let written = pipeline.blackbox().export_forensic_csv(&mut csv_buf).unwrap();
+    let written = pipeline
+        .blackbox()
+        .export_forensic_csv(&mut csv_buf)
+        .unwrap();
     assert_eq!(written, 11);
     let csv_str = String::from_utf8(csv_buf).unwrap();
     assert!(csv_str.contains("0x01")); // FLAG_CONCUSSION_SHOCK
@@ -901,7 +957,11 @@ fn test_pipeline_minimum_phase_polyphase_resampling_integration() {
     let pwr_in: f32 = in_48k[200..].iter().map(|s| s * s).sum();
     let pwr_recon: f32 = reconstructed_48k[200..].iter().map(|s| s * s).sum();
     let delta_db = (10.0 * (pwr_recon / pwr_in).log10()).abs();
-    assert!(delta_db < 0.5, "Resampling round-trip delta too high: {:.2} dB", delta_db);
+    assert!(
+        delta_db < 0.5,
+        "Resampling round-trip delta too high: {:.2} dB",
+        delta_db
+    );
 }
 
 #[test]
@@ -1145,7 +1205,10 @@ fn test_pipeline_wind_turbulence_derumbling_integration() {
         "WTI should detect uncorrelated wind turbulence, got {:.3}",
         wind_telem.mean_wti
     );
-    assert!(wind_telem.wind_detected, "Wind detector must flag active wind buffeting");
+    assert!(
+        wind_telem.wind_detected,
+        "Wind detector must flag active wind buffeting"
+    );
 }
 
 #[test]
@@ -1224,7 +1287,9 @@ fn test_pipeline_adpcm_codec_mesh_streaming_integration() {
     }
 
     for _ in 0..6 {
-        pipeline.process_hop(&speech_hop, None, &mut model, &mut out_hop).unwrap();
+        pipeline
+            .process_hop(&speech_hop, None, &mut model, &mut out_hop)
+            .unwrap();
     }
 
     let mut samples_arr = [0.0f32; 256];
@@ -1254,7 +1319,11 @@ fn test_pipeline_adpcm_codec_mesh_streaming_integration() {
         err += diff * diff;
     }
     let snr = 10.0 * (sig / err.max(1e-12)).log10();
-    assert!(snr > 20.0, "Tactical ADPCM reconstruction SNR must exceed 20 dB, got {:.2} dB", snr);
+    assert!(
+        snr > 20.0,
+        "Tactical ADPCM reconstruction SNR must exceed 20 dB, got {:.2} dB",
+        snr
+    );
 }
 
 #[test]
@@ -1403,7 +1472,9 @@ fn test_pipeline_deep_harmonic_comb_valley_rejection_integration() {
             in_hop[n] = speech + valley_noise;
         }
 
-        pipeline.process_hop(&in_hop, None, &mut model, &mut out_hop).unwrap();
+        pipeline
+            .process_hop(&in_hop, None, &mut model, &mut out_hop)
+            .unwrap();
     }
 
     assert!(pipeline.pitch_comb.is_enabled());
@@ -1452,7 +1523,10 @@ fn test_pipeline_geigel_double_talk_freeze_integration() {
             .process_hop_tactical(&m1, None, Some(&spk), &mut model, &mut out)
             .unwrap();
     }
-    assert!(!pipeline.afc_stats().double_talk_detected, "Echo alone must not trigger Geigel double-talk");
+    assert!(
+        !pipeline.afc_stats().double_talk_detected,
+        "Echo alone must not trigger Geigel double-talk"
+    );
 
     // Near-end soldier begins shouting while loudspeaker plays (mic jumps to 0.9, ref is 0.8 -> ratio > 0.50)
     let mut spk = vec![0.0f32; hop_size];
@@ -1467,8 +1541,14 @@ fn test_pipeline_geigel_double_talk_freeze_integration() {
         .unwrap();
 
     let stats = pipeline.afc_stats();
-    assert!(stats.double_talk_detected, "Geigel detector must immediately detect double-talk");
-    assert!(stats.geigel_metric > 0.50, "Geigel metric must exceed 0.50 threshold");
+    assert!(
+        stats.double_talk_detected,
+        "Geigel detector must immediately detect double-talk"
+    );
+    assert!(
+        stats.geigel_metric > 0.50,
+        "Geigel metric must exceed 0.50 threshold"
+    );
 }
 
 #[test]
@@ -1496,9 +1576,14 @@ fn test_pipeline_spectral_kurtosis_gunfire_shock_blanker_integration() {
         .map(|n| 0.02 * ((n as f32 * 0.1).sin() + (n as f32 * 0.37).cos()))
         .collect();
     for _ in 0..20 {
-        pipeline.process_hop(&bg_noise, None, &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&bg_noise, None, &mut model, &mut out)
+            .unwrap();
     }
-    assert!(!pipeline.kurtosis_telemetry().is_shock_transient, "Background noise must be non-shock");
+    assert!(
+        !pipeline.kurtosis_telemetry().is_shock_transient,
+        "Background noise must be non-shock"
+    );
 
     // Sudden massive gunfire blast shock transient (high crest factor + non-Gaussian energy spike)
     let mut shock_impulse = bg_noise.clone();
@@ -1506,12 +1591,23 @@ fn test_pipeline_spectral_kurtosis_gunfire_shock_blanker_integration() {
     shock_impulse[11] = -0.92;
     shock_impulse[12] = 0.85;
 
-    pipeline.process_hop(&shock_impulse, None, &mut model, &mut out).unwrap();
+    pipeline
+        .process_hop(&shock_impulse, None, &mut model, &mut out)
+        .unwrap();
 
     let telem = pipeline.kurtosis_telemetry();
-    assert!(telem.is_shock_transient, "Gunfire blast must trigger Spectral Kurtosis shock detection");
-    assert!(telem.crest_factor_db > 10.0, "Crest factor must indicate high-energy peak-to-RMS ratio");
-    assert!(telem.suggested_attenuation < 1.0, "Must recommend protective ear attenuation");
+    assert!(
+        telem.is_shock_transient,
+        "Gunfire blast must trigger Spectral Kurtosis shock detection"
+    );
+    assert!(
+        telem.crest_factor_db > 10.0,
+        "Crest factor must indicate high-energy peak-to-RMS ratio"
+    );
+    assert!(
+        telem.suggested_attenuation < 1.0,
+        "Must recommend protective ear attenuation"
+    );
 }
 
 #[test]
@@ -1550,7 +1646,11 @@ fn test_pipeline_full_duplex_hardware_coordinator_integration() {
 
     let telem = duplex.telemetry();
     assert!(telem.is_flowing);
-    assert!(telem.loopback_latency_ms <= 35.0, "Loopback latency must be <= 35.0 ms SIH budget (was {:.2} ms)", telem.loopback_latency_ms);
+    assert!(
+        telem.loopback_latency_ms <= 35.0,
+        "Loopback latency must be <= 35.0 ms SIH budget (was {:.2} ms)",
+        telem.loopback_latency_ms
+    );
     assert_eq!(telem.render_underruns, 0);
 }
 
@@ -1570,7 +1670,10 @@ fn test_pipeline_adaptive_filter_convergence_profiler_integration() {
         profiler.wpe.update(1.0);
     }
 
-    assert!(profiler.all_converged(), "All adaptive filters should achieve steady-state convergence");
+    assert!(
+        profiler.all_converged(),
+        "All adaptive filters should achieve steady-state convergence"
+    );
     assert!(profiler.mvdr.status().convergence_time_ms > 0.0);
     assert!(profiler.afc.status().convergence_time_ms > 0.0);
 }
@@ -1737,7 +1840,10 @@ fn test_pipeline_acoustic_camouflage_psychoacoustic_masking_integration() {
     camouflage.process_spectrum(&ambient, &soldier, &mut out_masking);
 
     let tele = camouflage.telemetry();
-    assert!(tele.cloaking_active, "Camouflage engine must trigger on soldier gear rustle");
+    assert!(
+        tele.cloaking_active,
+        "Camouflage engine must trigger on soldier gear rustle"
+    );
     assert!(tele.cloaked_events_count >= 1);
     assert!(tele.spectral_entropy > 0.80);
 }
@@ -1769,13 +1875,24 @@ fn test_pipeline_lufs_loudness_governor_tactical_integration() {
             let t = (frame * hop_size + i) as f32 / sample_rate;
             *s = 0.90 * (2.0 * PI * 1000.0 * t).sin();
         }
-        pipeline.process_hop(&mic1, None, &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, None, &mut model, &mut out)
+            .unwrap();
     }
 
     let telem = pipeline.lufs_telemetry();
-    assert!(telem.momentary_lufs > -15.0, "Momentary LUFS should measure high speech loudness");
-    assert!(telem.gain_reduction_db < -3.0, "Governor should apply gain reduction to regulate shouting");
-    assert!(telem.true_peak_dbfs <= 0.0, "True peak must not clip 0 dBFS ceiling");
+    assert!(
+        telem.momentary_lufs > -15.0,
+        "Momentary LUFS should measure high speech loudness"
+    );
+    assert!(
+        telem.gain_reduction_db < -3.0,
+        "Governor should apply gain reduction to regulate shouting"
+    );
+    assert!(
+        telem.true_peak_dbfs <= 0.0,
+        "True peak must not clip 0 dBFS ceiling"
+    );
 }
 
 #[test]
@@ -1823,11 +1940,16 @@ fn test_pipeline_subband_afc_and_res_postfilter_integration() {
             // Linear echo 0.20 + non-linear 2nd harmonic 0.05
             mic[i] = 0.20 * (2.0 * PI * 400.0 * t).sin() + 0.05 * (2.0 * PI * 800.0 * t).sin();
         }
-        pipeline.process_hop_tactical(&mic, None, Some(&spk), &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop_tactical(&mic, None, Some(&spk), &mut model, &mut out)
+            .unwrap();
     }
 
     let res_stats = pipeline.res_stats();
-    assert!(res_stats.total_erle_db > 10.0, "Linear AFC + RES postfilter should achieve >10 dB cancellation");
+    assert!(
+        res_stats.total_erle_db > 10.0,
+        "Linear AFC + RES postfilter should achieve >10 dB cancellation"
+    );
     assert!(res_stats.res_suppression_db >= 0.0);
 }
 
@@ -1872,13 +1994,24 @@ fn test_pipeline_sensor_calibration_restores_clogged_mic_mvdr_nulling() {
             *s = noise;
             mic2[i] = noise * clog_scale;
         }
-        pipeline.process_hop(&mic1, Some(&mic2), &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, Some(&mic2), &mut model, &mut out)
+            .unwrap();
     }
 
     let cal_telem = pipeline.sensor_cal_telemetry();
-    assert!(cal_telem.clog_detected, "Sensor calibration must detect severe sensitivity mismatch on clogged mic");
-    assert!(cal_telem.max_mismatch_db > 2.5, "Maximum mismatch should register the -4 dB deficit");
-    assert!(cal_telem.calibrated_frames_count > 0, "Diffuse frames should increment calibration counter");
+    assert!(
+        cal_telem.clog_detected,
+        "Sensor calibration must detect severe sensitivity mismatch on clogged mic"
+    );
+    assert!(
+        cal_telem.max_mismatch_db > 2.5,
+        "Maximum mismatch should register the -4 dB deficit"
+    );
+    assert!(
+        cal_telem.calibrated_frames_count > 0,
+        "Diffuse frames should increment calibration counter"
+    );
 }
 
 #[test]
@@ -1915,12 +2048,21 @@ fn test_pipeline_inverse_lombard_strain_compensation_integration() {
                 + 0.25 * (2.0 * PI * 2600.0 * t).sin();
             *s = voice;
         }
-        pipeline.process_hop(&mic1, None, &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, None, &mut model, &mut out)
+            .unwrap();
     }
 
     let lombard = pipeline.lombard_telemetry();
-    assert!(lombard.strain_index > 0.20, "Lombard compensator must detect strain on shouted voice, got {:.3}", lombard.strain_index);
-    assert!(lombard.tilt_correction_db > 0.8, "Inverse tilt attenuation should be active");
+    assert!(
+        lombard.strain_index > 0.20,
+        "Lombard compensator must detect strain on shouted voice, got {:.3}",
+        lombard.strain_index
+    );
+    assert!(
+        lombard.tilt_correction_db > 0.8,
+        "Inverse tilt attenuation should be active"
+    );
 }
 
 #[test]
@@ -1962,12 +2104,18 @@ fn test_pipeline_creeping_wave_diffraction_steering_vector_correction() {
             *s1 = speech + noise;
             mic2[i] = speech + noise_mic2;
         }
-        pipeline.process_hop(&mic1, Some(&mic2), &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, Some(&mic2), &mut model, &mut out)
+            .unwrap();
     }
 
     // Verify output is finite, stable, and beamformer is active
     let pwr = out.iter().map(|&s| s * s).sum::<f32>() / hop_size as f32;
-    assert!(pwr > 0.001 && pwr < 1.0, "Beamformed output power should be nominal: {}", pwr);
+    assert!(
+        pwr > 0.001 && pwr < 1.0,
+        "Beamformed output power should be nominal: {}",
+        pwr
+    );
 }
 
 #[test]
@@ -2000,12 +2148,20 @@ fn test_pipeline_anti_howling_hilbert_ssb_shifter_integration() {
             let t = (frame * hop_size + i) as f32 / sample_rate;
             *s = 0.70 * (2.0 * PI * 2200.0 * t).sin();
         }
-        pipeline.process_hop(&mic1, None, &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, None, &mut model, &mut out)
+            .unwrap();
     }
 
     let howling_telem = pipeline.howling_telemetry();
-    assert!(howling_telem.howling_detected, "Anti-howling shifter must flag closed-loop acoustic resonance");
-    assert!(howling_telem.loop_attenuation_db > 0.0, "Anti-howling must engage protective loop attenuation");
+    assert!(
+        howling_telem.howling_detected,
+        "Anti-howling shifter must flag closed-loop acoustic resonance"
+    );
+    assert!(
+        howling_telem.loop_attenuation_db > 0.0,
+        "Anti-howling must engage protective loop attenuation"
+    );
 }
 
 #[test]
@@ -2035,11 +2191,17 @@ fn test_pipeline_soldier_cognitive_stress_profiler_integration() {
             let t = (frame * hop_size + i) as f32 / sample_rate;
             *s = 0.40 * (2.0 * PI * f0 * t).sin();
         }
-        pipeline.process_hop(&mic1, None, &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, None, &mut model, &mut out)
+            .unwrap();
     }
 
     let stress_telem = pipeline.stress_telemetry();
-    assert!(stress_telem.stress_index_pct > 15.0, "Stress index must register vocal tremor, got {:.1}%", stress_telem.stress_index_pct);
+    assert!(
+        stress_telem.stress_index_pct > 15.0,
+        "Stress index must register vocal tremor, got {:.1}%",
+        stress_telem.stress_index_pct
+    );
 }
 
 #[test]
@@ -2070,12 +2232,19 @@ fn test_pipeline_audiogram_nal_nl2_wdrc_integration() {
             let t = (frame * hop_size + i) as f32 / sample_rate;
             *s = 0.05 * (2.0 * PI * 4000.0 * t).sin();
         }
-        pipeline.process_hop(&mic1, None, &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, None, &mut model, &mut out)
+            .unwrap();
     }
 
     // Output must be boosted at 4 kHz while remaining stable and finite
     assert!(out[128].is_finite());
-    assert!(pipeline.audiogram_wdrc.average_insertion_gain_db(anc_rust::dsp::Ear::Left) > 8.0);
+    assert!(
+        pipeline
+            .audiogram_wdrc
+            .average_insertion_gain_db(anc_rust::dsp::Ear::Left)
+            > 8.0
+    );
 }
 
 #[test]
@@ -2107,11 +2276,16 @@ fn test_pipeline_subband_bone_air_sensor_fusion_integration() {
             mic1[i] = 0.20 * (2.0 * PI * 3000.0 * t).sin();
             mic2[i] = 0.35 * (2.0 * PI * 300.0 * t).sin();
         }
-        pipeline.process_hop(&mic1, Some(&mic2), &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, Some(&mic2), &mut model, &mut out)
+            .unwrap();
     }
 
     let bone_telem = pipeline.bone_fusion_telemetry();
-    assert!(bone_telem.is_bone_active, "Bone sensor activity must be flagged");
+    assert!(
+        bone_telem.is_bone_active,
+        "Bone sensor activity must be flagged"
+    );
     assert_eq!(bone_telem.fusion_crossover_hz, 1500.0);
     assert!(out[100].is_finite());
 }
@@ -2137,7 +2311,9 @@ fn test_pipeline_tactical_battery_simulator_integration() {
     let mic1 = vec![0.05f32; hop_size];
 
     for _ in 0..30 {
-        pipeline.process_hop(&mic1, None, &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, None, &mut model, &mut out)
+            .unwrap();
     }
 
     let batt_telem = pipeline.battery_telemetry();
@@ -2173,13 +2349,28 @@ fn test_pipeline_acoustic_blast_wave_overpressure_meter_integration() {
     }
     let quiet_chunk = vec![0.01f32; hop_size];
 
-    pipeline.process_hop(&blast_chunk, None, &mut model, &mut out).unwrap();
-    pipeline.process_hop(&quiet_chunk, None, &mut model, &mut out).unwrap();
+    pipeline
+        .process_hop(&blast_chunk, None, &mut model, &mut out)
+        .unwrap();
+    pipeline
+        .process_hop(&quiet_chunk, None, &mut model, &mut out)
+        .unwrap();
 
     let blast_telem = pipeline.blast_telemetry();
-    assert!(blast_telem.daily_impulse_count >= 1, "Impulse meter must log blast event");
-    assert!(blast_telem.last_blast_event.peak_overpressure_pa > 1000.0, "Overpressure in Pa must exceed 1000 Pa, got {}", blast_telem.last_blast_event.peak_overpressure_pa);
-    assert!(blast_telem.last_blast_event.peak_overpressure_psi > 0.10, "Overpressure in PSI must register, got {}", blast_telem.last_blast_event.peak_overpressure_psi);
+    assert!(
+        blast_telem.daily_impulse_count >= 1,
+        "Impulse meter must log blast event"
+    );
+    assert!(
+        blast_telem.last_blast_event.peak_overpressure_pa > 1000.0,
+        "Overpressure in Pa must exceed 1000 Pa, got {}",
+        blast_telem.last_blast_event.peak_overpressure_pa
+    );
+    assert!(
+        blast_telem.last_blast_event.peak_overpressure_psi > 0.10,
+        "Overpressure in PSI must register, got {}",
+        blast_telem.last_blast_event.peak_overpressure_psi
+    );
 }
 
 #[test]
@@ -2209,12 +2400,20 @@ fn test_pipeline_deesser_anti_sibilance_integration() {
     }
 
     for _ in 0..6 {
-        pipeline.process_hop(&sibilant_chunk, None, &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&sibilant_chunk, None, &mut model, &mut out)
+            .unwrap();
     }
 
     let deesser_telem = pipeline.deesser_telemetry();
-    assert!(deesser_telem.sibilance_detected, "De-esser must flag sibilance detection in pipeline");
-    assert!(deesser_telem.gain_reduction_db < -1.0, "High-band gain reduction must be applied to harsh sibilance");
+    assert!(
+        deesser_telem.sibilance_detected,
+        "De-esser must flag sibilance detection in pipeline"
+    );
+    assert!(
+        deesser_telem.gain_reduction_db < -1.0,
+        "High-band gain reduction must be applied to harsh sibilance"
+    );
 }
 
 #[test]
@@ -2253,11 +2452,16 @@ fn test_pipeline_polar_pattern_shaper_directional_nulling_integration() {
     }
 
     for _ in 0..4 {
-        pipeline.process_hop(&mic1, Some(&mic2), &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, Some(&mic2), &mut model, &mut out)
+            .unwrap();
     }
 
     let polar_telem = pipeline.polar_telemetry();
-    assert_eq!(polar_telem.pattern_type, anc_rust::dsp::PolarPatternType::Cardioid as u8);
+    assert_eq!(
+        polar_telem.pattern_type,
+        anc_rust::dsp::PolarPatternType::Cardioid as u8
+    );
     assert_eq!(polar_telem.null_angle_deg, 180.0);
 }
 
@@ -2281,7 +2485,9 @@ fn test_pipeline_thermal_noise_estimator_wiener_floor_bounding_integration() {
     let mic1 = vec![0.0001f32; hop_size]; // Silent patrol near thermal floor
     let mut out = vec![0.0f32; hop_size];
 
-    pipeline.process_hop(&mic1, None, &mut model, &mut out).unwrap();
+    pipeline
+        .process_hop(&mic1, None, &mut model, &mut out)
+        .unwrap();
 
     let thermal_telem = pipeline.thermal_telemetry();
     assert!(thermal_telem.thermal_noise_floor_dbfs < -70.0);
@@ -2317,13 +2523,21 @@ fn test_pipeline_cable_continuity_and_fault_diagnostics_integration() {
     }
 
     for _ in 0..5 {
-        pipeline.process_hop(&mic1, Some(&mic2), &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, Some(&mic2), &mut model, &mut out)
+            .unwrap();
     }
 
     let cable_telem = pipeline.cable_telemetry();
-    assert_eq!(cable_telem.status, anc_rust::metrics::CableFaultStatus::Nominal);
+    assert_eq!(
+        cable_telem.status,
+        anc_rust::metrics::CableFaultStatus::Nominal
+    );
     assert!(cable_telem.health_pct > 90.0);
-    assert!(cable_telem.estimated_impedance_ohms > 1500.0 && cable_telem.estimated_impedance_ohms < 3000.0);
+    assert!(
+        cable_telem.estimated_impedance_ohms > 1500.0
+            && cable_telem.estimated_impedance_ohms < 3000.0
+    );
 }
 
 #[test]
@@ -2359,7 +2573,9 @@ fn test_pipeline_spectral_contrast_formant_unmasking_integration() {
     }
 
     for _ in 0..10 {
-        pipeline.process_hop(&mic1, Some(&mic2), &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, Some(&mic2), &mut model, &mut out)
+            .unwrap();
     }
 
     let contrast_telem = pipeline.contrast_telemetry();
@@ -2398,7 +2614,9 @@ fn test_pipeline_ambisonics_intensity_diffuseness_integration() {
     }
 
     for _ in 0..10 {
-        pipeline.process_hop(&mic1, Some(&mic2), &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, Some(&mic2), &mut model, &mut out)
+            .unwrap();
     }
 
     let ambi_telem = pipeline.ambisonics_telemetry();
@@ -2408,7 +2626,9 @@ fn test_pipeline_ambisonics_intensity_diffuseness_integration() {
 
 #[test]
 fn test_pipeline_jamming_detector_adpcm_fallback_integration() {
-    use anc_rust::network::jamming::{JammingDetector, JammingDetectorConfig, JammingRemediation, JammingType};
+    use anc_rust::network::jamming::{
+        JammingDetector, JammingDetectorConfig, JammingRemediation, JammingType,
+    };
 
     let config = JammingDetectorConfig {
         nominal_interval_ms: 16.0,
@@ -2485,7 +2705,9 @@ fn test_pipeline_rasti_speech_transmission_index_integration() {
             let carrier = (2.0 * std::f32::consts::PI * 1000.0 * t).sin();
             mic1[i] = syllabic_env * carrier * 0.4;
         }
-        pipeline.process_hop(&mic1, None, &mut model, &mut out).unwrap();
+        pipeline
+            .process_hop(&mic1, None, &mut model, &mut out)
+            .unwrap();
     }
 
     let rasti = pipeline.rasti_telemetry();

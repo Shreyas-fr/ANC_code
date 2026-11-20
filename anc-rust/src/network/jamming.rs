@@ -230,7 +230,8 @@ impl JammingDetector {
         let alpha = 0.10f32;
         self.smoothed_jitter_ms = (1.0 - alpha) * self.smoothed_jitter_ms + alpha * jitter;
         let j_diff = jitter - self.smoothed_jitter_ms;
-        self.smoothed_jitter_var = (1.0 - alpha) * self.smoothed_jitter_var + alpha * (j_diff * j_diff);
+        self.smoothed_jitter_var =
+            (1.0 - alpha) * self.smoothed_jitter_var + alpha * (j_diff * j_diff);
 
         // 2. Calculate sequence drop gap
         let gap = if let Some(last_s) = self.last_seq {
@@ -321,7 +322,9 @@ impl JammingDetector {
         }
 
         // 6. EW Jamming Classification & Mitigation
-        let (jamming_type, confidence, remediation) = if auth_failure_rate > self.config.auth_failure_thresh {
+        let (jamming_type, confidence, remediation) = if auth_failure_rate
+            > self.config.auth_failure_thresh
+        {
             (
                 JammingType::SpotJamming,
                 0.95,
@@ -331,7 +334,8 @@ impl JammingDetector {
             || drop_rate >= 0.55
             || self.smoothed_jitter_var >= self.config.barrage_jitter_var_thresh
         {
-            let conf = ((drop_rate / 0.5).min(1.0) + (self.smoothed_jitter_var / 30.0).min(1.0)) * 0.5;
+            let conf =
+                ((drop_rate / 0.5).min(1.0) + (self.smoothed_jitter_var / 30.0).min(1.0)) * 0.5;
             (
                 JammingType::BarrageJamming,
                 conf.clamp(0.60, 0.99),

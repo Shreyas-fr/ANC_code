@@ -7,9 +7,9 @@
 //! - Acoustic diffuseness index \psi = 1 - \frac{\|\vec{I}\|}{c \cdot E} (0.0 = pure plane wave, 1.0 = isotropic diffuse noise).
 //! - 360° directional flow vector rendered on a tactical polar HUD scope with azimuth indicator.
 
-use eframe::egui::{self, Color32, Frame, Margin, Pos2, Rect, Rounding, Stroke, Ui, Vec2};
 use crate::ui::theme::Theme;
 pub use anc_rust::dsp::ambisonics::AmbisonicsTelemetry;
+use eframe::egui::{self, Color32, Frame, Margin, Pos2, Rect, Rounding, Stroke, Ui, Vec2};
 
 /// Interactive Ambisonics Intensity & Diffuseness Scope Widget.
 #[derive(Debug, Clone)]
@@ -54,7 +54,11 @@ impl AmbisonicsScopeWidget {
             .show(ui, |ui| {
                 // Header
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("🧭").color(Theme::ACCENT_CYAN).size(13.0));
+                    ui.label(
+                        egui::RichText::new("🧭")
+                            .color(Theme::ACCENT_CYAN)
+                            .size(13.0),
+                    );
                     ui.label(
                         egui::RichText::new("B-FORMAT AMBISONICS INTENSITY & DIFFUSENESS")
                             .strong()
@@ -106,7 +110,8 @@ impl AmbisonicsScopeWidget {
                     );
 
                     // Diffuseness ring (radius proportional to diffuseness)
-                    let diff_radius = (radius * self.telemetry.diffuseness.clamp(0.05, 1.0)).max(4.0);
+                    let diff_radius =
+                        (radius * self.telemetry.diffuseness.clamp(0.05, 1.0)).max(4.0);
                     painter.circle_stroke(
                         center,
                         diff_radius,
@@ -115,11 +120,17 @@ impl AmbisonicsScopeWidget {
 
                     // Crosshairs
                     painter.line_segment(
-                        [Pos2::new(center.x - radius, center.y), Pos2::new(center.x + radius, center.y)],
+                        [
+                            Pos2::new(center.x - radius, center.y),
+                            Pos2::new(center.x + radius, center.y),
+                        ],
                         Stroke::new(0.8_f32, Color32::from_rgb(30, 41, 59)),
                     );
                     painter.line_segment(
-                        [Pos2::new(center.x, center.y - radius), Pos2::new(center.x, center.y + radius)],
+                        [
+                            Pos2::new(center.x, center.y - radius),
+                            Pos2::new(center.x, center.y + radius),
+                        ],
                         Stroke::new(0.8_f32, Color32::from_rgb(30, 41, 59)),
                     );
 
@@ -147,17 +158,28 @@ impl AmbisonicsScopeWidget {
                     let diff = self.telemetry.diffuseness;
                     ui.vertical(|ui| {
                         ui.horizontal(|ui| {
-                            ui.label(egui::RichText::new("AZIMUTH:").size(9.5).color(Theme::TEXT_MUTED));
                             ui.label(
-                                egui::RichText::new(format!("{:>+5.1}°", self.telemetry.azimuth_deg))
-                                    .size(11.0)
-                                    .strong()
-                                    .monospace()
-                                    .color(Theme::ACCENT_CYAN),
+                                egui::RichText::new("AZIMUTH:")
+                                    .size(9.5)
+                                    .color(Theme::TEXT_MUTED),
+                            );
+                            ui.label(
+                                egui::RichText::new(format!(
+                                    "{:>+5.1}°",
+                                    self.telemetry.azimuth_deg
+                                ))
+                                .size(11.0)
+                                .strong()
+                                .monospace()
+                                .color(Theme::ACCENT_CYAN),
                             );
 
                             ui.add_space(8.0);
-                            ui.label(egui::RichText::new("INTENSITY:").size(9.5).color(Theme::TEXT_MUTED));
+                            ui.label(
+                                egui::RichText::new("INTENSITY:")
+                                    .size(9.5)
+                                    .color(Theme::TEXT_MUTED),
+                            );
                             ui.label(
                                 egui::RichText::new(format!("{:.3}", self.telemetry.intensity_mag))
                                     .size(11.0)
@@ -169,7 +191,11 @@ impl AmbisonicsScopeWidget {
                         ui.add_space(2.0);
 
                         ui.horizontal(|ui| {
-                            ui.label(egui::RichText::new("DIFFUSENESS \u{03c8}:").size(9.5).color(Theme::TEXT_MUTED));
+                            ui.label(
+                                egui::RichText::new("DIFFUSENESS \u{03c8}:")
+                                    .size(9.5)
+                                    .color(Theme::TEXT_MUTED),
+                            );
                             let diff = self.telemetry.diffuseness;
                             let diff_col = if diff < 0.35 {
                                 Theme::ACCENT_CYAN
@@ -187,12 +213,19 @@ impl AmbisonicsScopeWidget {
                             );
 
                             ui.add_space(8.0);
-                            ui.label(egui::RichText::new("ENERGY DENS:").size(9.5).color(Theme::TEXT_MUTED));
                             ui.label(
-                                egui::RichText::new(format!("{:.3}", self.telemetry.energy_density))
-                                    .size(11.0)
-                                    .monospace()
-                                    .color(Theme::TEXT_PRIMARY),
+                                egui::RichText::new("ENERGY DENS:")
+                                    .size(9.5)
+                                    .color(Theme::TEXT_MUTED),
+                            );
+                            ui.label(
+                                egui::RichText::new(format!(
+                                    "{:.3}",
+                                    self.telemetry.energy_density
+                                ))
+                                .size(11.0)
+                                .monospace()
+                                .color(Theme::TEXT_PRIMARY),
                             );
                         });
 
@@ -201,9 +234,16 @@ impl AmbisonicsScopeWidget {
                         // Mini progress bar for diffuseness
                         let bar_width = 140.0_f32;
                         let bar_height = 4.0_f32;
-                        let (bar_rect, _) = ui.allocate_exact_size(Vec2::new(bar_width, bar_height), egui::Sense::hover());
+                        let (bar_rect, _) = ui.allocate_exact_size(
+                            Vec2::new(bar_width, bar_height),
+                            egui::Sense::hover(),
+                        );
                         let bar_painter = ui.painter_at(bar_rect);
-                        bar_painter.rect_filled(bar_rect, Rounding::same(2.0), Color32::from_rgb(26, 32, 44));
+                        bar_painter.rect_filled(
+                            bar_rect,
+                            Rounding::same(2.0),
+                            Color32::from_rgb(26, 32, 44),
+                        );
                         let fill_rect = Rect::from_min_size(
                             bar_rect.min,
                             Vec2::new(bar_width * diff.clamp(0.0, 1.0), bar_height),

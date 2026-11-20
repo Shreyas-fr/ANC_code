@@ -183,12 +183,7 @@ impl TacticalTransparency {
     /// - `out`: Buffer receiving the blended, hearing-protected output.
     ///
     /// Guarantees zero heap allocation and strictly clamps peak outputs <= `safe_peak_limit_dbfs`.
-    pub fn process_block(
-        &mut self,
-        ambient_in: &[f32],
-        enhanced_speech: &[f32],
-        out: &mut [f32],
-    ) {
+    pub fn process_block(&mut self, ambient_in: &[f32], enhanced_speech: &[f32], out: &mut [f32]) {
         let n = ambient_in.len();
         assert_eq!(enhanced_speech.len(), n);
         assert_eq!(out.len(), n);

@@ -11,15 +11,17 @@ use crate::audio::{
 use crate::dsp::SpectrumAnalyzer;
 use crate::network::{SharedStreamStats, UdpAudioReceiver, UdpTelemetryReceiver};
 use crate::ui::{
-    AmbisonicsScopeWidget, AudiogramTestWizard, BlastImpulseWidget, CableDiagnosticWidget, DiagnosticsPanel, DspTimelineWidget, EventFeed, EventSeverity, IntelligibilityBadge,
-    JammingWidget, MetricCard, PhaseScopeWidget, PolarDirectivityWidget, RastiWidget, RfLinkBadge, RollingWaveform, ShockTransientBadge,
-    SpectralKurtosisWidget, SpectrumView, StatusBadge, TacticalBatteryWidget, TacticalEqWidget, TacticalEqualizer,
-    TacticalLufsRadarWidget, TacticalRadarWidget, TacticalStressWidget, Theme, ThreatRadarWidget,
-    VadBeacon, Waterfall3dMesh, WaterfallSpectrogram,
+    AmbisonicsScopeWidget, AudiogramTestWizard, BlastImpulseWidget, CableDiagnosticWidget,
+    DiagnosticsPanel, DspTimelineWidget, EventFeed, EventSeverity, IntelligibilityBadge,
+    JammingWidget, MetricCard, PhaseScopeWidget, PolarDirectivityWidget, RastiWidget, RfLinkBadge,
+    RollingWaveform, ShockTransientBadge, SpectralKurtosisWidget, SpectrumView, StatusBadge,
+    TacticalBatteryWidget, TacticalEqWidget, TacticalEqualizer, TacticalLufsRadarWidget,
+    TacticalRadarWidget, TacticalStressWidget, Theme, ThreatRadarWidget, VadBeacon,
+    Waterfall3dMesh, WaterfallSpectrogram,
 };
 use anc_rust::dsp::ambisonics::AmbisonicsTelemetry;
-use anc_rust::dsp::polar_pattern::PolarPatternTelemetry;
 use anc_rust::dsp::deesser::DeEsserTelemetry;
+use anc_rust::dsp::polar_pattern::PolarPatternTelemetry;
 use anc_rust::metrics::cable::{CableFaultStatus, CableTelemetry};
 use anc_rust::metrics::sti::{StiRating, StiTelemetry, NUM_RASTI_MOD_FREQS};
 use anc_rust::network::jamming::{JammingTelemetry, JammingType};
@@ -104,7 +106,11 @@ impl AncDashboardApp {
             JitterBuffer::new(sample_rate, 48, 250, true).with_governor(true),
         ));
         let tactical_eq = Arc::new(Mutex::new(TacticalEqualizer::new(sample_rate as f32)));
-        let playback = match AudioPlayback::new(Arc::clone(&jitter_buffer), Arc::clone(&tactical_eq), sample_rate) {
+        let playback = match AudioPlayback::new(
+            Arc::clone(&jitter_buffer),
+            Arc::clone(&tactical_eq),
+            sample_rate,
+        ) {
             Ok(p) => Some(p),
             Err(e) => {
                 eprintln!("Warning: Audio output device failed to initialize: {}", e);
@@ -269,7 +275,8 @@ impl AncDashboardApp {
                     };
 
                     // Directional engine rumble + high-frequency noise
-                    let noise = 0.25 * ((self.demo_phase * 1.7).sin() + (self.demo_phase * 8.3).cos());
+                    let noise =
+                        0.25 * ((self.demo_phase * 1.7).sin() + (self.demo_phase * 8.3).cos());
 
                     let s_enh = speech * self.volume;
                     let s_raw = (speech + noise) * self.volume;
@@ -285,14 +292,20 @@ impl AncDashboardApp {
 
                 // If audiogram hearing test wizard tone is playing, inject calibrated pulse
                 if self.audiogram_wizard.is_tone_playing {
-                    self.audiogram_wizard.generate_test_tone(&mut demo_enh, 16000.0);
+                    self.audiogram_wizard
+                        .generate_test_tone(&mut demo_enh, 16000.0);
                 }
 
                 // Simulate realistic physical battery discharge dynamics in demo mode
-                self.battery_widget.telemetry.current_draw_ma = 145.0 + (self.demo_speech_timer * 2.0).sin().abs() * 30.0;
-                self.battery_widget.telemetry.power_draw_mw = self.battery_widget.telemetry.current_draw_ma * self.battery_widget.telemetry.terminal_voltage_v;
-                self.battery_widget.telemetry.soc_pct = (88.5 - (self.demo_speech_timer * 0.01)).max(10.0);
-                self.battery_widget.telemetry.estimated_runtime_hours = (self.battery_widget.telemetry.soc_pct * 0.08).max(0.5);
+                self.battery_widget.telemetry.current_draw_ma =
+                    145.0 + (self.demo_speech_timer * 2.0).sin().abs() * 30.0;
+                self.battery_widget.telemetry.power_draw_mw =
+                    self.battery_widget.telemetry.current_draw_ma
+                        * self.battery_widget.telemetry.terminal_voltage_v;
+                self.battery_widget.telemetry.soc_pct =
+                    (88.5 - (self.demo_speech_timer * 0.01)).max(10.0);
+                self.battery_widget.telemetry.estimated_runtime_hours =
+                    (self.battery_widget.telemetry.soc_pct * 0.08).max(0.5);
 
                 // Simulate occasional acoustic blast wave impulse (e.g. at 2.8s in cycle)
                 if cycle > 2.7 && cycle < 2.75 {
@@ -377,10 +390,15 @@ impl AncDashboardApp {
                 // RASTI demo state
                 self.rasti_widget.update(StiTelemetry {
                     sti_score: if self.is_speech_active { 0.84 } else { 0.42 },
-                    rating: if self.is_speech_active { StiRating::Excellent } else { StiRating::Fair },
+                    rating: if self.is_speech_active {
+                        StiRating::Excellent
+                    } else {
+                        StiRating::Fair
+                    },
                     mean_apparent_snr_db: if self.is_speech_active { 14.5 } else { 2.0 },
                     mean_mtf: if self.is_speech_active { 0.82 } else { 0.45 },
-                    mtf_bands: [if self.is_speech_active { 0.85 } else { 0.45 }; NUM_RASTI_MOD_FREQS],
+                    mtf_bands: [if self.is_speech_active { 0.85 } else { 0.45 };
+                        NUM_RASTI_MOD_FREQS],
                     is_authoritative: true,
                 });
 
@@ -427,26 +445,54 @@ impl AncDashboardApp {
                 };
                 self.timeline_widget.record_hop(&demo_timings);
 
-                let (demo_m, demo_s, demo_i, demo_lra, demo_tp, demo_gr) = if self.is_speech_active {
+                let (demo_m, demo_s, demo_i, demo_lra, demo_tp, demo_gr) = if self.is_speech_active
+                {
                     (-22.4, -23.1, -23.0, 4.5, -2.1, -0.6)
                 } else {
                     (-36.0, -25.2, -23.0, 3.8, -14.0, 0.0)
                 };
-                self.lufs_radar.push_measurements(demo_m, demo_s, demo_i, demo_lra, demo_tp, demo_gr);
+                self.lufs_radar
+                    .push_measurements(demo_m, demo_s, demo_i, demo_lra, demo_tp, demo_gr);
 
-                let (demo_stress, demo_jit, demo_shim, demo_f0, demo_sps, demo_fat) = if self.is_speech_active {
-                    (26.5 + (self.demo_speech_timer * 1.5).sin().abs() * 22.0, 0.82, 3.1, 14.0, 3.8, 14.0)
-                } else {
-                    (12.0, 0.45, 1.8, 0.0, 3.2, 10.0)
-                };
-                self.stress_widget.push_measurements(demo_stress, demo_jit, demo_shim, demo_f0, demo_sps, demo_fat);
-                self.incident_recorder.push_stereo_frame(&demo_raw, &demo_enh, self.tracked_talker_angle, demo_stress);
+                let (demo_stress, demo_jit, demo_shim, demo_f0, demo_sps, demo_fat) =
+                    if self.is_speech_active {
+                        (
+                            26.5 + (self.demo_speech_timer * 1.5).sin().abs() * 22.0,
+                            0.82,
+                            3.1,
+                            14.0,
+                            3.8,
+                            14.0,
+                        )
+                    } else {
+                        (12.0, 0.45, 1.8, 0.0, 3.2, 10.0)
+                    };
+                self.stress_widget.push_measurements(
+                    demo_stress,
+                    demo_jit,
+                    demo_shim,
+                    demo_f0,
+                    demo_sps,
+                    demo_fat,
+                );
+                self.incident_recorder.push_stereo_frame(
+                    &demo_raw,
+                    &demo_enh,
+                    self.tracked_talker_angle,
+                    demo_stress,
+                );
             }
             return;
         }
 
         // Live Network Mode: record edge telemetry stage timings if present
-        if let Some(t) = self.telemetry_receiver.latest_telemetry.lock().unwrap().as_ref() {
+        if let Some(t) = self
+            .telemetry_receiver
+            .latest_telemetry
+            .lock()
+            .unwrap()
+            .as_ref()
+        {
             self.tracked_talker_angle = t.talker_angle_deg;
             self.doa_confidence = t.doa_confidence;
             if t.mean_cdr_db != 0.0 {
@@ -477,7 +523,12 @@ impl AncDashboardApp {
             if n > 0 {
                 let r_slice = &r_samples[r_samples.len() - n..];
                 let e_slice = &e_samples[e_samples.len() - n..];
-                self.incident_recorder.push_stereo_frame(r_slice, e_slice, self.tracked_talker_angle, self.stress_widget.stress_index_pct);
+                self.incident_recorder.push_stereo_frame(
+                    r_slice,
+                    e_slice,
+                    self.tracked_talker_angle,
+                    self.stress_widget.stress_index_pct,
+                );
             }
         }
 
@@ -555,7 +606,9 @@ impl AncDashboardApp {
             // Detect speech activity from live enhanced energy
             if let Ok(ew) = self.enhanced_waveform.lock() {
                 let samples = ew.samples_vec();
-                let rms = (samples.iter().map(|s| s * s).sum::<f32>() / samples.len().max(1) as f32).sqrt();
+                let rms = (samples.iter().map(|s| s * s).sum::<f32>()
+                    / samples.len().max(1) as f32)
+                    .sqrt();
                 self.is_speech_active = rms > 0.02;
                 self.speech_presence_prob = (rms / 0.08).clamp(0.0, 1.0);
             }
@@ -566,22 +619,29 @@ impl AncDashboardApp {
                     self.doa_confidence = t.doa_confidence;
 
                     if t.battery_soc_pct > 0.0 {
-                        self.battery_widget.update(anc_rust::streaming::BatteryTelemetry {
-                            soc_pct: t.battery_soc_pct,
-                            terminal_voltage_v: t.battery_voltage_v,
-                            current_draw_ma: if t.battery_voltage_v > 0.1 { t.battery_power_mw / t.battery_voltage_v } else { 150.0 },
-                            power_draw_mw: t.battery_power_mw,
-                            cell_temp_c: t.temperature_c,
-                            estimated_runtime_hours: t.battery_runtime_hours,
-                            internal_resistance_mohm: 58.0,
-                            battery_health_pct: 98.0,
-                            power_mode: self.battery_widget.telemetry.power_mode,
-                        });
+                        self.battery_widget
+                            .update(anc_rust::streaming::BatteryTelemetry {
+                                soc_pct: t.battery_soc_pct,
+                                terminal_voltage_v: t.battery_voltage_v,
+                                current_draw_ma: if t.battery_voltage_v > 0.1 {
+                                    t.battery_power_mw / t.battery_voltage_v
+                                } else {
+                                    150.0
+                                },
+                                power_draw_mw: t.battery_power_mw,
+                                cell_temp_c: t.temperature_c,
+                                estimated_runtime_hours: t.battery_runtime_hours,
+                                internal_resistance_mohm: 58.0,
+                                battery_health_pct: 98.0,
+                                power_mode: self.battery_widget.telemetry.power_mode,
+                            });
                     }
 
                     if t.blast_overpressure_pa > 0.0 {
                         self.blast_widget.update(anc_rust::metrics::BlastTelemetry {
-                            peak_spl_db: 20.0 * (t.blast_overpressure_pa / anc_rust::metrics::P_REF_PASCALS).log10(),
+                            peak_spl_db: 20.0
+                                * (t.blast_overpressure_pa / anc_rust::metrics::P_REF_PASCALS)
+                                    .log10(),
                             peak_overpressure_pa: t.blast_overpressure_pa,
                             peak_overpressure_psi: t.blast_overpressure_psi,
                             current_a_duration_ms: 1.2,
@@ -596,7 +656,9 @@ impl AncDashboardApp {
                             },
                             last_blast_event: anc_rust::metrics::BlastEvent {
                                 frame_index: t.frame,
-                                peak_spl_db: 20.0 * (t.blast_overpressure_pa / anc_rust::metrics::P_REF_PASCALS).log10(),
+                                peak_spl_db: 20.0
+                                    * (t.blast_overpressure_pa / anc_rust::metrics::P_REF_PASCALS)
+                                        .log10(),
                                 peak_overpressure_pa: t.blast_overpressure_pa,
                                 peak_overpressure_psi: t.blast_overpressure_psi,
                                 a_duration_ms: 1.2,
@@ -696,7 +758,8 @@ impl eframe::App for AncDashboardApp {
                 } else {
                     None
                 };
-                self.phase_scope.push_samples(&raw_s[start_r..], &enh_s[start_e..], wti_opt);
+                self.phase_scope
+                    .push_samples(&raw_s[start_r..], &enh_s[start_e..], wti_opt);
             }
         }
 

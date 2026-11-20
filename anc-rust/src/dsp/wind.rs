@@ -330,9 +330,13 @@ mod tests {
         let mut seed: u64 = 0x12345678;
         for _ in 0..80 {
             for k in 1..=8 {
-                seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+                seed = seed
+                    .wrapping_mul(6364136223846793005)
+                    .wrapping_add(1442695040888963407);
                 let phase1 = (seed as f32 / u64::MAX as f32) * 2.0 * PI;
-                seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+                seed = seed
+                    .wrapping_mul(6364136223846793005)
+                    .wrapping_add(1442695040888963407);
                 let phase2 = (seed as f32 / u64::MAX as f32) * 2.0 * PI;
 
                 spec1[k] = Complex32::from_polar(0.5, phase1);
@@ -341,7 +345,11 @@ mod tests {
             wind.process_frame(&mut spec1, &spec2, None);
         }
 
-        assert!(wind.current_wti() > 0.85, "Expected high WTI for uncorrelated turbulence, got {:.3}", wind.current_wti());
+        assert!(
+            wind.current_wti() > 0.85,
+            "Expected high WTI for uncorrelated turbulence, got {:.3}",
+            wind.current_wti()
+        );
         assert!(wind.is_wind_detected());
     }
 
@@ -364,7 +372,11 @@ mod tests {
             assert!(!telem.wind_detected);
         }
 
-        assert!(wind.current_wti() < 0.15, "Expected near-zero WTI for coherent sound, got {:.3}", wind.current_wti());
+        assert!(
+            wind.current_wti() < 0.15,
+            "Expected near-zero WTI for coherent sound, got {:.3}",
+            wind.current_wti()
+        );
         assert!(!wind.is_wind_detected());
         assert!(wind.suppression_db() >= -0.5);
     }
@@ -408,8 +420,16 @@ mod tests {
         }
 
         // Bin 4 (F0 = 125 Hz) should be protected (gain ~ 1.0, preserving speech harmonic)
-        assert!(spec1[4].norm() > 0.45, "F0 harmonic at 125 Hz should be protected, got {:.3}", spec1[4].norm());
+        assert!(
+            spec1[4].norm() > 0.45,
+            "F0 harmonic at 125 Hz should be protected, got {:.3}",
+            spec1[4].norm()
+        );
         // Bin 2 (62.5 Hz, non-harmonic turbulence) should be notched
-        assert!(spec1[2].norm() < 0.25, "Uncorrelated non-harmonic bin should be attenuated, got {:.3}", spec1[2].norm());
+        assert!(
+            spec1[2].norm() < 0.25,
+            "Uncorrelated non-harmonic bin should be attenuated, got {:.3}",
+            spec1[2].norm()
+        );
     }
 }

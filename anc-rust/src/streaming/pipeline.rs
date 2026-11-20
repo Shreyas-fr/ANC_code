@@ -6,35 +6,38 @@
 //! -> Complex Spectral Masking -> CRN-INT8 Postfilter -> ISTFT -> Causal AGC
 //! -> Soft Limiter -> Tactical Transparency -> Transaural XTC
 
-use std::time::Instant;
 use num_complex::Complex32;
+use std::time::Instant;
 
 use crate::dsp::{
-    AcousticPhaseAligner, AfcConfig, AfcStats, AmbisonicsConfig, AmbisonicsSpatializer, AmbisonicsTelemetry,
-    AntiHowlingShifter, AshpConfig, AshpLimiter, AshpTelemetry, BoneFusionConfig,
-    BoneFusionTelemetry, CausalAgc, CausalDereverberator, CausalMvdrBeamformer, CdrConfig, CdrEstimator, DeEsser,
-    DeEsserConfig, DeEsserTelemetry, DereverbConfig, DitherEngine, DitherMode, DoaConfig, GccPhatDoaTracker, GscConfig,
-    GscStats, HowlingConfig, HowlingTelemetry, IntelligibilityConfig, IntelligibilityEnhancer, InverseLombardCompensator,
+    AcousticPhaseAligner, AfcConfig, AfcStats, AmbisonicsConfig, AmbisonicsSpatializer,
+    AmbisonicsTelemetry, AntiHowlingShifter, AshpConfig, AshpLimiter, AshpTelemetry,
+    BoneFusionConfig, BoneFusionTelemetry, CausalAgc, CausalDereverberator, CausalMvdrBeamformer,
+    CdrConfig, CdrEstimator, DeEsser, DeEsserConfig, DeEsserTelemetry, DereverbConfig,
+    DitherEngine, DitherMode, DoaConfig, GccPhatDoaTracker, GscConfig, GscStats, HowlingConfig,
+    HowlingTelemetry, IntelligibilityConfig, IntelligibilityEnhancer, InverseLombardCompensator,
     KurtosisConfig, KurtosisTelemetry, LombardConfig, LombardTelemetry, LufsConfig, LufsGovernor,
-    LufsTelemetry, MvdrConfig, NalNl2WdrcEngine, OnlineSensorCalibrator, PersonalAudiogram, PhaseAlignConfig,
-    PhaseAlignmentProfile, PitchHarmonicCombEngine, PolarPatternConfig, PolarPatternShaper, PolarPatternTelemetry,
-    PolarPatternType, ResPostfilterConfig, ResPostfilterStats, SensorCalConfig, SensorCalTelemetry, SoftLimiter,
-    SpectralContrastConfig, SpectralContrastEnhancer, SpectralContrastTelemetry,
-    SpectralKurtosisDetector, StreamingStft, SubbandAfc, SubbandBoneFusionEngine, SubbandGsc, SubbandResPostfilter,
-    TacticalTransparency, ThermalNoiseConfig, ThermalNoiseEstimator, ThermalNoiseTelemetry, TransauralXtc, TransientBlanker,
-    TransientConfig, TransparencyConfig, WhisperConfig, WhisperReconstructor, WhisperStats,
-    WindDetectorConfig, WindTelemetry, WindTurbulenceSuppressor, WindowType, XtcConfig,
+    LufsTelemetry, MvdrConfig, NalNl2WdrcEngine, OnlineSensorCalibrator, PersonalAudiogram,
+    PhaseAlignConfig, PhaseAlignmentProfile, PitchHarmonicCombEngine, PolarPatternConfig,
+    PolarPatternShaper, PolarPatternTelemetry, PolarPatternType, ResPostfilterConfig,
+    ResPostfilterStats, SensorCalConfig, SensorCalTelemetry, SoftLimiter, SpectralContrastConfig,
+    SpectralContrastEnhancer, SpectralContrastTelemetry, SpectralKurtosisDetector, StreamingStft,
+    SubbandAfc, SubbandBoneFusionEngine, SubbandGsc, SubbandResPostfilter, TacticalTransparency,
+    ThermalNoiseConfig, ThermalNoiseEstimator, ThermalNoiseTelemetry, TransauralXtc,
+    TransientBlanker, TransientConfig, TransparencyConfig, WhisperConfig, WhisperReconstructor,
+    WhisperStats, WindDetectorConfig, WindTelemetry, WindTurbulenceSuppressor, WindowType,
+    XtcConfig,
 };
 use crate::metrics::{
-    AdaptiveConvergenceProfiler, BlastImpulseMeter, BlastMeterConfig, BlastTelemetry,
-    CableConfig, CableDiagnostics, CableTelemetry, RastiPredictor, StiConfig, StiTelemetry,
-    StressProfiler, StressProfilerConfig, StressTelemetry,
+    AdaptiveConvergenceProfiler, BlastImpulseMeter, BlastMeterConfig, BlastTelemetry, CableConfig,
+    CableDiagnostics, CableTelemetry, RastiPredictor, StiConfig, StiTelemetry, StressProfiler,
+    StressProfilerConfig, StressTelemetry,
 };
 use crate::model::{CrnInt8Postfilter, EnhancerStats, SpeechEnhancer};
-use crate::network::{
-    DspStageTimings, JammingDetector, JammingDetectorConfig, JammingTelemetry,
+use crate::network::{DspStageTimings, JammingDetector, JammingDetectorConfig, JammingTelemetry};
+use crate::streaming::battery::{
+    BatteryConfig, BatterySimulator, BatteryTelemetry, TacticalPowerMode,
 };
-use crate::streaming::battery::{BatteryConfig, BatterySimulator, BatteryTelemetry, TacticalPowerMode};
 use crate::streaming::blackbox::TacticalBlackbox;
 use crate::streaming::governor::{GovernorConfig, GovernorTelemetry, PowerGovernor};
 
@@ -73,10 +76,10 @@ impl MissionProfile {
 
     pub fn min_gain_db(&self) -> f32 {
         match self {
-            Self::CombatVehicle => -22.0, // 0.08
-            Self::FlightCockpit => -20.0, // 0.10
+            Self::CombatVehicle => -22.0,      // 0.08
+            Self::FlightCockpit => -20.0,      // 0.10
             Self::DismountedInfantry => -16.0, // 0.16 (preserves quiet environmental awareness)
-            Self::CommandPost => -18.0, // 0.125
+            Self::CommandPost => -18.0,        // 0.125
         }
     }
 
@@ -222,10 +225,10 @@ impl MissionProfile {
 
     pub fn target_lufs(&self) -> f32 {
         match self {
-            Self::CombatVehicle => -20.0, // High-noise cabin intercom target
-            Self::FlightCockpit => -21.0, // Tactical avionics radio target
+            Self::CombatVehicle => -20.0,      // High-noise cabin intercom target
+            Self::FlightCockpit => -21.0,      // Tactical avionics radio target
             Self::DismountedInfantry => -23.0, // Standard tactical patrol target
-            Self::CommandPost => -23.0, // Standard EBU R128 command room target
+            Self::CommandPost => -23.0,        // Standard EBU R128 command room target
         }
     }
 
@@ -239,7 +242,7 @@ impl MissionProfile {
     pub fn enable_diffraction(&self) -> bool {
         match self {
             Self::CommandPost => false, // Stationary console
-            _ => true, // Cranial helmet / visor obstacle diffraction active
+            _ => true,                  // Cranial helmet / visor obstacle diffraction active
         }
     }
 
@@ -640,7 +643,8 @@ impl TacticalAncPipeline {
         ashp_limiter.set_enabled(config.enable_ashp);
 
         let mut gov_cfg = config.governor_config.clone();
-        gov_cfg.hop_budget_us = ((hop_size as f32 / config.sample_rate) * 1_000_000.0).round() as u32;
+        gov_cfg.hop_budget_us =
+            ((hop_size as f32 / config.sample_rate) * 1_000_000.0).round() as u32;
         let governor = PowerGovernor::new(gov_cfg);
 
         let mut wind_cfg = config.wind_config.clone();
@@ -691,7 +695,8 @@ impl TacticalAncPipeline {
         stress_cfg.sample_rate = config.sample_rate;
         let stress_profiler = StressProfiler::new(stress_cfg);
 
-        let mut audiogram_wdrc = NalNl2WdrcEngine::new(config.sample_rate, config.audiogram_profile);
+        let mut audiogram_wdrc =
+            NalNl2WdrcEngine::new(config.sample_rate, config.audiogram_profile);
         audiogram_wdrc.is_enabled = config.enable_audiogram_wdrc;
 
         let mut bone_cfg = config.bone_fusion_config.clone();
@@ -917,13 +922,17 @@ impl TacticalAncPipeline {
         self.config.enable_phase_align = profile.enable_phase_align();
         self.config.enable_kurtosis = profile.enable_kurtosis();
         self.phase_aligner.set_enabled(profile.enable_phase_align());
-        self.phase_aligner.apply_profile(profile.phase_align_profile());
+        self.phase_aligner
+            .apply_profile(profile.phase_align_profile());
         self.transparency.set_enabled(profile.enable_transparency());
-        self.beamformer.set_spatial_postfilter_floor(profile.spatial_postfilter_floor());
+        self.beamformer
+            .set_spatial_postfilter_floor(profile.spatial_postfilter_floor());
         self.xtc.set_enabled(profile.enable_xtc());
-        self.intelligibility.set_enabled(profile.enable_intelligibility());
+        self.intelligibility
+            .set_enabled(profile.enable_intelligibility());
         self.pitch_comb.set_enabled(profile.enable_pitch_comb());
-        self.whisper_reconstructor.set_enabled(profile.enable_whisper());
+        self.whisper_reconstructor
+            .set_enabled(profile.enable_whisper());
         self.gsc.set_enabled(profile.enable_gsc());
         self.ashp_limiter.set_enabled(profile.enable_ashp());
         self.config.enable_sensor_cal = profile.enable_sensor_cal();
@@ -931,8 +940,10 @@ impl TacticalAncPipeline {
         self.config.enable_lufs_governor = profile.enable_lufs_governor();
         self.lufs_governor.set_target_lufs(profile.target_lufs());
         self.config.enable_lombard = profile.enable_lombard();
-        self.lombard_compensator.set_enabled(profile.enable_lombard());
-        self.beamformer.set_diffraction_correction(profile.enable_diffraction());
+        self.lombard_compensator
+            .set_enabled(profile.enable_lombard());
+        self.beamformer
+            .set_diffraction_correction(profile.enable_diffraction());
         self.config.enable_howling = profile.enable_howling();
         self.howling_shifter.set_enabled(profile.enable_howling());
         self.config.enable_stress = profile.enable_stress();
@@ -1072,7 +1083,9 @@ impl TacticalAncPipeline {
 
         // 1.1. Higher-Order Spectral Kurtosis Non-Gaussian Shock Transient Detection
         if self.config.enable_kurtosis {
-            let k_telem = self.kurtosis_detector.process_frame(&self.spec_mic1, Some(mic1_in));
+            let k_telem = self
+                .kurtosis_detector
+                .process_frame(&self.spec_mic1, Some(mic1_in));
             if k_telem.is_shock_transient {
                 for s in self.spec_mic1.iter_mut() {
                     *s *= k_telem.suggested_attenuation;
@@ -1082,10 +1095,15 @@ impl TacticalAncPipeline {
 
         // 1.2. Subband Acoustic Feedback Cancellation (AFC)
         if self.config.enable_afc && ref_speaker_in.is_some() {
-            let spp_mean = self.beamformer.spp.iter().copied().sum::<f32>() / self.beamformer.spp.len().max(1) as f32;
+            let spp_mean = self.beamformer.spp.iter().copied().sum::<f32>()
+                / self.beamformer.spp.len().max(1) as f32;
             self.afc_stats = self.afc.process_frame(
                 &mut self.spec_mic1,
-                if has_mic2 { Some(&mut self.spec_mic2) } else { None },
+                if has_mic2 {
+                    Some(&mut self.spec_mic2)
+                } else {
+                    None
+                },
                 &self.spec_ref,
                 spp_mean,
             );
@@ -1105,19 +1123,18 @@ impl TacticalAncPipeline {
 
         // 1.25. Online Inter-Sensor Acoustic Calibration & Clogged Microphone Auto-Equalizer
         if self.config.enable_sensor_cal && has_mic2 {
-            let spp_mean = self.beamformer.spp.iter().copied().sum::<f32>() / self.beamformer.spp.len().max(1) as f32;
+            let spp_mean = self.beamformer.spp.iter().copied().sum::<f32>()
+                / self.beamformer.spp.len().max(1) as f32;
             let wti = self.wind_suppressor.current_wti();
-            self.last_sensor_cal_telem = self.sensor_cal.process_frame(
-                &self.spec_mic1,
-                &mut self.spec_mic2,
-                spp_mean,
-                wti,
-            );
+            self.last_sensor_cal_telem =
+                self.sensor_cal
+                    .process_frame(&self.spec_mic1, &mut self.spec_mic2, spp_mean, wti);
         }
 
         // 1.3. Multi-Microphone Coherence-to-Diffuse Ratio (CDR) & Diffuse Field Decomposition
         if self.config.enable_cdr && has_mic2 {
-            self.cdr_estimator.process_frame(&self.spec_mic1, &self.spec_mic2);
+            self.cdr_estimator
+                .process_frame(&self.spec_mic1, &self.spec_mic2);
             let min_gain = 10.0f32.powf(self.active_profile.min_gain_db() / 20.0);
             self.cdr_estimator.diffuse_suppression_factors(
                 &mut self.cdr_alpha_scratch,
@@ -1131,7 +1148,8 @@ impl TacticalAncPipeline {
             let mean_diff = self.cdr_estimator.mean_diffuse_ratio();
             let base_floor = self.active_profile.spatial_postfilter_floor();
             let modulated_floor = (base_floor * (1.0 - 0.20 * mean_diff)).clamp(0.15, 0.50);
-            self.beamformer.set_spatial_postfilter_floor(modulated_floor);
+            self.beamformer
+                .set_spatial_postfilter_floor(modulated_floor);
         }
 
         // 1.4. Dynamic Wind Noise Acoustic Turbulence Detector & Aero-Acoustic De-Rumbling Filter
@@ -1141,18 +1159,23 @@ impl TacticalAncPipeline {
             } else {
                 None
             };
-            self.wind_suppressor.process_frame(&mut self.spec_mic1, &self.spec_mic2, f0_opt);
+            self.wind_suppressor
+                .process_frame(&mut self.spec_mic1, &self.spec_mic2, f0_opt);
         }
 
         // 1.5. Online Direction of Arrival (DOA) Tracking via GCC-PHAT + 2-State Kalman Filter
         if self.config.enable_doa_tracking && has_mic2 {
-            let pwr_mic1 = self.spec_mic1.iter().map(|c| c.norm_sqr()).sum::<f32>() / self.spec_mic1.len().max(1) as f32;
+            let pwr_mic1 = self.spec_mic1.iter().map(|c| c.norm_sqr()).sum::<f32>()
+                / self.spec_mic1.len().max(1) as f32;
             let spp_mean = if pwr_mic1 > 1e-4 {
                 0.85
             } else {
-                self.beamformer.spp.iter().copied().sum::<f32>() / self.beamformer.spp.len().max(1) as f32
+                self.beamformer.spp.iter().copied().sum::<f32>()
+                    / self.beamformer.spp.len().max(1) as f32
             };
-            let tracked_angle = self.doa_tracker.process_frame(&self.spec_mic1, &self.spec_mic2, spp_mean);
+            let tracked_angle =
+                self.doa_tracker
+                    .process_frame(&self.spec_mic1, &self.spec_mic2, spp_mean);
             self.beamformer.set_steering_angle(tracked_angle);
             self.cdr_estimator.set_target_angle(tracked_angle);
         }
@@ -1161,16 +1184,23 @@ impl TacticalAncPipeline {
         // Decouples room reflections across both channels before MVDR covariance estimation
         if self.config.enable_dereverb {
             if has_mic2 {
-                self.dereverb.process_dual_frame(&mut self.spec_mic1, &mut self.spec_mic2, &self.spp_scratch);
+                self.dereverb.process_dual_frame(
+                    &mut self.spec_mic1,
+                    &mut self.spec_mic2,
+                    &self.spp_scratch,
+                );
             } else {
-                self.dereverb.process_frame(&mut self.spec_mic1, &self.spp_scratch);
+                self.dereverb
+                    .process_frame(&mut self.spec_mic1, &self.spp_scratch);
             }
         }
         let t_dereverb = Instant::now();
 
         // 1.95 Subband Thermal Johnson-Nyquist Preamplifier Noise Estimator
         if self.config.enable_thermal_estimator {
-            let bound = self.thermal_estimator.bound_mvdr_diagonal_loading(self.config.mvdr_config.diag_loading_eps);
+            let bound = self
+                .thermal_estimator
+                .bound_mvdr_diagonal_loading(self.config.mvdr_config.diag_loading_eps);
             self.beamformer.set_diagonal_loading_eps(bound);
             self.last_thermal_telem = self.thermal_estimator.telemetry();
         }
@@ -1178,9 +1208,14 @@ impl TacticalAncPipeline {
         // 2. Spatial Beamforming (MVDR or Griffith-Jim Subband GSC)
         if has_mic2 {
             if self.config.enable_gsc {
-                self.gsc.process_frame(&mut self.spec_mic1, &self.spec_mic2, Some(&self.beamformer.spp));
+                self.gsc.process_frame(
+                    &mut self.spec_mic1,
+                    &self.spec_mic2,
+                    Some(&self.beamformer.spp),
+                );
             } else {
-                self.beamformer.process_frame(&mut self.spec_mic1, &self.spec_mic2);
+                self.beamformer
+                    .process_frame(&mut self.spec_mic1, &self.spec_mic2);
             }
         }
         let t_beam = Instant::now();
@@ -1200,7 +1235,11 @@ impl TacticalAncPipeline {
 
         // 3.6. Adaptive Battlefield Whisper Formant Reconstructor
         if self.config.enable_whisper {
-            self.whisper_reconstructor.process_frame(&mut self.spec_mic1, mic1_slice, self.config.hop_size);
+            self.whisper_reconstructor.process_frame(
+                &mut self.spec_mic1,
+                mic1_slice,
+                self.config.hop_size,
+            );
         }
 
         // 3.8. Dynamic Psychoacoustic Inverse-Lombard Vocal Fatigue & Strain Compensator
@@ -1215,11 +1254,9 @@ impl TacticalAncPipeline {
             } else {
                 None
             };
-            self.last_lombard_telem = self.lombard_compensator.process_frame(
-                &mut self.spec_mic1,
-                f0_opt,
-                spp_opt,
-            );
+            self.last_lombard_telem =
+                self.lombard_compensator
+                    .process_frame(&mut self.spec_mic1, f0_opt, spp_opt);
         }
 
         // 3.99. Dynamic Psychoacoustic Spectral Contrast & Formant Masking Unveiler
@@ -1229,7 +1266,9 @@ impl TacticalAncPipeline {
             } else {
                 None
             };
-            self.last_contrast_telem = self.contrast_enhancer.process_frame(&mut self.spec_mic1, spp_opt);
+            self.last_contrast_telem = self
+                .contrast_enhancer
+                .process_frame(&mut self.spec_mic1, spp_opt);
         }
         let t_spectral = Instant::now();
 
@@ -1249,7 +1288,8 @@ impl TacticalAncPipeline {
         // 7. Tactical Situational Awareness / Transparency Mode
         if self.config.enable_transparency {
             self.out_scratch.copy_from_slice(out);
-            self.transparency.process_block(mic1_in, &self.out_scratch, out);
+            self.transparency
+                .process_block(mic1_in, &self.out_scratch, out);
         }
 
         // 7.5. DC Rejection (20 Hz Biquad) & Soft-Knee Saturation
@@ -1291,7 +1331,8 @@ impl TacticalAncPipeline {
         // 7.98. Subband Bone-Conduction & Air-Conduction Dual-Sensor Fusion
         if self.config.enable_bone_fusion && has_mic2 {
             self.out_scratch.copy_from_slice(out);
-            self.bone_fusion.fuse_frame(mic2_in.unwrap(), &self.out_scratch, out);
+            self.bone_fusion
+                .fuse_frame(mic2_in.unwrap(), &self.out_scratch, out);
         }
 
         // 7.99. Dynamic Psychoacoustic Split-Band De-Esser & Anti-Sibilance Engine
@@ -1302,13 +1343,10 @@ impl TacticalAncPipeline {
 
         // 7.995. First-Order 2D/3D B-Format Ambisonics Tactical Spatializer
         if self.config.enable_ambisonics && has_mic2 {
-            let (ix, iy, iz, e) = AmbisonicsSpatializer::compute_frame_intensity(
-                mic1_in,
-                mic2_in.unwrap(),
-                out,
-                out,
-            );
-            self.ambisonics_spatializer.update_smoothed_intensity(ix, iy, iz, e);
+            let (ix, iy, iz, e) =
+                AmbisonicsSpatializer::compute_frame_intensity(mic1_in, mic2_in.unwrap(), out, out);
+            self.ambisonics_spatializer
+                .update_smoothed_intensity(ix, iy, iz, e);
             self.last_ambisonics_telem = self.ambisonics_spatializer.telemetry();
         }
 
@@ -1325,7 +1363,11 @@ impl TacticalAncPipeline {
             beamformer_us: t_beam.duration_since(t_dereverb).as_micros() as u32,
             dereverb_us: t_dereverb.duration_since(t_afc).as_micros() as u32,
             spectral_us: t_spectral.duration_since(t_beam).as_micros() as u32,
-            intelligibility_us: if self.config.enable_intelligibility { 6 } else { 0 },
+            intelligibility_us: if self.config.enable_intelligibility {
+                6
+            } else {
+                0
+            },
             synthesis_us: t_synth.duration_since(t_spectral).as_micros() as u32,
             total_us: t_synth.duration_since(t_start).as_micros() as u32,
         };
@@ -1337,7 +1379,8 @@ impl TacticalAncPipeline {
 
         // 8. Tactical Mission Blackbox Rolling Forensic Recording (Zero Allocation)
         if self.config.enable_blackbox {
-            let in_rms = (mic1_in.iter().map(|s| s * s).sum::<f32>() / mic1_in.len().max(1) as f32).sqrt();
+            let in_rms =
+                (mic1_in.iter().map(|s| s * s).sum::<f32>() / mic1_in.len().max(1) as f32).sqrt();
             let out_rms = (out.iter().map(|s| s * s).sum::<f32>() / out.len().max(1) as f32).sqrt();
             let angle = self.doa_tracker.tracked_angle_deg();
             let doa_conf = self.doa_tracker.confidence();
@@ -1363,13 +1406,21 @@ impl TacticalAncPipeline {
         }
 
         // 8.5. Adaptive Filter Convergence Profiler tracking
-        self.convergence_profiler.mvdr.update(self.beamformer.condition_number_at_bin(10));
-        self.convergence_profiler.afc.update(self.afc_stats.erle_mic1_db);
+        self.convergence_profiler
+            .mvdr
+            .update(self.beamformer.condition_number_at_bin(10));
+        self.convergence_profiler
+            .afc
+            .update(self.afc_stats.erle_mic1_db);
         if self.config.enable_gsc {
-            self.convergence_profiler.gsc.update(self.gsc.stats().cancellation_db);
+            self.convergence_profiler
+                .gsc
+                .update(self.gsc.stats().cancellation_db);
         }
         if self.config.enable_doa_tracking {
-            self.convergence_profiler.kalman.update(self.doa_tracker.kalman_variance());
+            self.convergence_profiler
+                .kalman
+                .update(self.doa_tracker.kalman_variance());
         }
 
         // 8.6. Acoustic Vocal Fatigue & Soldier Cognitive Stress Index Profiler

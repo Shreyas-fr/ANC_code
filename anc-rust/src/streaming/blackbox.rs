@@ -291,18 +291,7 @@ mod tests {
 
         // Push 1500 frames (exceeding 1024 capacity)
         for i in 0..1500 {
-            bb.record_hop(
-                i,
-                0.05,
-                0.02,
-                15.0,
-                0.90,
-                8.5,
-                0.88,
-                75,
-                false,
-                false,
-            );
+            bb.record_hop(i, 0.05, 0.02, 15.0, 0.90, 8.5, 0.88, 75, false, false);
         }
 
         assert_eq!(bb.total_frames(), 1500);

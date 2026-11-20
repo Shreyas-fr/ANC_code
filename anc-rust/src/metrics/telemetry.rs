@@ -1,7 +1,7 @@
 //! Real-time telemetry profiler and system hardware monitor.
 
-use std::fs;
 use std::collections::VecDeque;
+use std::fs;
 
 /// Rolling latency and performance profiler.
 pub struct PerformanceProfiler {

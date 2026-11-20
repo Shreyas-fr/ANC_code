@@ -5,8 +5,8 @@
 //! Provides a seamless bridge between sliding-window XOR Parity FEC reconstruction
 //! and soundcard JitterBuffer playout with Packet Loss Concealment (PLC) fallback.
 
-use anc_rust::network::{AudioPacket, FecDecoder, FecStats, AUDIO_FRAME_SAMPLES};
 use super::jitter_buffer::JitterBuffer;
+use anc_rust::network::{AudioPacket, FecDecoder, FecStats, AUDIO_FRAME_SAMPLES};
 
 /// Tactical FEC bridge coupling sliding-window XOR decoding with JitterBuffer.
 pub struct FecJitterBridge {

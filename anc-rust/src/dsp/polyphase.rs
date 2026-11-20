@@ -18,14 +18,12 @@ pub const TOTAL_FIR_TAPS: usize = POLYPHASE_BRANCHES * TAPS_PER_BRANCH;
 /// Precomputed 48-tap minimum-phase low-pass FIR filter coefficients (Cutoff: 7.2 kHz @ 48 kHz Fs, Stopband: >45 dB).
 /// Designed via cepstral homomorphic spectral factorization. Energy is concentrated in the earliest taps (group delay ~0.15 ms).
 pub static MIN_PHASE_FIR_48: [f32; TOTAL_FIR_TAPS] = [
-    0.000081,  0.000736,  0.003579,  0.012152,  0.031935,  0.068306,
-    0.122074,  0.184344,  0.234765,  0.247171,  0.202836,  0.105187,
-   -0.014409, -0.107502, -0.133595, -0.085343,  0.003837,  0.078045,
-    0.093523,  0.046664, -0.024917, -0.069982, -0.060232, -0.008903,
-    0.042037,  0.055255,  0.025563, -0.019271, -0.043173, -0.030568,
-    0.003801,  0.030079,  0.028811,  0.005094, -0.018823, -0.023854,
-   -0.009042,  0.010400,  0.018016,  0.009753, -0.004792, -0.012626,
-   -0.008672,  0.001494,  0.008290,  0.006857,  0.000154, -0.005135,
+    0.000081, 0.000736, 0.003579, 0.012152, 0.031935, 0.068306, 0.122074, 0.184344, 0.234765,
+    0.247171, 0.202836, 0.105187, -0.014409, -0.107502, -0.133595, -0.085343, 0.003837, 0.078045,
+    0.093523, 0.046664, -0.024917, -0.069982, -0.060232, -0.008903, 0.042037, 0.055255, 0.025563,
+    -0.019271, -0.043173, -0.030568, 0.003801, 0.030079, 0.028811, 0.005094, -0.018823, -0.023854,
+    -0.009042, 0.010400, 0.018016, 0.009753, -0.004792, -0.012626, -0.008672, 0.001494, 0.008290,
+    0.006857, 0.000154, -0.005135,
 ];
 
 /// 3:1 Causal Minimum-Phase Polyphase FIR Decimator (48 kHz -> 16 kHz).
@@ -243,8 +241,10 @@ mod tests {
         decimator.process_block(&in_48k, &mut out_16k);
 
         // Check power in steady-state region (discard initial warmup)
-        let pwr_in: f32 = in_48k[300..].iter().map(|s| s * s).sum::<f32>() / (in_48k.len() - 300) as f32;
-        let pwr_out: f32 = out_16k[100..].iter().map(|s| s * s).sum::<f32>() / (out_16k.len() - 100) as f32;
+        let pwr_in: f32 =
+            in_48k[300..].iter().map(|s| s * s).sum::<f32>() / (in_48k.len() - 300) as f32;
+        let pwr_out: f32 =
+            out_16k[100..].iter().map(|s| s * s).sum::<f32>() / (out_16k.len() - 100) as f32;
 
         let gain_db = 10.0 * (pwr_out / pwr_in).log10();
         assert!(
@@ -269,8 +269,10 @@ mod tests {
         let mut out_16k = vec![0.0f32; n_48k / 3];
         decimator.process_block(&in_48k, &mut out_16k);
 
-        let pwr_in: f32 = in_48k[300..].iter().map(|s| s * s).sum::<f32>() / (in_48k.len() - 300) as f32;
-        let pwr_out: f32 = out_16k[100..].iter().map(|s| s * s).sum::<f32>() / (out_16k.len() - 100) as f32;
+        let pwr_in: f32 =
+            in_48k[300..].iter().map(|s| s * s).sum::<f32>() / (in_48k.len() - 300) as f32;
+        let pwr_out: f32 =
+            out_16k[100..].iter().map(|s| s * s).sum::<f32>() / (out_16k.len() - 100) as f32;
 
         let atten_db = 10.0 * (pwr_out / pwr_in).log10();
         // Stopband attenuation must be >= 35 dB for 14 kHz alias
@@ -295,8 +297,10 @@ mod tests {
         let mut out_48k = vec![0.0f32; n_16k * 3];
         interpolator.process_block(&in_16k, &mut out_48k);
 
-        let pwr_in: f32 = in_16k[100..].iter().map(|s| s * s).sum::<f32>() / (in_16k.len() - 100) as f32;
-        let pwr_out: f32 = out_48k[300..].iter().map(|s| s * s).sum::<f32>() / (out_48k.len() - 300) as f32;
+        let pwr_in: f32 =
+            in_16k[100..].iter().map(|s| s * s).sum::<f32>() / (in_16k.len() - 100) as f32;
+        let pwr_out: f32 =
+            out_48k[300..].iter().map(|s| s * s).sum::<f32>() / (out_48k.len() - 300) as f32;
 
         let gain_db = 10.0 * (pwr_out / pwr_in).log10();
         assert!(

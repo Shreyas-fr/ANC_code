@@ -7,9 +7,11 @@
 //! - Cumulative daily impulse blast dose percentage against MIL-STD-1474E limits.
 //! - Incident log of recent concussive events.
 
-use eframe::egui::{self, Pos2, Rect, Stroke, Vec2};
 use crate::ui::theme::Theme;
-pub use anc_rust::metrics::blast::{BlastEvent, BlastHazardStatus, BlastTelemetry, BLAST_HISTORY_CAPACITY};
+pub use anc_rust::metrics::blast::{
+    BlastEvent, BlastHazardStatus, BlastTelemetry, BLAST_HISTORY_CAPACITY,
+};
+use eframe::egui::{self, Pos2, Rect, Stroke, Vec2};
 
 /// Interactive Blast Impulse & Overpressure Widget.
 #[derive(Debug, Clone)]
@@ -37,7 +39,8 @@ impl BlastImpulseWidget {
     /// Updates internal telemetry state and records any new blast event.
     pub fn update(&mut self, telem: BlastTelemetry) {
         if telem.last_blast_event.frame_index > 0
-            && (self.history_count == 0 || self.blast_history[0].frame_index != telem.last_blast_event.frame_index)
+            && (self.history_count == 0
+                || self.blast_history[0].frame_index != telem.last_blast_event.frame_index)
         {
             // Shift history and insert latest at index 0
             for i in (1..BLAST_HISTORY_CAPACITY).rev() {
@@ -59,7 +62,11 @@ impl BlastImpulseWidget {
             .show(ui, |ui| {
                 // Header
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("💣").color(Theme::ACCENT_RED).size(13.0));
+                    ui.label(
+                        egui::RichText::new("💣")
+                            .color(Theme::ACCENT_RED)
+                            .size(13.0),
+                    );
                     ui.label(
                         egui::RichText::new("MIL-STD-1474E BLAST OVERPRESSURE")
                             .strong()
@@ -70,8 +77,12 @@ impl BlastImpulseWidget {
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                         let (status_text, status_col) = match self.telemetry.hazard_status {
                             BlastHazardStatus::Nominal => ("NOMINAL (<50%)", Theme::ACCENT_GREEN),
-                            BlastHazardStatus::Caution => ("CAUTION (50-100%)", Theme::ACCENT_AMBER),
-                            BlastHazardStatus::Hazardous => ("HAZARDOUS (>100%)", Theme::ACCENT_RED),
+                            BlastHazardStatus::Caution => {
+                                ("CAUTION (50-100%)", Theme::ACCENT_AMBER)
+                            }
+                            BlastHazardStatus::Hazardous => {
+                                ("HAZARDOUS (>100%)", Theme::ACCENT_RED)
+                            }
                         };
 
                         ui.label(
@@ -98,13 +109,17 @@ impl BlastImpulseWidget {
                 let text_x = rect.min.x + gauge_w + 12.0;
 
                 // Draw Friedlander shock wave curve preview
-                let shock_rect = Rect::from_min_size(rect.min, Vec2::new(gauge_w, rect.height() - 20.0));
+                let shock_rect =
+                    Rect::from_min_size(rect.min, Vec2::new(gauge_w, rect.height() - 20.0));
                 painter.rect_filled(shock_rect, 4.0, Theme::BG_SURFACE);
                 painter.rect_stroke(shock_rect, 4.0, Stroke::new(1.0_f32, Theme::BORDER_DEFAULT));
 
                 let baseline_y = shock_rect.min.y + shock_rect.height() * 0.65;
                 painter.line_segment(
-                    [Pos2::new(shock_rect.min.x, baseline_y), Pos2::new(shock_rect.max.x, baseline_y)],
+                    [
+                        Pos2::new(shock_rect.min.x, baseline_y),
+                        Pos2::new(shock_rect.max.x, baseline_y),
+                    ],
                     Stroke::new(1.0_f32, Theme::BORDER_SUBTLE),
                 );
 
@@ -125,7 +140,8 @@ impl BlastImpulseWidget {
                     };
 
                     let cur_pt = Pos2::new(t_x, baseline_y - p * peak_px);
-                    painter.line_segment([prev_pt, cur_pt], Stroke::new(1.5_f32, Theme::ACCENT_RED));
+                    painter
+                        .line_segment([prev_pt, cur_pt], Stroke::new(1.5_f32, Theme::ACCENT_RED));
                     prev_pt = cur_pt;
                 }
 
@@ -143,8 +159,7 @@ impl BlastImpulseWidget {
                 // 1. Peak Overpressure in Pa and PSI
                 let pa_str = format!(
                     "PEAK: {:.1} Pa ({:.3} PSI)",
-                    self.telemetry.peak_overpressure_pa,
-                    self.telemetry.peak_overpressure_psi,
+                    self.telemetry.peak_overpressure_pa, self.telemetry.peak_overpressure_psi,
                 );
                 painter.text(
                     Pos2::new(text_x, rect.min.y + 4.0),
@@ -157,8 +172,7 @@ impl BlastImpulseWidget {
                 // 2. Sound Pressure Level & Impulse Count
                 let spl_str = format!(
                     "SPL: {:.1} dB peak  |  IMPULSES: {}",
-                    self.telemetry.peak_spl_db,
-                    self.telemetry.daily_impulse_count,
+                    self.telemetry.peak_spl_db, self.telemetry.daily_impulse_count,
                 );
                 painter.text(
                     Pos2::new(text_x, rect.min.y + 4.0 + line_h),
@@ -172,7 +186,8 @@ impl BlastImpulseWidget {
                 let dose_y = rect.min.y + 4.0 + line_h * 2.0;
                 let bar_w = (rect.max.x - text_x - 8.0).max(60.0);
                 let bar_h = 10.0;
-                let dose_rect = Rect::from_min_size(Pos2::new(text_x, dose_y + 4.0), Vec2::new(bar_w, bar_h));
+                let dose_rect =
+                    Rect::from_min_size(Pos2::new(text_x, dose_y + 4.0), Vec2::new(bar_w, bar_h));
 
                 painter.rect_filled(dose_rect, 2.0, Theme::BG_SURFACE);
                 painter.rect_stroke(dose_rect, 2.0, Stroke::new(1.0_f32, Theme::BORDER_SUBTLE));
@@ -192,7 +207,10 @@ impl BlastImpulseWidget {
                     painter.rect_filled(fill_rect, 2.0, fill_col);
                 }
 
-                let dose_label = format!("DAILY DOSE: {:.1}% OF LIMIT", self.telemetry.cumulative_dose_pct);
+                let dose_label = format!(
+                    "DAILY DOSE: {:.1}% OF LIMIT",
+                    self.telemetry.cumulative_dose_pct
+                );
                 painter.text(
                     Pos2::new(text_x, dose_y + 18.0),
                     egui::Align2::LEFT_TOP,

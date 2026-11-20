@@ -1,8 +1,8 @@
 //! Audio Codec integration for frontend playback and low-bitrate decompression.
 
 pub use anc_rust::network::codec::{
-    AdpcmDecoder, AdpcmEncoder, AdpcmFecCodec, AdpcmPacket,
-    ADPCM_FRAME_SAMPLES, ADPCM_PAYLOAD_BYTES, ADPCM_PACKET_BYTES, ADPCM_FEC_PACKET_BYTES,
+    AdpcmDecoder, AdpcmEncoder, AdpcmFecCodec, AdpcmPacket, ADPCM_FEC_PACKET_BYTES,
+    ADPCM_FRAME_SAMPLES, ADPCM_PACKET_BYTES, ADPCM_PAYLOAD_BYTES,
 };
 
 /// Frontend Audio Decompressor supporting ultra-low-bitrate 64 kbps ADPCM streams.
@@ -27,7 +27,8 @@ impl FrontendAudioCodec {
 
     /// Decodes an incoming ADPCM packet into the pre-allocated sample buffer.
     pub fn decode(&mut self, packet: &AdpcmPacket) -> &[f32; ADPCM_FRAME_SAMPLES] {
-        self.decoder.decode_packet(packet, &mut self.decoded_samples);
+        self.decoder
+            .decode_packet(packet, &mut self.decoded_samples);
         &self.decoded_samples
     }
 }

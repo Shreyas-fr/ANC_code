@@ -90,7 +90,8 @@ impl UdpAudioReceiver {
 
                                 let total = st.packets_received + st.packets_lost;
                                 if total > 0 {
-                                    st.loss_percentage = (st.packets_lost as f32 / total as f32) * 100.0;
+                                    st.loss_percentage =
+                                        (st.packets_lost as f32 / total as f32) * 100.0;
                                 }
                             }
 
@@ -101,7 +102,10 @@ impl UdpAudioReceiver {
                             callback(&packet);
                         }
                     }
-                    Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock || e.kind() == std::io::ErrorKind::TimedOut => {
+                    Err(ref e)
+                        if e.kind() == std::io::ErrorKind::WouldBlock
+                            || e.kind() == std::io::ErrorKind::TimedOut =>
+                    {
                         // Read timeout - loop again
                     }
                     Err(e) => {
@@ -159,7 +163,10 @@ impl UdpTelemetryReceiver {
                     s
                 }
                 Err(e) => {
-                    eprintln!("Failed to bind UDP telemetry socket on port {}: {}", port, e);
+                    eprintln!(
+                        "Failed to bind UDP telemetry socket on port {}: {}",
+                        port, e
+                    );
                     return;
                 }
             };
@@ -181,7 +188,10 @@ impl UdpTelemetryReceiver {
                             }
                         }
                     }
-                    Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock || e.kind() == std::io::ErrorKind::TimedOut => {
+                    Err(ref e)
+                        if e.kind() == std::io::ErrorKind::WouldBlock
+                            || e.kind() == std::io::ErrorKind::TimedOut =>
+                    {
                         // Read timeout
                     }
                     Err(e) => {

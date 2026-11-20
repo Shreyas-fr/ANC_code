@@ -276,7 +276,8 @@ impl DeEsser {
     pub fn update_config(&mut self, config: DeEsserConfig) {
         let fs = config.sample_rate.max(8000.0);
         self.crossover.configure(fs, config.crossover_freq_hz);
-        self.sidechain_bpf.set_bandpass(fs, config.sibilant_center_hz, config.sibilant_q);
+        self.sidechain_bpf
+            .set_bandpass(fs, config.sibilant_center_hz, config.sibilant_q);
 
         let env_tc_ms = 4.0f32;
         self.alpha_env = (-1.0 / (env_tc_ms * 0.001 * fs)).exp();
@@ -335,8 +336,8 @@ impl DeEsser {
             // Adaptive release phase
             let alpha_rel = self.alpha_rel_min * (1.0 - self.sibilance_persisting)
                 + self.alpha_rel_max * self.sibilance_persisting;
-            self.gain_reduction_db = alpha_rel * self.gain_reduction_db
-                + (1.0 - alpha_rel) * target_reduction_db;
+            self.gain_reduction_db =
+                alpha_rel * self.gain_reduction_db + (1.0 - alpha_rel) * target_reduction_db;
         }
 
         // 7. Modulate strictly high sibilance band
@@ -414,8 +415,14 @@ mod tests {
         deesser.process_block(&mut audio);
         let telem = deesser.telemetry();
 
-        assert!(!telem.sibilance_detected, "500 Hz speech fundamental should not trigger sibilance");
-        assert!(telem.gain_reduction_db > -0.5, "Gain reduction should be negligible on 500 Hz tone");
+        assert!(
+            !telem.sibilance_detected,
+            "500 Hz speech fundamental should not trigger sibilance"
+        );
+        assert!(
+            telem.gain_reduction_db > -0.5,
+            "Gain reduction should be negligible on 500 Hz tone"
+        );
     }
 
     #[test]
@@ -442,8 +449,14 @@ mod tests {
         }
 
         let telem = deesser.telemetry();
-        assert!(telem.sibilance_detected, "6500 Hz tone must trigger sibilance detection");
-        assert!(telem.gain_reduction_db < -3.0, "Gain reduction must be applied to harsh 6500 Hz spike");
+        assert!(
+            telem.sibilance_detected,
+            "6500 Hz tone must trigger sibilance detection"
+        );
+        assert!(
+            telem.gain_reduction_db < -3.0,
+            "Gain reduction must be applied to harsh 6500 Hz spike"
+        );
     }
 
     #[test]
@@ -496,6 +509,9 @@ mod tests {
             }
         }
         let gain_db = 10.0 * (sum_power / in_power).log10();
-        assert!(gain_db.abs() < 0.25, "LR4 crossover magnitude should be flat within 0.25 dB");
+        assert!(
+            gain_db.abs() < 0.25,
+            "LR4 crossover magnitude should be flat within 0.25 dB"
+        );
     }
 }

@@ -163,7 +163,8 @@ impl BatterySimulator {
         // Dynamic heat transfer: cell temperature tracks ambient plus self-heating
         let self_heating_c = (self.smoothed_power_mw / 1000.0) * 1.8;
         let target_temp = ambient_temp_c + self_heating_c;
-        self.cell_temperature_c += (target_temp - self.cell_temperature_c) * (dt_seconds / 15.0).min(1.0);
+        self.cell_temperature_c +=
+            (target_temp - self.cell_temperature_c) * (dt_seconds / 15.0).min(1.0);
 
         // Effective usable capacity adjusted for temperature
         let temp_factor = self.temperature_capacity_factor(self.cell_temperature_c);
@@ -193,7 +194,8 @@ impl BatterySimulator {
             TacticalPowerMode::EmergencyBeacon => 0.40,
         };
 
-        let total_power_mw = (self.config.base_afe_power_mw + dsp_power_mw + rf_power_mw) * mode_mult;
+        let total_power_mw =
+            (self.config.base_afe_power_mw + dsp_power_mw + rf_power_mw) * mode_mult;
 
         // Pack Open Circuit Voltage
         let v_cell_oc = self.cell_open_circuit_voltage(soc);
@@ -201,14 +203,16 @@ impl BatterySimulator {
 
         // Pack ESR
         let r_cell = self.cell_internal_resistance_mohm(self.cell_temperature_c);
-        let pack_esr_mohm = (r_cell * self.config.cell_count_series as f32) / self.config.cell_count_parallel as f32;
+        let pack_esr_mohm = (r_cell * self.config.cell_count_series as f32)
+            / self.config.cell_count_parallel as f32;
 
         // Current draw in mA: I(mA) = P(mW) / V(V)
         let approx_current_ma = total_power_mw / v_pack_oc.max(3.0);
 
         // Voltage sag across internal resistance: V_term = Voc - I * ESR
         let voltage_sag_v = (approx_current_ma / 1000.0) * (pack_esr_mohm / 1000.0);
-        let v_terminal = (v_pack_oc - voltage_sag_v).max(3.0 * self.config.cell_count_series as f32);
+        let v_terminal =
+            (v_pack_oc - voltage_sag_v).max(3.0 * self.config.cell_count_series as f32);
 
         // Precise current with terminal voltage
         let current_ma = total_power_mw / v_terminal;
@@ -285,7 +289,8 @@ mod tests {
         }
 
         assert!(
-            sim_cold.telemetry.internal_resistance_mohm > sim_warm.telemetry.internal_resistance_mohm,
+            sim_cold.telemetry.internal_resistance_mohm
+                > sim_warm.telemetry.internal_resistance_mohm,
             "Arctic cold must increase internal resistance (ESR)"
         );
         assert!(
@@ -308,6 +313,8 @@ mod tests {
         }
 
         assert!(sim_eco.telemetry.power_draw_mw < sim_nom.telemetry.power_draw_mw);
-        assert!(sim_eco.telemetry.estimated_runtime_hours > sim_nom.telemetry.estimated_runtime_hours);
+        assert!(
+            sim_eco.telemetry.estimated_runtime_hours > sim_nom.telemetry.estimated_runtime_hours
+        );
     }
 }

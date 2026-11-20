@@ -132,7 +132,8 @@ impl CausalDereverberator {
 
             for tau in 0..taps {
                 let past_offset = delay + tau;
-                let past_idx = (self.history_idx + self.history_len - past_offset) % self.history_len;
+                let past_idx =
+                    (self.history_idx + self.history_len - past_offset) % self.history_len;
                 let x_past = self.history_ch1[past_idx][k];
 
                 pred_rev += self.weights_ch1_from_ch1[k][tau] * x_past;
@@ -158,11 +159,13 @@ impl CausalDereverberator {
 
                 for tau in 0..taps {
                     let past_offset = delay + tau;
-                    let past_idx = (self.history_idx + self.history_len - past_offset) % self.history_len;
+                    let past_idx =
+                        (self.history_idx + self.history_len - past_offset) % self.history_len;
                     let x_past = self.history_ch1[past_idx][k];
 
                     let delta_w = err * x_past.conj() * norm_factor;
-                    self.weights_ch1_from_ch1[k][tau] = self.weights_ch1_from_ch1[k][tau] * leakage + delta_w;
+                    self.weights_ch1_from_ch1[k][tau] =
+                        self.weights_ch1_from_ch1[k][tau] * leakage + delta_w;
 
                     let w_norm = self.weights_ch1_from_ch1[k][tau].norm();
                     if w_norm > 1.2 {
@@ -215,7 +218,8 @@ impl CausalDereverberator {
 
             for tau in 0..taps {
                 let past_offset = delay + tau;
-                let past_idx = (self.history_idx + self.history_len - past_offset) % self.history_len;
+                let past_idx =
+                    (self.history_idx + self.history_len - past_offset) % self.history_len;
                 let x1_past = self.history_ch1[past_idx][k];
                 let x2_past = self.history_ch2[past_idx][k];
 
@@ -254,21 +258,26 @@ impl CausalDereverberator {
 
                 for tau in 0..taps {
                     let past_offset = delay + tau;
-                    let past_idx = (self.history_idx + self.history_len - past_offset) % self.history_len;
+                    let past_idx =
+                        (self.history_idx + self.history_len - past_offset) % self.history_len;
                     let x1_past_conj = self.history_ch1[past_idx][k].conj();
                     let x2_past_conj = self.history_ch2[past_idx][k].conj();
 
                     // Channel 1 updates
                     let dw11 = d1_k * x1_past_conj * norm_factor;
                     let dw12 = d1_k * x2_past_conj * norm_factor;
-                    self.weights_ch1_from_ch1[k][tau] = self.weights_ch1_from_ch1[k][tau] * leakage + dw11;
-                    self.weights_ch1_from_ch2[k][tau] = self.weights_ch1_from_ch2[k][tau] * leakage + dw12;
+                    self.weights_ch1_from_ch1[k][tau] =
+                        self.weights_ch1_from_ch1[k][tau] * leakage + dw11;
+                    self.weights_ch1_from_ch2[k][tau] =
+                        self.weights_ch1_from_ch2[k][tau] * leakage + dw12;
 
                     // Channel 2 updates
                     let dw21 = d2_k * x1_past_conj * norm_factor;
                     let dw22 = d2_k * x2_past_conj * norm_factor;
-                    self.weights_ch2_from_ch1[k][tau] = self.weights_ch2_from_ch1[k][tau] * leakage + dw21;
-                    self.weights_ch2_from_ch2[k][tau] = self.weights_ch2_from_ch2[k][tau] * leakage + dw22;
+                    self.weights_ch2_from_ch1[k][tau] =
+                        self.weights_ch2_from_ch1[k][tau] * leakage + dw21;
+                    self.weights_ch2_from_ch2[k][tau] =
+                        self.weights_ch2_from_ch2[k][tau] * leakage + dw22;
 
                     // Clamp norms
                     let w11_norm = self.weights_ch1_from_ch1[k][tau].norm();

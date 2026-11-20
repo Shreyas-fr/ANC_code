@@ -11,9 +11,9 @@
 //! - Stereo width percentage [0%, 100%]
 //! - Wind buffeting intensity percentage
 
+use super::theme::Theme;
 use egui::{Color32, Frame, Margin, Pos2, Rounding, Stroke, Ui, Vec2};
 use std::f32::consts::{FRAC_1_SQRT_2, PI};
-use super::theme::Theme;
 
 /// Real-time phase correlation statistics.
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -136,7 +136,11 @@ impl PhaseScopeWidget {
             .show(ui, |ui| {
                 // Widget Header
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("●").color(Theme::ACCENT_CYAN).size(11.0));
+                    ui.label(
+                        egui::RichText::new("●")
+                            .color(Theme::ACCENT_CYAN)
+                            .size(11.0),
+                    );
                     ui.label(
                         egui::RichText::new("SPATIAL LISSAJOUS PHASE SCOPE")
                             .strong()
@@ -146,13 +150,25 @@ impl PhaseScopeWidget {
 
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                         let (r_label, r_color) = if self.stats.correlation_r >= 0.70 {
-                            (format!("r: {:+.2} (IN-PHASE)", self.stats.correlation_r), Theme::ACCENT_GREEN)
+                            (
+                                format!("r: {:+.2} (IN-PHASE)", self.stats.correlation_r),
+                                Theme::ACCENT_GREEN,
+                            )
                         } else if self.stats.correlation_r >= 0.20 {
-                            (format!("r: {:+.2} (DIFFUSE)", self.stats.correlation_r), Theme::ACCENT_CYAN)
+                            (
+                                format!("r: {:+.2} (DIFFUSE)", self.stats.correlation_r),
+                                Theme::ACCENT_CYAN,
+                            )
                         } else if self.stats.correlation_r >= -0.20 {
-                            (format!("r: {:+.2} (UNCORRELATED)", self.stats.correlation_r), Theme::ACCENT_AMBER)
+                            (
+                                format!("r: {:+.2} (UNCORRELATED)", self.stats.correlation_r),
+                                Theme::ACCENT_AMBER,
+                            )
                         } else {
-                            (format!("r: {:+.2} (OUT-OF-PHASE)", self.stats.correlation_r), Theme::ACCENT_RED)
+                            (
+                                format!("r: {:+.2} (OUT-OF-PHASE)", self.stats.correlation_r),
+                                Theme::ACCENT_RED,
+                            )
                         };
 
                         ui.label(
@@ -168,20 +184,14 @@ impl PhaseScopeWidget {
                 ui.add_space(6.0);
 
                 // Scope Canvas
-                let (rect, _response) = ui.allocate_exact_size(
-                    Vec2::new(diameter, diameter),
-                    egui::Sense::hover(),
-                );
+                let (rect, _response) =
+                    ui.allocate_exact_size(Vec2::new(diameter, diameter), egui::Sense::hover());
                 let painter = ui.painter_at(rect);
                 let center = rect.center();
                 let radius = diameter * 0.46;
 
                 // 1. Dark circular radar background
-                painter.circle_filled(
-                    center,
-                    radius,
-                    Color32::from_rgb(10, 14, 20),
-                );
+                painter.circle_filled(center, radius, Color32::from_rgb(10, 14, 20));
 
                 // 2. Range rings and polar reticles
                 for &frac in &[0.33, 0.66, 1.0] {
@@ -193,27 +203,41 @@ impl PhaseScopeWidget {
                 }
 
                 // Orthogonal Mid-Side Axes
-                let axis_stroke = Stroke::new(1.0_f32, Color32::from_rgba_unmultiplied(35, 60, 80, 180));
+                let axis_stroke =
+                    Stroke::new(1.0_f32, Color32::from_rgba_unmultiplied(35, 60, 80, 180));
                 // Vertical (Mid / In-Phase Mono)
                 painter.line_segment(
-                    [Pos2::new(center.x, center.y - radius), Pos2::new(center.x, center.y + radius)],
+                    [
+                        Pos2::new(center.x, center.y - radius),
+                        Pos2::new(center.x, center.y + radius),
+                    ],
                     axis_stroke,
                 );
                 // Horizontal (Side / Out-of-Phase)
                 painter.line_segment(
-                    [Pos2::new(center.x - radius, center.y), Pos2::new(center.x + radius, center.y)],
+                    [
+                        Pos2::new(center.x - radius, center.y),
+                        Pos2::new(center.x + radius, center.y),
+                    ],
                     axis_stroke,
                 );
 
                 // Diagonal +/- 45 deg guide lines (Raw Mic 1 and Mic 2 axes)
-                let diag_stroke = Stroke::new(0.6_f32, Color32::from_rgba_unmultiplied(30, 50, 65, 100));
+                let diag_stroke =
+                    Stroke::new(0.6_f32, Color32::from_rgba_unmultiplied(30, 50, 65, 100));
                 let cos45 = (PI / 4.0).cos() * radius;
                 painter.line_segment(
-                    [Pos2::new(center.x - cos45, center.y - cos45), Pos2::new(center.x + cos45, center.y + cos45)],
+                    [
+                        Pos2::new(center.x - cos45, center.y - cos45),
+                        Pos2::new(center.x + cos45, center.y + cos45),
+                    ],
                     diag_stroke,
                 );
                 painter.line_segment(
-                    [Pos2::new(center.x - cos45, center.y + cos45), Pos2::new(center.x + cos45, center.y - cos45)],
+                    [
+                        Pos2::new(center.x - cos45, center.y + cos45),
+                        Pos2::new(center.x + cos45, center.y - cos45),
+                    ],
                     diag_stroke,
                 );
 
@@ -266,7 +290,12 @@ impl PhaseScopeWidget {
                         // Fading trail effect
                         let alpha = ((i as f32 / n_points as f32) * 200.0) as u8 + 55;
                         let mut pt_color = trace_color;
-                        pt_color = Color32::from_rgba_unmultiplied(pt_color.r(), pt_color.g(), pt_color.b(), alpha);
+                        pt_color = Color32::from_rgba_unmultiplied(
+                            pt_color.r(),
+                            pt_color.g(),
+                            pt_color.b(),
+                            alpha,
+                        );
 
                         painter.circle_filled(Pos2::new(px, py), 1.3, pt_color);
                     }
@@ -292,10 +321,13 @@ impl PhaseScopeWidget {
                     };
 
                     ui.label(
-                        egui::RichText::new(format!("WIND TURB: {:.0}%", self.stats.wind_buffeting_pct))
-                            .size(10.0)
-                            .strong()
-                            .color(wind_color),
+                        egui::RichText::new(format!(
+                            "WIND TURB: {:.0}%",
+                            self.stats.wind_buffeting_pct
+                        ))
+                        .size(10.0)
+                        .strong()
+                        .color(wind_color),
                     );
 
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {

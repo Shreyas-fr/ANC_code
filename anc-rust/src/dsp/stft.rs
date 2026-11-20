@@ -2,9 +2,9 @@
 //!
 //! Designed for zero-heap-allocation streaming on embedded ARM/x86 targets.
 
-use std::sync::Arc;
 use num_complex::Complex32;
 use rustfft::{Fft, FftPlanner};
+use std::sync::Arc;
 
 use super::window::{compute_synthesis_window, generate_analysis_window, WindowType};
 
@@ -45,7 +45,8 @@ impl StreamingStft {
         let analysis_window = generate_analysis_window(window_type, n_fft);
         let synthesis_window = compute_synthesis_window(&analysis_window, hop_size);
 
-        let scratch_len = fft_forward.get_inplace_scratch_len()
+        let scratch_len = fft_forward
+            .get_inplace_scratch_len()
             .max(fft_inverse.get_inplace_scratch_len());
 
         let num_bins = n_fft / 2 + 1;
@@ -80,7 +81,11 @@ impl StreamingStft {
     /// `output_spec`: slice of length `num_bins` (n_fft / 2 + 1).
     pub fn analyze(&mut self, input_hop: &[f32], output_spec: &mut [Complex32]) {
         assert_eq!(input_hop.len(), self.hop_size, "input_hop length mismatch");
-        assert_eq!(output_spec.len(), self.num_bins, "output_spec length mismatch");
+        assert_eq!(
+            output_spec.len(),
+            self.num_bins,
+            "output_spec length mismatch"
+        );
 
         // 1. Shift input history left by hop_size
         let shift = self.n_fft - self.hop_size;
@@ -89,17 +94,13 @@ impl StreamingStft {
 
         // 2. Window the frame into scratch buffer
         for i in 0..self.n_fft {
-            self.time_scratch_in[i] = Complex32::new(
-                self.input_history[i] * self.analysis_window[i],
-                0.0,
-            );
+            self.time_scratch_in[i] =
+                Complex32::new(self.input_history[i] * self.analysis_window[i], 0.0);
         }
 
         // 3. Compute in-place forward FFT
-        self.fft_forward.process_with_scratch(
-            &mut self.time_scratch_in,
-            &mut self.fft_scratch,
-        );
+        self.fft_forward
+            .process_with_scratch(&mut self.time_scratch_in, &mut self.fft_scratch);
 
         // 4. Copy non-redundant positive frequencies (0..=n_fft/2)
         output_spec.copy_from_slice(&self.time_scratch_in[0..self.num_bins]);
@@ -111,8 +112,16 @@ impl StreamingStft {
     /// `input_spec`: slice of length `num_bins` (n_fft / 2 + 1).
     /// `output_hop`: slice of length `hop_size` to receive synthesized audio.
     pub fn synthesize(&mut self, input_spec: &[Complex32], output_hop: &mut [f32]) {
-        assert_eq!(input_spec.len(), self.num_bins, "input_spec length mismatch");
-        assert_eq!(output_hop.len(), self.hop_size, "output_hop length mismatch");
+        assert_eq!(
+            input_spec.len(),
+            self.num_bins,
+            "input_spec length mismatch"
+        );
+        assert_eq!(
+            output_hop.len(),
+            self.hop_size,
+            "output_hop length mismatch"
+        );
 
         // 1. Reconstruct full Hermitian symmetric spectrum (0..n_fft)
         self.time_scratch_out[0..self.num_bins].copy_from_slice(input_spec);
@@ -124,10 +133,8 @@ impl StreamingStft {
         }
 
         // 2. Compute in-place inverse FFT
-        self.fft_inverse.process_with_scratch(
-            &mut self.time_scratch_out,
-            &mut self.fft_scratch,
-        );
+        self.fft_inverse
+            .process_with_scratch(&mut self.time_scratch_out, &mut self.fft_scratch);
 
         // 3. Scale by 1 / n_fft and apply synthesis window
         let inv_n = 1.0f32 / self.n_fft as f32;
@@ -140,7 +147,8 @@ impl StreamingStft {
         output_hop.copy_from_slice(&self.ola_accumulator[0..self.hop_size]);
 
         // 5. Shift accumulator left by hop_size and zero the trailing tail
-        self.ola_accumulator.copy_within(self.hop_size..self.n_fft, 0);
+        self.ola_accumulator
+            .copy_within(self.hop_size..self.n_fft, 0);
         let tail_start = self.n_fft - self.hop_size;
         self.ola_accumulator[tail_start..self.n_fft].fill(0.0);
     }

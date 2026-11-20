@@ -1,7 +1,7 @@
 //! Tests for network protocol and receiver state tracking.
 
-use anc_rust::network::{AudioPacket, EdgeTelemetry, AUDIO_FRAME_SAMPLES, AUDIO_PACKET_BYTES};
 use anc_frontend::network::StreamStats;
+use anc_rust::network::{AudioPacket, EdgeTelemetry, AUDIO_FRAME_SAMPLES, AUDIO_PACKET_BYTES};
 
 #[test]
 fn test_audio_packet_roundtrip() {
@@ -31,18 +31,13 @@ fn test_audio_packet_with_fec_roundtrip() {
         parity_samples[i] = (i as f32 * 0.10).cos();
     }
 
-    let packet = AudioPacket::new_with_fec(
-        100,
-        original_samples,
-        98,
-        2,
-        parity_samples,
-    );
+    let packet = AudioPacket::new_with_fec(100, original_samples, 98, 2, parity_samples);
 
     let serialized = packet.serialize();
     assert_eq!(serialized.len(), anc_rust::network::FEC_PACKET_TOTAL_BYTES);
 
-    let deserialized = AudioPacket::deserialize(&serialized).expect("FEC Deserialization must succeed");
+    let deserialized =
+        AudioPacket::deserialize(&serialized).expect("FEC Deserialization must succeed");
     assert_eq!(deserialized.sequence, 100);
     assert_eq!(deserialized.fec_base_seq, Some(98));
     assert_eq!(deserialized.fec_window, 2);
@@ -156,7 +151,8 @@ fn test_telemetry_json_roundtrip() {
     };
 
     let json_str = serde_json::to_string(&telemetry).expect("JSON serialization must succeed");
-    let parsed: EdgeTelemetry = serde_json::from_str(&json_str).expect("JSON deserialization must succeed");
+    let parsed: EdgeTelemetry =
+        serde_json::from_str(&json_str).expect("JSON deserialization must succeed");
 
     assert_eq!(parsed.frame, 1050);
     assert_eq!(parsed.model, "Track1-FrozenEnsemble");

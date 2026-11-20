@@ -52,7 +52,7 @@ impl PitchTracker {
     /// Creates a new `PitchTracker`.
     pub fn new(config: PitchTrackerConfig) -> Self {
         let min_lag = (config.sample_rate / config.max_f0).floor() as usize; // e.g. 40 @ 16k
-        let max_lag = (config.sample_rate / config.min_f0).ceil() as usize;  // e.g. 228 @ 16k
+        let max_lag = (config.sample_rate / config.min_f0).ceil() as usize; // e.g. 228 @ 16k
         let default_lag = (config.sample_rate / 150.0).clamp(min_lag as f32, max_lag as f32);
 
         Self {
@@ -72,7 +72,8 @@ impl PitchTracker {
     pub fn reset(&mut self) {
         self.history = [0.0; 1024];
         self.write_pos = 0;
-        self.tracked_lag = (self.config.sample_rate / 150.0).clamp(self.min_lag as f32, self.max_lag as f32);
+        self.tracked_lag =
+            (self.config.sample_rate / 150.0).clamp(self.min_lag as f32, self.max_lag as f32);
         self.tracked_f0 = 150.0;
         self.voicing_strength = 0.0;
         self.is_voiced = false;
@@ -432,7 +433,10 @@ mod tests {
             tracker.process_block(chunk);
         }
 
-        assert!(tracker.is_voiced(), "Voiced vowel was not detected as voiced");
+        assert!(
+            tracker.is_voiced(),
+            "Voiced vowel was not detected as voiced"
+        );
         assert!(
             tracker.voicing_strength() > 0.70,
             "Voicing strength too low: {}",
@@ -515,7 +519,11 @@ mod tests {
         engine.process_block(&unvoiced, &mut output);
 
         // Since unvoiced, comb filter should be transparent (output ~= input)
-        let diff: f32 = unvoiced.iter().zip(output.iter()).map(|(a, b)| (a - b).abs()).sum();
+        let diff: f32 = unvoiced
+            .iter()
+            .zip(output.iter())
+            .map(|(a, b)| (a - b).abs())
+            .sum();
         assert!(
             diff < 0.05,
             "Unvoiced signal was colored by comb filter: diff={}",

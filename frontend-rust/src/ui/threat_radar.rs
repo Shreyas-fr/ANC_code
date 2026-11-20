@@ -27,9 +27,9 @@
 //!
 //! Zero heap allocations in the audio synthesis and rendering loops.
 
+use super::theme::Theme;
 use egui::{Color32, Frame, Margin, Pos2, Rounding, Sense, Stroke, Ui, Vec2};
 use std::f32::consts::PI;
-use super::theme::Theme;
 
 /// Categorization of tactical acoustic threats.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -56,9 +56,9 @@ impl ThreatType {
 
     pub fn color(&self) -> Color32 {
         match self {
-            Self::SniperCrack => Color32::from_rgb(255, 45, 85),  // Crimson Red
-            Self::Gunfire => Color32::from_rgb(255, 120, 40),      // Fiery Orange
-            Self::DroneUav => Color32::from_rgb(255, 215, 0),      // Amber Yellow
+            Self::SniperCrack => Color32::from_rgb(255, 45, 85), // Crimson Red
+            Self::Gunfire => Color32::from_rgb(255, 120, 40),    // Fiery Orange
+            Self::DroneUav => Color32::from_rgb(255, 215, 0),    // Amber Yellow
             Self::EngineRumble => Color32::from_rgb(180, 100, 255), // Tactical Violet
         }
     }
@@ -199,7 +199,8 @@ impl SpatialAlertSonifier {
         for sample in out.iter_mut() {
             if self.read_pos + 1 < self.alert_buffer.len() {
                 // Mix left and right
-                let s = 0.5 * (self.alert_buffer[self.read_pos] + self.alert_buffer[self.read_pos + 1]);
+                let s =
+                    0.5 * (self.alert_buffer[self.read_pos] + self.alert_buffer[self.read_pos + 1]);
                 *sample += s;
                 self.read_pos += 2;
             } else {
@@ -259,7 +260,8 @@ impl ThreatRadarWidget {
         self.threats.push(entity);
 
         // Trigger spatial sonification tone
-        self.sonifier.trigger_spatial_alert(threat_type, azimuth_deg);
+        self.sonifier
+            .trigger_spatial_alert(threat_type, azimuth_deg);
     }
 
     /// Advances internal timers and cleans up expired threats.
@@ -311,7 +313,9 @@ impl ThreatRadarWidget {
                 ui.add_space(4.0);
 
                 // Most urgent threat banner
-                if let Some(top_threat) = self.threats.iter().min_by_key(|t| t.threat_type.priority()) {
+                if let Some(top_threat) =
+                    self.threats.iter().min_by_key(|t| t.threat_type.priority())
+                {
                     let dir_str = if top_threat.azimuth_deg < -15.0 {
                         format!("{:.0}° L", -top_threat.azimuth_deg)
                     } else if top_threat.azimuth_deg > 15.0 {
@@ -348,10 +352,8 @@ impl ThreatRadarWidget {
                 ui.columns(2, |cols| {
                     // Col 0: 360° Polar Radar Screen
                     cols[0].vertical(|ui| {
-                        let (rect, _response) = ui.allocate_exact_size(
-                            Vec2::new(diameter, diameter),
-                            Sense::hover(),
-                        );
+                        let (rect, _response) =
+                            ui.allocate_exact_size(Vec2::new(diameter, diameter), Sense::hover());
 
                         let painter = ui.painter_at(rect);
                         let center = rect.center();
@@ -366,13 +368,21 @@ impl ThreatRadarWidget {
                         );
 
                         // Range Rings: 500m (outer), 300m, 150m, 50m (inner)
-                        let rings = [(0.25, "100m"), (0.50, "250m"), (0.75, "400m"), (1.00, "500m")];
+                        let rings = [
+                            (0.25, "100m"),
+                            (0.50, "250m"),
+                            (0.75, "400m"),
+                            (1.00, "500m"),
+                        ];
                         for &(frac, label) in &rings {
                             let r = radius * frac;
                             painter.circle_stroke(
                                 center,
                                 r,
-                                Stroke::new(1.0_f32, Color32::from_rgba_premultiplied(40, 60, 80, 80)),
+                                Stroke::new(
+                                    1.0_f32,
+                                    Color32::from_rgba_premultiplied(40, 60, 80, 80),
+                                ),
                             );
                             if frac > 0.4 {
                                 painter.text(
@@ -387,19 +397,49 @@ impl ThreatRadarWidget {
 
                         // Crosshairs (North, South, East, West)
                         painter.line_segment(
-                            [Pos2::new(center.x, center.y - radius), Pos2::new(center.x, center.y + radius)],
+                            [
+                                Pos2::new(center.x, center.y - radius),
+                                Pos2::new(center.x, center.y + radius),
+                            ],
                             Stroke::new(1.0_f32, Color32::from_rgba_premultiplied(40, 60, 80, 100)),
                         );
                         painter.line_segment(
-                            [Pos2::new(center.x - radius, center.y), Pos2::new(center.x + radius, center.y)],
+                            [
+                                Pos2::new(center.x - radius, center.y),
+                                Pos2::new(center.x + radius, center.y),
+                            ],
                             Stroke::new(1.0_f32, Color32::from_rgba_premultiplied(40, 60, 80, 100)),
                         );
 
                         // Bearing labels
-                        painter.text(Pos2::new(center.x, center.y - radius - 2.0), egui::Align2::CENTER_BOTTOM, "N (0°)", egui::FontId::proportional(8.5), Theme::ACCENT_CYAN);
-                        painter.text(Pos2::new(center.x + radius + 2.0, center.y), egui::Align2::LEFT_CENTER, "E (+90°)", egui::FontId::proportional(8.5), Theme::TEXT_MUTED);
-                        painter.text(Pos2::new(center.x, center.y + radius + 2.0), egui::Align2::CENTER_TOP, "S (180°)", egui::FontId::proportional(8.5), Theme::TEXT_MUTED);
-                        painter.text(Pos2::new(center.x - radius - 2.0, center.y), egui::Align2::RIGHT_CENTER, "W (-90°)", egui::FontId::proportional(8.5), Theme::TEXT_MUTED);
+                        painter.text(
+                            Pos2::new(center.x, center.y - radius - 2.0),
+                            egui::Align2::CENTER_BOTTOM,
+                            "N (0°)",
+                            egui::FontId::proportional(8.5),
+                            Theme::ACCENT_CYAN,
+                        );
+                        painter.text(
+                            Pos2::new(center.x + radius + 2.0, center.y),
+                            egui::Align2::LEFT_CENTER,
+                            "E (+90°)",
+                            egui::FontId::proportional(8.5),
+                            Theme::TEXT_MUTED,
+                        );
+                        painter.text(
+                            Pos2::new(center.x, center.y + radius + 2.0),
+                            egui::Align2::CENTER_TOP,
+                            "S (180°)",
+                            egui::FontId::proportional(8.5),
+                            Theme::TEXT_MUTED,
+                        );
+                        painter.text(
+                            Pos2::new(center.x - radius - 2.0, center.y),
+                            egui::Align2::RIGHT_CENTER,
+                            "W (-90°)",
+                            egui::FontId::proportional(8.5),
+                            Theme::TEXT_MUTED,
+                        );
 
                         // Draw Operator Center Icon (Soldier headset silhouette marker)
                         painter.circle_filled(center, 4.0, Theme::ACCENT_CYAN);
@@ -423,14 +463,25 @@ impl ThreatRadarWidget {
                             // Bearing vector line
                             painter.line_segment(
                                 [center, blip_pos],
-                                Stroke::new(1.0_f32, Color32::from_rgba_premultiplied(col.r(), col.g(), col.b(), 90)),
+                                Stroke::new(
+                                    1.0_f32,
+                                    Color32::from_rgba_premultiplied(col.r(), col.g(), col.b(), 90),
+                                ),
                             );
 
                             // Halo ring
                             painter.circle_stroke(
                                 blip_pos,
                                 6.0 + 3.0 * pulse,
-                                Stroke::new(1.2_f32, Color32::from_rgba_premultiplied(col.r(), col.g(), col.b(), (180.0 * pulse) as u8)),
+                                Stroke::new(
+                                    1.2_f32,
+                                    Color32::from_rgba_premultiplied(
+                                        col.r(),
+                                        col.g(),
+                                        col.b(),
+                                        (180.0 * pulse) as u8,
+                                    ),
+                                ),
                             );
 
                             // Blip center
@@ -449,25 +500,65 @@ impl ThreatRadarWidget {
 
                     // Col 1: Interactive Test Triggers & Threat Feed
                     cols[1].vertical(|ui| {
-                        ui.label(egui::RichText::new("SIMULATE ACOUSTIC THREAT:").size(10.0).strong().color(Theme::TEXT_MUTED));
+                        ui.label(
+                            egui::RichText::new("SIMULATE ACOUSTIC THREAT:")
+                                .size(10.0)
+                                .strong()
+                                .color(Theme::TEXT_MUTED),
+                        );
 
-                        if ui.button(egui::RichText::new("🎯 SNIPER CRACK (-45° NW, 180m)").size(9.5).color(Color32::from_rgb(255, 45, 85))).clicked() {
+                        if ui
+                            .button(
+                                egui::RichText::new("🎯 SNIPER CRACK (-45° NW, 180m)")
+                                    .size(9.5)
+                                    .color(Color32::from_rgb(255, 45, 85)),
+                            )
+                            .clicked()
+                        {
                             self.add_threat(ThreatType::SniperCrack, -45.0, 180.0, 0.96);
                         }
 
-                        if ui.button(egui::RichText::new("🛸 HOSTILE DRONE (+60° NE, 320m)").size(9.5).color(Color32::from_rgb(255, 215, 0))).clicked() {
+                        if ui
+                            .button(
+                                egui::RichText::new("🛸 HOSTILE DRONE (+60° NE, 320m)")
+                                    .size(9.5)
+                                    .color(Color32::from_rgb(255, 215, 0)),
+                            )
+                            .clicked()
+                        {
                             self.add_threat(ThreatType::DroneUav, 60.0, 320.0, 0.89);
                         }
 
-                        if ui.button(egui::RichText::new("💥 GUNFIRE (+110° SE, 240m)").size(9.5).color(Color32::from_rgb(255, 120, 40))).clicked() {
+                        if ui
+                            .button(
+                                egui::RichText::new("💥 GUNFIRE (+110° SE, 240m)")
+                                    .size(9.5)
+                                    .color(Color32::from_rgb(255, 120, 40)),
+                            )
+                            .clicked()
+                        {
                             self.add_threat(ThreatType::Gunfire, 110.0, 240.0, 0.92);
                         }
 
-                        if ui.button(egui::RichText::new("🚜 ARMOR CHASSIS (0° N, 420m)").size(9.5).color(Color32::from_rgb(180, 100, 255))).clicked() {
+                        if ui
+                            .button(
+                                egui::RichText::new("🚜 ARMOR CHASSIS (0° N, 420m)")
+                                    .size(9.5)
+                                    .color(Color32::from_rgb(180, 100, 255)),
+                            )
+                            .clicked()
+                        {
                             self.add_threat(ThreatType::EngineRumble, 0.0, 420.0, 0.84);
                         }
 
-                        if ui.button(egui::RichText::new("🔄 CLEAR RADAR").size(9.5).color(Theme::TEXT_SECONDARY)).clicked() {
+                        if ui
+                            .button(
+                                egui::RichText::new("🔄 CLEAR RADAR")
+                                    .size(9.5)
+                                    .color(Theme::TEXT_SECONDARY),
+                            )
+                            .clicked()
+                        {
                             self.clear();
                         }
                     });

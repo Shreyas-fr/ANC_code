@@ -19,7 +19,12 @@ use anc_rust::network::{
 use anc_rust::streaming::{PipelineConfig, PlayoutScheduler, TacticalAncPipeline};
 
 #[derive(Parser, Debug)]
-#[command(name = "anc-edge", author, version, about = "DRDO SIH 26052 Edge Real-Time Streaming Daemon")]
+#[command(
+    name = "anc-edge",
+    author,
+    version,
+    about = "DRDO SIH 26052 Edge Real-Time Streaming Daemon"
+)]
 struct CliArgs {
     #[arg(long, default_value = "127.0.0.1")]
     target_ip: String,
@@ -59,10 +64,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("  DRDO SIH 26052 EDGE REAL-TIME STREAMING DAEMON (RUST)");
     println!("============================================================");
     println!("Target Operator IP:  {}", args.target_ip);
-    println!("Streaming Ports:     Enhanced: {}, Telemetry: {}, Raw: {}",
-        args.audio_port, args.telemetry_port, args.raw_port);
+    println!(
+        "Streaming Ports:     Enhanced: {}, Telemetry: {}, Raw: {}",
+        args.audio_port, args.telemetry_port, args.raw_port
+    );
     println!("Operational Mode:    {}", args.mode);
-    println!("Dual-Mic Geometry:   30 mm array spacing (d = {} m)", args.mic_distance_m);
+    println!(
+        "Dual-Mic Geometry:   30 mm array spacing (d = {} m)",
+        args.mic_distance_m
+    );
 
     let sender = Arc::new(EdgeSender::bind(
         &args.target_ip,
@@ -93,7 +103,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut model: Box<dyn SpeechEnhancer> = if let Some(ref path) = args.onnx_model {
         println!("Loading neural enhancement ONNX model: {}", path);
-        Box::new(TractEnhancer::load_from_onnx(path, "Tract-ONNX-Engine", 257, 32, 0)?)
+        Box::new(TractEnhancer::load_from_onnx(
+            path,
+            "Tract-ONNX-Engine",
+            257,
+            32,
+            0,
+        )?)
     } else {
         println!("Initializing Decision-Directed Adaptive ERB Spectral Engine.");
         Box::new(AdaptiveSpectralEnhancer::new(257, 32, 16000.0))
@@ -106,14 +122,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Chain delay in packets (e.g. 512 samples framing = 2 packets)
-    let chain_delay_packets = pipeline.algorithmic_delay_samples().div_ceil(AUDIO_FRAME_SAMPLES);
-    let mut scheduler = PlayoutScheduler::new(chain_delay_packets, args.jitter_packets, AUDIO_FRAME_SAMPLES);
+    let chain_delay_packets = pipeline
+        .algorithmic_delay_samples()
+        .div_ceil(AUDIO_FRAME_SAMPLES);
+    let mut scheduler = PlayoutScheduler::new(
+        chain_delay_packets,
+        args.jitter_packets,
+        AUDIO_FRAME_SAMPLES,
+    );
 
-    println!("Chain delay: {} packets ({:.1} ms) | Jitter budget: {} packets ({:.1} ms)",
-        chain_delay_packets, chain_delay_packets as f32 * 16.0,
-        args.jitter_packets, args.jitter_packets as f32 * 16.0);
-    println!("Total configured playout latency: {:.1} ms",
-        scheduler.total_delay_packets() as f32 * 16.0);
+    println!(
+        "Chain delay: {} packets ({:.1} ms) | Jitter budget: {} packets ({:.1} ms)",
+        chain_delay_packets,
+        chain_delay_packets as f32 * 16.0,
+        args.jitter_packets,
+        args.jitter_packets as f32 * 16.0
+    );
+    println!(
+        "Total configured playout latency: {:.1} ms",
+        scheduler.total_delay_packets() as f32 * 16.0
+    );
 
     let running = Arc::new(AtomicBool::new(true));
     let r = running.clone();
@@ -161,7 +189,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         // 3. Process through Spatial MVDR + Neural Engine
         let step_t0 = Instant::now();
-        let _ = pipeline.process_hop(&mic1_buf, Some(&mic2_buf), model.as_mut(), &mut enhanced_chunk);
+        let _ = pipeline.process_hop(
+            &mic1_buf,
+            Some(&mic2_buf),
+            model.as_mut(),
+            &mut enhanced_chunk,
+        );
         let compute_us = step_t0.elapsed().as_micros() as u64;
 
         profiler.record(compute_us, 16_000); // 16 ms chunk
@@ -175,8 +208,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         // 6. Periodic Telemetry Emission on Port 5006 (every 1 second)
         if last_telemetry.elapsed() >= Duration::from_secs(1) {
-            let input_rms = (mic1_buf.iter().map(|&x| x * x).sum::<f32>() / mic1_buf.len() as f32).sqrt();
-            let output_rms = (playout_out.iter().map(|&x| x * x).sum::<f32>() / playout_out.len() as f32).sqrt();
+            let input_rms =
+                (mic1_buf.iter().map(|&x| x * x).sum::<f32>() / mic1_buf.len() as f32).sqrt();
+            let output_rms =
+                (playout_out.iter().map(|&x| x * x).sum::<f32>() / playout_out.len() as f32).sqrt();
 
             let telemetry = EdgeTelemetry {
                 frame: seq,
@@ -230,7 +265,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 blast_overpressure_psi: pipeline.blast_telemetry().peak_overpressure_psi,
                 blast_daily_dose_pct: pipeline.blast_telemetry().cumulative_dose_pct,
                 bone_fusion_active: pipeline.bone_fusion_telemetry().is_bone_active,
-                audiogram_wdrc_gain_db: pipeline.audiogram_wdrc.average_insertion_gain_db(anc_rust::dsp::Ear::Left),
+                audiogram_wdrc_gain_db: pipeline
+                    .audiogram_wdrc
+                    .average_insertion_gain_db(anc_rust::dsp::Ear::Left),
                 deesser_gain_reduction_db: pipeline.deesser_telemetry().gain_reduction_db,
                 deesser_sibilance_ratio_db: pipeline.deesser_telemetry().sibilance_ratio_db,
                 deesser_active: pipeline.deesser_telemetry().sibilance_detected,
@@ -273,7 +310,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    println!("\nDaemon stopped successfully. Total frames processed: {}", seq);
+    println!(
+        "\nDaemon stopped successfully. Total frames processed: {}",
+        seq
+    );
     Ok(())
 }
 

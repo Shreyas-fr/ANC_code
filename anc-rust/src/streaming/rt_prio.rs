@@ -131,9 +131,7 @@ impl RtPrioGovernor {
         {
             // 1. Lock memory pages into RAM
             if self.config.lock_memory {
-                let mlock_res = unsafe {
-                    libc::mlockall(libc::MCL_CURRENT | libc::MCL_FUTURE)
-                };
+                let mlock_res = unsafe { libc::mlockall(libc::MCL_CURRENT | libc::MCL_FUTURE) };
                 if mlock_res == 0 {
                     status.memory_locked = true;
                 } else {
@@ -152,17 +150,17 @@ impl RtPrioGovernor {
                 unsafe {
                     libc::CPU_ZERO(&mut cpuset);
                     libc::CPU_SET(core_id, &mut cpuset);
-                    let res = libc::sched_setaffinity(
-                        0,
-                        std::mem::size_of::<libc::cpu_set_t>(),
-                        &cpuset,
-                    );
+                    let res =
+                        libc::sched_setaffinity(0, std::mem::size_of::<libc::cpu_set_t>(), &cpuset);
                     if res == 0 {
                         status.pinned_core = Some(core_id);
                     } else {
                         let err = std::io::Error::last_os_error();
                         if !self.config.allow_fallback {
-                            return Err(format!("sched_setaffinity to core {} failed: {}", core_id, err));
+                            return Err(format!(
+                                "sched_setaffinity to core {} failed: {}",
+                                core_id, err
+                            ));
                         }
                     }
                 }
@@ -174,9 +172,7 @@ impl RtPrioGovernor {
                 sched_priority: target_prio,
             };
 
-            let sched_res = unsafe {
-                libc::sched_setscheduler(0, libc::SCHED_FIFO, &param)
-            };
+            let sched_res = unsafe { libc::sched_setscheduler(0, libc::SCHED_FIFO, &param) };
 
             if sched_res == 0 {
                 status.policy = RtSchedPolicy::Fifo;
@@ -269,7 +265,9 @@ mod tests {
         let mut gov = RtPrioGovernor::new(config);
         // In standard cargo test environment (without root / CAP_SYS_NICE),
         // apply must succeed via graceful fallback without panic or error.
-        let status = gov.apply().expect("Fallback should handle unprivileged test environment");
+        let status = gov
+            .apply()
+            .expect("Fallback should handle unprivileged test environment");
         // Status must record that fallback was invoked or policy observed
         assert!(status.policy == RtSchedPolicy::Other || status.policy == RtSchedPolicy::Fifo);
         let _ = gov.release();

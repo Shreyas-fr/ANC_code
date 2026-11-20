@@ -9,8 +9,8 @@
 //!
 //! Includes circular delay compensation buffers to phase-align models with different lookaheads.
 
-use num_complex::Complex32;
 use super::traits::{EnhancerStats, ModelError, SpeechEnhancer};
+use num_complex::Complex32;
 
 /// Multi-model heterogeneous ensemble.
 pub struct FrozenEnsemble {
@@ -30,15 +30,14 @@ impl FrozenEnsemble {
     /// - `models`: vector of 3 speech enhancer models.
     /// - `weights`: vector of blending weights (e.g. `[0.15, 0.70, 0.15]`).
     /// - `num_bins`: number of STFT frequency bins.
-    pub fn new(
-        models: Vec<Box<dyn SpeechEnhancer>>,
-        weights: Vec<f32>,
-        num_bins: usize,
-    ) -> Self {
+    pub fn new(models: Vec<Box<dyn SpeechEnhancer>>, weights: Vec<f32>, num_bins: usize) -> Self {
         assert_eq!(models.len(), weights.len());
         assert!(!models.is_empty());
 
-        let lookaheads: Vec<usize> = models.iter().map(|m| m.algorithmic_lookahead_samples()).collect();
+        let lookaheads: Vec<usize> = models
+            .iter()
+            .map(|m| m.algorithmic_lookahead_samples())
+            .collect();
         let max_lookahead = *lookaheads.iter().max().unwrap_or(&0);
 
         // For each model, compute frames needed to align to the model with the largest lookahead

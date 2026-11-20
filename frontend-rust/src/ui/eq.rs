@@ -9,9 +9,9 @@
 //! - Tanker Rumble Cut (Deep low-frequency cuts at 60/150 Hz to eliminate chassis vibration fatigue)
 //! - Fricative Clarity Boost (High-frequency boost at 4/6/8 kHz for noise-induced hearing loss)
 
-use std::f32::consts::PI;
-use eframe::egui;
 use crate::ui::theme::Theme;
+use eframe::egui;
+use std::f32::consts::PI;
 
 /// 8 center frequencies covering the human auditory speech and tactical noise spectrum.
 pub const EQ_FREQUENCIES: [f32; 8] = [60.0, 150.0, 400.0, 1000.0, 2500.0, 4000.0, 6000.0, 8000.0];
@@ -154,12 +154,7 @@ impl TacticalEqualizer {
     fn recalculate_filters(&mut self) {
         let q = 1.414f32; // Standard 1-octave bandwidth
         for i in 0..NUM_BANDS {
-            self.filters[i].set_peaking(
-                EQ_FREQUENCIES[i],
-                self.sample_rate,
-                self.gains_db[i],
-                q,
-            );
+            self.filters[i].set_peaking(EQ_FREQUENCIES[i], self.sample_rate, self.gains_db[i], q);
         }
     }
 
@@ -264,7 +259,10 @@ impl TacticalEqWidget {
                         ("EQ: BYPASS", Theme::TEXT_MUTED)
                     };
 
-                    if ui.button(egui::RichText::new(enable_txt).size(10.5).color(enable_col)).clicked() {
+                    if ui
+                        .button(egui::RichText::new(enable_txt).size(10.5).color(enable_col))
+                        .clicked()
+                    {
                         let cur = eq.is_enabled();
                         eq.set_enabled(!cur);
                     }
@@ -386,15 +384,15 @@ mod tests {
 
         eq.set_preset(EqPreset::TankerRumbleCut);
         assert_eq!(eq.gain(0), -12.0); // 60 Hz
-        assert_eq!(eq.gain(1), -8.0);  // 150 Hz
-        assert_eq!(eq.gain(5), 4.0);   // 4 kHz
+        assert_eq!(eq.gain(1), -8.0); // 150 Hz
+        assert_eq!(eq.gain(5), 4.0); // 4 kHz
 
         eq.set_preset(EqPreset::AviationPilot);
-        assert_eq!(eq.gain(1), -6.0);  // 150 Hz
-        assert_eq!(eq.gain(5), 5.0);   // 4 kHz
+        assert_eq!(eq.gain(1), -6.0); // 150 Hz
+        assert_eq!(eq.gain(5), 5.0); // 4 kHz
 
         eq.set_preset(EqPreset::FricativeClarityBoost);
-        assert_eq!(eq.gain(5), 6.0);   // 4 kHz
-        assert_eq!(eq.gain(6), 5.0);   // 6 kHz
+        assert_eq!(eq.gain(5), 6.0); // 4 kHz
+        assert_eq!(eq.gain(6), 5.0); // 6 kHz
     }
 }

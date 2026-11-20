@@ -167,7 +167,10 @@ impl SpectralContrastEnhancer {
         spectrum: &mut [Complex32],
         speech_prob: f32,
     ) -> SpectralContrastTelemetry {
-        let num_bins = spectrum.len().min(self.config.num_bins).min(MAX_CONTRAST_BINS);
+        let num_bins = spectrum
+            .len()
+            .min(self.config.num_bins)
+            .min(MAX_CONTRAST_BINS);
         if num_bins == 0 || !self.config.enabled {
             self.last_telemetry = SpectralContrastTelemetry::default();
             return self.last_telemetry;
@@ -272,7 +275,9 @@ impl SpectralContrastEnhancer {
             let ratio = m / mean;
 
             // Power expansion: (ratio)^gamma
-            let g = ratio.powf(eff_gamma).clamp(self.min_gain_lin, self.max_gain_lin);
+            let g = ratio
+                .powf(eff_gamma)
+                .clamp(self.min_gain_lin, self.max_gain_lin);
             self.gains[k] = g;
 
             if g > max_g {

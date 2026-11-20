@@ -7,9 +7,9 @@
 //! - Real-time estimated remaining mission runtime ("Xh YYm REMAINING").
 //! - Interactive tactical power mode switcher: Nominal / Low-Power Eco / Emergency Beacon.
 
-use eframe::egui::{self, Color32, Pos2, Rect, Stroke, Vec2};
 use crate::ui::theme::Theme;
 pub use anc_rust::streaming::battery::{BatteryTelemetry, TacticalPowerMode};
+use eframe::egui::{self, Color32, Pos2, Rect, Stroke, Vec2};
 
 /// Interactive Tactical Battery & Power Management Widget.
 #[derive(Debug, Clone, Default)]
@@ -41,7 +41,11 @@ impl TacticalBatteryWidget {
             .show(ui, |ui| {
                 // Header row
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("⚡").color(Theme::ACCENT_AMBER).size(13.0));
+                    ui.label(
+                        egui::RichText::new("⚡")
+                            .color(Theme::ACCENT_AMBER)
+                            .size(13.0),
+                    );
                     ui.label(
                         egui::RichText::new("FIELD POWER & DURABILITY")
                             .strong()
@@ -56,10 +60,20 @@ impl TacticalBatteryWidget {
                             TacticalPowerMode::EmergencyBeacon => ("BEACON", Theme::ACCENT_RED),
                         };
 
-                        if ui.button(egui::RichText::new(mode_lbl).size(10.0).strong().color(mode_col)).clicked() {
+                        if ui
+                            .button(
+                                egui::RichText::new(mode_lbl)
+                                    .size(10.0)
+                                    .strong()
+                                    .color(mode_col),
+                            )
+                            .clicked()
+                        {
                             let next = match self.telemetry.power_mode {
                                 TacticalPowerMode::Nominal => TacticalPowerMode::LowPowerEco,
-                                TacticalPowerMode::LowPowerEco => TacticalPowerMode::EmergencyBeacon,
+                                TacticalPowerMode::LowPowerEco => {
+                                    TacticalPowerMode::EmergencyBeacon
+                                }
                                 TacticalPowerMode::EmergencyBeacon => TacticalPowerMode::Nominal,
                             };
                             self.telemetry.power_mode = next;
@@ -84,7 +98,8 @@ impl TacticalBatteryWidget {
                 let batt_x = rect.min.x + 8.0;
                 let batt_y = rect.min.y + (rect.height() - batt_h) * 0.5 - 6.0;
 
-                let batt_body = Rect::from_min_size(Pos2::new(batt_x, batt_y), Vec2::new(batt_w, batt_h));
+                let batt_body =
+                    Rect::from_min_size(Pos2::new(batt_x, batt_y), Vec2::new(batt_w, batt_h));
                 let terminal_nipple = Rect::from_min_size(
                     Pos2::new(batt_x + batt_w, batt_y + (batt_h - 14.0) * 0.5),
                     Vec2::new(4.0, 14.0),
@@ -123,7 +138,11 @@ impl TacticalBatteryWidget {
                     egui::Align2::CENTER_CENTER,
                     soc_str,
                     egui::FontId::monospace(11.0),
-                    if soc > 35.0 { Color32::BLACK } else { Theme::TEXT_PRIMARY },
+                    if soc > 35.0 {
+                        Color32::BLACK
+                    } else {
+                        Theme::TEXT_PRIMARY
+                    },
                 );
 
                 // Telemetry metrics readout on right side of gauge
@@ -148,8 +167,7 @@ impl TacticalBatteryWidget {
                 // Line 2: Current Drain and Power Consumption
                 let l2_text = format!(
                     "DRAIN: {:.0} mA  |  POWER: {:.0} mW",
-                    self.telemetry.current_draw_ma,
-                    self.telemetry.power_draw_mw,
+                    self.telemetry.current_draw_ma, self.telemetry.power_draw_mw,
                 );
                 painter.text(
                     Pos2::new(metrics_x, rect.min.y + 6.0 + line_h),

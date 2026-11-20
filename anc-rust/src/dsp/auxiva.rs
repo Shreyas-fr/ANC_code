@@ -144,7 +144,12 @@ impl OnlineAuxIva {
         out_target: &mut [Complex32],
         out_interf: &mut [Complex32],
     ) {
-        let num_bins = self.config.num_bins.min(MAX_IVA_BINS).min(x1.len()).min(x2.len());
+        let num_bins = self
+            .config
+            .num_bins
+            .min(MAX_IVA_BINS)
+            .min(x1.len())
+            .min(x2.len());
         let beta = self.config.forgetting_factor;
         let one_minus_beta = 1.0 - beta;
         let eta = self.config.learning_rate;

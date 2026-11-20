@@ -1,8 +1,8 @@
 //! UDP audio and telemetry receiver with sequence tracking and packet loss detection.
 
-use std::net::UdpSocket;
-use std::io;
 use super::protocol::{AudioPacket, EdgeTelemetry};
+use std::io;
+use std::net::UdpSocket;
 
 /// UDP Audio Stream Receiver.
 pub struct AudioReceiver {

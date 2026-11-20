@@ -186,11 +186,7 @@ impl DistortionAnalyzer {
     }
 
     /// Internal distortion calculation and health diagnostics.
-    fn analyze_internal(
-        &mut self,
-        num_bins: usize,
-        known_f0: Option<f32>,
-    ) -> DistortionMetrics {
+    fn analyze_internal(&mut self, num_bins: usize, known_f0: Option<f32>) -> DistortionMetrics {
         let bin_hz = self.config.sample_rate / self.config.fft_size as f32;
 
         let min_bin = ((self.config.min_f0_hz / bin_hz).floor() as usize).max(1);

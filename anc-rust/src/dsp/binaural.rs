@@ -182,7 +182,8 @@ impl BinauralSpatialRenderer {
         azimuth_deg: f32,
         stereo_out: &mut [f32],
     ) {
-        self.xtc.position_source_3d(mono_in, azimuth_deg, stereo_out);
+        self.xtc
+            .position_source_3d(mono_in, azimuth_deg, stereo_out);
     }
 }
 

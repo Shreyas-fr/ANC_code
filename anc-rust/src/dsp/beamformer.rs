@@ -282,7 +282,8 @@ impl CausalMvdrBeamformer {
         let clamped_deg = angle_deg.clamp(-45.0, 45.0);
         self.config.target_angle_deg = clamped_deg;
         let angle_rad = clamped_deg * PI / 180.0;
-        let delta_t = (self.config.mic_distance_m * angle_rad.sin()) / self.config.speed_of_sound_m_s;
+        let delta_t =
+            (self.config.mic_distance_m * angle_rad.sin()) / self.config.speed_of_sound_m_s;
 
         let n_fft = (self.config.num_bins - 1) * 2;
         let bin_hz = self.config.sample_rate / n_fft as f32;
@@ -292,7 +293,8 @@ impl CausalMvdrBeamformer {
             let phase = -2.0 * PI * freq * delta_t;
             let free_d = [Complex32::new(1.0, 0.0), Complex32::from_polar(1.0, phase)];
             self.steering_vectors[k] = if self.config.enable_diffraction_correction {
-                self.diffraction_engine.correct_steering_vector(k, freq, clamped_deg, free_d)
+                self.diffraction_engine
+                    .correct_steering_vector(k, freq, clamped_deg, free_d)
             } else {
                 free_d
             };
@@ -370,7 +372,9 @@ impl CausalMvdrBeamformer {
             self.auto_power_mic1[k] = self.auto_power_mic1[k] * gamma + p0 * (1.0 - gamma);
             self.auto_power_mic2[k] = self.auto_power_mic2[k] * gamma + p1 * (1.0 - gamma);
 
-            let denom_pow = (self.auto_power_mic1[k] * self.auto_power_mic2[k]).sqrt().max(1e-6);
+            let denom_pow = (self.auto_power_mic1[k] * self.auto_power_mic2[k])
+                .sqrt()
+                .max(1e-6);
             let coherence = (self.cross_power[k].re / denom_pow).clamp(-1.0, 1.0);
 
             let spp_k = if self.config.enable_spp_vad {
@@ -416,7 +420,9 @@ impl CausalMvdrBeamformer {
                 [w0_smooth, w1_smooth]
             } else {
                 // Compute Adaptive Superdirective MVDR weight vector
-                let (w0_mvdr_raw, w1_mvdr_raw) = if let Some((inv00, inv01, inv11)) = cov.invert_regularized(diag_eps, max_cond) {
+                let (w0_mvdr_raw, w1_mvdr_raw) = if let Some((inv00, inv01, inv11)) =
+                    cov.invert_regularized(diag_eps, max_cond)
+                {
                     let v0 = inv00 * d0 + inv01 * d1;
                     let v1 = inv01.conj() * d0 + inv11 * d1;
                     let denom = (d0.conj() * v0 + d1.conj() * v1).re;
@@ -444,7 +450,8 @@ impl CausalMvdrBeamformer {
 
                 if enable_subband && freq >= (split_hz - trans_half_hz) {
                     // Transition band: blend MVDR and DSB
-                    let mu = ((freq - (split_hz - trans_half_hz)) / (2.0 * trans_half_hz)).clamp(0.0, 1.0);
+                    let mu = ((freq - (split_hz - trans_half_hz)) / (2.0 * trans_half_hz))
+                        .clamp(0.0, 1.0);
                     let w0_dsb = Complex32::new(0.5, 0.0) * d0;
                     let w1_dsb = Complex32::new(0.5, 0.0) * d1;
 

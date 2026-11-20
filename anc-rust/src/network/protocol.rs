@@ -1,14 +1,15 @@
 //! SIH 26052 UDP Network Wire Protocol specifications.
 
-use std::io::{self, Cursor};
 use byteorder::{LittleEndian, ReadBytesExt, WriteBytesExt};
 use serde::{Deserialize, Serialize};
+use std::io::{self, Cursor};
 
 /// Standard packet sizes for SIH 26052 tactical audio transmission.
 pub const AUDIO_FRAME_SAMPLES: usize = 256; // 16 ms @ 16 kHz
 pub const AUDIO_PACKET_BYTES: usize = 8 + AUDIO_FRAME_SAMPLES * 4; // 1032 bytes
 pub const FEC_HEADER_BYTES: usize = 12; // 8 bytes base_seq + 1 byte window + 3 bytes padding
-pub const FEC_PACKET_TOTAL_BYTES: usize = AUDIO_PACKET_BYTES + FEC_HEADER_BYTES + AUDIO_FRAME_SAMPLES * 4; // 2068 bytes
+pub const FEC_PACKET_TOTAL_BYTES: usize =
+    AUDIO_PACKET_BYTES + FEC_HEADER_BYTES + AUDIO_FRAME_SAMPLES * 4; // 2068 bytes
 
 pub const DEFAULT_AUDIO_PORT: u16 = 5005;
 pub const DEFAULT_TELEMETRY_PORT: u16 = 5006;

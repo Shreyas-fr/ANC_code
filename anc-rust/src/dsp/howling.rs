@@ -253,7 +253,8 @@ impl AntiHowlingShifter {
         self.smoothed_papr_db = 0.85 * self.smoothed_papr_db + 0.15 * inst_papr_db;
 
         // Howling occurs when a single pure sinusoidal oscillation dominates the signal (low crest factor <= 4.5 dB with high energy)
-        let is_howling_candidate = self.smoothed_papr_db <= self.config.howling_threshold_db && mean_sq > 0.005;
+        let is_howling_candidate =
+            self.smoothed_papr_db <= self.config.howling_threshold_db && mean_sq > 0.005;
         if is_howling_candidate {
             self.howling_counter = (self.howling_counter + 1).min(100);
         } else {

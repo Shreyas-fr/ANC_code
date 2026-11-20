@@ -81,7 +81,8 @@ impl GeigelDetector {
     /// Creates a new GeigelDetector with pre-allocated circular delay line.
     pub fn new(config: GeigelConfig) -> Self {
         let history_len = config.history_len.max(16);
-        let hangover_samples_total = ((config.hangover_ms / 1000.0) * config.sample_rate).round() as usize;
+        let hangover_samples_total =
+            ((config.hangover_ms / 1000.0) * config.sample_rate).round() as usize;
 
         Self {
             config,
@@ -136,7 +137,8 @@ impl GeigelDetector {
         };
 
         // 4. Trigger double-talk detection and update hangover
-        let raw_trigger = geigel_metric > self.config.threshold && max_ref >= self.config.min_ref_threshold;
+        let raw_trigger =
+            geigel_metric > self.config.threshold && max_ref >= self.config.min_ref_threshold;
 
         if raw_trigger {
             self.hangover_countdown = self.hangover_samples_total;
@@ -194,7 +196,11 @@ impl GeigelDetector {
     ///
     /// Computes RMS magnitudes across frequency bins to evaluate broad-spectrum Geigel metric.
     /// Strictly zero heap allocations.
-    pub fn process_spectrum(&mut self, mic_spec: &[Complex32], ref_spec: &[Complex32]) -> GeigelStats {
+    pub fn process_spectrum(
+        &mut self,
+        mic_spec: &[Complex32],
+        ref_spec: &[Complex32],
+    ) -> GeigelStats {
         let num_bins = mic_spec.len().min(ref_spec.len()).max(1);
         let mut mic_pwr = 0.0f32;
         let mut ref_pwr = 0.0f32;
@@ -236,8 +242,14 @@ mod tests {
         // Echo path attenuation: loudspeaker is 0.8, echo arriving at mic is 0.2 (25% < 50% threshold)
         for _ in 0..100 {
             let stats = geigel.process_sample(0.2, 0.8);
-            assert!(!stats.is_double_talk, "Single talk echo must not trigger double-talk");
-            assert_eq!(stats.step_scale, 1.0, "Filter adaptation must remain active");
+            assert!(
+                !stats.is_double_talk,
+                "Single talk echo must not trigger double-talk"
+            );
+            assert_eq!(
+                stats.step_scale, 1.0,
+                "Filter adaptation must remain active"
+            );
         }
     }
 
@@ -260,8 +272,14 @@ mod tests {
 
         // Near-end soldier begins shouting: mic signal jumps to 0.7 while ref is 0.8 -> ratio 0.875 > 0.50
         let stats = geigel.process_sample(0.7, 0.8);
-        assert!(stats.is_double_talk, "Double-talk must be instantly detected");
-        assert_eq!(stats.step_scale, 0.0, "Filter adaptation must be immediately frozen (step_scale = 0)");
+        assert!(
+            stats.is_double_talk,
+            "Double-talk must be instantly detected"
+        );
+        assert_eq!(
+            stats.step_scale, 0.0,
+            "Filter adaptation must be immediately frozen (step_scale = 0)"
+        );
         assert!(stats.geigel_metric > 0.50);
     }
 
@@ -283,7 +301,10 @@ mod tests {
 
         // Next sample: mic drops to quiet echo (0.1), but hangover should maintain freeze
         let stats = geigel.process_sample(0.1, 0.8);
-        assert!(stats.is_double_talk, "Hangover must sustain double-talk flag during momentary dip");
+        assert!(
+            stats.is_double_talk,
+            "Hangover must sustain double-talk flag during momentary dip"
+        );
         assert!(stats.hangover_active, "Hangover flag must be set");
         assert_eq!(stats.step_scale, 0.0);
     }

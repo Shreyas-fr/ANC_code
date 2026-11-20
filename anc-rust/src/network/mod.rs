@@ -23,7 +23,7 @@ pub use jamming::{
 };
 pub use protocol::{
     AudioPacket, DspStageTimings, EdgeTelemetry, AUDIO_FRAME_SAMPLES, AUDIO_PACKET_BYTES,
-    FEC_PACKET_TOTAL_BYTES, DEFAULT_AUDIO_PORT, DEFAULT_RAW_INPUT_PORT, DEFAULT_TELEMETRY_PORT,
+    DEFAULT_AUDIO_PORT, DEFAULT_RAW_INPUT_PORT, DEFAULT_TELEMETRY_PORT, FEC_PACKET_TOTAL_BYTES,
 };
 pub use receiver::{AudioReceiver, TelemetryReceiver};
 pub use sender::EdgeSender;

@@ -17,17 +17,21 @@
 //!
 //! Strictly zero heap allocations in the streaming loop.
 
-use num_complex::Complex32;
 use super::erb::ErbFilterbank;
 use super::simd::{vector_complex_norm_sqr, vector_complex_scale};
+use num_complex::Complex32;
 
 /// ANSI S3.5 Band Importance Weightings for Speech Intelligibility Index (SII) across 32 ERB bands.
 /// Peaks in the 1.2 kHz - 3.8 kHz formant and consonant transition zone.
 const SII_BAND_WEIGHTS: [f32; 32] = [
-    0.005, 0.008, 0.012, 0.018, 0.025, 0.035, 0.045, 0.055, // 0-7: Low frequencies (20-450 Hz)
-    0.065, 0.075, 0.085, 0.095, 0.100, 0.105, 0.100, 0.095, // 8-15: First & second formants (450-1600 Hz)
-    0.090, 0.085, 0.080, 0.075, 0.070, 0.065, 0.060, 0.055, // 16-23: Formants & consonants (1.6-3.8 kHz)
-    0.050, 0.045, 0.040, 0.035, 0.030, 0.025, 0.020, 0.015, // 24-31: Fricatives & high air (3.8-8.0 kHz)
+    0.005, 0.008, 0.012, 0.018, 0.025, 0.035, 0.045,
+    0.055, // 0-7: Low frequencies (20-450 Hz)
+    0.065, 0.075, 0.085, 0.095, 0.100, 0.105, 0.100,
+    0.095, // 8-15: First & second formants (450-1600 Hz)
+    0.090, 0.085, 0.080, 0.075, 0.070, 0.065, 0.060,
+    0.055, // 16-23: Formants & consonants (1.6-3.8 kHz)
+    0.050, 0.045, 0.040, 0.035, 0.030, 0.025, 0.020,
+    0.015, // 24-31: Fricatives & high air (3.8-8.0 kHz)
 ];
 
 /// Configuration parameters for the Speech Intelligibility Enhancer.
@@ -212,7 +216,8 @@ impl IntelligibilityEnhancer {
         vector_complex_norm_sqr(spec, &mut self.power_spec);
 
         // 2. Extract 32 ERB Subband Log-Energies
-        self.filterbank.extract_erb_energies(&self.power_spec, &mut self.erb_energies);
+        self.filterbank
+            .extract_erb_energies(&self.power_spec, &mut self.erb_energies);
 
         // 3. Track ERB Noise Floor (slow minimum tracking)
         let alpha_noise = 0.98f32;
@@ -221,7 +226,8 @@ impl IntelligibilityEnhancer {
             if energy < self.erb_noise_floor[b] {
                 self.erb_noise_floor[b] = energy;
             } else {
-                self.erb_noise_floor[b] = alpha_noise * self.erb_noise_floor[b] + (1.0 - alpha_noise) * energy;
+                self.erb_noise_floor[b] =
+                    alpha_noise * self.erb_noise_floor[b] + (1.0 - alpha_noise) * energy;
             }
         }
 
@@ -234,7 +240,11 @@ impl IntelligibilityEnhancer {
         let fricative_boost = 10.0f32.powf(self.config.fricative_boost_db / 20.0);
         let rumble_mult = 10.0f32.powf(self.config.rumble_suppression_db / 20.0);
 
-        for (b, &w) in SII_BAND_WEIGHTS.iter().enumerate().take(self.config.num_bands) {
+        for (b, &w) in SII_BAND_WEIGHTS
+            .iter()
+            .enumerate()
+            .take(self.config.num_bands)
+        {
             let snr_db = (self.erb_energies[b] - self.erb_noise_floor[b]) * 4.3429448; // ln to dB
             total_sii_weight += w;
 
@@ -253,8 +263,16 @@ impl IntelligibilityEnhancer {
             // (B) Formant Dynamic Peaking & Sharpening (bands 12 to 22: ~1.2 kHz to 3.8 kHz)
             if (12..=22).contains(&b) {
                 let e_curr = self.erb_energies[b];
-                let e_prev = if b > 0 { self.erb_energies[b - 1] } else { e_curr };
-                let e_next = if b < self.config.num_bands - 1 { self.erb_energies[b + 1] } else { e_curr };
+                let e_prev = if b > 0 {
+                    self.erb_energies[b - 1]
+                } else {
+                    e_curr
+                };
+                let e_next = if b < self.config.num_bands - 1 {
+                    self.erb_energies[b + 1]
+                } else {
+                    e_curr
+                };
 
                 // Detect local formant spectral peak
                 if e_curr > e_prev && e_curr > e_next {
@@ -290,12 +308,18 @@ impl IntelligibilityEnhancer {
         // 5. Temporal Gain Smoothing (Attack: fast, Release: smooth)
         for b in 0..self.config.num_bands {
             let target = self.erb_gains[b];
-            let alpha = if target > self.smoothed_erb_gains[b] { 0.40 } else { 0.85 };
-            self.smoothed_erb_gains[b] = alpha * self.smoothed_erb_gains[b] + (1.0 - alpha) * target;
+            let alpha = if target > self.smoothed_erb_gains[b] {
+                0.40
+            } else {
+                0.85
+            };
+            self.smoothed_erb_gains[b] =
+                alpha * self.smoothed_erb_gains[b] + (1.0 - alpha) * target;
         }
 
         // 6. Interpolate 32 ERB Gains back to 257 Linear STFT Bins
-        self.filterbank.interpolate_band_gains(&self.smoothed_erb_gains, &mut self.linear_gains);
+        self.filterbank
+            .interpolate_band_gains(&self.smoothed_erb_gains, &mut self.linear_gains);
 
         // 7. Vectorized In-Place Spectral Scaling
         vector_complex_scale(spec, &self.linear_gains);
@@ -390,7 +414,10 @@ mod tests {
         enhancer.process_spec(&mut spec);
         let enhanced_peak = spec[64].norm();
 
-        assert!(enhanced_peak >= initial_peak, "Formant peak was not boosted!");
+        assert!(
+            enhanced_peak >= initial_peak,
+            "Formant peak was not boosted!"
+        );
         assert!(enhancer.current_sii() > 0.0, "SII should be positive");
     }
 }

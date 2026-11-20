@@ -2,8 +2,8 @@
 //!
 //! Developed for DRDO SIH 26052 Live Defence Dashboard.
 
-use std::sync::{Arc, Mutex};
 use super::elastic::{ElasticGovernor, ElasticGovernorConfig};
+use std::sync::{Arc, Mutex};
 
 /// Dynamic ring buffer for real-time audio playback.
 pub struct JitterBuffer {
@@ -39,7 +39,8 @@ pub struct JitterBuffer {
 impl JitterBuffer {
     pub fn new(sample_rate: u32, target_ms: u32, max_ms: u32, prebuffer: bool) -> Self {
         let target_samples = (target_ms as f64 * 0.001 * sample_rate as f64) as usize;
-        let max_samples = (max_ms as f64 * 0.001 * sample_rate as f64).max(target_samples as f64 + 1.0) as usize;
+        let max_samples =
+            (max_ms as f64 * 0.001 * sample_rate as f64).max(target_samples as f64 + 1.0) as usize;
         let capacity = max_samples + 8192;
 
         Self {

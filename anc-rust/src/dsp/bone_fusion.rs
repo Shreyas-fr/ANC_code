@@ -90,7 +90,9 @@ struct Biquad {
 
 impl Biquad {
     fn process(&mut self, x: f32) -> f32 {
-        let y = self.b0 * x + self.b1 * self.x1 + self.b2 * self.x2 - self.a1 * self.y1 - self.a2 * self.y2;
+        let y = self.b0 * x + self.b1 * self.x1 + self.b2 * self.x2
+            - self.a1 * self.y1
+            - self.a2 * self.y2;
         self.x2 = self.x1;
         self.x1 = x;
         self.y2 = self.y1;
@@ -107,7 +109,8 @@ impl Biquad {
 
     /// 2nd-order Butterworth Low-Pass Filter
     fn set_lowpass(&mut self, sample_rate: f32, cutoff_hz: f32) {
-        let w0 = 2.0 * std::f32::consts::PI * cutoff_hz.clamp(20.0, sample_rate * 0.45) / sample_rate;
+        let w0 =
+            2.0 * std::f32::consts::PI * cutoff_hz.clamp(20.0, sample_rate * 0.45) / sample_rate;
         let cos_w0 = w0.cos();
         let sin_w0 = w0.sin();
         let alpha = sin_w0 / (2.0 * std::f32::consts::FRAC_1_SQRT_2);
@@ -122,7 +125,8 @@ impl Biquad {
 
     /// 2nd-order Butterworth High-Pass Filter
     fn set_highpass(&mut self, sample_rate: f32, cutoff_hz: f32) {
-        let w0 = 2.0 * std::f32::consts::PI * cutoff_hz.clamp(20.0, sample_rate * 0.45) / sample_rate;
+        let w0 =
+            2.0 * std::f32::consts::PI * cutoff_hz.clamp(20.0, sample_rate * 0.45) / sample_rate;
         let cos_w0 = w0.cos();
         let sin_w0 = w0.sin();
         let alpha = sin_w0 / (2.0 * std::f32::consts::FRAC_1_SQRT_2);
@@ -325,8 +329,16 @@ impl SubbandBoneFusionEngine {
     /// - `out_samples`: fused enhanced tactical audio output.
     ///
     /// Strictly zero heap allocations.
-    pub fn fuse_frame(&mut self, bone_samples: &[f32], air_samples: &[f32], out_samples: &mut [f32]) {
-        let frame_len = bone_samples.len().min(air_samples.len()).min(out_samples.len());
+    pub fn fuse_frame(
+        &mut self,
+        bone_samples: &[f32],
+        air_samples: &[f32],
+        out_samples: &mut [f32],
+    ) {
+        let frame_len = bone_samples
+            .len()
+            .min(air_samples.len())
+            .min(out_samples.len());
         if frame_len == 0 {
             return;
         }
@@ -344,8 +356,10 @@ impl SubbandBoneFusionEngine {
             frame_air_e += air_samples[i] * air_samples[i];
         }
 
-        self.bone_energy_smoothed = 0.95 * self.bone_energy_smoothed + 0.05 * (frame_bone_e / frame_len as f32).max(1e-8);
-        self.air_energy_smoothed = 0.95 * self.air_energy_smoothed + 0.05 * (frame_air_e / frame_len as f32).max(1e-8);
+        self.bone_energy_smoothed =
+            0.95 * self.bone_energy_smoothed + 0.05 * (frame_bone_e / frame_len as f32).max(1e-8);
+        self.air_energy_smoothed =
+            0.95 * self.air_energy_smoothed + 0.05 * (frame_air_e / frame_len as f32).max(1e-8);
 
         // Update noise floor tracking for air mic
         if self.air_energy_smoothed < self.air_noise_floor {
@@ -388,7 +402,8 @@ impl SubbandBoneFusionEngine {
             };
 
             let low_component = if is_bone_active {
-                bone_mix_weight * b_low + (1.0 - bone_mix_weight) * self.crossover.process_low(a_raw)
+                bone_mix_weight * b_low
+                    + (1.0 - bone_mix_weight) * self.crossover.process_low(a_raw)
             } else {
                 self.crossover.process_low(a_raw)
             };

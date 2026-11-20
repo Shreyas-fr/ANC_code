@@ -12,9 +12,9 @@
 //! Visually proves deterministic real-time execution with zero deadline breaches against
 //! the 16,000 µs (16.0 ms) hop deadline.
 
-use egui::{pos2, vec2, Color32, Frame, Margin, Rect, Rounding, Stroke, Ui};
-use anc_rust::network::DspStageTimings;
 use super::theme::Theme;
+use anc_rust::network::DspStageTimings;
+use egui::{pos2, vec2, Color32, Frame, Margin, Rect, Rounding, Stroke, Ui};
 
 /// Real-time Execution Profiler and Variance Timeline Widget.
 pub struct DspTimelineWidget {
@@ -83,7 +83,8 @@ impl DspTimelineWidget {
             self.p99_us = sorted[idx99];
 
             let budget_us = 16_000.0f32; // 16 ms hop budget @ 16 kHz
-            self.headroom_percent = ((budget_us - self.p99_us as f32) / budget_us * 100.0).clamp(0.0, 100.0);
+            self.headroom_percent =
+                ((budget_us - self.p99_us as f32) / budget_us * 100.0).clamp(0.0, 100.0);
         }
     }
 

@@ -8,9 +8,9 @@
 //! - Diffuse field halo ring (visualizing ambient diffuse noise intensity)
 //! - Spatial MVDR interference null vectors (+/- 90 degrees)
 
+use super::theme::Theme;
 use egui::{Color32, Frame, Margin, Pos2, Rounding, Sense, Stroke, Ui, Vec2};
 use std::f32::consts::PI;
-use super::theme::Theme;
 
 /// 2D Tactical DOA & Spatial Coherence Radar Widget.
 pub struct TacticalRadarWidget;
@@ -69,7 +69,11 @@ impl TacticalRadarWidget {
             .show(ui, |ui| {
                 // Widget Header
                 ui.horizontal(|ui| {
-                    ui.label(egui::RichText::new("●").color(Theme::ACCENT_CYAN).size(11.0));
+                    ui.label(
+                        egui::RichText::new("●")
+                            .color(Theme::ACCENT_CYAN)
+                            .size(11.0),
+                    );
                     ui.label(
                         egui::RichText::new("2D TACTICAL DOA & CDR RADAR")
                             .strong()
@@ -135,7 +139,10 @@ impl TacticalRadarWidget {
                     painter.circle_stroke(
                         center,
                         radius * 0.82,
-                        Stroke::new(3.0_f32, Color32::from_rgba_premultiplied(180, 80, 220, halo_alpha)),
+                        Stroke::new(
+                            3.0_f32,
+                            Color32::from_rgba_premultiplied(180, 80, 220, halo_alpha),
+                        ),
                     );
                 }
 
@@ -150,8 +157,14 @@ impl TacticalRadarWidget {
 
                 // 4. Acoustic Field of View (+/- 45 deg sector)
                 let fov_rad = 45.0_f32 * PI / 180.0;
-                let p_left_fov = Pos2::new(center.x - radius * fov_rad.sin(), center.y - radius * fov_rad.cos());
-                let p_right_fov = Pos2::new(center.x + radius * fov_rad.sin(), center.y - radius * fov_rad.cos());
+                let p_left_fov = Pos2::new(
+                    center.x - radius * fov_rad.sin(),
+                    center.y - radius * fov_rad.cos(),
+                );
+                let p_right_fov = Pos2::new(
+                    center.x + radius * fov_rad.sin(),
+                    center.y - radius * fov_rad.cos(),
+                );
 
                 painter.line_segment(
                     [center, p_left_fov],
@@ -170,7 +183,10 @@ impl TacticalRadarWidget {
 
                 // 6. 30mm Microphone Array Baseline Axis (Horizontal Line)
                 painter.line_segment(
-                    [Pos2::new(center.x - radius * 0.85, center.y), Pos2::new(center.x + radius * 0.85, center.y)],
+                    [
+                        Pos2::new(center.x - radius * 0.85, center.y),
+                        Pos2::new(center.x + radius * 0.85, center.y),
+                    ],
                     Stroke::new(1.0_f32, Color32::from_rgba_premultiplied(50, 75, 100, 120)),
                 );
 
@@ -200,21 +216,49 @@ impl TacticalRadarWidget {
                 // 7. Perimeter Degree Ticks and Labels (-45, -30, -15, 0, +15, +30, +45)
                 for deg in [-45, -30, -15, 0, 15, 30, 45] {
                     let rad = (deg as f32) * PI / 180.0;
-                    let p_outer = Pos2::new(center.x + radius * rad.sin(), center.y - radius * rad.cos());
-                    let p_inner = Pos2::new(center.x + (radius - 5.0) * rad.sin(), center.y - (radius - 5.0) * rad.cos());
-                    painter.line_segment([p_inner, p_outer], Stroke::new(1.0_f32, Color32::from_rgba_premultiplied(100, 150, 190, 140)));
+                    let p_outer =
+                        Pos2::new(center.x + radius * rad.sin(), center.y - radius * rad.cos());
+                    let p_inner = Pos2::new(
+                        center.x + (radius - 5.0) * rad.sin(),
+                        center.y - (radius - 5.0) * rad.cos(),
+                    );
+                    painter.line_segment(
+                        [p_inner, p_outer],
+                        Stroke::new(
+                            1.0_f32,
+                            Color32::from_rgba_premultiplied(100, 150, 190, 140),
+                        ),
+                    );
 
                     if deg % 30 == 0 || deg == 0 {
-                        let p_text = Pos2::new(center.x + (radius + 8.0) * rad.sin(), center.y - (radius + 8.0) * rad.cos());
-                        let label = if deg == 0 { "0°" } else if deg > 0 { "+30°" } else { "-30°" };
-                        painter.text(p_text, egui::Align2::CENTER_CENTER, label, egui::FontId::proportional(8.5), Theme::TEXT_MUTED);
+                        let p_text = Pos2::new(
+                            center.x + (radius + 8.0) * rad.sin(),
+                            center.y - (radius + 8.0) * rad.cos(),
+                        );
+                        let label = if deg == 0 {
+                            "0°"
+                        } else if deg > 0 {
+                            "+30°"
+                        } else {
+                            "-30°"
+                        };
+                        painter.text(
+                            p_text,
+                            egui::Align2::CENTER_CENTER,
+                            label,
+                            egui::FontId::proportional(8.5),
+                            Theme::TEXT_MUTED,
+                        );
                     }
                 }
 
                 // 8. Spatial Interference Null Vectors (Amber/Red glowing vectors)
                 for &null_deg in interference_nulls_deg {
                     let null_rad = null_deg * PI / 180.0;
-                    let p_null = Pos2::new(center.x + radius * null_rad.sin(), center.y - radius * null_rad.cos());
+                    let p_null = Pos2::new(
+                        center.x + radius * null_rad.sin(),
+                        center.y - radius * null_rad.cos(),
+                    );
                     painter.line_segment(
                         [center, p_null],
                         Stroke::new(1.2_f32, Color32::from_rgba_premultiplied(255, 75, 75, 140)),
@@ -225,7 +269,10 @@ impl TacticalRadarWidget {
                 // 9. Live Tracked Talker Arrival Vector theta(t) (Glowing Cyan Reticle)
                 let clamped_angle = talker_angle_deg.clamp(-45.0, 45.0);
                 let talker_rad = clamped_angle * PI / 180.0;
-                let target_pos = Pos2::new(center.x + radius * talker_rad.sin(), center.y - radius * talker_rad.cos());
+                let target_pos = Pos2::new(
+                    center.x + radius * talker_rad.sin(),
+                    center.y - radius * talker_rad.cos(),
+                );
 
                 let (beam_color, glow_color, beam_thickness) = if is_speech_active {
                     (
@@ -242,9 +289,15 @@ impl TacticalRadarWidget {
                 };
 
                 // Glow beam aura
-                painter.line_segment([center, target_pos], Stroke::new(beam_thickness + 3.0, glow_color));
+                painter.line_segment(
+                    [center, target_pos],
+                    Stroke::new(beam_thickness + 3.0, glow_color),
+                );
                 // Core beam reticle
-                painter.line_segment([center, target_pos], Stroke::new(beam_thickness, beam_color));
+                painter.line_segment(
+                    [center, target_pos],
+                    Stroke::new(beam_thickness, beam_color),
+                );
 
                 // Target Talker Blip Marker at the perimeter
                 painter.circle_filled(target_pos, 4.0, beam_color);
@@ -265,26 +318,41 @@ impl TacticalRadarWidget {
                         egui::RichText::new(format!("DOA: {:+.1}°", clamped_angle))
                             .size(10.5)
                             .strong()
-                            .color(if is_speech_active { Theme::ACCENT_CYAN } else { Theme::TEXT_PRIMARY }),
+                            .color(if is_speech_active {
+                                Theme::ACCENT_CYAN
+                            } else {
+                                Theme::TEXT_PRIMARY
+                            }),
                     );
 
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                        ui.label(
-                            egui::RichText::new(slip_label)
-                                .size(9.5)
-                                .color(if clamped_angle.abs() >= 10.0 { Theme::ACCENT_AMBER } else { Theme::TEXT_MUTED }),
-                        );
+                        ui.label(egui::RichText::new(slip_label).size(9.5).color(
+                            if clamped_angle.abs() >= 10.0 {
+                                Theme::ACCENT_AMBER
+                            } else {
+                                Theme::TEXT_MUTED
+                            },
+                        ));
                     });
                 });
 
                 // Line 2: Coherence-to-Diffuse Ratio (CDR) Status Indicator
                 ui.horizontal(|ui| {
                     let (cdr_text, cdr_color) = if mean_cdr_db >= 6.0 {
-                        (format!("CDR: {:+.1} dB (DIRECT)", mean_cdr_db), Theme::ACCENT_CYAN)
+                        (
+                            format!("CDR: {:+.1} dB (DIRECT)", mean_cdr_db),
+                            Theme::ACCENT_CYAN,
+                        )
                     } else if mean_cdr_db >= 0.0 {
-                        (format!("CDR: {:+.1} dB (MODERATE)", mean_cdr_db), Theme::ACCENT_AMBER)
+                        (
+                            format!("CDR: {:+.1} dB (MODERATE)", mean_cdr_db),
+                            Theme::ACCENT_AMBER,
+                        )
                     } else {
-                        (format!("CDR: {:+.1} dB (DIFFUSE)", mean_cdr_db), Theme::ACCENT_VIOLET)
+                        (
+                            format!("CDR: {:+.1} dB (DIFFUSE)", mean_cdr_db),
+                            Theme::ACCENT_VIOLET,
+                        )
                     };
 
                     ui.label(

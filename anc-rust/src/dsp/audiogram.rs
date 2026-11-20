@@ -15,9 +15,8 @@
 use num_complex::Complex32;
 
 /// Standard clinical and military audiometric frequencies (Hz).
-pub const AUDIOMETRIC_FREQUENCIES: [f32; 8] = [
-    250.0, 500.0, 1000.0, 2000.0, 3000.0, 4000.0, 6000.0, 8000.0,
-];
+pub const AUDIOMETRIC_FREQUENCIES: [f32; 8] =
+    [250.0, 500.0, 1000.0, 2000.0, 3000.0, 4000.0, 6000.0, 8000.0];
 
 pub const NUM_AUDIOMETRIC_BANDS: usize = 8;
 
@@ -190,11 +189,13 @@ impl WdrcChannel {
         self.compression_ratio = (1.0 + 0.022 * self.htl_db_hl).clamp(1.0, 3.2);
 
         // Gain at soft speech (50 dB SPL) provides greater amplification
-        self.insertion_gain_50_db = (self.insertion_gain_65_db + (65.0 - 50.0) * (1.0 - 1.0 / self.compression_ratio))
+        self.insertion_gain_50_db = (self.insertion_gain_65_db
+            + (65.0 - 50.0) * (1.0 - 1.0 / self.compression_ratio))
             .clamp(0.0, 42.0);
 
         // Gain at loud speech (80 dB SPL) provides reduced gain
-        self.insertion_gain_80_db = (self.insertion_gain_65_db - (80.0 - 65.0) * (1.0 - 1.0 / self.compression_ratio))
+        self.insertion_gain_80_db = (self.insertion_gain_65_db
+            - (80.0 - 65.0) * (1.0 - 1.0 / self.compression_ratio))
             .max(0.0);
 
         // Expansion threshold to suppress ambient microphone hiss
@@ -236,7 +237,8 @@ impl WdrcChannel {
         } else {
             // WDRC Compression region: Gain(L) = IG_50 - (1 - 1/CR) * (L - CT)
             let comp_gain = self.insertion_gain_50_db
-                - (1.0 - 1.0 / self.compression_ratio) * (in_db_spl - self.compression_threshold_db_spl);
+                - (1.0 - 1.0 / self.compression_ratio)
+                    * (in_db_spl - self.compression_threshold_db_spl);
 
             // MPO Output limiting: clamp output level L_out = L_in + Gain <= MPO
             let max_allowed_gain = self.mpo_db_spl - in_db_spl;
@@ -249,7 +251,9 @@ impl WdrcChannel {
     pub fn process_sample(&mut self, input: f32) -> f32 {
         // Direct Form II Transposed / Direct Form I Biquad
         let x0 = input;
-        let y0 = self.b0 * x0 + self.b1 * self.x1 + self.b2 * self.x2 - self.a1 * self.y1 - self.a2 * self.y2;
+        let y0 = self.b0 * x0 + self.b1 * self.x1 + self.b2 * self.x2
+            - self.a1 * self.y1
+            - self.a2 * self.y2;
         self.x2 = self.x1;
         self.x1 = x0;
         self.y2 = self.y1;
@@ -390,12 +394,7 @@ impl NalNl2WdrcEngine {
 
     /// Applies NAL-NL2 WDRC subband compensation directly to an STFT frequency spectrum.
     /// Strictly zero heap allocations.
-    pub fn process_stft_spectrum(
-        &mut self,
-        spectrum: &mut [Complex32],
-        ear: Ear,
-        hop_size: usize,
-    ) {
+    pub fn process_stft_spectrum(&mut self, spectrum: &mut [Complex32], ear: Ear, hop_size: usize) {
         if !self.is_enabled || spectrum.is_empty() {
             return;
         }
@@ -457,7 +456,10 @@ mod tests {
 
         for ch in engine.channels_left.iter() {
             assert_eq!(ch.htl_db_hl, 0.0);
-            assert!(ch.insertion_gain_65_db <= 4.0, "Normal hearing should have minimal gain");
+            assert!(
+                ch.insertion_gain_65_db <= 4.0,
+                "Normal hearing should have minimal gain"
+            );
             assert!((ch.compression_ratio - 1.0).abs() < 1e-4);
         }
     }
@@ -471,8 +473,14 @@ mod tests {
         let ch_4k = &engine.channels_left[5];
         assert_eq!(ch_4k.center_freq, 4000.0);
         assert_eq!(ch_4k.htl_db_hl, 50.0);
-        assert!(ch_4k.insertion_gain_65_db > 20.0, "4 kHz dip should receive significant compensation");
-        assert!(ch_4k.compression_ratio > 1.8, "Compression ratio should be elevated for hearing loss");
+        assert!(
+            ch_4k.insertion_gain_65_db > 20.0,
+            "4 kHz dip should receive significant compensation"
+        );
+        assert!(
+            ch_4k.compression_ratio > 1.8,
+            "Compression ratio should be elevated for hearing loss"
+        );
 
         // 250 Hz is band index 0 (normal threshold of 5 dB HL)
         let ch_250 = &engine.channels_left[0];
@@ -488,12 +496,21 @@ mod tests {
         let g_nom = ch.compute_gain_db(65.0);
         let g_loud = ch.compute_gain_db(85.0);
 
-        assert!(g_soft > g_nom, "Soft sounds must receive more gain than nominal");
-        assert!(g_nom > g_loud, "Nominal sounds must receive more gain than loud sounds");
+        assert!(
+            g_soft > g_nom,
+            "Soft sounds must receive more gain than nominal"
+        );
+        assert!(
+            g_nom > g_loud,
+            "Nominal sounds must receive more gain than loud sounds"
+        );
 
         // Verify MPO ceiling
         let g_extreme = ch.compute_gain_db(96.0);
-        assert!(96.0 + g_extreme <= ch.mpo_db_spl + 0.1, "Output must never exceed MPO");
+        assert!(
+            96.0 + g_extreme <= ch.mpo_db_spl + 0.1,
+            "Output must never exceed MPO"
+        );
     }
 
     #[test]

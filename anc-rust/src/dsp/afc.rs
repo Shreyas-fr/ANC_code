@@ -12,8 +12,8 @@
 //! - Double-talk / Near-end speech protection: Freezes or slows adaptation during speech
 //!   activity to guarantee zero distortion of the soldier's voice.
 
-use num_complex::Complex32;
 use super::geigel::{GeigelConfig, GeigelDetector, GeigelStats};
+use num_complex::Complex32;
 
 /// Configuration for Subband Acoustic Feedback Cancellation.
 #[derive(Debug, Clone)]
@@ -115,7 +115,13 @@ impl SubbandChannelFilter {
     }
 
     #[inline]
-    fn set_weight(weights: &mut [Complex32], bin: usize, tap: usize, num_taps: usize, val: Complex32) {
+    fn set_weight(
+        weights: &mut [Complex32],
+        bin: usize,
+        tap: usize,
+        num_taps: usize,
+        val: Complex32,
+    ) {
         weights[bin * num_taps + tap] = val;
     }
 }
@@ -337,7 +343,8 @@ impl SubbandAfc {
                     let delay_idx = (current_tap + num_taps - tap) % num_taps;
                     let x_val = ref_history[delay_idx * num_bins + k];
 
-                    let old_w = SubbandChannelFilter::get_weight(&chan.weights_bg, k, tap, num_taps);
+                    let old_w =
+                        SubbandChannelFilter::get_weight(&chan.weights_bg, k, tap, num_taps);
                     let grad = e_bg * x_val.conj();
                     // NLMS with leakage: W <- (1 - gamma) * W + mu_norm * E * X*
                     let new_w = old_w * (1.0 - gamma) + grad * norm_factor;
@@ -431,7 +438,10 @@ mod tests {
             "Expected ERLE > 8.0 dB, achieved {:.2} dB",
             last_erle
         );
-        assert!(afc.mic1_filter.transfers > 0, "Expected at least one shadow transfer");
+        assert!(
+            afc.mic1_filter.transfers > 0,
+            "Expected at least one shadow transfer"
+        );
     }
 
     #[test]

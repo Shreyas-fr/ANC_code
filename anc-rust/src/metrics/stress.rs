@@ -215,12 +215,14 @@ impl StressProfiler {
 
             if mean_p > 1e-5 {
                 let inst_jitter = ((sum_diff_period / (n - 1) as f32) / mean_p) * 100.0;
-                self.smoothed_jitter = 0.90 * self.smoothed_jitter + 0.10 * inst_jitter.clamp(0.1, 10.0);
+                self.smoothed_jitter =
+                    0.90 * self.smoothed_jitter + 0.10 * inst_jitter.clamp(0.1, 10.0);
             }
 
             if mean_a > 1e-4 {
                 let inst_shimmer = ((sum_diff_amp / (n - 1) as f32) / mean_a) * 100.0;
-                self.smoothed_shimmer = 0.90 * self.smoothed_shimmer + 0.10 * inst_shimmer.clamp(0.2, 25.0);
+                self.smoothed_shimmer =
+                    0.90 * self.smoothed_shimmer + 0.10 * inst_shimmer.clamp(0.2, 25.0);
             }
         }
 
@@ -236,7 +238,8 @@ impl StressProfiler {
 
         let inst_stress = 0.30 * s_jit + 0.30 * s_shim + 0.25 * s_f0 + 0.15 * s_rate;
         let smooth_coeff = if is_voiced { 0.15 } else { 0.02 };
-        self.smoothed_stress = (1.0 - smooth_coeff) * self.smoothed_stress + smooth_coeff * inst_stress;
+        self.smoothed_stress =
+            (1.0 - smooth_coeff) * self.smoothed_stress + smooth_coeff * inst_stress;
         let final_stress = self.smoothed_stress.clamp(0.0, 100.0);
 
         // 5. Cumulative Vocal Fatigue Tracking
@@ -287,7 +290,8 @@ mod tests {
             let mut samples = vec![0.0f32; 256];
             let amp_jittered = 0.50 + if i % 2 == 0 { 0.20 } else { -0.20 };
             for (n, s) in samples.iter_mut().enumerate() {
-                *s = amp_jittered * (2.0 * std::f32::consts::PI * f0_jittered * (n as f32) / 16000.0).sin();
+                *s = amp_jittered
+                    * (2.0 * std::f32::consts::PI * f0_jittered * (n as f32) / 16000.0).sin();
             }
             profiler.process_frame(&samples, Some(f0_jittered));
         }

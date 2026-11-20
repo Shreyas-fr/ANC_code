@@ -5,9 +5,9 @@
 
 #![allow(dead_code)]
 
+use anc_frontend::AncDashboardApp;
 use clap::Parser;
 use eframe::egui;
-use anc_frontend::AncDashboardApp;
 
 #[derive(Parser, Debug)]
 #[command(

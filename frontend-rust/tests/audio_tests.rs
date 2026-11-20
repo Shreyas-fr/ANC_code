@@ -13,13 +13,19 @@ fn test_jitter_buffer_prebuffering() {
     // Initial state: holding
     let mut out = [1.0f32; 256];
     jb.read(&mut out);
-    assert_eq!(out, [0.0f32; 256], "Prebuffering should return silence while buffer < target");
+    assert_eq!(
+        out, [0.0f32; 256],
+        "Prebuffering should return silence while buffer < target"
+    );
 
     // Write partial frame (256 samples < 768 target)
     let in_partial = vec![0.5f32; 256];
     jb.write(&in_partial);
     jb.read(&mut out);
-    assert_eq!(out, [0.0f32; 256], "Should still hold silence below target threshold");
+    assert_eq!(
+        out, [0.0f32; 256],
+        "Should still hold silence below target threshold"
+    );
 
     // Write remaining frames to exceed target (256 + 512 = 768 samples)
     let in_rest = vec![0.5f32; 512];
@@ -27,7 +33,10 @@ fn test_jitter_buffer_prebuffering() {
 
     // Now buffer has 768 samples >= target threshold -> holding released
     jb.read(&mut out);
-    assert_ne!(out, [0.0f32; 256], "Should release audio once target is met");
+    assert_ne!(
+        out, [0.0f32; 256],
+        "Should release audio once target is met"
+    );
 }
 
 #[test]
@@ -41,7 +50,10 @@ fn test_jitter_buffer_overflow_trimming() {
     let massive_input = vec![0.25f32; 3000];
     jb.write(&massive_input);
 
-    assert!(jb.overflow_count > 0, "Overflow counter must register trimmed samples");
+    assert!(
+        jb.overflow_count > 0,
+        "Overflow counter must register trimmed samples"
+    );
     assert!(
         (jb.buffer_ms() - target_ms as f32).abs() < 2.0,
         "Buffer should trim back to target_ms on overflow, got {:.2} ms",
@@ -77,7 +89,11 @@ fn test_spectrum_analyzer_peak_bin() {
         }
     }
 
-    assert_eq!(peak_bin, 32, "Peak frequency bin of 1000 Hz sine wave must be bin 32 (got {})", peak_bin);
+    assert_eq!(
+        peak_bin, 32,
+        "Peak frequency bin of 1000 Hz sine wave must be bin 32 (got {})",
+        peak_bin
+    );
     // Real sinusoid amplitude 1.0 has 0.5 amplitude per complex pole (-6.02 dB)
     // Hann window mean is 0.5 (-6.02 dB), yielding exact peak bin magnitude 20*log10(0.25) = -12.04 dBFS.
     assert!(
@@ -165,7 +181,10 @@ fn test_dsp_timeline_widget_percentiles_and_headroom() {
     assert!(widget.mean_us > 70.0 && widget.mean_us < 80.0);
     assert!(widget.p95_us >= 95);
     assert!(widget.p99_us >= 98);
-    assert!(widget.headroom_percent > 99.0, "Execution headroom should exceed 99% against 16 ms budget");
+    assert!(
+        widget.headroom_percent > 99.0,
+        "Execution headroom should exceed 99% against 16 ms budget"
+    );
 }
 
 #[test]
@@ -246,7 +265,10 @@ fn test_elastic_buffer_governor_clock_drift_stabilization() {
         "Buffer should be kept bounded by governor without unbounded creep, got {:.2} ms",
         buf_ms
     );
-    assert_eq!(jb.underrun_events, 0, "No underruns must occur under governed playback");
+    assert_eq!(
+        jb.underrun_events, 0,
+        "No underruns must occur under governed playback"
+    );
 }
 
 #[test]
@@ -260,7 +282,10 @@ fn test_spatial_lissajous_scope_widget_headless_context() {
     scope.push_samples(&mic1, &mic2, Some(0.12));
 
     let stats = scope.stats();
-    assert!(stats.correlation_r > 0.90, "Pure in-phase input must yield r > 0.90");
+    assert!(
+        stats.correlation_r > 0.90,
+        "Pure in-phase input must yield r > 0.90"
+    );
     assert_eq!(stats.wind_buffeting_pct, 12.0);
 
     // Headless UI render
@@ -278,7 +303,11 @@ fn test_aggressive_max_snr_mode_dashboard_integration() {
     Theme::apply_to_context(&ctx);
 
     let mut aggressive_mode = true;
-    let snr_val = if aggressive_mode { "+11.5 dB" } else { "+9.0 dB" };
+    let snr_val = if aggressive_mode {
+        "+11.5 dB"
+    } else {
+        "+9.0 dB"
+    };
 
     let _ = ctx.run(Default::default(), |ctx| {
         egui::CentralPanel::default().show(ctx, |ui| {
@@ -308,11 +337,18 @@ fn test_tsnr_latency_budget_compliance_under_deadline() {
     let t0 = Instant::now();
     for _ in 0..10 {
         let stats = enhancer.process_stft_frame(&mut spec).unwrap();
-        assert!(stats.compute_time_us < 16_000, "Compute must remain strictly below 16 ms hop deadline");
+        assert!(
+            stats.compute_time_us < 16_000,
+            "Compute must remain strictly below 16 ms hop deadline"
+        );
     }
     let elapsed_total_us = t0.elapsed().as_micros();
     // Average compute per frame must be < 500 us (0.5 ms)
-    assert!(elapsed_total_us / 10 < 500, "Mean compute exceeds 500 us: {}", elapsed_total_us / 10);
+    assert!(
+        elapsed_total_us / 10 < 500,
+        "Mean compute exceeds 500 us: {}",
+        elapsed_total_us / 10
+    );
 }
 
 #[test]
@@ -329,7 +365,12 @@ fn test_kurtosis_diagnostic_hud_widget_headless_context() {
     // Headless UI render before transient injection
     let _ = ctx.run(Default::default(), |ctx| {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ShockTransientBadge::show(ui, widget.is_shock, widget.crest_factor_db, widget.peak_kurtosis);
+            ShockTransientBadge::show(
+                ui,
+                widget.is_shock,
+                widget.crest_factor_db,
+                widget.peak_kurtosis,
+            );
             widget.show(ui, 100.0);
         });
     });
@@ -343,7 +384,12 @@ fn test_kurtosis_diagnostic_hud_widget_headless_context() {
     // Headless UI render with active shock alert
     let _ = ctx.run(Default::default(), |ctx| {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ShockTransientBadge::show(ui, widget.is_shock, widget.crest_factor_db, widget.peak_kurtosis);
+            ShockTransientBadge::show(
+                ui,
+                widget.is_shock,
+                widget.crest_factor_db,
+                widget.peak_kurtosis,
+            );
             widget.show(ui, 100.0);
         });
     });
@@ -571,8 +617,8 @@ fn test_blast_impulse_widget_headless_workflow() {
 #[test]
 fn test_polar_directivity_widget_headless_workflow() {
     use anc_frontend::ui::{PolarDirectivityWidget, Theme};
-    use anc_rust::dsp::polar_pattern::{PolarPatternTelemetry, PolarPatternType};
     use anc_rust::dsp::deesser::DeEsserTelemetry;
+    use anc_rust::dsp::polar_pattern::{PolarPatternTelemetry, PolarPatternType};
     use eframe::egui;
 
     let ctx = egui::Context::default();

@@ -69,7 +69,11 @@ impl SpectrumAnalyzer {
 
         // Compute magnitude in dBFS
         let norm = 1.0 / self.n_fft as f32;
-        for (out_val, input_val) in out_db.iter_mut().take(num_bins).zip(self.input_buffer.iter()) {
+        for (out_val, input_val) in out_db
+            .iter_mut()
+            .take(num_bins)
+            .zip(self.input_buffer.iter())
+        {
             let mag = input_val.norm() * norm;
             let db = 20.0 * (mag.max(1e-5)).log10();
             *out_val = (db as f64).clamp(-90.0, 0.0);
