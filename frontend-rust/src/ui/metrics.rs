@@ -110,3 +110,98 @@ impl StatusBadge {
             });
     }
 }
+
+pub struct IntelligibilityBadge;
+
+impl IntelligibilityBadge {
+    /// Renders a live Speech Intelligibility Index (SII) badge.
+    pub fn show(ui: &mut Ui, sii: f32, gain_db: f32) {
+        let (color, bg, status_text) = if sii >= 0.75 {
+            (Theme::ACCENT_GREEN, Color32::from_rgb(4, 50, 36), "EXCELLENT")
+        } else if sii >= 0.50 {
+            (Theme::ACCENT_CYAN, Color32::from_rgb(6, 40, 60), "GOOD")
+        } else {
+            (Theme::ACCENT_AMBER, Color32::from_rgb(60, 35, 10), "FAIR")
+        };
+
+        egui::Frame::none()
+            .fill(bg)
+            .stroke(Stroke::new(1.0_f32, color))
+            .rounding(Rounding::same(6.0))
+            .inner_margin(Margin::symmetric(10.0, 5.0))
+            .show(ui, |ui| {
+                ui.horizontal(|ui| {
+                    ui.label(egui::RichText::new("SII").size(10.0).color(Theme::TEXT_MUTED));
+                    ui.label(egui::RichText::new(format!("{:.2} ({:+.1} dB)", sii, gain_db)).strong().color(color).size(11.0));
+                    ui.label(egui::RichText::new(format!("[{}]", status_text)).size(9.5).color(color));
+                });
+            });
+    }
+}
+
+pub struct RfLinkBadge;
+
+impl RfLinkBadge {
+    /// Renders live RF Tactical Link Health & FEC recovery indicator.
+    pub fn show(ui: &mut Ui, rf_health: f32, fec_recov_rate: f32) {
+        let (color, bg) = if rf_health >= 95.0 {
+            (Theme::ACCENT_GREEN, Color32::from_rgb(4, 50, 36))
+        } else if rf_health >= 85.0 {
+            (Theme::ACCENT_AMBER, Color32::from_rgb(60, 35, 10))
+        } else {
+            (Theme::ACCENT_RED, Color32::from_rgb(60, 15, 20))
+        };
+
+        egui::Frame::none()
+            .fill(bg)
+            .stroke(Stroke::new(1.0_f32, color))
+            .rounding(Rounding::same(6.0))
+            .inner_margin(Margin::symmetric(10.0, 5.0))
+            .show(ui, |ui| {
+                ui.horizontal(|ui| {
+                    ui.label(egui::RichText::new("RF LINK").size(10.0).color(Theme::TEXT_MUTED));
+                    ui.label(egui::RichText::new(format!("{:.1}%", rf_health)).strong().color(color).size(11.0));
+                    ui.label(egui::RichText::new(format!("FEC: {:.0}%", fec_recov_rate)).size(9.5).color(Theme::TEXT_SECONDARY));
+                });
+            });
+    }
+}
+
+pub struct ShockTransientBadge;
+
+impl ShockTransientBadge {
+    /// Renders real-time Spectral Kurtosis non-Gaussian shock indicator badge.
+    pub fn show(ui: &mut Ui, is_shock: bool, crest_factor_db: f32, peak_kurtosis: f32) {
+        let (color, bg, status_text) = if is_shock {
+            (
+                Theme::ACCENT_RED,
+                Color32::from_rgb(80, 15, 25),
+                format!("SHOCK TRANSIENT (K={:.1}, {:.1} dB)", peak_kurtosis, crest_factor_db),
+            )
+        } else if peak_kurtosis > 4.0 {
+            (
+                Theme::ACCENT_AMBER,
+                Color32::from_rgb(60, 35, 10),
+                format!("NON-STATIONARY (K={:.1}, {:.1} dB)", peak_kurtosis, crest_factor_db),
+            )
+        } else {
+            (
+                Theme::ACCENT_GREEN,
+                Color32::from_rgb(4, 50, 36),
+                format!("GAUSSIAN QUIET (K={:.1}, {:.1} dB)", peak_kurtosis, crest_factor_db),
+            )
+        };
+
+        egui::Frame::none()
+            .fill(bg)
+            .stroke(Stroke::new(1.0_f32, color))
+            .rounding(Rounding::same(6.0))
+            .inner_margin(Margin::symmetric(10.0, 5.0))
+            .show(ui, |ui| {
+                ui.horizontal(|ui| {
+                    ui.label(egui::RichText::new("●").color(color).size(10.0));
+                    ui.label(egui::RichText::new(status_text).strong().color(color).size(11.0));
+                });
+            });
+    }
+}

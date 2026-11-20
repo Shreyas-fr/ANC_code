@@ -30,6 +30,9 @@ struct Args {
 
     #[arg(long, default_value_t = 256)]
     hop_size: usize,
+
+    #[arg(long)]
+    aggressive_snr: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -75,6 +78,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         enable_mvdr: mic2.is_some(),
         enable_agc: true,
         enable_limiter: true,
+        aggressive_snr: args.aggressive_snr,
         mvdr_config: MvdrConfig {
             num_bins: args.n_fft / 2 + 1,
             sample_rate,
@@ -92,6 +96,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("Using Decision-Directed Adaptive ERB Spectral Enhancer.");
         Box::new(AdaptiveSpectralEnhancer::new(args.n_fft / 2 + 1, 32, sample_rate))
     };
+
+    if args.aggressive_snr {
+        println!("Aggressive Max SNR Optimization Mode: ENGAGED");
+        pipeline.set_aggressive_snr(true, Some(model.as_mut()));
+        model.set_aggressive_snr(true);
+    }
 
     let mut enhanced_output = Vec::with_capacity(total_frames);
     let mut hop_out = vec![0.0f32; args.hop_size];

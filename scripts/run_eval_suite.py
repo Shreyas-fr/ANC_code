@@ -8,9 +8,10 @@ import os
 import glob
 import re
 import subprocess
+import argparse
 import numpy as np
 
-def run_evaluation():
+def run_evaluation(aggressive: bool = False):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     bench_dir = os.path.join(base_dir, "data", "eval", "benchmarks")
     enhanced_dir = os.path.join(base_dir, "data", "eval", "enhanced")
@@ -30,7 +31,9 @@ def run_evaluation():
         print("No benchmark clips found in", bench_dir)
         return
 
-    print(f"\nFound {len(stereo_files)} benchmark clips. Beginning batch evaluation...\n")
+    mode_str = "Aggressive Max SNR Mode (Deep Pause Floor -36dB & Deep Harmonic Valley Comb)" if aggressive else "Balanced Tactical Intelligibility Mode (Dynamic SPP Floor -30dB & TSNR)"
+    print(f"\nOptimization Mode: {mode_str}")
+    print(f"Found {len(stereo_files)} benchmark clips. Beginning batch evaluation...\n")
 
     results = []
 
@@ -50,6 +53,8 @@ def run_evaluation():
             "--n-fft", "512",
             "--hop-size", "256",
         ]
+        if aggressive:
+            cmd.append("--aggressive-snr")
 
         proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         output = proc.stdout
@@ -146,4 +151,7 @@ def run_evaluation():
         print(f"| {n:<14} | {len(sub):^5} | {m_in_snr:>7.2f} dB | {m_out_snr:>8.2f} dB | {m_d_snr:>+8.2f} dB | {m_in_si:>10.2f} dB | {m_out_si:>11.2f} dB | {m_d_si:>+11.2f} dB | {m_rtf:.4f} |")
 
 if __name__ == "__main__":
-    run_evaluation()
+    parser = argparse.ArgumentParser(description="Evaluate 30mm spatial ANC benchmark suite")
+    parser.add_argument("--aggressive", action="store_true", help="Enable Aggressive Max SNR mode")
+    args = parser.parse_args()
+    run_evaluation(aggressive=args.aggressive)

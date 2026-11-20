@@ -4,17 +4,24 @@
 
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
+use anc_rust::dsp::{BinauralConfig, BinauralSpatialRenderer};
+use crate::ui::eq::TacticalEqualizer;
 use super::jitter_buffer::SharedJitterBuffer;
 
 pub struct AudioPlayback {
     _stream: Option<cpal::Stream>,
     is_playing: Arc<AtomicBool>,
     is_muted: Arc<AtomicBool>,
+    is_spatial_stereo: Arc<AtomicBool>,
 }
 
 impl AudioPlayback {
-    pub fn new(jitter_buf: SharedJitterBuffer, sample_rate: u32) -> Result<Self, String> {
+    pub fn new(
+        jitter_buf: SharedJitterBuffer,
+        equalizer: Arc<Mutex<TacticalEqualizer>>,
+        sample_rate: u32,
+    ) -> Result<Self, String> {
         let host = cpal::default_host();
         let device = host
             .default_output_device()
@@ -36,12 +43,17 @@ impl AudioPlayback {
 
         let is_playing = Arc::new(AtomicBool::new(true));
         let is_muted = Arc::new(AtomicBool::new(false));
+        let is_spatial_stereo = Arc::new(AtomicBool::new(true));
 
         let stream = if let Some(config) = chosen_config {
             let channels = config.channels() as usize;
             let jbuf = Arc::clone(&jitter_buf);
+            let eq_clone = Arc::clone(&equalizer);
             let playing = Arc::clone(&is_playing);
             let muted = Arc::clone(&is_muted);
+            let spatial_stereo = Arc::clone(&is_spatial_stereo);
+            let mut spatial_renderer = BinauralSpatialRenderer::new(BinauralConfig::default());
+            let mut stereo_buf = Vec::new();
 
             let err_fn = |err| eprintln!("Audio stream error: {}", err);
 
@@ -61,10 +73,29 @@ impl AudioPlayback {
                             jb.read(&mut mono_buf);
                         }
 
-                        // Duplicate mono into all output channels (stereo/multi)
-                        for (frame_idx, &sample) in mono_buf.iter().enumerate() {
-                            for ch in 0..channels {
-                                data[frame_idx * channels + ch] = sample;
+                        // Apply Operator Headset 8-Band Tactical Parametric EQ
+                        if let Ok(mut eq) = eq_clone.lock() {
+                            eq.process_block(&mut mono_buf);
+                        }
+
+                        if channels >= 2 && spatial_stereo.load(Ordering::Relaxed) {
+                            if stereo_buf.len() < frames * 2 {
+                                stereo_buf.resize(frames * 2, 0.0);
+                            }
+                            spatial_renderer.render_interleaved(&mono_buf, None, &mut stereo_buf[..frames * 2]);
+                            for frame_idx in 0..frames {
+                                data[frame_idx * channels] = stereo_buf[frame_idx * 2];
+                                data[frame_idx * channels + 1] = stereo_buf[frame_idx * 2 + 1];
+                                for ch in 2..channels {
+                                    data[frame_idx * channels + ch] = mono_buf[frame_idx];
+                                }
+                            }
+                        } else {
+                            // Duplicate mono into all output channels (stereo/multi)
+                            for (frame_idx, &sample) in mono_buf.iter().enumerate() {
+                                for ch in 0..channels {
+                                    data[frame_idx * channels + ch] = sample;
+                                }
                             }
                         }
                     },
@@ -84,7 +115,16 @@ impl AudioPlayback {
             _stream: stream,
             is_playing,
             is_muted,
+            is_spatial_stereo,
         })
+    }
+
+    pub fn set_spatial_stereo(&self, enabled: bool) {
+        self.is_spatial_stereo.store(enabled, Ordering::Relaxed);
+    }
+
+    pub fn is_spatial_stereo(&self) -> bool {
+        self.is_spatial_stereo.load(Ordering::Relaxed)
     }
 
     pub fn set_muted(&self, muted: bool) {

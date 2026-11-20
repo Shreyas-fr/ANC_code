@@ -3,6 +3,7 @@
 use std::net::{SocketAddr, UdpSocket};
 use std::io;
 
+use super::fec::FecEncoder;
 use super::protocol::{AudioPacket, EdgeTelemetry, AUDIO_FRAME_SAMPLES};
 
 /// Autonomous Edge Network Streamer.
@@ -50,10 +51,19 @@ impl EdgeSender {
         let n = samples.len().min(AUDIO_FRAME_SAMPLES);
         pkt_samples[..n].copy_from_slice(&samples[..n]);
 
-        let packet = AudioPacket {
-            sequence,
-            samples: pkt_samples,
-        };
+        let packet = AudioPacket::new(sequence, pkt_samples);
+        let bytes = packet.serialize();
+        self.sock_enhanced.send_to(&bytes, self.target_enhanced_addr)?;
+        Ok(())
+    }
+
+    /// Sends an enhanced audio packet with sliding-window XOR FEC parity over UDP.
+    pub fn send_enhanced_fec(&self, sequence: u64, samples: &[f32], encoder: &mut FecEncoder) -> io::Result<()> {
+        let mut pkt_samples = [0.0f32; AUDIO_FRAME_SAMPLES];
+        let n = samples.len().min(AUDIO_FRAME_SAMPLES);
+        pkt_samples[..n].copy_from_slice(&samples[..n]);
+
+        let packet = encoder.encode(sequence, pkt_samples);
         let bytes = packet.serialize();
         self.sock_enhanced.send_to(&bytes, self.target_enhanced_addr)?;
         Ok(())
@@ -65,10 +75,7 @@ impl EdgeSender {
         let n = samples.len().min(AUDIO_FRAME_SAMPLES);
         pkt_samples[..n].copy_from_slice(&samples[..n]);
 
-        let packet = AudioPacket {
-            sequence,
-            samples: pkt_samples,
-        };
+        let packet = AudioPacket::new(sequence, pkt_samples);
         let bytes = packet.serialize();
         self.sock_raw.send_to(&bytes, self.target_raw_addr)?;
         Ok(())

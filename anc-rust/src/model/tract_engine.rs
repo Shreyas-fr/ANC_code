@@ -12,6 +12,7 @@ use tract_onnx::prelude::*;
 use super::traits::{EnhancerStats, ModelError, SpeechEnhancer};
 
 /// Tract-based Neural Speech Enhancer.
+#[allow(clippy::type_complexity)]
 pub struct TractEnhancer {
     model_name: &'static str,
     plan: Option<SimplePlan<TypedFact, Box<dyn TypedOp>, Graph<TypedFact, Box<dyn TypedOp>>>>,

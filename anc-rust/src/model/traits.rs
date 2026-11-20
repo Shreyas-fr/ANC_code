@@ -51,6 +51,18 @@ pub trait SpeechEnhancer: Send {
     /// Strictly causal models return 0.
     fn algorithmic_lookahead_samples(&self) -> usize;
 
+    /// Sets minimum attenuation floor in dB (optional tuning for adaptive enhancers).
+    fn set_min_gain_db(&mut self, _min_gain_db: f32) {}
+
+    /// Enables or disables shaped comfort noise injection during speech pauses.
+    fn set_comfort_noise(&mut self, _enabled: bool) {}
+
+    /// Sets diffuse field suppression scaling factors from spatial CDR estimation.
+    fn set_diffuse_factors(&mut self, _alpha_factors: &[f32], _floor_factors: &[f32]) {}
+
+    /// Enables or disables aggressive SNR optimization mode (dynamic pause floor deepening & deep harmonic comb).
+    fn set_aggressive_snr(&mut self, _enabled: bool) {}
+
     /// Descriptive name of the model architecture.
     fn name(&self) -> &'static str;
 }

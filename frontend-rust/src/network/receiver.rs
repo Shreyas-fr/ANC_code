@@ -6,14 +6,18 @@ use std::sync::{Arc, Mutex};
 use std::thread::{self, JoinHandle};
 use std::time::{Duration, Instant};
 
-use anc_rust::network::{AudioPacket, EdgeTelemetry, AUDIO_PACKET_BYTES};
+use anc_rust::network::{AudioPacket, EdgeTelemetry, FecDecoder, AUDIO_FRAME_SAMPLES};
 
+#[derive(Debug, Clone, Copy)]
 pub struct StreamStats {
     pub packets_received: u64,
     pub packets_lost: u64,
     pub last_sequence: Option<u64>,
     pub last_arrival: Option<Instant>,
     pub loss_percentage: f32,
+    pub packets_fec_recovered: u64,
+    pub fec_recovery_rate: f32,
+    pub rf_link_health: f32,
 }
 
 impl Default for StreamStats {
@@ -24,6 +28,9 @@ impl Default for StreamStats {
             last_sequence: None,
             last_arrival: None,
             loss_percentage: 0.0,
+            packets_fec_recovered: 0,
+            fec_recovery_rate: 100.0,
+            rf_link_health: 100.0,
         }
     }
 }
@@ -31,7 +38,7 @@ impl Default for StreamStats {
 pub type SharedStreamStats = Arc<Mutex<StreamStats>>;
 pub type AudioFrameCallback = Arc<dyn Fn(&AudioPacket) + Send + Sync>;
 
-/// Asynchronous UDP Audio Receiver thread.
+/// Asynchronous UDP Audio Receiver thread with integrated Sliding-Window XOR Parity FEC.
 pub struct UdpAudioReceiver {
     port: u16,
     running: Arc<AtomicBool>,
@@ -59,26 +66,37 @@ impl UdpAudioReceiver {
                 }
             };
 
-            let mut buf = [0u8; AUDIO_PACKET_BYTES + 64];
+            let mut buf = [0u8; 4096];
+            let mut fec_decoder = FecDecoder::new();
+            let mut rec_buf = [
+                AudioPacket::new(0, [0.0; AUDIO_FRAME_SAMPLES]),
+                AudioPacket::new(0, [0.0; AUDIO_FRAME_SAMPLES]),
+            ];
 
             while is_running.load(Ordering::Relaxed) {
                 match socket.recv_from(&mut buf) {
                     Ok((len, _)) => {
                         if let Ok(packet) = AudioPacket::deserialize(&buf[..len]) {
+                            let n_rec = fec_decoder.process_packet(&packet, &mut rec_buf);
+
                             if let Ok(mut st) = stream_stats.lock() {
-                                if let Some(last) = st.last_sequence {
-                                    if packet.sequence > last + 1 {
-                                        st.packets_lost += packet.sequence - (last + 1);
-                                    }
-                                }
                                 st.last_sequence = Some(packet.sequence);
-                                st.packets_received += 1;
+                                st.packets_received = fec_decoder.stats.packets_received;
+                                st.packets_lost = fec_decoder.stats.packets_lost;
+                                st.packets_fec_recovered = fec_decoder.stats.packets_recovered;
+                                st.fec_recovery_rate = fec_decoder.stats.recovery_rate;
+                                st.rf_link_health = fec_decoder.stats.rf_link_health;
                                 st.last_arrival = Some(Instant::now());
 
                                 let total = st.packets_received + st.packets_lost;
                                 if total > 0 {
                                     st.loss_percentage = (st.packets_lost as f32 / total as f32) * 100.0;
                                 }
+                            }
+
+                            // Deliver reconstructed packets first, then incoming packet
+                            for rec_packet in rec_buf.iter().take(n_rec) {
+                                callback(rec_packet);
                             }
                             callback(&packet);
                         }

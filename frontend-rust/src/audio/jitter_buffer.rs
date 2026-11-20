@@ -3,6 +3,7 @@
 //! Developed for DRDO SIH 26052 Live Defence Dashboard.
 
 use std::sync::{Arc, Mutex};
+use super::elastic::{ElasticGovernor, ElasticGovernorConfig};
 
 /// Dynamic ring buffer for real-time audio playback.
 pub struct JitterBuffer {
@@ -21,6 +22,13 @@ pub struct JitterBuffer {
     need_fade_in: bool,
     last_sample: f32,
     fade_samples: usize,
+
+    // Packet Loss Concealment (PLC) circular history
+    plc_history: Vec<f32>,
+
+    // Elastic Audio Time-Scale Buffer Governor (WSOLA / Micro-Resampler)
+    pub governor: Option<ElasticGovernor>,
+    pub enable_governor: bool,
 
     pub underrun_events: u64,
     pub underrun_samples: u64,
@@ -48,6 +56,14 @@ impl JitterBuffer {
             need_fade_in: false,
             last_sample: 0.0,
             fade_samples: 32,
+            plc_history: Vec::with_capacity(640),
+            governor: Some(ElasticGovernor::new(ElasticGovernorConfig {
+                sample_rate,
+                target_samples,
+                max_rate_delta: 0.001,
+                ..Default::default()
+            })),
+            enable_governor: false,
             underrun_events: 0,
             underrun_samples: 0,
             overflow_count: 0,
@@ -88,6 +104,17 @@ impl JitterBuffer {
         }
     }
 
+    /// Enables or disables the elastic time-scale governor (micro-resampler).
+    pub fn set_governor_enabled(&mut self, enabled: bool) {
+        self.enable_governor = enabled;
+    }
+
+    /// Builder pattern helper to enable or disable the elastic governor.
+    pub fn with_governor(mut self, enabled: bool) -> Self {
+        self.enable_governor = enabled;
+        self
+    }
+
     /// Reads audio samples for the soundcard driver callback.
     pub fn read(&mut self, out: &mut [f32]) {
         let requested = out.len();
@@ -96,9 +123,45 @@ impl JitterBuffer {
             return;
         }
 
+        // Micro-resampling via Elastic Buffer Governor if active
+        if self.enable_governor && self.count >= 8 {
+            if let Some(ref mut gov) = self.governor {
+                gov.update_governor(self.count);
+
+                // Prime history if needed
+                while gov.history_filled < 4 && self.count > 0 {
+                    let s = self.buffer[self.read_pos];
+                    self.read_pos = (self.read_pos + 1) % self.capacity;
+                    self.count -= 1;
+                    gov.push_sample(s);
+                }
+
+                let mut produced = 0usize;
+                while produced < requested && self.count > 0 {
+                    let (sample, advance) = gov.process_step();
+                    out[produced] = sample;
+                    produced += 1;
+
+                    for _ in 0..advance {
+                        if self.count > 0 {
+                            let s = self.buffer[self.read_pos];
+                            self.read_pos = (self.read_pos + 1) % self.capacity;
+                            self.count -= 1;
+                            gov.push_sample(s);
+                        }
+                    }
+                }
+
+                if produced == requested {
+                    self.last_sample = out[requested - 1];
+                    return;
+                }
+            }
+        }
+
         let available = self.count.min(requested);
-        for i in 0..available {
-            out[i] = self.buffer[self.read_pos];
+        for item in out.iter_mut().take(available) {
+            *item = self.buffer[self.read_pos];
             self.read_pos = (self.read_pos + 1) % self.capacity;
         }
         self.count -= available;
@@ -106,33 +169,52 @@ impl JitterBuffer {
         // Apply smooth fade-in if recovering from silence/underrun
         if self.need_fade_in && available > 0 {
             let fade_len = self.fade_samples.min(available);
-            for i in 0..fade_len {
+            for (i, item) in out.iter_mut().enumerate().take(fade_len) {
                 let factor = i as f32 / fade_len as f32;
-                out[i] *= factor;
+                *item *= factor;
             }
             self.need_fade_in = false;
         }
 
-        // Handle underrun
+        // Save valid samples to PLC history
+        if available > 0 {
+            self.plc_history.extend_from_slice(&out[..available]);
+            if self.plc_history.len() > 640 {
+                let excess = self.plc_history.len() - 640;
+                self.plc_history.drain(0..excess);
+            }
+        }
+
+        // Handle underrun with Packet Loss Concealment (PLC)
         if available < requested {
             self.underrun_events += 1;
             self.underrun_samples += (requested - available) as u64;
 
-            // Fade out the tail of real samples if present to avoid clicks
-            if available > 0 {
-                let fade_len = self.fade_samples.min(available);
-                for i in 0..fade_len {
-                    let factor = (fade_len - 1 - i) as f32 / fade_len as f32;
-                    let idx = available - fade_len + i;
-                    out[idx] *= factor;
+            let missing = requested - available;
+            let hist_len = self.plc_history.len();
+
+            // Extrapolate past pitch cycle if available to mask the drop
+            if hist_len >= 64 && self.last_sample.abs() > 1e-4 {
+                let window = hist_len.min(320); // 20 ms pitch history
+                for j in 0..missing {
+                    let decay = (1.0 - 0.5 * (j as f32 / missing as f32)).max(0.1);
+                    let src_idx = hist_len - 1 - (j % window);
+                    out[available + j] = self.plc_history[src_idx] * decay;
                 }
-                self.last_sample = 0.0;
+                self.last_sample = out[requested - 1];
             } else {
+                // Fade out the tail of real samples if present to avoid clicks
+                if available > 0 {
+                    let fade_len = self.fade_samples.min(available);
+                    for i in 0..fade_len {
+                        let factor = (fade_len - 1 - i) as f32 / fade_len as f32;
+                        let idx = available - fade_len + i;
+                        out[idx] *= factor;
+                    }
+                }
+                out[available..].fill(0.0);
                 self.last_sample = 0.0;
             }
-
-            // Fill remainder with silence
-            out[available..].fill(0.0);
 
             // Re-enter prebuffer holding state if configured
             if self.prebuffer {
@@ -157,6 +239,7 @@ impl JitterBuffer {
         self.is_holding = self.prebuffer;
         self.need_fade_in = false;
         self.last_sample = 0.0;
+        self.plc_history.clear();
     }
 }
 

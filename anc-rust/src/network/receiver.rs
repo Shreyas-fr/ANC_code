@@ -2,7 +2,7 @@
 
 use std::net::UdpSocket;
 use std::io;
-use super::protocol::{AudioPacket, EdgeTelemetry, AUDIO_PACKET_BYTES};
+use super::protocol::{AudioPacket, EdgeTelemetry};
 
 /// UDP Audio Stream Receiver.
 pub struct AudioReceiver {
@@ -26,7 +26,7 @@ impl AudioReceiver {
 
     /// Receives the next incoming audio packet.
     pub fn recv_packet(&mut self) -> io::Result<AudioPacket> {
-        let mut buf = [0u8; AUDIO_PACKET_BYTES + 64];
+        let mut buf = [0u8; 4096];
         let (len, _) = self.socket.recv_from(&mut buf)?;
         let packet = AudioPacket::deserialize(&buf[..len])?;
 
